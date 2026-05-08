@@ -11,6 +11,32 @@
 
 :root {
   --font-pretendard: "Pretendard";
+  --bg-primary: #08090d;
+  --bg-primary-rgb: 8 9 13;
+  --bg-card: #12141b;
+  --bg-card-rgb: 18 20 27;
+  --bg-card-hover: #191c26;
+  --bg-card-hover-rgb: 25 28 38;
+  --bg-raised: #20242f;
+  --bg-raised-rgb: 32 36 47;
+  --border: #2a2f3d;
+  --border-rgb: 42 47 61;
+  --border-bright: #445064;
+  --border-bright-rgb: 68 80 100;
+  --text-primary: #f5f7fb;
+  --text-primary-rgb: 245 247 251;
+  --text-muted: #a0a8b8;
+  --text-muted-rgb: 160 168 184;
+  --text-faint: #5a6272;
+  --text-faint-rgb: 90 98 114;
+  --accent-info: #7dd8ff;
+  --accent-info-rgb: 125 216 255;
+  --accent-warn: #ffd27d;
+  --accent-warn-rgb: 255 210 125;
+  --accent-bad: #ff5a6e;
+  --accent-bad-rgb: 255 90 110;
+  --accent-ok: #86efac;
+  --accent-ok-rgb: 134 239 172;
 }
 
 * {
@@ -20,13 +46,62 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: #fbfaf7;
-  color: #1d1b20;
+  background:
+    radial-gradient(circle at 50% -20%, rgb(125 216 255 / 0.12), transparent 34rem),
+    linear-gradient(180deg, #0b0d13 0%, var(--bg-primary) 48%, #050609 100%);
+  color: var(--text-primary);
   font-family: var(--font-pretendard), system-ui, sans-serif;
+  font-feature-settings: "ss03";
+  -webkit-font-smoothing: antialiased;
 }
 
 button,
 input,
 select {
   font: inherit;
+}
+
+::selection {
+  background: rgb(125 216 255 / 0.26);
+}
+
+button,
+a,
+input,
+label,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.glass-panel {
+  border: 1px solid rgb(255 255 255 / 0.13);
+  background:
+    linear-gradient(135deg, rgb(255 255 255 / 0.16), rgb(255 255 255 / 0.035) 34%, rgb(125 216 255 / 0.055) 100%),
+    rgb(14 16 23 / 0.58);
+  box-shadow:
+    0 28px 90px rgb(0 0 0 / 0.46),
+    0 0 0 1px rgb(125 216 255 / 0.05),
+    inset 0 1px 0 rgb(255 255 255 / 0.2),
+    inset 0 -1px 0 rgb(255 255 255 / 0.045);
+  backdrop-filter: blur(30px) saturate(1.45);
+}
+
+.scanline::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgb(255 255 255 / 0.035) 0,
+    rgb(255 255 255 / 0.035) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+  mix-blend-mode: screen;
+  opacity: 0.23;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
 }
