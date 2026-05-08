@@ -20,3 +20,5 @@ AI 관상/사주 기반 도서 추천 MVP.
 ## Design
 
 - [MVP design spec](docs/superpowers/specs/2026-05-08-library-physiognomy-mvp-design.md)
+- [Implementation plan](docs/superpowers/plans/2026-05-08-ai-library-physiognomy-implementation.md)
+- [Implementation plan Korean reader version](docs/superpowers/plans/2026-05-08-ai-library-physiognomy-implementation.ko.md)
