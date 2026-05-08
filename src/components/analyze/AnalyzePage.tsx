@@ -110,7 +110,7 @@ export function AnalyzePage() {
               <>
                 <video ref={videoRef} className="h-full w-full scale-x-[-1] object-cover" autoPlay muted playsInline />
                 <FaceMeshOverlay result={face.result} />
-                <div className="absolute left-4 top-4 rounded-full bg-white/88 px-4 py-2 text-sm font-black text-library backdrop-blur">
+                <div className="absolute left-4 top-4 rounded-full bg-white/90 px-4 py-2 text-sm font-black text-library backdrop-blur">
                   {face.landmarks ? "얼굴 인식 완료" : face.isLoading ? "관상 좌표 로딩 중" : "정면 스캔 대기"}
                 </div>
               </>

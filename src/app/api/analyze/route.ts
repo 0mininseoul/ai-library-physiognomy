@@ -124,6 +124,8 @@ export async function POST(req: NextRequest) {
         bookId: book.sourceId,
         title: book.title,
         author: book.author,
+        category: book.category,
+        tags: book.tags,
         callNumber: book.callNumber,
         locationLabel: book.locationLabel,
         reason: item.reason,

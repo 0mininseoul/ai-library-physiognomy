@@ -17,6 +17,8 @@ export type BookRecommendation = {
   author: string;
   callNumber: string;
   locationLabel: string;
+  category?: string;
+  tags?: string[];
   reason: string;
   actionCopy: string;
 };
