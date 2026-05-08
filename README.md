@@ -1,4 +1,4 @@
-# AI Library Physiognomy
+# AI 관상가 고양이
 
 AI 관상/사주 기반 도서 추천 MVP.
 
