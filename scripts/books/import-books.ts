@@ -1,3 +1,5 @@
+import "./load-env";
+
 import { createClient } from "@supabase/supabase-js";
 import fs from "node:fs/promises";
 import path from "node:path";

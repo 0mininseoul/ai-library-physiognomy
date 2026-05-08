@@ -1,3 +1,5 @@
+import "./load-env";
+
 import { GoogleGenAI, Type } from "@google/genai";
 import fs from "node:fs/promises";
 import path from "node:path";
