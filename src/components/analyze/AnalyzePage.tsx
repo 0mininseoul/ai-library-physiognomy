@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Camera, CheckCircle2, Loader2, RefreshCw, ScanFace, Sparkles } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Camera, Loader2, RefreshCw, ScanFace, Sparkles } from "lucide-react";
 import { FaceMeshOverlay } from "@/components/analyze/FaceMeshOverlay";
 import { EntryPage } from "@/components/analyze/EntryPage";
 import { Mascot } from "@/components/mascot/Mascot";
@@ -11,19 +12,18 @@ import { averageLandmarks, computeFaceMetrics } from "@/lib/facemesh/metricsCalc
 import { displayGivenName, particle } from "@/lib/korean/name";
 import { useCamera } from "@/hooks/useCamera";
 import { useFaceLandmarker } from "@/hooks/useFaceLandmarker";
-import type { LibraryAnalysisResult, StudentInput } from "@/types/session";
+import type { StudentInput } from "@/types/session";
 
-type Step = "entry" | "camera" | "submitting" | "complete" | "error";
+type Step = "entry" | "camera" | "submitting" | "error";
 
 type AnalyzeResponse = {
   sessionId: string;
-  result: LibraryAnalysisResult;
 };
 
 export function AnalyzePage() {
+  const router = useRouter();
   const [step, setStep] = useState<Step>("entry");
   const [studentInput, setStudentInput] = useState<StudentInput | null>(null);
-  const [response, setResponse] = useState<AnalyzeResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const { videoRef, status: cameraStatus, error: cameraError, start: startCamera, stop: stopCamera } = useCamera();
   const face = useFaceLandmarker(videoRef, step === "camera" && cameraStatus === "ready", {
@@ -47,7 +47,6 @@ export function AnalyzePage() {
 
   function start(input: StudentInput) {
     setStudentInput(input);
-    setResponse(null);
     setError(null);
     setStep("camera");
   }
@@ -74,9 +73,8 @@ export function AnalyzePage() {
       const payload = await res.json();
       if (!res.ok) throw new Error(apiErrorCopy(payload?.error));
 
-      setResponse(payload as AnalyzeResponse);
-      setStep("complete");
       stopCamera();
+      router.push(`/result/${(payload as AnalyzeResponse).sessionId}`);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "고양이 분석실이 잠깐 삐끗했어. 다시 가보자.");
       setStep("error");
@@ -84,7 +82,6 @@ export function AnalyzePage() {
   }
 
   function retryCamera() {
-    setResponse(null);
     setError(null);
     setStep("camera");
     void startCamera();
@@ -108,101 +105,59 @@ export function AnalyzePage() {
             <ScanFace className="mt-1 h-8 w-8 shrink-0 text-library" aria-hidden="true" />
           </header>
 
-          {step === "complete" && response ? (
-            <ResultPreview displayName={displayName} response={response} onReset={() => setStep("entry")} />
-          ) : (
-            <>
-              <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-ink">
-                {cameraStatus === "ready" ? (
-                  <>
-                    <video
-                      ref={videoRef}
-                      className="h-full w-full scale-x-[-1] object-cover"
-                      autoPlay
-                      muted
-                      playsInline
-                    />
-                    <FaceMeshOverlay result={face.result} />
-                    <div className="absolute left-4 top-4 rounded-full bg-white/88 px-4 py-2 text-sm font-black text-library backdrop-blur">
-                      {face.landmarks ? "얼굴 인식 완료" : face.isLoading ? "관상 좌표 로딩 중" : "정면 스캔 대기"}
-                    </div>
-                  </>
-                ) : (
-                  <div className="flex h-full items-center justify-center bg-[#152522] px-6 text-center text-white">
-                    <div>
-                      {cameraStatus === "requesting" ? <Loader2 className="mx-auto mb-4 h-10 w-10 animate-spin" aria-hidden="true" /> : <Camera className="mx-auto mb-4 h-10 w-10" aria-hidden="true" />}
-                      <p className="text-lg font-black">{cameraStatusCopy(cameraStatus)}</p>
-                      {cameraError ? <p className="mt-2 text-sm font-semibold text-white/70">{cameraError}</p> : null}
-                    </div>
-                  </div>
-                )}
+          <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-ink">
+            {cameraStatus === "ready" ? (
+              <>
+                <video ref={videoRef} className="h-full w-full scale-x-[-1] object-cover" autoPlay muted playsInline />
+                <FaceMeshOverlay result={face.result} />
+                <div className="absolute left-4 top-4 rounded-full bg-white/88 px-4 py-2 text-sm font-black text-library backdrop-blur">
+                  {face.landmarks ? "얼굴 인식 완료" : face.isLoading ? "관상 좌표 로딩 중" : "정면 스캔 대기"}
+                </div>
+              </>
+            ) : (
+              <div className="flex h-full items-center justify-center bg-[#152522] px-6 text-center text-white">
+                <div>
+                  {cameraStatus === "requesting" ? (
+                    <Loader2 className="mx-auto mb-4 h-10 w-10 animate-spin" aria-hidden="true" />
+                  ) : (
+                    <Camera className="mx-auto mb-4 h-10 w-10" aria-hidden="true" />
+                  )}
+                  <p className="text-lg font-black">{cameraStatusCopy(cameraStatus)}</p>
+                  {cameraError ? <p className="mt-2 text-sm font-semibold text-white/70">{cameraError}</p> : null}
+                </div>
               </div>
+            )}
+          </div>
 
-              {step === "error" && error ? (
-                <p role="alert" className="mt-5 rounded-lg bg-prescription/10 px-4 py-3 text-sm font-bold text-prescription">
-                  {error}
-                </p>
-              ) : null}
+          {step === "error" && error ? (
+            <p role="alert" className="mt-5 rounded-lg bg-prescription/10 px-4 py-3 text-sm font-bold text-prescription">
+              {error}
+            </p>
+          ) : null}
 
-              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                {cameraStatus === "denied" || cameraStatus === "error" || step === "error" ? (
-                  <Button variant="secondary" className="sm:w-44" onClick={retryCamera}>
-                    <RefreshCw className="h-5 w-5" aria-hidden="true" />
-                    다시 열기
-                  </Button>
-                ) : null}
-                <Button className="flex-1" disabled={!canCapture || isSubmitting} onClick={submitCapture}>
-                  {isSubmitting ? <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" /> : <Sparkles className="h-5 w-5" aria-hidden="true" />}
-                  {isSubmitting ? "책 처방전 쓰는 중" : "이 얼굴로 책 처방받기"}
-                </Button>
-              </div>
-            </>
-          )}
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+            {cameraStatus === "denied" || cameraStatus === "error" || step === "error" ? (
+              <Button variant="secondary" className="sm:w-44" onClick={retryCamera}>
+                <RefreshCw className="h-5 w-5" aria-hidden="true" />
+                다시 열기
+              </Button>
+            ) : null}
+            <Button className="flex-1" disabled={!canCapture || isSubmitting} onClick={submitCapture}>
+              {isSubmitting ? <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" /> : <Sparkles className="h-5 w-5" aria-hidden="true" />}
+              {isSubmitting ? "책 처방전 쓰는 중" : "이 얼굴로 책 처방받기"}
+            </Button>
+          </div>
         </div>
 
         <aside className="rounded-lg border border-library/10 bg-[#f4f7f1] p-5 shadow-sm md:p-6">
           <Mascot
-            variant={step === "complete" ? "result" : step === "submitting" ? "reading" : step === "error" ? "retry" : "diagnose"}
+            variant={step === "submitting" ? "reading" : step === "error" ? "retry" : "diagnose"}
             size="lg"
             message={mascotMessage(step, displayName)}
           />
         </aside>
       </section>
     </main>
-  );
-}
-
-function ResultPreview({ displayName, response, onReset }: { displayName: string; response: AnalyzeResponse; onReset: () => void }) {
-  const name = displayName || "당신";
-
-  return (
-    <section className="rounded-lg border border-library/20 bg-[#f4f7f1] p-5 md:p-6">
-      <div className="flex items-start gap-3">
-        <CheckCircle2 className="mt-1 h-7 w-7 shrink-0 text-library" aria-hidden="true" />
-        <div>
-          <p className="text-sm font-black text-prescription">처방 완료</p>
-          <h2 className="mt-2 text-2xl font-black leading-tight text-ink">{response.result.readingType.headline}</h2>
-          <p className="mt-3 text-base font-semibold leading-7 text-ink/70">{response.result.readingType.description}</p>
-        </div>
-      </div>
-
-      <div className="mt-6 grid gap-3">
-        {response.result.recommendations.map((book, index) => (
-          <article key={`${book.bookId}-${index}`} className="rounded-lg bg-white p-4">
-            <p className="text-xs font-black text-library">{name} 맞춤 처방 #{index + 1}</p>
-            <h3 className="mt-1 text-lg font-black text-ink">{book.title}</h3>
-            <p className="mt-1 text-sm font-semibold text-ink/60">{book.author}</p>
-            <p className="mt-3 text-sm font-bold leading-6 text-ink/75">{book.actionCopy}</p>
-          </article>
-        ))}
-      </div>
-
-      <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-        <Button className="w-full" onClick={onReset}>
-          새 처방 받기
-        </Button>
-      </div>
-    </section>
   );
 }
 
@@ -215,7 +170,6 @@ function cameraStatusCopy(status: ReturnType<typeof useCamera>["status"]) {
 
 function mascotMessage(step: Step, displayName: string) {
   if (step === "submitting") return `${displayName || "회원"} 데이터에 책장 운세 섞는 중`;
-  if (step === "complete") return `${displayName || "회원"} 처방전 나왔습니다. 대출각 꽤 선명함.`;
   if (step === "error") return "살짝 삐끗했지만 고양이 멘탈은 멀쩡함";
   return "정면만 딱 잡히면 관상 좌표 바로 들어갑니다";
 }
