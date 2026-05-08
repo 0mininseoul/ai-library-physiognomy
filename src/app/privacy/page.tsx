@@ -1,0 +1,25 @@
+export default function PrivacyPage() {
+  return (
+    <main className="min-h-screen bg-paper px-5 py-10 text-ink md:px-8">
+      <article className="mx-auto max-w-3xl rounded-lg border border-ink/10 bg-white p-6 leading-7 shadow-sm md:p-8">
+        <p className="text-sm font-black text-prescription">AI 관상가 고양이</p>
+        <h1 className="mt-2 text-3xl font-black">개인정보처리방침</h1>
+        <p className="mt-6">
+          AI 관상가 고양이는 도서 추천 결과 제공과 30일 내 재조회를 위해 이름, 학번, 성별, 생년월일, 선호 독서 카테고리,
+          얼굴 이미지, 얼굴 분석 지표, 추천 결과를 처리합니다.
+        </p>
+        <p className="mt-4">
+          얼굴 이미지는 결과 화면에서 생성 후 24시간까지만 표시되며, 화면상으로는 24시간 이후 삭제된 것으로 안내됩니다.
+        </p>
+        <p className="mt-4">
+          개인 결과와 추천 기록은 30일간 보관되며, 이후 개인 식별 정보와 개별 결과 원문은 삭제됩니다. 장기 보관 데이터는 개인을
+          재식별할 수 없는 집계 통계만 남깁니다.
+        </p>
+        <p className="mt-4">
+          관리자 화면에는 오늘 참여자 수, 추천된 책 수, 선호 카테고리, 추천 분야와 태그, 세션 목록 등 시연 운영에 필요한 집계
+          데이터가 표시됩니다.
+        </p>
+      </article>
+    </main>
+  );
+}
