@@ -1,4 +1,5 @@
 import { displayGivenName, hasFinalConsonant, particle, vocative } from "@/lib/korean/name";
+import { describe, expect, it } from "vitest";
 
 describe("displayGivenName", () => {
   it("removes the first Korean surname character for common 3-character names", () => {
@@ -25,5 +26,9 @@ describe("particles", () => {
     expect(particle("건우", "to")).toBe("건우에게");
     expect(vocative("영민")).toBe("영민아");
     expect(vocative("건우")).toBe("건우야");
+  });
+
+  it("uses 로 for direction particles after ㄹ-final names", () => {
+    expect(particle("서울", "direction")).toBe("서울로");
   });
 });

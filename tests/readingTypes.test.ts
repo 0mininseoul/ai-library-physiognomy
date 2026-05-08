@@ -1,4 +1,5 @@
 import { READING_TYPE_CODES, getReadingType, isReadingTypeCode } from "@/lib/reading-types/types";
+import { describe, expect, it } from "vitest";
 
 describe("reading types", () => {
   it("defines exactly 16 allowed reading types", () => {

@@ -3,6 +3,7 @@ export type ParticleKind = "subject" | "topic" | "object" | "vocative" | "to" | 
 const HANGUL_BASE = 0xac00;
 const HANGUL_END = 0xd7a3;
 const FINAL_CONSONANT_COUNT = 28;
+const RIEUL_FINAL_CONSONANT_INDEX = 8;
 
 export function displayGivenName(fullName: string): string {
   const trimmed = fullName.trim();
@@ -14,11 +15,20 @@ export function displayGivenName(fullName: string): string {
 }
 
 export function hasFinalConsonant(value: string): boolean {
+  const finalConsonantIndex = getFinalConsonantIndex(value);
+  return finalConsonantIndex !== null && finalConsonantIndex !== 0;
+}
+
+function hasRieulFinalConsonant(value: string): boolean {
+  return getFinalConsonantIndex(value) === RIEUL_FINAL_CONSONANT_INDEX;
+}
+
+function getFinalConsonantIndex(value: string): number | null {
   const char = [...value.trim()].at(-1);
-  if (!char) return false;
+  if (!char) return null;
   const code = char.charCodeAt(0);
-  if (code < HANGUL_BASE || code > HANGUL_END) return false;
-  return (code - HANGUL_BASE) % FINAL_CONSONANT_COUNT !== 0;
+  if (code < HANGUL_BASE || code > HANGUL_END) return null;
+  return (code - HANGUL_BASE) % FINAL_CONSONANT_COUNT;
 }
 
 export function particle(name: string, kind: ParticleKind): string {
@@ -29,7 +39,7 @@ export function particle(name: string, kind: ParticleKind): string {
   if (kind === "vocative") return vocative(name);
   if (kind === "to") return `${name}${final ? "이에게" : "에게"}`;
   if (kind === "with") return `${name}${final ? "과" : "와"}`;
-  if (kind === "direction") return `${name}${final ? "으로" : "로"}`;
+  if (kind === "direction") return `${name}${final && !hasRieulFinalConsonant(name) ? "으로" : "로"}`;
   return name;
 }
 
