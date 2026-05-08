@@ -34,7 +34,18 @@ export function useFaceLandmarker(
   const imageFallbackAfterMs = options?.imageFallbackAfterMs ?? 6_000;
 
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled) {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
+      setResult(null);
+      setLandmarks(null);
+      setDetectionSource(null);
+      setIsLoading(false);
+      setError(null);
+      return;
+    }
     let cancelled = false;
     let emptySince: number | null = null;
     let lastImageFallbackAt = 0;
@@ -124,7 +135,10 @@ export function useFaceLandmarker(
 
     return () => {
       cancelled = true;
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
     };
   }, [delegate, enabled, imageFallback, imageFallbackAfterMs, videoRef]);
 

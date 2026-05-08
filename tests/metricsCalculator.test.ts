@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { computeFaceMetrics, computeFaceBox } from "@/lib/facemesh/metricsCalculator";
+import { averageLandmarks, computeFaceMetrics, computeFaceBox } from "@/lib/facemesh/metricsCalculator";
 import type { Landmark } from "@/types/face";
 
 function fakeLandmarks(): Landmark[] {
@@ -32,6 +32,20 @@ describe("computeFaceMetrics", () => {
   it("emits a forehead classification alongside areaPct", () => {
     const metrics = computeFaceMetrics(fakeLandmarks());
     expect(metrics.forehead.classification).toMatch(/^(narrow|average|wide)$/);
+  });
+});
+
+describe("averageLandmarks", () => {
+  it("rejects samples with mismatched landmark counts", () => {
+    expect(() =>
+      averageLandmarks([
+        [
+          { x: 0, y: 0, z: 0 },
+          { x: 1, y: 1, z: 1 },
+        ],
+        [{ x: 2, y: 2, z: 2 }],
+      ]),
+    ).toThrow("same number of landmarks");
   });
 });
 

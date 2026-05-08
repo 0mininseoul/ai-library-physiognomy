@@ -22,7 +22,12 @@ function getFaceLandmarkerForMode(mode: FaceLandmarkerRunningMode, delegate: Fac
   const existing = singletonByKey.get(key);
   if (existing) return existing;
 
-  const created = createFaceLandmarker(mode, delegate);
+  const created = createFaceLandmarker(mode, delegate).catch((error: unknown) => {
+    if (singletonByKey.get(key) === created) {
+      singletonByKey.delete(key);
+    }
+    throw error;
+  });
   singletonByKey.set(key, created);
   return created;
 }

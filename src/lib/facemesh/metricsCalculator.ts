@@ -132,10 +132,14 @@ export function computeFaceMetrics(landmarks: Landmark[]): FaceMetrics {
 export function averageLandmarks(samples: Landmark[][]): Landmark[] {
   if (samples.length === 0) return [];
   const count = samples[0]?.length ?? 0;
+  const mismatchedSample = samples.find((landmarks) => landmarks.length !== count);
+  if (mismatchedSample) {
+    throw new Error("All landmark samples must contain the same number of landmarks");
+  }
   return Array.from({ length: count }, (_, index) => {
     const acc = samples.reduce(
       (sum, landmarks) => {
-        const p = landmarks[index] ?? { x: 0, y: 0, z: 0 };
+        const p = landmarks[index]!;
         sum.x += p.x;
         sum.y += p.y;
         sum.z += p.z;
