@@ -1,5 +1,5 @@
 export type LibraryBook = {
-  source: "data4library";
+  source: "data4library" | "naver";
   sourceId: string;
   isbn13: string | null;
   title: string;
@@ -25,4 +25,16 @@ export type RawData4LibraryBook = {
   class_nm?: string;
   bookImageURL?: string;
   bookDtlUrl?: string;
+};
+
+export type RawNaverBook = {
+  source?: "naver";
+  title?: string;
+  link?: string;
+  image?: string;
+  author?: string;
+  publisher?: string;
+  isbn?: string;
+  description?: string;
+  pubdate?: string;
 };

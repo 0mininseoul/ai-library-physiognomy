@@ -1,9 +1,14 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import type { LibraryBook, RawData4LibraryBook } from "../../src/lib/books/types";
+import type { LibraryBook, RawData4LibraryBook, RawNaverBook } from "../../src/lib/books/types";
 
 type RawMvpBook = RawData4LibraryBook & {
+  mvp_category?: string;
+  mvp_query?: string;
+};
+
+type RawNaverMvpBook = RawNaverBook & {
   mvp_category?: string;
   mvp_query?: string;
 };
@@ -26,6 +31,16 @@ const CLASS_PREFIXES: Array<{ pattern: RegExp; prefix: string }> = [
 
 function clean(value: string | null | undefined): string {
   return value?.replace(/\s+/g, " ").trim() ?? "";
+}
+
+function stripHtml(value: string | null | undefined): string {
+  return clean(value)
+    .replace(/<[^>]+>/g, "")
+    .replace(/&quot;/g, "\"")
+    .replace(/&#39;/g, "'")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">");
 }
 
 function emptyToNull(value: string): string | null {
@@ -51,6 +66,17 @@ function stableSuffix(book: RawMvpBook): string {
   const digits = id.replace(/\D/g, "");
   if (digits.length > 0) return digits.slice(-3).padStart(3, "0");
   return "001";
+}
+
+function stableNaverSuffix(book: RawNaverMvpBook): string {
+  const id = clean(book.isbn) || clean(book.link) || clean(book.title);
+  const digits = id.replace(/\D/g, "");
+  if (digits.length > 0) return digits.slice(-3).padStart(3, "0");
+  return "001";
+}
+
+function isbn13(value: string | null | undefined): string | null {
+  return value?.match(/\b\d{13}\b/)?.[0] ?? null;
 }
 
 function uniqueTags(tags: string[]): string[] {
@@ -80,6 +106,37 @@ export function normalizeRawBook(raw: RawMvpBook): LibraryBook {
   };
 }
 
+function normalizeRawNaverBook(raw: RawNaverMvpBook): LibraryBook {
+  const title = stripHtml(raw.title);
+  const category = clean(raw.mvp_category) || "교양/세계관";
+  const parsedIsbn13 = isbn13(raw.isbn);
+  const prefix = classPrefix(category);
+
+  return {
+    source: "naver",
+    sourceId: parsedIsbn13 || clean(raw.link) || `${title}-${stripHtml(raw.author)}`,
+    isbn13: parsedIsbn13,
+    title,
+    author: stripHtml(raw.author),
+    publisher: stripHtml(raw.publisher),
+    publishedYear: parsePublishedYear(raw.pubdate),
+    category,
+    description: stripHtml(raw.description),
+    coverUrl: emptyToNull(clean(raw.image)),
+    callNumber: `${prefix}.${stableNaverSuffix(raw)}`,
+    locationLabel: `${category} 추천 서가`,
+    tags: uniqueTags([category, raw.mvp_query ?? "", "네이버 책"]),
+  };
+}
+
+export function normalizeAnyRawBook(raw: RawMvpBook | RawNaverMvpBook): LibraryBook {
+  if ("source" in raw && raw.source === "naver") {
+    return normalizeRawNaverBook(raw);
+  }
+
+  return normalizeRawBook(raw as RawMvpBook);
+}
+
 function dedupeBooks(books: LibraryBook[]): LibraryBook[] {
   const seen = new Set<string>();
   const deduped: LibraryBook[] = [];
@@ -95,8 +152,8 @@ function dedupeBooks(books: LibraryBook[]): LibraryBook[] {
 }
 
 async function main() {
-  const raw = JSON.parse(await fs.readFile(RAW_PATH, "utf8")) as RawMvpBook[];
-  const books = dedupeBooks(raw.map(normalizeRawBook).filter((book) => book.title.length > 0));
+  const raw = JSON.parse(await fs.readFile(RAW_PATH, "utf8")) as Array<RawMvpBook | RawNaverMvpBook>;
+  const books = dedupeBooks(raw.map(normalizeAnyRawBook).filter((book) => book.title.length > 0));
 
   await fs.mkdir(path.dirname(OUT_PATH), { recursive: true });
   await fs.writeFile(OUT_PATH, JSON.stringify(books, null, 2));

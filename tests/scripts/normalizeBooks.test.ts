@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { normalizeRawBook } from "../../scripts/books/normalize-books";
+import { normalizeAnyRawBook, normalizeRawBook } from "../../scripts/books/normalize-books";
 
 describe("normalizeRawBook", () => {
   it("normalizes Data4Library fields into MVP book records", () => {
@@ -24,6 +24,33 @@ describe("normalizeRawBook", () => {
       category: "집중/실행",
       callNumber: expect.stringMatching(/^000/),
       locationLabel: expect.stringContaining("자료실"),
+    });
+  });
+
+  it("normalizes Naver Book API fields into MVP book records", () => {
+    const book = normalizeAnyRawBook({
+      source: "naver",
+      title: "<b>소년이 온다</b>",
+      author: "한강",
+      publisher: "창비",
+      pubdate: "20140519",
+      isbn: "8936434128 9788936434120",
+      image: "https://example.com/naver-cover.jpg",
+      description: "상처를 마주 보는 문학",
+      link: "https://example.com/book",
+      mvp_category: "문학/취향",
+      mvp_query: "문학",
+    });
+
+    expect(book).toMatchObject({
+      source: "naver",
+      sourceId: "9788936434120",
+      isbn13: "9788936434120",
+      title: "소년이 온다",
+      author: "한강",
+      category: "문학/취향",
+      publishedYear: 2014,
+      locationLabel: "문학/취향 추천 서가",
     });
   });
 });

@@ -11,6 +11,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "books:fetch": "tsx scripts/books/fetch-data4library.ts",
+    "books:fetch:naver": "tsx scripts/books/fetch-naver-books.ts",
     "books:normalize": "tsx scripts/books/normalize-books.ts",
     "books:tag": "tsx scripts/books/tag-books.ts",
     "books:import": "tsx scripts/books/import-books.ts"
