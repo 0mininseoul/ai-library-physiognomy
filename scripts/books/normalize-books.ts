@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
+import { inferBookCategory } from "../../src/lib/books/categories";
 import type { LibraryBook, RawData4LibraryBook, RawNaverBook } from "../../src/lib/books/types";
 
 type RawMvpBook = RawData4LibraryBook & {
@@ -85,8 +86,8 @@ function uniqueTags(tags: string[]): string[] {
 
 export function normalizeRawBook(raw: RawMvpBook): LibraryBook {
   const title = clean(raw.bookname);
-  const category = clean(raw.mvp_category) || "교양/세계관";
   const className = clean(raw.class_nm);
+  const category = inferBookCategory({ title, description: `${className} ${clean(raw.bookDtlUrl)}`, categoryHint: clean(raw.mvp_category) });
   const prefix = classPrefix(className);
 
   return {
@@ -108,7 +109,8 @@ export function normalizeRawBook(raw: RawMvpBook): LibraryBook {
 
 function normalizeRawNaverBook(raw: RawNaverMvpBook): LibraryBook {
   const title = stripHtml(raw.title);
-  const category = clean(raw.mvp_category) || "교양/세계관";
+  const description = stripHtml(raw.description);
+  const category = inferBookCategory({ title, description, categoryHint: clean(raw.mvp_category) });
   const parsedIsbn13 = isbn13(raw.isbn);
   const prefix = classPrefix(category);
 
@@ -121,7 +123,7 @@ function normalizeRawNaverBook(raw: RawNaverMvpBook): LibraryBook {
     publisher: stripHtml(raw.publisher),
     publishedYear: parsePublishedYear(raw.pubdate),
     category,
-    description: stripHtml(raw.description),
+    description,
     coverUrl: emptyToNull(clean(raw.image)),
     callNumber: `${prefix}.${stableNaverSuffix(raw)}`,
     locationLabel: `${category} 추천 서가`,

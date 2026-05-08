@@ -3,35 +3,53 @@ import "./load-env";
 import { GoogleGenAI, Type } from "@google/genai";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { BOOK_CATEGORIES, inferBookCategory, isBookCategory } from "../../src/lib/books/categories";
 import type { LibraryBook } from "../../src/lib/books/types";
 
 const IN_PATH = path.join(process.cwd(), "data/books/books.normalized.json");
 const OUT_PATH = path.join(process.cwd(), "data/books/books.tagged.json");
-const MODEL = process.env.GEMINI_BOOK_TAG_MODEL ?? process.env.GEMINI_ANALYSIS_MODEL ?? "gemini-2.5-pro";
+const MODEL = process.env.GEMINI_BOOK_TAG_MODEL ?? process.env.GEMINI_LIVE_MODEL ?? "gemini-2.5-flash";
 const BATCH_SIZE = Number.parseInt(process.env.GEMINI_BOOK_TAG_BATCH_SIZE ?? "50", 10);
 
 const CATEGORY_COPY: Record<string, string> = {
-  "진로/커리어": "진로 고민이 머릿속에서 탭 47개처럼 떠 있을 때 방향을 잡아 줄 책입니다.",
-  "관계/대화": "말 한마디가 자꾸 마음속에서 리플레이될 때 관계의 해상도를 올려 줄 책입니다.",
-  "감정/회복": "마음 배터리가 3% 남은 날에도 다시 충전할 실마리를 주는 책입니다.",
-  "집중/실행": "계획은 많은데 실행 버튼이 안 눌릴 때 손가락 힘을 보태 줄 책입니다.",
-  "문학/취향": "취향과 감수성의 근육을 조용히 키워 줄 이야기 처방전입니다.",
-  "교양/세계관": "세상을 보는 렌즈를 한 단계 업그레이드해 줄 교양 처방전입니다.",
+  "소설": "이야기의 힘으로 감정과 상상력을 넓혀 줄 책입니다.",
+  "시/에세이": "마음 배터리가 3% 남은 날에도 다시 충전할 실마리를 주는 책입니다.",
+  "자기계발": "계획은 많은데 실행 버튼이 안 눌릴 때 손가락 힘을 보태 줄 책입니다.",
+  "인문/철학": "세상을 보는 렌즈를 한 단계 업그레이드해 줄 교양 처방전입니다.",
+  "경제/경영": "돈, 일, 시장을 감이 아니라 구조로 보게 해 줄 책입니다.",
+  "과학/기술": "새로운 기술과 세상의 작동 원리를 선명하게 보여 줄 책입니다.",
+  "사회/정치": "내가 사는 사회를 더 입체적으로 읽게 해 줄 책입니다.",
+  "예술/취미": "취향과 감각의 근육을 조용히 키워 줄 책입니다.",
+  "진로/학습": "진로 고민이 머릿속에서 탭 47개처럼 떠 있을 때 방향을 잡아 줄 책입니다.",
 };
+
+const LEGACY_CATEGORIES = new Set(["진로/커리어", "관계/대화", "감정/회복", "집중/실행", "문학/취향", "교양/세계관"]);
 
 type TagResponse = {
   books: Array<{
     sourceId: string;
+    category?: string;
     description?: string;
     tags?: string[];
   }>;
 };
 
-function mergeTags(existing: string[], generated: string[] | undefined): string[] {
-  return Array.from(new Set([...existing, ...(generated ?? [])].map((tag) => tag.trim()).filter(Boolean))).slice(0, 8);
+function mergeTags(category: string, existing: string[], generated: string[] | undefined): string[] {
+  const cleanedExisting = existing.filter((tag) => !LEGACY_CATEGORIES.has(tag) && tag !== "네이버 책");
+  return Array.from(new Set([category, ...cleanedExisting, ...(generated ?? [])].map((tag) => tag.trim()).filter(Boolean))).slice(0, 8);
+}
+
+function locationLabel(category: string): string {
+  return `${category} 추천 서가`;
+}
+
+function resolvedCategory(book: LibraryBook, generatedCategory?: string): string {
+  if (isBookCategory(generatedCategory)) return generatedCategory;
+  return inferBookCategory({ title: book.title, description: book.description, categoryHint: book.category });
 }
 
 function fallbackBookTag(book: LibraryBook): LibraryBook {
+  const category = resolvedCategory(book);
   const titleTags = [
     book.title.includes("진로") || book.title.includes("직업") ? "진로탐색" : "",
     book.title.includes("습관") || book.title.includes("집중") ? "실행력" : "",
@@ -43,8 +61,10 @@ function fallbackBookTag(book: LibraryBook): LibraryBook {
 
   return {
     ...book,
-    description: book.description || CATEGORY_COPY[book.category] || "지금 고민과 취향 사이를 이어 줄 추천 책입니다.",
-    tags: mergeTags(book.tags, [book.category, ...titleTags]),
+    category,
+    description: book.description || CATEGORY_COPY[category] || "지금 고민과 취향 사이를 이어 줄 추천 책입니다.",
+    locationLabel: locationLabel(category),
+    tags: mergeTags(category, book.tags, titleTags),
   };
 }
 
@@ -66,7 +86,8 @@ async function tagBatch(ai: GoogleGenAI, books: LibraryBook[]): Promise<LibraryB
     model: MODEL,
     contents: [
       "AI 관상가 고양이의 학교도서관 추천 DB를 만들고 있습니다.",
-      "각 책에 대해 고등학생에게 어울리는 짧은 추천 설명과 한국어 태그 3-5개를 JSON으로 작성하세요.",
+      `각 책에 대해 분야 category를 다음 허용 카테고리 중 하나로 재분류하고, 고등학생에게 어울리는 짧은 추천 설명과 한국어 태그 3-5개를 JSON으로 작성하세요. 허용 카테고리: ${BOOK_CATEGORIES.join(", ")}`,
+      "기존 category는 검색어 기반 힌트일 뿐입니다. 제목과 설명을 우선하세요. 부동산, 경매, 투자, 금융, 시장, 창업 책은 경제/경영으로 분류하세요.",
       JSON.stringify(
         books.map((book) => ({
           sourceId: book.sourceId,
@@ -89,13 +110,14 @@ async function tagBatch(ai: GoogleGenAI, books: LibraryBook[]): Promise<LibraryB
               type: Type.OBJECT,
               properties: {
                 sourceId: { type: Type.STRING },
+                category: { type: Type.STRING, enum: BOOK_CATEGORIES },
                 description: { type: Type.STRING },
                 tags: {
                   type: Type.ARRAY,
                   items: { type: Type.STRING },
                 },
               },
-              required: ["sourceId", "description", "tags"],
+              required: ["sourceId", "category", "description", "tags"],
             },
           },
         },
@@ -108,10 +130,13 @@ async function tagBatch(ai: GoogleGenAI, books: LibraryBook[]): Promise<LibraryB
 
   return books.map((book) => {
     const generated = generatedById.get(book.sourceId);
+    const category = resolvedCategory(book, generated?.category);
     return {
       ...book,
+      category,
       description: generated?.description?.trim() || book.description,
-      tags: mergeTags(book.tags, generated?.tags),
+      locationLabel: locationLabel(category),
+      tags: mergeTags(category, book.tags, generated?.tags),
     };
   });
 }

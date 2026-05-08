@@ -69,6 +69,13 @@ async function main() {
     auth: { persistSession: false, autoRefreshToken: false },
   });
   const rows = (await readBooks()).map(toRow);
+  const sources = Array.from(new Set(rows.map((row) => row.source)));
+
+  if (sources.length > 0) {
+    const { error } = await supabase.from("books").update({ active: false }).in("source", sources);
+    if (error) throw error;
+    console.log(`Deactivated existing books for sources: ${sources.join(", ")}`);
+  }
 
   for (let index = 0; index < rows.length; index += CHUNK_SIZE) {
     const chunk = rows.slice(index, index + CHUNK_SIZE);

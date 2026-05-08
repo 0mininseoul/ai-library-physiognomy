@@ -12,7 +12,7 @@ describe("normalizeRawBook", () => {
       isbn13: "9791190000001",
       class_nm: "총류",
       bookImageURL: "https://example.com/cover.jpg",
-      mvp_category: "집중/실행",
+      mvp_category: "자기계발",
       mvp_query: "집중",
     });
 
@@ -21,7 +21,7 @@ describe("normalizeRawBook", () => {
       sourceId: "123",
       title: "생각 정리의 기술",
       author: "홍길동",
-      category: "집중/실행",
+      category: "자기계발",
       callNumber: expect.stringMatching(/^000/),
       locationLabel: expect.stringContaining("자료실"),
     });
@@ -38,7 +38,7 @@ describe("normalizeRawBook", () => {
       image: "https://example.com/naver-cover.jpg",
       description: "상처를 마주 보는 문학",
       link: "https://example.com/book",
-      mvp_category: "문학/취향",
+      mvp_category: "소설",
       mvp_query: "문학",
     });
 
@@ -48,9 +48,9 @@ describe("normalizeRawBook", () => {
       isbn13: "9788936434120",
       title: "소년이 온다",
       author: "한강",
-      category: "문학/취향",
+      category: "소설",
       publishedYear: 2014,
-      locationLabel: "문학/취향 추천 서가",
+      locationLabel: "소설 추천 서가",
     });
   });
 });
