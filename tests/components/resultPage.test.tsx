@@ -28,7 +28,7 @@ const payload: ResultPayload = {
       nose: { metricsText: "콧대 길이 기준", comment: "시작 전 계산이 들어가는 타입입니다." },
       mouth: { metricsText: "입꼬리 각도 기준", comment: "핵심에서 표현이 선명합니다." },
       jaw: { metricsText: "하관 안정감 기준", comment: "버티는 힘이 있습니다." },
-      skin: { metricsText: "전체 분위기 기준", comment: "컨디션이 얼굴에 빠르게 드러납니다." },
+      impression: { metricsText: "표정 안정감 기준", comment: "차분하게 몰입하는 인상이 있습니다." },
     },
     scores: {
       likability: 82,
@@ -50,6 +50,12 @@ const payload: ResultPayload = {
       currentFlow: "루틴과 실행력을 끌어올릴 타이밍입니다.",
       strength: "한 번 꽂히면 오래 파고듭니다.",
       advice: "작게 시작하면 흐름이 붙습니다.",
+    },
+    romanticMatch: {
+      bestTypes: ["불꽃 실행형", "잔잔한 물결형"],
+      why: "영민님의 깊게 파고드는 리듬을 상대가 가볍게 환기해줄 때 케미가 좋습니다.",
+      dateStyle: "조용한 전시나 책방처럼 대화가 천천히 열리는 코스가 잘 맞습니다.",
+      caution: "답장이 늦다고 바로 의미 부여하면 고양이 귀 접힙니다.",
     },
     physiognomySummary: "이마와 눈매 밸런스에서 목표 재정렬 신호가 보입니다.",
     sajuSummary: "지금은 루틴과 실행력을 끌어올릴 책이 잘 맞습니다.",
@@ -76,6 +82,8 @@ describe("ResultContent", () => {
 
     expect(screen.getByText(/영민님 집중 모드 켜짐/)).toBeInTheDocument();
     expect(screen.getByText("지금 영민님에게 필요한 책")).toBeInTheDocument();
+    expect(screen.getByText("연애 궁합")).toBeInTheDocument();
+    expect(screen.queryByText(/피부/)).not.toBeInTheDocument();
     expect(screen.getByText("얼굴 이미지는 24시간 이후 삭제됐어요.")).toBeInTheDocument();
     expect(screen.getByText("몰입의 기술")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /몰입의 기술/ })).toHaveAttribute("href", expect.stringContaining("search.shopping.naver.com"));

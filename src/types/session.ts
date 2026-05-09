@@ -52,7 +52,7 @@ export type LibraryAnalysisResult = {
     nose: DetailComment;
     mouth: DetailComment;
     jaw: DetailComment;
-    skin: DetailComment;
+    impression: DetailComment;
   };
   scores: {
     likability: number;
@@ -75,6 +75,12 @@ export type LibraryAnalysisResult = {
     strength: string;
     advice: string;
     calculation?: SajuCalculation;
+  };
+  romanticMatch: {
+    bestTypes: string[];
+    why: string;
+    dateStyle: string;
+    caution: string;
   };
   physiognomySummary: string;
   sajuSummary: string;

@@ -9,6 +9,7 @@ import { FaceMeshOverlay } from "@/components/analyze/FaceMeshOverlay";
 import { captureVideoFrame } from "@/lib/capture/screenshot";
 import { averageLandmarks, computeFaceMetrics } from "@/lib/facemesh/metricsCalculator";
 import { displayGivenName } from "@/lib/korean/name";
+import { dominantElementText, elementCountItems, koreanDayMaster, koreanPillarSummary } from "@/lib/saju/display";
 import { useCamera } from "@/hooks/useCamera";
 import { useFaceLandmarker } from "@/hooks/useFaceLandmarker";
 import type { Landmark } from "@/types/face";
@@ -37,7 +38,7 @@ const ANALYSIS_CARDS = [
   { title: "§4 NOSE FLOW", body: "콧대 길이와 콧방울 폭에서 추진력 패턴을 읽는 중." },
   { title: "§5 MOUTH TONE", body: "입술 비율과 입꼬리 각도로 표현 습관을 분석 중." },
   { title: "§6 JAW BALANCE", body: "턱선, 하관 안정감, 얼굴형 밸런스를 정리 중." },
-  { title: "§7 SKIN SIGNAL", body: "화면 밝기와 표정 분위기에서 컨디션 신호를 분리 중." },
+  { title: "§7 IMPRESSION SIGNAL", body: "표정 안정감과 전체 인상 리듬을 분리 중." },
   { title: "§8 AESTHETIC INDEX", body: "호감도, 신뢰감, 균형감 지표를 스코어로 환산 중." },
   { title: "§9 SAJU RHYTHM", body: "생년월일 기반 오행 분포와 현재 리듬을 대조 중." },
   { title: "§10 FINAL REPORT", body: "관상과 사주 해석을 한 줄 결론까지 정리 중." },
@@ -209,7 +210,10 @@ export function AnalyzePage() {
       {flow !== "entry" ? <FaceMeshOverlay result={face.result} /> : null}
 
       <header className="fixed left-7 top-6 z-30 flex items-center gap-3 rounded-lg border border-border bg-black/[0.45] px-3 py-2.5 text-xs font-bold uppercase tracking-[0.14em] text-text-muted backdrop-blur">
-        <span className="grid h-8 w-8 place-items-center rounded-md border border-white/10 bg-white/[0.08] text-lg">猫</span>
+        <span className="grid h-8 w-8 place-items-center rounded-md border border-white/10 bg-white/[0.08]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/icon.svg" alt="" className="h-5 w-5" />
+        </span>
         <span>AI 관상가 고양이 / Live Face Scan</span>
       </header>
 
@@ -295,7 +299,9 @@ function EntryModal({
   const [name, setName] = useState("");
   const [studentId, setStudentId] = useState("");
   const [gender, setGender] = useState<Gender | "">("");
-  const [birthDate, setBirthDate] = useState("");
+  const [birthYear, setBirthYear] = useState("2000");
+  const [birthMonth, setBirthMonth] = useState("01");
+  const [birthDay, setBirthDay] = useState("01");
   const [favoriteCategory, setFavoriteCategory] = useState<string>(BOOK_CATEGORIES[0]);
   const [consentAccepted, setConsentAccepted] = useState(false);
 
@@ -303,6 +309,7 @@ function EntryModal({
     event.preventDefault();
     const trimmedName = name.trim();
     const trimmedStudentId = studentId.trim();
+    const birthDate = buildBirthDate(birthYear, birthMonth, birthDay);
 
     if (!trimmedName || !trimmedStudentId || !gender || !birthDate || !favoriteCategory) {
       onError("빈칸 있으면 분석이 삐끗해요. 전부 채워줘.");
@@ -378,7 +385,14 @@ function EntryModal({
             </div>
           </fieldset>
 
-          <DarkInput label="생년월일" name="birthDate" type="date" value={birthDate} max={new Date().toISOString().slice(0, 10)} onChange={(event) => setBirthDate(event.target.value)} />
+          <BirthDateSelects
+            year={birthYear}
+            month={birthMonth}
+            day={birthDay}
+            onYearChange={setBirthYear}
+            onMonthChange={setBirthMonth}
+            onDayChange={setBirthDay}
+          />
 
           <label className="grid gap-2 text-sm font-bold text-text-primary" htmlFor="favoriteCategory">
             <span>선호 카테고리</span>
@@ -452,6 +466,79 @@ function CatGatekeeperOverlay() {
   );
 }
 
+function BirthDateSelects({
+  year,
+  month,
+  day,
+  onYearChange,
+  onMonthChange,
+  onDayChange,
+}: {
+  year: string;
+  month: string;
+  day: string;
+  onYearChange: (value: string) => void;
+  onMonthChange: (value: string) => void;
+  onDayChange: (value: string) => void;
+}) {
+  const years = useMemo(() => {
+    const currentYear = new Date().getFullYear();
+    return Array.from({ length: currentYear - 1949 }, (_, index) => String(currentYear - index));
+  }, []);
+  const months = useMemo(() => Array.from({ length: 12 }, (_, index) => pad2(index + 1)), []);
+  const days = useMemo(() => {
+    const maxDay = daysInMonth(Number(year), Number(month));
+    return Array.from({ length: maxDay }, (_, index) => pad2(index + 1));
+  }, [month, year]);
+
+  useEffect(() => {
+    if (!days.includes(day)) onDayChange(days[days.length - 1] ?? "01");
+  }, [day, days, onDayChange]);
+
+  return (
+    <fieldset className="grid gap-2">
+      <legend className="text-sm font-bold text-text-primary">생년월일</legend>
+      <div className="grid grid-cols-[1.15fr_0.85fr_0.85fr] gap-2">
+        <DateSelect label="년도" value={year} values={years} suffix="년" onChange={onYearChange} />
+        <DateSelect label="월" value={month} values={months} suffix="월" onChange={onMonthChange} />
+        <DateSelect label="일" value={day} values={days} suffix="일" onChange={onDayChange} />
+      </div>
+    </fieldset>
+  );
+}
+
+function DateSelect({
+  label,
+  value,
+  values,
+  suffix,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  values: string[];
+  suffix: string;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <label className="grid gap-1 text-xs font-black uppercase tracking-[0.08em] text-text-faint">
+      <span>{label}</span>
+      <select
+        value={value}
+        className="h-11 rounded-lg border border-border bg-bg-card/70 px-3 text-sm font-black text-text-primary outline-none transition focus:border-accent-info focus:ring-2 focus:ring-accent-info/25"
+        onChange={(event) => onChange(event.target.value)}
+      >
+        {values.map((nextValue) => (
+          <option key={nextValue} value={nextValue}>
+            {Number(nextValue)}
+            {suffix}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
 function ChromaKeyCatSequence({ className, onPhaseChange }: { className: string; onPhaseChange: (phase: "entering" | "resting") => void }) {
   const entryVideoRef = useRef<HTMLVideoElement>(null);
   const restingVideoRef = useRef<HTMLVideoElement>(null);
@@ -507,14 +594,14 @@ function ChromaKeyCatSequence({ className, onPhaseChange }: { className: string;
         alphaMask[index / 4] = alpha > 12 ? 1 : 0;
       }
 
-      for (let y = 2; y < imageData.height - 2; y += 1) {
-        for (let x = 2; x < imageData.width - 2; x += 1) {
+      for (let y = 4; y < imageData.height - 4; y += 1) {
+        for (let x = 4; x < imageData.width - 4; x += 1) {
           const pixelIndex = y * imageData.width + x;
           if (!alphaMask[pixelIndex]) continue;
 
-          let edgeDistance = 3;
-          for (let dy = -2; dy <= 2; dy += 1) {
-            for (let dx = -2; dx <= 2; dx += 1) {
+          let edgeDistance = 5;
+          for (let dy = -4; dy <= 4; dy += 1) {
+            for (let dx = -4; dx <= 4; dx += 1) {
               if (dx === 0 && dy === 0) continue;
               const neighborIndex = pixelIndex + dy * imageData.width + dx;
               if (alphaMask[neighborIndex]) continue;
@@ -522,7 +609,7 @@ function ChromaKeyCatSequence({ className, onPhaseChange }: { className: string;
             }
           }
 
-          if (edgeDistance === 3) continue;
+          if (edgeDistance === 5) continue;
 
           const offset = pixelIndex * 4;
           const red = pixels[offset] ?? 0;
@@ -533,14 +620,16 @@ function ChromaKeyCatSequence({ className, onPhaseChange }: { className: string;
           const lowSaturation = max - min < 58;
           const brightHalo = max > 150 && lowSaturation;
 
-          if (edgeDistance <= 1 || (edgeDistance <= 2 && brightHalo)) {
+          if (edgeDistance <= 2 || (edgeDistance <= 4 && brightHalo)) {
             pixels[offset + 3] = 0;
           } else if (brightHalo) {
-            pixels[offset + 3] = Math.round((pixels[offset + 3] ?? 255) * 0.12);
-          } else if (edgeDistance <= 2) {
-            pixels[offset + 3] = Math.round((pixels[offset + 3] ?? 255) * 0.36);
+            pixels[offset + 3] = Math.round((pixels[offset + 3] ?? 255) * 0.04);
+          } else if (edgeDistance <= 3) {
+            pixels[offset + 3] = Math.round((pixels[offset + 3] ?? 255) * 0.08);
+          } else if (edgeDistance <= 4) {
+            pixels[offset + 3] = Math.round((pixels[offset + 3] ?? 255) * 0.28);
           } else {
-            pixels[offset + 3] = Math.round((pixels[offset + 3] ?? 255) * 0.68);
+            pixels[offset + 3] = Math.round((pixels[offset + 3] ?? 255) * 0.5);
           }
         }
       }
@@ -684,37 +773,84 @@ type CompletedAnalysisCard = {
 
 function FloatingCards({ progress, revealCount, completedCards }: { progress: number; revealCount: number; completedCards: CompletedAnalysisCard[] | null }) {
   const sourceCards = completedCards ?? ANALYSIS_CARDS;
+  const isCompletedView = Boolean(completedCards);
   const visibleCards = sourceCards.slice(0, Math.max(1, revealCount)).map((card, index) => ({
     ...card,
     index,
-    progress: completedCards ? 100 : stepProgress(progress, index),
+    progress: isCompletedView ? 100 : stepProgress(progress, index),
   }));
   const leftCards = visibleCards.filter((card) => card.index % 2 === 0);
   const rightCards = visibleCards.filter((card) => card.index % 2 === 1);
 
   return (
     <>
+      <AnalysisCardConnectors visibleIndexes={visibleCards.map((card) => card.index)} />
       <div className="fixed left-6 top-[104px] z-20 grid w-[min(500px,34vw)] gap-3">
         {leftCards.map((card) => (
-          <AnalysisStepCard key={card.title} title={card.title} body={card.body} progress={card.progress} scores={"scores" in card ? card.scores : undefined} />
+          <AnalysisStepCard key={card.title} title={card.title} body={card.body} progress={card.progress} scores={"scores" in card ? card.scores : undefined} completedView={isCompletedView} />
         ))}
       </div>
       <div className="fixed right-6 top-[104px] z-20 grid w-[min(500px,34vw)] gap-3">
         {rightCards.map((card) => (
-          <AnalysisStepCard key={card.title} title={card.title} body={card.body} progress={card.progress} scores={"scores" in card ? card.scores : undefined} />
+          <AnalysisStepCard key={card.title} title={card.title} body={card.body} progress={card.progress} scores={"scores" in card ? card.scores : undefined} completedView={isCompletedView} />
         ))}
       </div>
     </>
   );
 }
 
-function AnalysisStepCard({ title, body, progress, scores }: { title: string; body: string; progress: number; scores?: Array<{ label: string; value: number; comment?: string }> }) {
+const ANALYSIS_CONNECTORS = [
+  { fromX: 27, fromY: 24, toX: 50, toY: 32 },
+  { fromX: 73, fromY: 24, toX: 50, toY: 44 },
+  { fromX: 27, fromY: 36, toX: 43, toY: 46 },
+  { fromX: 73, fromY: 36, toX: 50, toY: 53 },
+  { fromX: 27, fromY: 48, toX: 50, toY: 64 },
+  { fromX: 73, fromY: 48, toX: 50, toY: 73 },
+  { fromX: 27, fromY: 60, toX: 54, toY: 48 },
+  { fromX: 73, fromY: 60, toX: 50, toY: 58 },
+  { fromX: 27, fromY: 72, toX: 46, toY: 35 },
+  { fromX: 73, fromY: 72, toX: 50, toY: 68 },
+] as const;
+
+function AnalysisCardConnectors({ visibleIndexes }: { visibleIndexes: number[] }) {
+  return (
+    <svg className="pointer-events-none fixed inset-0 z-[19] h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+      {visibleIndexes.map((index) => {
+        const connector = ANALYSIS_CONNECTORS[index];
+        if (!connector) return null;
+
+        return (
+          <g key={index} className="opacity-70">
+            <line x1={connector.fromX} y1={connector.fromY} x2={connector.toX} y2={connector.toY} stroke="rgb(var(--accent-info-rgb) / 0.38)" strokeWidth="0.06" />
+            <circle cx={connector.fromX} cy={connector.fromY} r="0.18" fill="rgb(var(--accent-info-rgb) / 0.85)" />
+            <circle cx={connector.toX} cy={connector.toY} r="0.22" fill="rgb(255 255 255 / 0.88)" />
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
+function AnalysisStepCard({
+  title,
+  body,
+  progress,
+  scores,
+  completedView,
+}: {
+  title: string;
+  body: string;
+  progress: number;
+  scores?: Array<{ label: string; value: number; comment?: string }>;
+  completedView: boolean;
+}) {
   const complete = progress >= 100;
+  const displayBody = useStreamingText(body, completedView ? 22 : 0);
 
   return (
     <article className="glass-panel rounded-xl p-4 transition">
       <div className="mb-2 flex items-center justify-between gap-4">
-        <h2 className="text-xs font-black uppercase tracking-[0.16em] text-text-faint">{title}</h2>
+        <h2 className="text-xs font-black uppercase tracking-[0.16em] text-text-muted">{title}</h2>
         {complete ? <CheckCircle2 className="h-4 w-4 text-accent-info" aria-hidden="true" /> : <Loader2 className="h-4 w-4 animate-spin text-accent-info" aria-hidden="true" />}
       </div>
       {scores ? (
@@ -728,14 +864,14 @@ function AnalysisStepCard({ title, body, progress, scores }: { title: string; bo
               <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
                 <div className="h-full rounded-full bg-accent-info transition-[width] duration-500 ease-out" style={{ width: `${clampInt(score.value, 0, 100)}%` }} />
               </div>
-              {score.comment ? <p className="mt-1.5 text-xs font-medium leading-5 text-text-faint">{score.comment}</p> : null}
+              {score.comment ? <p className="mt-1.5 text-xs font-bold leading-5 text-text-muted">{score.comment}</p> : null}
             </div>
           ))}
         </div>
       ) : (
-        <p className="text-sm font-semibold leading-6 text-text-muted">{body}</p>
+        <p className="text-sm font-bold leading-6 text-text-primary">{displayBody}</p>
       )}
-      {!scores ? (
+      {!scores && !completedView ? (
         <div className="mt-3 flex items-center gap-3">
           <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-white/10">
             <div className="h-full rounded-full bg-accent-info transition-[width] duration-300 ease-out" style={{ width: `${progress}%` }} />
@@ -747,10 +883,34 @@ function AnalysisStepCard({ title, body, progress, scores }: { title: string; bo
   );
 }
 
+function useStreamingText(text: string, charsPerTick: number) {
+  const [visibleLength, setVisibleLength] = useState(charsPerTick > 0 ? 0 : text.length);
+
+  useEffect(() => {
+    if (charsPerTick <= 0) {
+      setVisibleLength(text.length);
+      return;
+    }
+
+    setVisibleLength(0);
+    const interval = window.setInterval(() => {
+      setVisibleLength((length) => {
+        const nextLength = Math.min(text.length, length + charsPerTick);
+        if (nextLength >= text.length) window.clearInterval(interval);
+        return nextLength;
+      });
+    }, 42);
+
+    return () => window.clearInterval(interval);
+  }, [charsPerTick, text]);
+
+  return text.slice(0, visibleLength);
+}
+
 function FinalRevealCard({ displayName, result, onOpenResult }: { displayName: string; result: LibraryAnalysisResult; onOpenResult: () => void }) {
   const name = `${displayName || "회원"}님`;
   const calculation = result.saju.calculation;
-  const sajuLine = calculation ? `${calculation.dayMaster.label} 일간, ${calculation.dominantElementLabels.join("·")} 기운이 강한 흐름까지 확인 완료.` : result.saju.currentFlow;
+  const sajuLine = calculation ? `${koreanDayMaster(calculation)}, 우세 기운은 ${dominantElementText(calculation)}로 확인 완료.` : result.saju.currentFlow;
 
   return (
     <section className="fixed bottom-8 left-1/2 z-30 w-[min(980px,72vw)] -translate-x-1/2">
@@ -758,7 +918,11 @@ function FinalRevealCard({ displayName, result, onOpenResult }: { displayName: s
         <p className="text-xs font-black uppercase tracking-[0.16em] text-accent-info">§11 FINAL ASSESSMENT</p>
         <h2 className="mt-2 truncate text-2xl font-black text-text-primary">{result.mainCopy}</h2>
         <p className="mt-3 text-sm font-semibold leading-6 text-text-muted">
-          {name}의 얼굴 비율, 이목구비 신호, 대칭성, 관상 리듬을 한 번에 정리했어. {sajuLine}
+          {name}의 얼굴 비율, 이목구비 신호, 대칭성, 관상 리듬을 한 번에 정리했어.
+          <br />
+          {sajuLine}
+          <br />
+          야옹이 눈에는 {result.readingType.displayName} 쪽 신호가 제일 크게 잡혔고, 이제 진짜 리포트로 넘어갈 차례야.
         </p>
         <button
           type="button"
@@ -775,18 +939,19 @@ function FinalRevealCard({ displayName, result, onOpenResult }: { displayName: s
 
 function buildCompletedAnalysisCards(result: LibraryAnalysisResult): CompletedAnalysisCard[] {
   const calculation = result.saju.calculation;
-  const sajuIntro = calculation
-    ? `${calculation.yearPillar.label}년 ${calculation.monthPillar.label}월 ${calculation.dayPillar.label}일, 일간 ${calculation.dayMaster.label}. 우세 오행은 ${calculation.dominantElementLabels.join(", ")}로 계산됨.`
-    : "";
+  const elementSummary = elementCountItems(calculation)
+    .map((item) => `${item.icon} ${item.label} ${item.count}`)
+    .join(" / ");
+  const sajuIntro = calculation ? `${koreanPillarSummary(calculation)}. 우세 오행은 ${dominantElementText(calculation)}. ${elementSummary}` : "";
 
   return [
-    { title: "§1 FACE GEOMETRY", body: `${result.geometry.symmetry} ${result.geometry.faceShape}` },
+    { title: "§1 FACE GEOMETRY", body: `${result.geometry.symmetry} ${result.geometry.faceShape} ${result.parts.forehead.metricsText} ${result.parts.forehead.comment}` },
     { title: "§2 SYMMETRY MAP", body: `${result.geometry.goldenRatio} ${result.geometry.thirds} ${result.geometry.fifths}` },
     { title: "§3 EYES SIGNAL", body: `${result.parts.eyes.metricsText} ${result.parts.eyes.comment}` },
     { title: "§4 NOSE FLOW", body: `${result.parts.nose.metricsText} ${result.parts.nose.comment}` },
     { title: "§5 MOUTH TONE", body: `${result.parts.mouth.metricsText} ${result.parts.mouth.comment}` },
     { title: "§6 JAW BALANCE", body: `${result.parts.jaw.metricsText} ${result.parts.jaw.comment}` },
-    { title: "§7 SKIN SIGNAL", body: `${result.parts.skin.metricsText} ${result.parts.skin.comment}` },
+    { title: "§7 IMPRESSION SIGNAL", body: `${result.parts.impression.metricsText} ${result.parts.impression.comment}` },
     {
       title: "§8 AESTHETIC INDEX",
       body: "인상 지표 계산 완료",
@@ -797,7 +962,7 @@ function buildCompletedAnalysisCards(result: LibraryAnalysisResult): CompletedAn
       ],
     },
     { title: "§9 SAJU RHYTHM", body: `${sajuIntro} ${result.saju.elementBalance} ${result.saju.currentFlow}` },
-    { title: "§10 FINAL REPORT", body: `${result.physiognomy.summary} ${result.saju.strength} ${result.saju.advice}` },
+    { title: "§10 ROMANCE MATCH", body: `${result.romanticMatch.bestTypes.join(", ")} 타입과 케미 좋음. ${result.romanticMatch.why} ${result.romanticMatch.caution}` },
   ];
 }
 
@@ -856,6 +1021,23 @@ function apiErrorCopy(code: string | undefined) {
 
 function delay(ms: number) {
   return new Promise((resolve) => window.setTimeout(resolve, ms));
+}
+
+function buildBirthDate(year: string, month: string, day: string) {
+  const normalized = `${year}-${month}-${day}`;
+  const date = new Date(`${normalized}T00:00:00`);
+  if (Number.isNaN(date.getTime())) return "";
+  if (date > new Date()) return "";
+  return normalized;
+}
+
+function daysInMonth(year: number, month: number) {
+  if (!Number.isFinite(year) || !Number.isFinite(month)) return 31;
+  return new Date(year, month, 0).getDate();
+}
+
+function pad2(value: number) {
+  return String(value).padStart(2, "0");
 }
 
 function clampInt(value: number, min: number, max: number) {

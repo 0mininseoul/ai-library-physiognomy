@@ -24,7 +24,7 @@ describe("normalizeLibraryAnalysis", () => {
         nose: { metrics_text: "콧대 길이 기준", comment: "시작 전 계산이 들어가는 타입입니다." },
         mouth: { metrics_text: "입꼬리 각도 기준", comment: "핵심에서 표현이 선명합니다." },
         jaw: { metrics_text: "하관 안정감 기준", comment: "버티는 힘이 있습니다." },
-        skin: { metrics_text: "전체 분위기 기준", comment: "컨디션이 얼굴에 빠르게 드러납니다." },
+        impression: { metrics_text: "표정 안정감 기준", comment: "차분하게 몰입하는 인상이 있습니다." },
       },
       scores: {
         likability: 82,
@@ -47,6 +47,12 @@ describe("normalizeLibraryAnalysis", () => {
         strength: "한 번 꽂히면 오래 파고듭니다.",
         advice: "작게 시작하면 흐름이 붙습니다.",
       },
+      romantic_match: {
+        best_types: ["불꽃 실행형", "잔잔한 물결형"],
+        why: "영민님의 깊게 파고드는 리듬을 상대가 가볍게 환기해줄 때 케미가 좋습니다.",
+        date_style: "조용한 전시나 책방처럼 대화가 천천히 열리는 코스가 잘 맞습니다.",
+        caution: "답장이 늦다고 바로 의미 부여하면 고양이 귀 접힙니다.",
+      },
       physiognomy_summary: "이목구비 균형에서 집중 테마를 뽑았습니다.",
       saju_summary: "월주 흐름은 실행 키워드와 연결됩니다.",
       reading_needs: ["집중력 회복", "실행력", "사고 확장"],
@@ -59,6 +65,8 @@ describe("normalizeLibraryAnalysis", () => {
 
     expect(result.readingType.code).toBe("focus_reboot");
     expect(result.mainCopy).toBe("영민님 집중 모드 켜짐");
+    expect(result.parts.impression.comment).toContain("차분하게");
+    expect(result.romanticMatch.bestTypes).toContain("불꽃 실행형");
     expect(result.recommendations).toHaveLength(3);
   });
 

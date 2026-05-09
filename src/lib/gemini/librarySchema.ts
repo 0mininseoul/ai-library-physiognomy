@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { isReadingTypeCode } from "@/lib/reading-types/types";
+import { stripHanja } from "@/lib/saju/display";
 
 const detailCommentSchema = z.object({
   metrics_text: z.string().min(1),
@@ -29,7 +30,7 @@ const rawSchema = z.object({
     nose: detailCommentSchema,
     mouth: detailCommentSchema,
     jaw: detailCommentSchema,
-    skin: detailCommentSchema,
+    impression: detailCommentSchema,
   }),
   scores: z.object({
     likability: scoreSchema,
@@ -51,6 +52,12 @@ const rawSchema = z.object({
     current_flow: z.string().min(1),
     strength: z.string().min(1),
     advice: z.string().min(1),
+  }),
+  romantic_match: z.object({
+    best_types: z.array(z.string().min(1)).min(2).max(4),
+    why: z.string().min(1),
+    date_style: z.string().min(1),
+    caution: z.string().min(1),
   }),
   physiognomy_summary: z.string().min(1).optional(),
   saju_summary: z.string().min(1).optional(),
@@ -74,17 +81,17 @@ export function normalizeLibraryAnalysis(input: unknown) {
   return {
     readingType: {
       code: raw.reading_type.code,
-      displayName: raw.reading_type.display_name,
-      headline: raw.reading_type.headline,
-      description: raw.reading_type.description,
+      displayName: clean(raw.reading_type.display_name),
+      headline: clean(raw.reading_type.headline),
+      description: clean(raw.reading_type.description),
     },
-    mainCopy: raw.main_copy,
+    mainCopy: clean(raw.main_copy),
     geometry: {
-      symmetry: raw.geometry.symmetry,
-      goldenRatio: raw.geometry.golden_ratio,
-      thirds: raw.geometry.thirds,
-      fifths: raw.geometry.fifths,
-      faceShape: raw.geometry.face_shape,
+      symmetry: clean(raw.geometry.symmetry),
+      goldenRatio: clean(raw.geometry.golden_ratio),
+      thirds: clean(raw.geometry.thirds),
+      fifths: clean(raw.geometry.fifths),
+      faceShape: clean(raw.geometry.face_shape),
     },
     parts: {
       forehead: toDetailComment(raw.parts.forehead),
@@ -92,31 +99,49 @@ export function normalizeLibraryAnalysis(input: unknown) {
       nose: toDetailComment(raw.parts.nose),
       mouth: toDetailComment(raw.parts.mouth),
       jaw: toDetailComment(raw.parts.jaw),
-      skin: toDetailComment(raw.parts.skin),
+      impression: toDetailComment(raw.parts.impression),
     },
-    scores: raw.scores,
-    physiognomy: raw.physiognomy,
+    scores: {
+      ...raw.scores,
+      comments: raw.scores.comments.map(clean),
+    },
+    physiognomy: {
+      keywords: raw.physiognomy.keywords.map(clean),
+      summary: clean(raw.physiognomy.summary),
+      strengths: raw.physiognomy.strengths.map(clean),
+      cautions: raw.physiognomy.cautions.map(clean),
+    },
     saju: {
-      keywords: raw.saju.keywords,
-      elementBalance: raw.saju.element_balance,
-      currentFlow: raw.saju.current_flow,
-      strength: raw.saju.strength,
-      advice: raw.saju.advice,
+      keywords: raw.saju.keywords.map(clean),
+      elementBalance: clean(raw.saju.element_balance),
+      currentFlow: clean(raw.saju.current_flow),
+      strength: clean(raw.saju.strength),
+      advice: clean(raw.saju.advice),
     },
-    physiognomySummary,
-    sajuSummary,
-    readingNeeds: raw.reading_needs,
+    romanticMatch: {
+      bestTypes: raw.romantic_match.best_types.map(clean),
+      why: clean(raw.romantic_match.why),
+      dateStyle: clean(raw.romantic_match.date_style),
+      caution: clean(raw.romantic_match.caution),
+    },
+    physiognomySummary: clean(physiognomySummary),
+    sajuSummary: clean(sajuSummary),
+    readingNeeds: raw.reading_needs.map(clean),
     recommendations: raw.recommendations.map((item) => ({
       bookId: item.book_id,
-      reason: item.reason,
-      actionCopy: item.action_copy,
+      reason: clean(item.reason),
+      actionCopy: clean(item.action_copy),
     })),
   };
 }
 
 function toDetailComment(input: z.infer<typeof detailCommentSchema>) {
   return {
-    metricsText: input.metrics_text,
-    comment: input.comment,
+    metricsText: clean(input.metrics_text),
+    comment: clean(input.comment),
   };
+}
+
+function clean(input: string) {
+  return stripHanja(input);
 }

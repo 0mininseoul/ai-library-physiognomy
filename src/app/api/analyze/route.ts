@@ -114,9 +114,9 @@ export async function POST(req: NextRequest) {
                 nose: detailCommentSchema(),
                 mouth: detailCommentSchema(),
                 jaw: detailCommentSchema(),
-                skin: detailCommentSchema(),
+                impression: detailCommentSchema(),
               },
-              required: ["forehead", "eyes", "nose", "mouth", "jaw", "skin"],
+              required: ["forehead", "eyes", "nose", "mouth", "jaw", "impression"],
             },
             scores: {
               type: Type.OBJECT,
@@ -151,6 +151,16 @@ export async function POST(req: NextRequest) {
               },
               required: ["keywords", "element_balance", "current_flow", "strength", "advice"],
             },
+            romantic_match: {
+              type: Type.OBJECT,
+              properties: {
+                best_types: { type: Type.ARRAY, items: { type: Type.STRING }, minItems: 2, maxItems: 4 },
+                why: { type: Type.STRING },
+                date_style: { type: Type.STRING },
+                caution: { type: Type.STRING },
+              },
+              required: ["best_types", "why", "date_style", "caution"],
+            },
             reading_needs: { type: Type.ARRAY, items: { type: Type.STRING }, minItems: 3, maxItems: 6 },
             recommendations: {
               type: Type.ARRAY,
@@ -167,7 +177,7 @@ export async function POST(req: NextRequest) {
               maxItems: 3,
             },
           },
-          required: ["reading_type", "main_copy", "geometry", "parts", "scores", "physiognomy", "saju", "reading_needs", "recommendations"],
+          required: ["reading_type", "main_copy", "geometry", "parts", "scores", "physiognomy", "saju", "romantic_match", "reading_needs", "recommendations"],
         },
       },
     });

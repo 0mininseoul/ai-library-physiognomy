@@ -113,8 +113,8 @@ select {
 .cat-gatekeeper-anchor {
   position: absolute;
   bottom: clamp(1.6rem, 5vh, 4rem);
-  left: clamp(-7rem, -5vw, -2rem);
-  width: min(52vw, 840px);
+  left: clamp(-2.8rem, -1.8vw, -0.75rem);
+  width: min(46vw, 760px);
   filter:
     drop-shadow(0 30px 48px rgb(0 0 0 / 0.42))
     drop-shadow(0 0 22px rgb(var(--accent-info-rgb) / 0.08));
@@ -122,7 +122,7 @@ select {
 }
 
 .cat-gatekeeper-anchor--entering {
-  animation: cat-gatekeeper-enter 6.3s cubic-bezier(0.34, 0, 0.22, 1) both;
+  animation: cat-gatekeeper-enter 5.3s cubic-bezier(0.22, 0.02, 0.15, 1) both;
 }
 
 .cat-gatekeeper-anchor--resting {
@@ -184,7 +184,7 @@ select {
 
   82% {
     opacity: 1;
-    transform: translate3d(0.6rem, 0, 0) scale(1);
+    transform: translate3d(0.25rem, 0, 0) scale(1);
   }
 
   100% {
@@ -196,7 +196,7 @@ select {
 @media (max-width: 767px) {
   .cat-gatekeeper-anchor {
     bottom: 1.25rem;
-    left: -4.5rem;
-    width: min(78vw, 28rem);
+    left: -1.6rem;
+    width: min(72vw, 25rem);
   }
 }
