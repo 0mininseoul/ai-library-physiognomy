@@ -2,7 +2,7 @@ export default function TermsPage() {
   return (
     <main className="min-h-screen bg-bg-primary px-5 py-10 text-text-primary md:px-8">
       <article className="glass-panel mx-auto max-w-3xl rounded-2xl p-6 leading-7 md:p-8">
-        <p className="text-sm font-black text-accent-warn">AI 관상가 고양이</p>
+        <p className="text-sm font-black text-accent-info">AI 관상가 고양이</p>
         <h1 className="mt-2 text-3xl font-black">이용약관</h1>
         <p className="mt-6">AI 관상가 고양이는 관상과 사주 컨셉을 활용한 엔터테인먼트형 독서 큐레이션 서비스입니다.</p>
         <p className="mt-4">

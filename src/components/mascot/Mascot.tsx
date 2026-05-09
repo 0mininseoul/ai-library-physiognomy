@@ -39,7 +39,7 @@ export function Mascot({ variant = "idle", message, size = "md", className = "" 
         />
       </div>
       {message ? (
-        <figcaption className={`max-w-[18rem] text-center font-semibold leading-6 text-library ${selected.text}`}>{message}</figcaption>
+        <figcaption className={`max-w-[18rem] text-center font-semibold leading-6 text-accent-info ${selected.text}`}>{message}</figcaption>
       ) : null}
     </figure>
   );

@@ -75,9 +75,9 @@ export function AdminDashboard() {
     return (
       <main className="grid min-h-screen place-items-center bg-bg-primary px-5 text-text-primary">
         <section className="glass-panel max-w-md rounded-2xl p-6 text-center">
-          <ShieldAlert className="mx-auto h-10 w-10 text-accent-warn" aria-hidden="true" />
-          <h1 className="mt-4 text-2xl font-black">관리자 인증이 필요해</h1>
-          <p className="mt-3 text-sm font-bold leading-6 text-text-muted">관리자 계정으로 접속한 뒤 다시 불러와줘.</p>
+          <ShieldAlert className="mx-auto h-10 w-10 text-accent-info" aria-hidden="true" />
+          <h1 className="mt-4 text-2xl font-black">관리자 인증이 필요합니다</h1>
+          <p className="mt-3 text-sm font-bold leading-6 text-text-muted">관리자 계정으로 접속한 뒤 다시 불러와 주세요.</p>
           <button
             type="button"
             className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg border border-accent-info/35 bg-accent-info/15 px-5 text-sm font-bold text-text-primary transition hover:bg-accent-info/25"
@@ -102,7 +102,7 @@ function AdminLogin({ onSubmit }: { onSubmit: (token: string) => void }) {
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!user.trim() || !password) {
-      setError("관리자 아이디와 비밀번호를 입력해줘.");
+      setError("관리자 아이디와 비밀번호를 입력해 주세요.");
       return;
     }
     setError(null);
@@ -113,7 +113,7 @@ function AdminLogin({ onSubmit }: { onSubmit: (token: string) => void }) {
     <main className="grid min-h-screen place-items-center bg-bg-primary px-5 text-text-primary">
       <form onSubmit={submit} className="glass-panel w-full max-w-md rounded-2xl p-6">
         <LockKeyhole className="h-10 w-10 text-accent-info" aria-hidden="true" />
-        <p className="mt-5 text-xs font-black uppercase tracking-[0.18em] text-accent-warn">AI 관상가 고양이</p>
+        <p className="mt-5 text-xs font-black uppercase tracking-[0.18em] text-accent-info">AI 관상가 고양이</p>
         <h1 className="mt-2 text-3xl font-black">관리자 로그인</h1>
         <p className="mt-3 text-sm font-semibold leading-6 text-text-muted">운영 데이터는 관리자 인증 후 확인할 수 있습니다.</p>
 
@@ -122,11 +122,11 @@ function AdminLogin({ onSubmit }: { onSubmit: (token: string) => void }) {
           <AdminInput label="비밀번호" name="adminPassword" type="password" value={password} autoComplete="current-password" onChange={(event) => setPassword(event.target.value)} />
         </div>
 
-        {error ? <p className="mt-4 rounded-lg border border-accent-bad/35 bg-accent-bad/10 px-4 py-3 text-sm font-bold text-accent-bad">{error}</p> : null}
+        {error ? <p className="mt-4 rounded-xl border border-accent-info/35 bg-accent-info/10 px-4 py-3 text-sm font-bold text-text-primary">{error}</p> : null}
 
         <button
           type="submit"
-          className="mt-5 inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-accent-info/40 bg-accent-info/[0.18] px-5 text-sm font-black text-text-primary transition hover:bg-accent-info/25"
+          className="mt-5 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl border border-accent-info/40 bg-accent-info/[0.18] px-5 text-sm font-black text-text-primary shadow-glass transition hover:bg-accent-info/25"
         >
           <LockKeyhole className="h-5 w-5" aria-hidden="true" />
           데이터 보기
@@ -141,12 +141,12 @@ function AdminInput(props: InputHTMLAttributes<HTMLInputElement> & { label: stri
   const inputId = id ?? name;
 
   return (
-    <label className="grid gap-1.5 text-sm font-bold text-text-primary" htmlFor={inputId}>
+    <label className="grid gap-2.5 text-sm font-black text-text-primary" htmlFor={inputId}>
       <span>{label}</span>
       <input
         id={inputId}
         name={name}
-        className={`h-11 rounded-lg border border-border bg-bg-card/70 px-4 text-sm font-semibold text-text-primary outline-none transition placeholder:text-text-faint focus:border-accent-info focus:ring-2 focus:ring-accent-info/25 ${className}`.trim()}
+        className={`h-12 rounded-xl border border-border bg-bg-card/70 px-4 text-sm font-bold text-text-primary outline-none transition placeholder:text-text-faint focus:border-accent-info focus:ring-2 focus:ring-accent-info/25 ${className}`.trim()}
         {...inputProps}
       />
     </label>
@@ -161,13 +161,13 @@ export function AdminDashboardContent({ metrics, onRefresh }: { metrics: AdminMe
       <div className="mx-auto grid w-full max-w-7xl gap-5 px-5 py-6 md:px-8 md:py-8">
         <header className="glass-panel flex flex-col justify-between gap-5 rounded-2xl p-5 md:flex-row md:items-end md:p-7">
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-accent-warn">AI 관상가 고양이</p>
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-accent-info">AI 관상가 고양이</p>
             <h1 className="mt-3 text-[clamp(2rem,4vw,4.75rem)] font-black leading-none">관리자 데이터</h1>
             <p className="mt-4 text-sm font-semibold leading-6 text-text-muted">부스 운영 흐름, 추천 집계, 참여 세션을 한 화면에서 확인합니다.</p>
           </div>
           <button
             type="button"
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-border bg-bg-card/70 px-4 text-sm font-black text-text-primary transition hover:border-border-bright hover:bg-bg-card-hover"
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-border bg-bg-card/70 px-4 text-sm font-black text-text-primary transition hover:border-border-bright hover:bg-bg-card-hover"
             onClick={onRefresh}
           >
             <RefreshCw className="h-4 w-4" aria-hidden="true" />
@@ -183,7 +183,7 @@ export function AdminDashboardContent({ metrics, onRefresh }: { metrics: AdminMe
         <section className="glass-panel rounded-2xl p-5 md:p-6">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <p className="text-xs font-black uppercase tracking-[0.16em] text-accent-warn">PARTICIPANTS</p>
+              <p className="text-xs font-black uppercase tracking-[0.16em] text-accent-info">PARTICIPANTS</p>
               <h2 className="mt-2 text-2xl font-black">오늘 시간대별 참여자 수</h2>
             </div>
             <p className="rounded-full border border-accent-info/25 bg-accent-info/10 px-3 py-1 text-sm font-black text-accent-info">{metrics.todayParticipants}명</p>
@@ -198,7 +198,7 @@ export function AdminDashboardContent({ metrics, onRefresh }: { metrics: AdminMe
         </section>
 
         <section className="glass-panel rounded-2xl p-5 md:p-6">
-          <p className="text-xs font-black uppercase tracking-[0.16em] text-accent-warn">BOOK LIST</p>
+          <p className="text-xs font-black uppercase tracking-[0.16em] text-accent-info">BOOK LIST</p>
           <h2 className="mt-2 text-2xl font-black">오늘 추천된 책</h2>
           <div className="mt-5 overflow-x-auto">
             <table className="w-full min-w-[760px] border-separate border-spacing-0 text-left text-sm">
@@ -227,7 +227,7 @@ export function AdminDashboardContent({ metrics, onRefresh }: { metrics: AdminMe
         </section>
 
         <section className="glass-panel rounded-2xl p-5 md:p-6">
-          <p className="text-xs font-black uppercase tracking-[0.16em] text-accent-warn">SESSIONS</p>
+          <p className="text-xs font-black uppercase tracking-[0.16em] text-accent-info">SESSIONS</p>
           <h2 className="mt-2 text-2xl font-black">오늘 참여 세션</h2>
           <div className="mt-5 overflow-x-auto">
             <table className="w-full min-w-[640px] border-separate border-spacing-0 text-left text-sm">

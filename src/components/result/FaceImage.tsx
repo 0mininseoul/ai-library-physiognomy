@@ -12,7 +12,7 @@ export function FaceImage({ displayName, faceImageUrl }: FaceImageProps) {
   return (
     <section className="glass-panel rounded-2xl p-5 md:p-6">
       <div>
-        <p className="text-xs font-black uppercase tracking-[0.16em] text-accent-warn">FACE CAPTURE</p>
+        <p className="text-xs font-black uppercase tracking-[0.16em] text-accent-info">FACE CAPTURE</p>
         <h2 className="mt-2 text-2xl font-black text-text-primary">{name}의 얼굴 스캔 컷</h2>
       </div>
 

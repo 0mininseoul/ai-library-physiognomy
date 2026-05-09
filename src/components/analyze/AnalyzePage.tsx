@@ -290,7 +290,7 @@ export function AnalyzePage() {
           {analysisError ? (
             <div className="fixed inset-0 z-50 grid place-items-center bg-black/[0.78] px-6">
               <div className="glass-panel max-w-lg rounded-2xl p-8 text-center">
-                <Camera className="mx-auto h-10 w-10 text-accent-warn" aria-hidden="true" />
+                <Camera className="mx-auto h-10 w-10 text-accent-info" aria-hidden="true" />
                 <h1 className="mt-4 text-2xl font-extrabold text-text-primary">관상 분석실이 잠시 멈췄습니다</h1>
                 <p className="mt-3 text-sm font-semibold leading-6 text-text-muted">{analysisError}</p>
                 <button
@@ -376,9 +376,9 @@ function EntryModal({
   }
 
   return (
-    <section className="fixed bottom-4 right-5 z-30 max-h-[calc(100vh-2rem)] w-[min(500px,calc(100vw-2.5rem))] overflow-y-auto md:bottom-6 md:right-8">
-      <form onSubmit={submit} className="glass-panel relative rounded-2xl p-5 md:p-6">
-        <div className="mb-4 flex items-center justify-between">
+    <section className="fixed bottom-4 right-5 z-30 max-h-[calc(100vh-2rem)] w-[min(520px,calc(100vw-2.5rem))] overflow-y-auto md:bottom-6 md:right-8">
+      <form onSubmit={submit} className="glass-panel relative rounded-2xl p-6 md:p-7">
+        <div className="mb-5 flex items-center justify-between">
           <div className="flex items-center gap-2 text-sm font-black uppercase tracking-[0.08em] text-text-muted">
             <Camera className="h-4 w-4 text-accent-info" aria-hidden="true" />
             CAMERA INPUT
@@ -386,23 +386,23 @@ function EntryModal({
           <div className="text-xs uppercase tracking-[0.16em] text-text-faint">{cameraStatus}</div>
         </div>
 
-        <div className="mb-6 rounded-lg border border-border bg-black/[0.35] px-4 py-3">
+        <div className="mb-7 rounded-xl border border-border bg-black/[0.35] px-4 py-3">
           <p className="text-sm font-bold leading-6 text-text-muted">
             <span className="block">정보를 채운 뒤 정면 얼굴이 잡히면 자동 분석됩니다.</span>
             <span className="block">얼굴 이미지는 결과 화면에서 24시간까지만 표시됩니다.</span>
           </p>
         </div>
 
-        <div className="mb-6 flex items-start justify-between gap-4">
+        <div className="mb-7 flex items-start justify-between gap-4">
           <div>
-            <p className="text-sm font-black text-accent-warn">AI 관상가 고양이</p>
+            <p className="text-sm font-black text-accent-info">AI 관상가 고양이</p>
             <h1 className="mt-1.5 text-2xl font-black leading-tight text-text-primary md:text-3xl">
               야옹이가 관상 봐드립니다
             </h1>
           </div>
         </div>
 
-        <div className="grid gap-4">
+        <div className="grid gap-5">
           <DarkInput label="이름" name="name" value={name} placeholder="박영민" autoComplete="name" onChange={(event) => setName(event.target.value)} />
           <DarkInput label="학번(또는 사번)" name="studentId" value={studentId} placeholder="20260000" inputMode="numeric" autoComplete="off" onChange={(event) => setStudentId(event.target.value)} />
 
@@ -417,7 +417,7 @@ function EntryModal({
                   key={option.value}
                   type="button"
                   className={[
-                    "min-h-11 rounded-lg border px-4 text-sm font-black transition",
+                    "min-h-12 rounded-xl border px-4 text-sm font-black transition",
                     gender === option.value
                       ? "border-accent-info bg-accent-info/[0.12] text-text-primary shadow-[0_0_0_1px_rgb(141_222_215_/_0.20)]"
                       : "border-border bg-bg-card/70 text-text-muted hover:border-border-bright hover:bg-bg-card-hover",
@@ -445,7 +445,7 @@ function EntryModal({
               id="favoriteCategory"
               name="favoriteCategory"
               value={favoriteCategory}
-              className="h-12 rounded-lg border border-border bg-bg-card/70 px-4 text-sm font-black text-text-primary outline-none transition focus:border-accent-info focus:ring-2 focus:ring-accent-info/25"
+              className="h-12 rounded-xl border border-border bg-bg-card/70 px-4 text-sm font-black text-text-primary outline-none transition focus:border-accent-info focus:ring-2 focus:ring-accent-info/25"
               onChange={(event) => setFavoriteCategory(event.target.value)}
             >
               {BOOK_CATEGORIES.map((category) => (
@@ -456,7 +456,7 @@ function EntryModal({
             </select>
           </label>
 
-          <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-border bg-bg-card/70 p-4 text-sm text-text-muted transition hover:border-border-bright">
+          <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-border bg-bg-card/70 p-4 text-sm text-text-muted transition hover:border-border-bright">
             <input className="mt-1 h-4 w-4 accent-[var(--accent-info)]" type="checkbox" checked={consentAccepted} onChange={(event) => setConsentAccepted(event.target.checked)} />
             <span className="font-medium leading-6">
               개인정보처리방침 및 이용약관 동의
@@ -466,14 +466,14 @@ function EntryModal({
         </div>
 
         {error ? (
-          <p role="alert" className="mt-4 rounded-lg border border-accent-bad/[0.35] bg-accent-bad/[0.12] px-4 py-3 text-sm font-bold text-accent-bad">
+          <p role="alert" className="mt-4 rounded-xl border border-accent-info/[0.35] bg-accent-info/[0.12] px-4 py-3 text-sm font-bold text-text-primary">
             {error}
           </p>
         ) : null}
 
         <button
           type="submit"
-          className="mt-5 inline-flex min-h-[3.25rem] w-full items-center justify-center gap-2 rounded-lg border border-accent-info/40 bg-accent-info/[0.18] px-5 py-4 text-sm font-black text-text-primary transition hover:bg-accent-info/25 disabled:cursor-not-allowed disabled:opacity-[0.45]"
+          className="mt-5 inline-flex min-h-[3.25rem] w-full items-center justify-center gap-2 rounded-xl border border-accent-info/40 bg-accent-info/[0.18] px-5 py-4 text-sm font-black text-text-primary shadow-glass transition hover:bg-accent-info/25 disabled:cursor-not-allowed disabled:opacity-[0.45]"
           disabled={cameraStatus === "requesting"}
         >
           <ScanFace className="h-5 w-5" aria-hidden="true" />
@@ -481,7 +481,7 @@ function EntryModal({
         </button>
 
         {cameraStatus === "denied" || cameraStatus === "error" ? (
-          <button type="button" className="mt-3 w-full text-sm font-bold text-accent-warn underline underline-offset-4" onClick={onRetryCamera}>
+          <button type="button" className="mt-3 w-full text-sm font-bold text-accent-info underline underline-offset-4" onClick={onRetryCamera}>
             {cameraError ?? "카메라 권한 다시 요청"}
           </button>
         ) : null}
@@ -570,7 +570,7 @@ function DateSelect({
       <select
         aria-label={label}
         value={value}
-        className="h-12 rounded-lg border border-border bg-bg-card/70 px-4 text-sm font-black text-text-primary outline-none transition focus:border-accent-info focus:ring-2 focus:ring-accent-info/25"
+        className="h-12 rounded-xl border border-border bg-bg-card/70 px-4 text-sm font-black text-text-primary outline-none transition focus:border-accent-info focus:ring-2 focus:ring-accent-info/25"
         onChange={(event) => onChange(event.target.value)}
       >
         {values.map((nextValue) => (
@@ -751,7 +751,7 @@ function DarkInput(props: InputHTMLAttributes<HTMLInputElement> & { label: strin
       <input
         id={inputId}
         name={name}
-        className={`h-12 rounded-lg border border-border bg-bg-card/70 px-4 text-sm font-black text-text-primary outline-none transition placeholder:text-text-faint focus:border-accent-info focus:ring-2 focus:ring-accent-info/25 ${className}`.trim()}
+        className={`h-12 rounded-xl border border-border bg-bg-card/70 px-4 text-sm font-black text-text-primary outline-none transition placeholder:text-text-faint focus:border-accent-info focus:ring-2 focus:ring-accent-info/25 ${className}`.trim()}
         {...inputProps}
       />
     </label>
@@ -1067,6 +1067,9 @@ function cleanAnalysisCopy(input: string, maxLength: number) {
     .replace(/처방전?/g, "추천")
     .replace(/학생/g, "님")
     .replace(/연애/g, "관계")
+    .replace(/데이트/g, "함께하는 시간")
+    .replace(/근거 더 보기/g, "더보기")
+    .replace(/근거/g, "설명")
     .replace(/\s+/g, " ")
     .trim();
 

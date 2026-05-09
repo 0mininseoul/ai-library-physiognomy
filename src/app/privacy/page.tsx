@@ -2,7 +2,7 @@ export default function PrivacyPage() {
   return (
     <main className="min-h-screen bg-bg-primary px-5 py-10 text-text-primary md:px-8">
       <article className="glass-panel mx-auto max-w-3xl rounded-2xl p-6 leading-7 md:p-8">
-        <p className="text-sm font-black text-accent-warn">AI 관상가 고양이</p>
+        <p className="text-sm font-black text-accent-info">AI 관상가 고양이</p>
         <h1 className="mt-2 text-3xl font-black">개인정보처리방침</h1>
         <p className="mt-6">
           AI 관상가 고양이는 결과 제공과 30일 내 재조회를 위해 이름, 학번(또는 사번), 성별, 생년월일, 선호하는 책 카테고리,

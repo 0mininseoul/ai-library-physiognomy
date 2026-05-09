@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { act, fireEvent, render, screen } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { ResultContent, type ResultPayload } from "@/components/pages/ResultPage";
 import { calculateSaju } from "@/lib/saju/calculator";
 
@@ -74,18 +74,65 @@ const payload: ResultPayload = {
         reason: "목표를 다시 좁히는 데 좋습니다.",
         actionCopy: "이건 영민님 책상 위에 바로 올리면 집중각입니다.",
       },
+      {
+        bookId: "book-2",
+        title: "생각 정리의 힘",
+        author: "박정리",
+        coverUrl: "https://example.com/cover-2.jpg",
+        naverBookUrl: "https://search.shopping.naver.com/book/search?query=%EC%83%9D%EA%B0%81%20%EC%A0%95%EB%A6%AC%EC%9D%98%20%ED%9E%98",
+        callNumber: "181.4 박74ㅅ",
+        locationLabel: "중앙도서관 4층",
+        reason: "복잡한 생각을 정리하는 데 좋습니다.",
+        actionCopy: "머릿속 탭을 정리하고 싶을 때 펼쳐보세요.",
+      },
+      {
+        bookId: "book-3",
+        title: "루틴 회복 수업",
+        author: "최루틴",
+        coverUrl: "https://example.com/cover-3.jpg",
+        naverBookUrl: "https://search.shopping.naver.com/book/search?query=%EB%A3%A8%ED%8B%B4%20%ED%9A%8C%EB%B3%B5%20%EC%88%98%EC%97%85",
+        callNumber: "199.1 최296ㄹ",
+        locationLabel: "중앙도서관 2층",
+        reason: "작게 다시 시작하는 데 좋습니다.",
+        actionCopy: "오늘부터 리듬을 다시 잡고 싶다면 이 책입니다.",
+      },
     ],
   },
 };
 
 describe("ResultContent", () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it("uses horizontal snap navigation by wheel and does not auto-advance", () => {
+    vi.useFakeTimers();
+    render(<ResultContent payload={payload} />);
+
+    const shell = screen.getByTestId("result-horizontal-shell");
+    const track = screen.getByTestId("result-horizontal-track");
+
+    expect(track).toHaveStyle({ transform: "translateX(-0vw)" });
+
+    act(() => {
+      vi.advanceTimersByTime(10_000);
+    });
+    expect(track).toHaveStyle({ transform: "translateX(-0vw)" });
+
+    fireEvent.wheel(shell, { deltaY: 180 });
+    expect(track).toHaveStyle({ transform: "translateX(-100vw)" });
+
+    fireEvent.wheel(shell, { deltaY: -180 });
+    expect(track).toHaveStyle({ transform: "translateX(-0vw)" });
+  });
+
   it("renders the story sections with polite copy and no blocked words", () => {
     const forbiddenRelationshipWord = ["연", "애"].join("");
     const { container } = render(<ResultContent payload={payload} />);
 
     expect(screen.getByText(/영민님 집중 모드 켜짐/)).toBeInTheDocument();
     expect(screen.getByText("지금 영민님에게 필요한 책")).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "관계 궁합" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "함께 있으면 흐름이 좋은 타입" })).toBeInTheDocument();
     expect(container).not.toHaveTextContent("피부");
     expect(container).not.toHaveTextContent(forbiddenRelationshipWord);
     expect(screen.getByText("얼굴 이미지는 24시간 이후 삭제되었습니다.")).toBeInTheDocument();
@@ -101,8 +148,10 @@ describe("ResultContent", () => {
   it("shows compact core interpretation while secondary evidence is collapsed by default", () => {
     render(<ResultContent payload={payload} />);
 
-    expect(screen.getByText("이목구비 관상 리포트")).toBeInTheDocument();
-    expect(screen.getAllByText("이마와 눈매 밸런스에서 목표 재정렬 신호가 보입니다.")[0]).toBeVisible();
+    expect(screen.getByText("얼굴 신호 3개만 딱 집었어요")).toBeInTheDocument();
+    expect(screen.getByText("균형 좌표")).toBeInTheDocument();
+    expect(screen.getByText("눈 신호")).toBeInTheDocument();
+    expect(screen.getByText("하관 리듬")).toBeInTheDocument();
     expect(screen.getByText("계획 세우는 힘이 보입니다.")).not.toBeVisible();
     expect(screen.getAllByText("더보기").length).toBeGreaterThan(0);
   });
@@ -116,6 +165,8 @@ describe("ResultContent", () => {
     expect(screen.getByText("금")).toBeInTheDocument();
     expect(screen.getByText("물")).toBeInTheDocument();
     expect(screen.getByText("몰입의 기술")).toBeInTheDocument();
+    expect(screen.getByText("생각 정리의 힘")).toBeInTheDocument();
+    expect(screen.getByText("루틴 회복 수업")).toBeInTheDocument();
     expect(screen.getByAltText("몰입의 기술 표지")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /몰입의 기술/ })).toHaveAttribute("href", expect.stringContaining("search.shopping.naver.com"));
   });

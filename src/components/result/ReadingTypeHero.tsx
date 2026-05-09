@@ -17,7 +17,7 @@ export function ReadingTypeHero({ result, displayName }: ReadingTypeHeroProps) {
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-info/60 to-transparent" />
       <div className="flex flex-col justify-between gap-5 md:flex-row md:items-start">
         <div className="min-w-0">
-          <p className="text-xs font-black uppercase tracking-[0.18em] text-accent-warn">AI 관상가 고양이</p>
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-accent-info">AI 관상가 고양이</p>
           <h1 className="mt-3 overflow-hidden text-ellipsis whitespace-nowrap text-[clamp(1.8rem,4.3vw,4.4rem)] font-black leading-none text-text-primary">
             {headline}
           </h1>
