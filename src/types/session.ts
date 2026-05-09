@@ -1,4 +1,5 @@
 import type { ReadingTypeCode } from "@/lib/reading-types/types";
+import type { SajuCalculation } from "@/lib/saju/calculator";
 
 export type Gender = "male" | "female";
 
@@ -17,10 +18,17 @@ export type BookRecommendation = {
   author: string;
   callNumber: string;
   locationLabel: string;
+  coverUrl?: string | null;
+  naverBookUrl?: string;
   category?: string;
   tags?: string[];
   reason: string;
   actionCopy: string;
+};
+
+export type DetailComment = {
+  metricsText: string;
+  comment: string;
 };
 
 export type LibraryAnalysisResult = {
@@ -29,6 +37,44 @@ export type LibraryAnalysisResult = {
     displayName: string;
     headline: string;
     description: string;
+  };
+  mainCopy: string;
+  geometry: {
+    symmetry: string;
+    goldenRatio: string;
+    thirds: string;
+    fifths: string;
+    faceShape: string;
+  };
+  parts: {
+    forehead: DetailComment;
+    eyes: DetailComment;
+    nose: DetailComment;
+    mouth: DetailComment;
+    jaw: DetailComment;
+    skin: DetailComment;
+  };
+  scores: {
+    likability: number;
+    trust: number;
+    symmetry: number;
+    balance: number;
+    attractiveness: number;
+    comments: string[];
+  };
+  physiognomy: {
+    keywords: string[];
+    summary: string;
+    strengths: string[];
+    cautions: string[];
+  };
+  saju: {
+    keywords: string[];
+    elementBalance: string;
+    currentFlow: string;
+    strength: string;
+    advice: string;
+    calculation?: SajuCalculation;
   };
   physiognomySummary: string;
   sajuSummary: string;

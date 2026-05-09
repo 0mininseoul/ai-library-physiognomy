@@ -1,4 +1,5 @@
 export type LibraryBook = {
+  id?: string;
   source: "data4library" | "naver";
   sourceId: string;
   isbn13: string | null;

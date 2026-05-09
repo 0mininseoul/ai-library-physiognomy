@@ -78,7 +78,7 @@ export function FaceMeshOverlay({ result }: { result: FaceLandmarkerResult | nul
     const landmarks = result?.faceLandmarks?.[0];
     if (!landmarks) return;
 
-    ctx.strokeStyle = "rgba(125, 216, 255, 0.42)";
+    ctx.strokeStyle = "rgba(141, 222, 215, 0.42)";
     ctx.lineWidth = 1;
     for (const [a, b] of CONNECTIONS) {
       const pa = landmarks[a];
@@ -90,7 +90,7 @@ export function FaceMeshOverlay({ result }: { result: FaceLandmarkerResult | nul
       ctx.stroke();
     }
 
-    ctx.fillStyle = "rgba(245, 247, 251, 0.46)";
+    ctx.fillStyle = "rgba(248, 244, 226, 0.42)";
     for (let index = 0; index < landmarks.length; index += 4) {
       const p = landmarks[index]!;
       ctx.beginPath();

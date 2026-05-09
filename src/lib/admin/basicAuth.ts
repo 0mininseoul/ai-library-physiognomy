@@ -13,8 +13,7 @@ export function isAdminRequest(req: NextRequest): boolean {
 }
 
 export function unauthorized() {
-  return new Response("Unauthorized", {
+  return Response.json({ error: "unauthorized" }, {
     status: 401,
-    headers: { "WWW-Authenticate": 'Basic realm="AI Library Admin"' },
   });
 }

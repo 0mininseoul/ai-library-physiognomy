@@ -1,12 +1,12 @@
 export default function PrivacyPage() {
   return (
-    <main className="min-h-screen bg-paper px-5 py-10 text-ink md:px-8">
-      <article className="mx-auto max-w-3xl rounded-lg border border-ink/10 bg-white p-6 leading-7 shadow-sm md:p-8">
-        <p className="text-sm font-black text-prescription">AI 관상가 고양이</p>
+    <main className="min-h-screen bg-bg-primary px-5 py-10 text-text-primary md:px-8">
+      <article className="glass-panel mx-auto max-w-3xl rounded-2xl p-6 leading-7 md:p-8">
+        <p className="text-sm font-black text-accent-warn">AI 관상가 고양이</p>
         <h1 className="mt-2 text-3xl font-black">개인정보처리방침</h1>
         <p className="mt-6">
-          AI 관상가 고양이는 도서 추천 결과 제공과 30일 내 재조회를 위해 이름, 학번, 성별, 생년월일, 선호 독서 카테고리,
-          얼굴 이미지, 얼굴 분석 지표, 추천 결과를 처리합니다.
+          AI 관상가 고양이는 결과 제공과 30일 내 재조회를 위해 이름, 학번(또는 사번), 성별, 생년월일, 선호 카테고리, 얼굴 이미지,
+          얼굴 분석 지표, 추천 결과를 처리합니다.
         </p>
         <p className="mt-4">
           얼굴 이미지는 결과 화면에서 생성 후 24시간까지만 표시되며, 화면상으로는 24시간 이후 삭제된 것으로 안내됩니다.

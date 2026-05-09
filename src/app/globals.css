@@ -29,12 +29,12 @@
   --text-muted-rgb: 160 168 184;
   --text-faint: #5a6272;
   --text-faint-rgb: 90 98 114;
-  --accent-info: #7dd8ff;
-  --accent-info-rgb: 125 216 255;
-  --accent-warn: #ffd27d;
-  --accent-warn-rgb: 255 210 125;
-  --accent-bad: #ff5a6e;
-  --accent-bad-rgb: 255 90 110;
+  --accent-info: #8dded7;
+  --accent-info-rgb: 141 222 215;
+  --accent-warn: #f0d18a;
+  --accent-warn-rgb: 240 209 138;
+  --accent-bad: #f08f74;
+  --accent-bad-rgb: 240 143 116;
   --accent-ok: #86efac;
   --accent-ok-rgb: 134 239 172;
 }
@@ -47,7 +47,7 @@ body {
   margin: 0;
   min-height: 100vh;
   background:
-    radial-gradient(circle at 50% -20%, rgb(125 216 255 / 0.12), transparent 34rem),
+    radial-gradient(circle at 50% -20%, rgb(var(--accent-info-rgb) / 0.12), transparent 34rem),
     linear-gradient(180deg, #0b0d13 0%, var(--bg-primary) 48%, #050609 100%);
   color: var(--text-primary);
   font-family: var(--font-pretendard), system-ui, sans-serif;
@@ -62,7 +62,7 @@ select {
 }
 
 ::selection {
-  background: rgb(125 216 255 / 0.26);
+  background: rgb(var(--accent-info-rgb) / 0.26);
 }
 
 button,
@@ -76,11 +76,11 @@ select {
 .glass-panel {
   border: 1px solid rgb(255 255 255 / 0.13);
   background:
-    linear-gradient(135deg, rgb(255 255 255 / 0.16), rgb(255 255 255 / 0.035) 34%, rgb(125 216 255 / 0.055) 100%),
+    linear-gradient(135deg, rgb(255 255 255 / 0.16), rgb(255 255 255 / 0.035) 34%, rgb(var(--accent-info-rgb) / 0.055) 100%),
     rgb(14 16 23 / 0.58);
   box-shadow:
     0 28px 90px rgb(0 0 0 / 0.46),
-    0 0 0 1px rgb(125 216 255 / 0.05),
+    0 0 0 1px rgb(var(--accent-info-rgb) / 0.05),
     inset 0 1px 0 rgb(255 255 255 / 0.2),
     inset 0 -1px 0 rgb(255 255 255 / 0.045);
   backdrop-filter: blur(30px) saturate(1.45);
@@ -104,4 +104,99 @@ select {
 
 .tabular-nums {
   font-variant-numeric: tabular-nums;
+}
+
+.cat-gatekeeper-stage {
+  mix-blend-mode: normal;
+}
+
+.cat-gatekeeper-anchor {
+  position: absolute;
+  bottom: clamp(1.6rem, 5vh, 4rem);
+  left: clamp(-7rem, -5vw, -2rem);
+  width: min(52vw, 840px);
+  filter:
+    drop-shadow(0 30px 48px rgb(0 0 0 / 0.42))
+    drop-shadow(0 0 22px rgb(var(--accent-info-rgb) / 0.08));
+  will-change: transform, opacity;
+}
+
+.cat-gatekeeper-anchor--entering {
+  animation: cat-gatekeeper-enter 6.3s cubic-bezier(0.34, 0, 0.22, 1) both;
+}
+
+.cat-gatekeeper-anchor--resting {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.cat-gatekeeper-source-video {
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+  height: 1px;
+  width: 1px;
+  opacity: 0;
+}
+
+.cat-gatekeeper-canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  filter: contrast(1.04) saturate(1.05) brightness(1);
+}
+
+.result-card-reveal {
+  opacity: 0;
+  transform: translate3d(0, 18px, 0) scale(0.965);
+  animation: result-card-in 560ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.result-final-reveal {
+  opacity: 0;
+  transform: translate3d(-50%, 18px, 0) scale(0.965);
+  animation: result-final-in 620ms cubic-bezier(0.22, 1, 0.36, 1) 2450ms both;
+}
+
+@keyframes result-card-in {
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes result-final-in {
+  to {
+    opacity: 1;
+    transform: translate3d(-50%, 0, 0) scale(1);
+  }
+}
+
+@keyframes cat-gatekeeper-enter {
+  0% {
+    opacity: 0;
+    transform: translate3d(124vw, 4vh, 0) scale(0.86);
+  }
+
+  18% {
+    opacity: 1;
+  }
+
+  82% {
+    opacity: 1;
+    transform: translate3d(0.6rem, 0, 0) scale(1);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@media (max-width: 767px) {
+  .cat-gatekeeper-anchor {
+    bottom: 1.25rem;
+    left: -4.5rem;
+    width: min(78vw, 28rem);
+  }
 }

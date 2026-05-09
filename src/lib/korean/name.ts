@@ -46,3 +46,8 @@ export function particle(name: string, kind: ParticleKind): string {
 export function vocative(name: string): string {
   return `${name}${hasFinalConsonant(name) ? "아" : "야"}`;
 }
+
+export function honorific(name: string): string {
+  const trimmed = name.trim();
+  return trimmed ? `${trimmed}님` : "회원님";
+}

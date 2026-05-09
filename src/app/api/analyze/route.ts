@@ -7,6 +7,7 @@ import { buildLibraryPrompt } from "@/lib/gemini/libraryPrompt";
 import { normalizeLibraryAnalysis } from "@/lib/gemini/librarySchema";
 import { getGeminiClient } from "@/lib/gemini/client";
 import { displayGivenName } from "@/lib/korean/name";
+import { calculateSaju } from "@/lib/saju/calculator";
 import { getServerSupabase } from "@/lib/supabase/server";
 import type { FaceMetrics, Landmark } from "@/types/face";
 import type { StudentInput } from "@/types/session";
@@ -30,6 +31,7 @@ export async function POST(req: NextRequest) {
 
   const supabase = getServerSupabase();
   const displayName = displayGivenName(body.input.name);
+  const saju = calculateSaju(body.input.birthDate);
   const provider = new SupabaseBookProvider(supabase);
   const books = await provider.listActiveBooks();
   const candidates = selectBookCandidates({
@@ -76,7 +78,7 @@ export async function POST(req: NextRequest) {
     const ai = getGeminiClient();
     const response = await ai.models.generateContent({
       model: LIBRARY_ANALYSIS_MODEL,
-      contents: buildLibraryPrompt({ input: body.input, displayName, metrics: body.metrics, candidates }),
+      contents: buildLibraryPrompt({ input: body.input, displayName, metrics: body.metrics, saju, candidates }),
       config: {
         responseMimeType: "application/json",
         responseSchema: {
@@ -92,8 +94,63 @@ export async function POST(req: NextRequest) {
               },
               required: ["code", "display_name", "headline", "description"],
             },
-            physiognomy_summary: { type: Type.STRING },
-            saju_summary: { type: Type.STRING },
+            main_copy: { type: Type.STRING },
+            geometry: {
+              type: Type.OBJECT,
+              properties: {
+                symmetry: { type: Type.STRING },
+                golden_ratio: { type: Type.STRING },
+                thirds: { type: Type.STRING },
+                fifths: { type: Type.STRING },
+                face_shape: { type: Type.STRING },
+              },
+              required: ["symmetry", "golden_ratio", "thirds", "fifths", "face_shape"],
+            },
+            parts: {
+              type: Type.OBJECT,
+              properties: {
+                forehead: detailCommentSchema(),
+                eyes: detailCommentSchema(),
+                nose: detailCommentSchema(),
+                mouth: detailCommentSchema(),
+                jaw: detailCommentSchema(),
+                skin: detailCommentSchema(),
+              },
+              required: ["forehead", "eyes", "nose", "mouth", "jaw", "skin"],
+            },
+            scores: {
+              type: Type.OBJECT,
+              properties: {
+                likability: { type: Type.NUMBER },
+                trust: { type: Type.NUMBER },
+                symmetry: { type: Type.NUMBER },
+                balance: { type: Type.NUMBER },
+                attractiveness: { type: Type.NUMBER },
+                comments: { type: Type.ARRAY, items: { type: Type.STRING }, minItems: 5, maxItems: 5 },
+              },
+              required: ["likability", "trust", "symmetry", "balance", "attractiveness", "comments"],
+            },
+            physiognomy: {
+              type: Type.OBJECT,
+              properties: {
+                keywords: { type: Type.ARRAY, items: { type: Type.STRING }, minItems: 3, maxItems: 6 },
+                summary: { type: Type.STRING },
+                strengths: { type: Type.ARRAY, items: { type: Type.STRING }, minItems: 2, maxItems: 4 },
+                cautions: { type: Type.ARRAY, items: { type: Type.STRING }, minItems: 2, maxItems: 4 },
+              },
+              required: ["keywords", "summary", "strengths", "cautions"],
+            },
+            saju: {
+              type: Type.OBJECT,
+              properties: {
+                keywords: { type: Type.ARRAY, items: { type: Type.STRING }, minItems: 3, maxItems: 6 },
+                element_balance: { type: Type.STRING },
+                current_flow: { type: Type.STRING },
+                strength: { type: Type.STRING },
+                advice: { type: Type.STRING },
+              },
+              required: ["keywords", "element_balance", "current_flow", "strength", "advice"],
+            },
             reading_needs: { type: Type.ARRAY, items: { type: Type.STRING }, minItems: 3, maxItems: 6 },
             recommendations: {
               type: Type.ARRAY,
@@ -110,22 +167,26 @@ export async function POST(req: NextRequest) {
               maxItems: 3,
             },
           },
-          required: ["reading_type", "physiognomy_summary", "saju_summary", "reading_needs", "recommendations"],
+          required: ["reading_type", "main_copy", "geometry", "parts", "scores", "physiognomy", "saju", "reading_needs", "recommendations"],
         },
       },
     });
 
     const normalized = normalizeLibraryAnalysis(JSON.parse(response.text ?? "{}"));
     const candidateById = new Map(candidates.map((book) => [book.sourceId, book]));
+    const recommendedDatabaseIds: string[] = [];
     const finalRecommendations = normalized.recommendations.map((item) => {
       const book = candidateById.get(item.bookId);
       if (!book) throw new Error(`Gemini returned unknown book_id: ${item.bookId}`);
+      if (book.id) recommendedDatabaseIds.push(book.id);
       return {
         bookId: book.sourceId,
         title: book.title,
         author: book.author,
         category: book.category,
         tags: book.tags,
+        coverUrl: book.coverUrl,
+        naverBookUrl: naverBookUrl(book.title, book.author),
         callNumber: book.callNumber,
         locationLabel: book.locationLabel,
         reason: item.reason,
@@ -133,7 +194,7 @@ export async function POST(req: NextRequest) {
       };
     });
 
-    const resultJson = { ...normalized, recommendations: finalRecommendations };
+    const resultJson = { ...normalized, saju: { ...normalized.saju, calculation: saju }, recommendations: finalRecommendations };
     const { error: updateError } = await supabase
       .from("library_sessions")
       .update({
@@ -141,7 +202,7 @@ export async function POST(req: NextRequest) {
         face_image_path: facePath,
         reading_type_code: normalized.readingType.code,
         result_json: resultJson,
-        recommended_book_ids: [],
+        recommended_book_ids: recommendedDatabaseIds,
       })
       .eq("id", session.id);
 
@@ -149,10 +210,27 @@ export async function POST(req: NextRequest) {
 
     return Response.json({ sessionId: session.id, result: resultJson }, { status: 200 });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "analysis_failed";
+    const message = errorToMessage(error);
+    console.error("[api/analyze] analysis failed", { sessionId: session.id, message, error });
     await supabase.from("library_sessions").update({ status: "failed", last_error: message }).eq("id", session.id);
-    return Response.json({ error: "analysis_failed" }, { status: 500 });
+    return Response.json({ error: "analysis_failed", detail: process.env.NODE_ENV === "production" ? undefined : message }, { status: 500 });
   }
+}
+
+function detailCommentSchema() {
+  return {
+    type: Type.OBJECT,
+    properties: {
+      metrics_text: { type: Type.STRING },
+      comment: { type: Type.STRING },
+    },
+    required: ["metrics_text", "comment"],
+  };
+}
+
+function naverBookUrl(title: string, author: string) {
+  const query = encodeURIComponent(`${title} ${author}`.trim());
+  return `https://search.shopping.naver.com/book/search?query=${query}`;
 }
 
 function stripDataUrl(input: string): string {
@@ -161,4 +239,20 @@ function stripDataUrl(input: string): string {
 
 function sha256(input: string): string {
   return createHash("sha256").update(input.trim()).digest("hex");
+}
+
+function errorToMessage(error: unknown) {
+  if (error instanceof Error) return error.message;
+  if (typeof error === "string") return error;
+  if (error && typeof error === "object") {
+    const maybeMessage = "message" in error ? error.message : null;
+    if (typeof maybeMessage === "string" && maybeMessage.length > 0) return maybeMessage;
+
+    try {
+      return JSON.stringify(error);
+    } catch {
+      return "analysis_failed";
+    }
+  }
+  return "analysis_failed";
 }
