@@ -10,7 +10,7 @@ import { applyConnectedBlackKeyToImageData } from "@/lib/chroma/blackKey";
 import { captureVideoFrame } from "@/lib/capture/screenshot";
 import { averageLandmarks, computeFaceMetrics } from "@/lib/facemesh/metricsCalculator";
 import { displayGivenName } from "@/lib/korean/name";
-import { dominantElementText, elementCountItems, koreanDayMaster, koreanPillarSummary } from "@/lib/saju/display";
+import { dominantElementText, elementCountItems, koreanDayMaster, stripHanja } from "@/lib/saju/display";
 import { useCamera } from "@/hooks/useCamera";
 import { useFaceLandmarker } from "@/hooks/useFaceLandmarker";
 import type { Landmark } from "@/types/face";
@@ -27,7 +27,8 @@ const TARGET_SAMPLE_COUNT = 12;
 const CAPTURE_SETTLE_MS = 650;
 const MIN_ANALYSIS_DURATION_MS = 12_000;
 const CARD_REVEAL_INTERVAL_MS = 1_350;
-const COMPLETED_CARD_REVEAL_INTERVAL_MS = 850;
+const COMPLETED_CARD_STREAM_INTERVAL_MS = 48;
+const COMPLETED_CARD_NEXT_DELAY_MS = 520;
 const CAT_ENTRY_START_DELAY_MS = 1_000;
 const CAT_ENTRY_FALLBACK_MS = 12_000;
 const CAT_CANVAS_MAX_WIDTH = 960;
@@ -56,9 +57,12 @@ export function AnalyzePage() {
   const [sampleCount, setSampleCount] = useState(0);
   const [displayProgress, setDisplayProgress] = useState(0);
   const [revealCount, setRevealCount] = useState(0);
+  const [completedRevealFinished, setCompletedRevealFinished] = useState(false);
   const startedRef = useRef(false);
   const scanStartedAtRef = useRef<number | null>(null);
   const sampleRef = useRef<Landmark[][]>([]);
+  const completedStreamHandledRef = useRef(-1);
+  const completedStreamTimersRef = useRef<number[]>([]);
   const { videoRef, status: cameraStatus, error: cameraError, start: startCamera, stop: stopCamera } = useCamera({ persistGlobal: true });
   const face = useFaceLandmarker(videoRef, flow !== "entry" && cameraStatus === "ready", {
     imageFallback: true,
@@ -78,12 +82,16 @@ export function AnalyzePage() {
   }, [stopCamera]);
 
   const resetCapture = useCallback(() => {
+    completedStreamTimersRef.current.forEach((timer) => window.clearTimeout(timer));
+    completedStreamTimersRef.current = [];
+    completedStreamHandledRef.current = -1;
     startedRef.current = false;
     scanStartedAtRef.current = null;
     sampleRef.current = [];
     setSampleCount(0);
     setDisplayProgress(0);
     setRevealCount(0);
+    setCompletedRevealFinished(false);
     setCompletedResult(null);
     setCompletedSessionId(null);
   }, []);
@@ -125,7 +133,7 @@ export function AnalyzePage() {
         setFlow("revealing");
       } catch (caught) {
         startedRef.current = false;
-        setAnalysisError(caught instanceof Error ? caught.message : "분석실이 잠깐 삐끗했어. 다시 가보자.");
+        setAnalysisError(caught instanceof Error ? caught.message : "분석실이 잠시 멈췄습니다. 다시 시도해 주세요.");
         setFlow("error");
       }
     },
@@ -164,17 +172,33 @@ export function AnalyzePage() {
   useEffect(() => {
     if (flow !== "revealing" || !completedResult) return;
 
+    completedStreamTimersRef.current.forEach((timer) => window.clearTimeout(timer));
+    completedStreamTimersRef.current = [];
+    completedStreamHandledRef.current = -1;
+    setCompletedRevealFinished(false);
     setRevealCount(0);
     const first = window.setTimeout(() => setRevealCount(1), 280);
-    const interval = window.setInterval(() => {
-      setRevealCount((count) => Math.min(ANALYSIS_CARDS.length, count + 1));
-    }, COMPLETED_CARD_REVEAL_INTERVAL_MS);
 
     return () => {
       window.clearTimeout(first);
-      window.clearInterval(interval);
+      completedStreamTimersRef.current.forEach((timer) => window.clearTimeout(timer));
+      completedStreamTimersRef.current = [];
     };
   }, [completedResult, flow]);
+
+  const handleCompletedCardStreamComplete = useCallback((index: number) => {
+    if (completedStreamHandledRef.current >= index) return;
+    completedStreamHandledRef.current = index;
+
+    const timer = window.setTimeout(() => {
+      if (index < ANALYSIS_CARDS.length - 1) {
+        setRevealCount(index + 2);
+      } else {
+        setCompletedRevealFinished(true);
+      }
+    }, COMPLETED_CARD_NEXT_DELAY_MS);
+    completedStreamTimersRef.current.push(timer);
+  }, []);
 
   function handleStart(nextInput: StudentInput) {
     setInput(nextInput);
@@ -200,7 +224,7 @@ export function AnalyzePage() {
   const statusLabel =
     flow === "entry" ? getStatusLabel({ flow, cameraStatus, isModelLoading: face.isLoading, hasFace: Boolean(face.landmarks) }) : facePositionHint ?? getStatusLabel({ flow, cameraStatus, isModelLoading: face.isLoading, hasFace: Boolean(face.landmarks) });
   const completedCards = useMemo(() => (completedResult ? buildCompletedAnalysisCards(completedResult) : null), [completedResult]);
-  const showFinalCard = flow === "revealing" && completedResult && completedSessionId && revealCount >= ANALYSIS_CARDS.length;
+  const showFinalCard = flow === "revealing" && completedResult && completedSessionId && completedRevealFinished;
 
   return (
     <main className="relative h-screen overflow-hidden bg-black text-text-primary">
@@ -243,8 +267,14 @@ export function AnalyzePage() {
         />
       ) : (
         <>
-          {flow === "revealing" ? <TopStatus label="관상 리포트 정리 완료" /> : <AnalysisHud flow={flow} displayName={displayName} progress={progress} statusLabel={statusLabel} />}
-          <FloatingCards progress={progress} revealCount={revealCount} completedCards={completedCards} />
+          {flow === "revealing" ? <TopStatus label="고양이 관상 노트가 열리고 있어요" /> : <AnalysisHud flow={flow} displayName={displayName} progress={progress} statusLabel={statusLabel} />}
+          <FloatingCards
+            progress={progress}
+            revealCount={revealCount}
+            completedCards={completedCards}
+            activeCompletedIndex={completedCards && !completedRevealFinished ? Math.max(0, revealCount - 1) : null}
+            onCompletedCardStreamComplete={handleCompletedCardStreamComplete}
+          />
 
           {showFinalCard ? (
             <FinalRevealCard
@@ -261,7 +291,7 @@ export function AnalyzePage() {
             <div className="fixed inset-0 z-50 grid place-items-center bg-black/[0.78] px-6">
               <div className="glass-panel max-w-lg rounded-2xl p-8 text-center">
                 <Camera className="mx-auto h-10 w-10 text-accent-warn" aria-hidden="true" />
-                <h1 className="mt-4 text-2xl font-extrabold text-text-primary">관상 분석실이 잠깐 멈췄어</h1>
+                <h1 className="mt-4 text-2xl font-extrabold text-text-primary">관상 분석실이 잠시 멈췄습니다</h1>
                 <p className="mt-3 text-sm font-semibold leading-6 text-text-muted">{analysisError}</p>
                 <button
                   type="button"
@@ -269,7 +299,7 @@ export function AnalyzePage() {
                   className="mt-6 inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-accent-info/[0.45] bg-accent-info/[0.15] px-5 text-sm font-black text-text-primary transition hover:bg-accent-info/[0.22]"
                 >
                   <RefreshCcw className="h-4 w-4" aria-hidden="true" />
-                  다시 스캔
+                  다시 스캔하기
                 </button>
               </div>
             </div>
@@ -327,11 +357,11 @@ function EntryModal({
     const birthDate = buildBirthDate(birthYear, birthMonth, birthDay);
 
     if (!trimmedName || !trimmedStudentId || !gender || !birthDate || !favoriteCategory) {
-      onError("빈칸 있으면 분석이 삐끗해요. 전부 채워줘.");
+      onError("빈칸이 있으면 고양이 수염 레이더가 흔들려요. 모두 채워 주세요.");
       return;
     }
     if (!consentAccepted) {
-      onError("동의 체크가 필요해. 고양이도 개인정보 앞에서는 진지해져.");
+      onError("동의 체크가 필요해요. 고양이도 개인정보 앞에서는 진지해집니다.");
       return;
     }
 
@@ -346,24 +376,24 @@ function EntryModal({
   }
 
   return (
-    <section className="fixed bottom-5 right-5 z-30 max-h-[calc(100vh-6rem)] w-[min(500px,calc(100vw-2.5rem))] overflow-y-auto md:bottom-8 md:right-8">
-      <form onSubmit={submit} className="glass-panel relative rounded-2xl p-4 md:p-5">
-        <div className="mb-2 flex items-center justify-between px-1">
-          <div className="flex items-center gap-2 text-sm font-semibold text-text-muted">
+    <section className="fixed bottom-4 right-5 z-30 max-h-[calc(100vh-2rem)] w-[min(500px,calc(100vw-2.5rem))] overflow-y-auto md:bottom-6 md:right-8">
+      <form onSubmit={submit} className="glass-panel relative rounded-2xl p-5 md:p-6">
+        <div className="mb-4 flex items-center justify-between">
+          <div className="flex items-center gap-2 text-sm font-black uppercase tracking-[0.08em] text-text-muted">
             <Camera className="h-4 w-4 text-accent-info" aria-hidden="true" />
             CAMERA INPUT
           </div>
           <div className="text-xs uppercase tracking-[0.16em] text-text-faint">{cameraStatus}</div>
         </div>
 
-        <div className="mb-4 rounded-lg border border-border bg-black/[0.35] px-4 py-2.5">
-          <p className="text-xs font-semibold leading-5 text-text-muted">
+        <div className="mb-6 rounded-lg border border-border bg-black/[0.35] px-4 py-3">
+          <p className="text-sm font-bold leading-6 text-text-muted">
             <span className="block">정보를 채운 뒤 정면 얼굴이 잡히면 자동 분석됩니다.</span>
             <span className="block">얼굴 이미지는 결과 화면에서 24시간까지만 표시됩니다.</span>
           </p>
         </div>
 
-        <div className="mb-4 flex items-start justify-between gap-4">
+        <div className="mb-6 flex items-start justify-between gap-4">
           <div>
             <p className="text-sm font-black text-accent-warn">AI 관상가 고양이</p>
             <h1 className="mt-1.5 text-2xl font-black leading-tight text-text-primary md:text-3xl">
@@ -372,12 +402,12 @@ function EntryModal({
           </div>
         </div>
 
-        <div className="grid gap-3">
+        <div className="grid gap-4">
           <DarkInput label="이름" name="name" value={name} placeholder="박영민" autoComplete="name" onChange={(event) => setName(event.target.value)} />
           <DarkInput label="학번(또는 사번)" name="studentId" value={studentId} placeholder="20260000" inputMode="numeric" autoComplete="off" onChange={(event) => setStudentId(event.target.value)} />
 
-          <fieldset className="grid gap-2">
-            <legend className="text-sm font-bold text-text-primary">성별</legend>
+          <fieldset className="grid gap-2.5">
+            <legend className="text-sm font-black text-text-primary">성별</legend>
             <div className="grid grid-cols-2 gap-3">
               {[
                 { value: "male" as const, label: "남성" },
@@ -409,13 +439,13 @@ function EntryModal({
             onDayChange={setBirthDay}
           />
 
-          <label className="grid gap-2 text-sm font-bold text-text-primary" htmlFor="favoriteCategory">
-            <span>선호 카테고리</span>
+          <label className="grid gap-2.5 text-sm font-black text-text-primary" htmlFor="favoriteCategory">
+            <span>선호하는 책 카테고리</span>
             <select
               id="favoriteCategory"
               name="favoriteCategory"
               value={favoriteCategory}
-              className="h-11 rounded-lg border border-border bg-bg-card/70 px-4 text-sm font-bold text-text-primary outline-none transition focus:border-accent-info focus:ring-2 focus:ring-accent-info/25"
+              className="h-12 rounded-lg border border-border bg-bg-card/70 px-4 text-sm font-black text-text-primary outline-none transition focus:border-accent-info focus:ring-2 focus:ring-accent-info/25"
               onChange={(event) => setFavoriteCategory(event.target.value)}
             >
               {BOOK_CATEGORIES.map((category) => (
@@ -426,7 +456,7 @@ function EntryModal({
             </select>
           </label>
 
-          <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-border bg-bg-card/70 p-3 text-sm text-text-muted transition hover:border-border-bright">
+          <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-border bg-bg-card/70 p-4 text-sm text-text-muted transition hover:border-border-bright">
             <input className="mt-1 h-4 w-4 accent-[var(--accent-info)]" type="checkbox" checked={consentAccepted} onChange={(event) => setConsentAccepted(event.target.checked)} />
             <span className="font-medium leading-6">
               개인정보처리방침 및 이용약관 동의
@@ -443,7 +473,7 @@ function EntryModal({
 
         <button
           type="submit"
-          className="mt-4 inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-accent-info/40 bg-accent-info/[0.18] px-5 text-sm font-black text-text-primary transition hover:bg-accent-info/25 disabled:cursor-not-allowed disabled:opacity-[0.45]"
+          className="mt-5 inline-flex min-h-[3.25rem] w-full items-center justify-center gap-2 rounded-lg border border-accent-info/40 bg-accent-info/[0.18] px-5 py-4 text-sm font-black text-text-primary transition hover:bg-accent-info/25 disabled:cursor-not-allowed disabled:opacity-[0.45]"
           disabled={cameraStatus === "requesting"}
         >
           <ScanFace className="h-5 w-5" aria-hidden="true" />
@@ -511,8 +541,8 @@ function BirthDateSelects({
   }, [day, days, onDayChange]);
 
   return (
-    <fieldset className="grid gap-2">
-      <legend className="text-sm font-bold text-text-primary">생년월일</legend>
+    <fieldset className="grid gap-2.5">
+      <legend className="text-sm font-black text-text-primary">생년월일</legend>
       <div className="grid grid-cols-[1.15fr_0.85fr_0.85fr] gap-2">
         <DateSelect label="년도" value={year} values={years} suffix="년" onChange={onYearChange} />
         <DateSelect label="월" value={month} values={months} suffix="월" onChange={onMonthChange} />
@@ -537,10 +567,10 @@ function DateSelect({
 }) {
   return (
     <label className="grid gap-1 text-xs font-black uppercase tracking-[0.08em] text-text-faint">
-      <span>{label}</span>
       <select
+        aria-label={label}
         value={value}
-        className="h-11 rounded-lg border border-border bg-bg-card/70 px-3 text-sm font-black text-text-primary outline-none transition focus:border-accent-info focus:ring-2 focus:ring-accent-info/25"
+        className="h-12 rounded-lg border border-border bg-bg-card/70 px-4 text-sm font-black text-text-primary outline-none transition focus:border-accent-info focus:ring-2 focus:ring-accent-info/25"
         onChange={(event) => onChange(event.target.value)}
       >
         {values.map((nextValue) => (
@@ -716,12 +746,12 @@ function DarkInput(props: InputHTMLAttributes<HTMLInputElement> & { label: strin
   const inputId = id ?? name;
 
   return (
-    <label className="grid gap-1.5 text-sm font-bold text-text-primary" htmlFor={inputId}>
+    <label className="grid gap-2.5 text-sm font-black text-text-primary" htmlFor={inputId}>
       <span>{label}</span>
       <input
         id={inputId}
         name={name}
-        className={`h-11 rounded-lg border border-border bg-bg-card/70 px-4 text-sm font-semibold text-text-primary outline-none transition placeholder:text-text-faint focus:border-accent-info focus:ring-2 focus:ring-accent-info/25 ${className}`.trim()}
+        className={`h-12 rounded-lg border border-border bg-bg-card/70 px-4 text-sm font-black text-text-primary outline-none transition placeholder:text-text-faint focus:border-accent-info focus:ring-2 focus:ring-accent-info/25 ${className}`.trim()}
         {...inputProps}
       />
     </label>
@@ -745,7 +775,7 @@ function AnalysisHud({ flow, displayName, progress, statusLabel }: { flow: Flow;
             ) : (
               <ScanFace className="h-4 w-4 shrink-0 text-accent-info" aria-hidden="true" />
             )}
-            <span>{flow === "submitting" ? `${name}의 관상 리포트 작성 중` : `${name}의 얼굴 신호 수집 중`}</span>
+            <span>{flow === "submitting" ? `${name}의 관상 좌표를 고양이 눈으로 읽고 있어요` : `${name}의 얼굴 신호를 차분히 모으고 있어요`}</span>
           </div>
           <span className="text-2xl font-black tabular-nums text-text-primary">{Math.max(8, progress)}%</span>
         </div>
@@ -772,7 +802,19 @@ type CompletedAnalysisCard = {
   scores?: Array<{ label: string; value: number; comment?: string }>;
 };
 
-function FloatingCards({ progress, revealCount, completedCards }: { progress: number; revealCount: number; completedCards: CompletedAnalysisCard[] | null }) {
+function FloatingCards({
+  progress,
+  revealCount,
+  completedCards,
+  activeCompletedIndex,
+  onCompletedCardStreamComplete,
+}: {
+  progress: number;
+  revealCount: number;
+  completedCards: CompletedAnalysisCard[] | null;
+  activeCompletedIndex: number | null;
+  onCompletedCardStreamComplete: (index: number) => void;
+}) {
   const sourceCards = completedCards ?? ANALYSIS_CARDS;
   const isCompletedView = Boolean(completedCards);
   const visibleCards = sourceCards.slice(0, Math.max(1, revealCount)).map((card, index) => ({
@@ -782,18 +824,42 @@ function FloatingCards({ progress, revealCount, completedCards }: { progress: nu
   }));
   const leftCards = visibleCards.filter((card) => card.index % 2 === 0);
   const rightCards = visibleCards.filter((card) => card.index % 2 === 1);
+  const railClassName = [
+    "fixed top-[104px] z-20 grid w-[min(500px,34vw)] content-start gap-3 overflow-y-auto pr-1",
+    isCompletedView ? "bottom-6" : "bottom-40",
+  ].join(" ");
 
   return (
     <>
       <AnalysisCardConnectors visibleIndexes={visibleCards.map((card) => card.index)} />
-      <div className="fixed left-6 top-[104px] z-20 grid w-[min(500px,34vw)] gap-3">
+      <div className={`${railClassName} left-6`}>
         {leftCards.map((card) => (
-          <AnalysisStepCard key={card.title} title={card.title} body={card.body} progress={card.progress} scores={"scores" in card ? card.scores : undefined} completedView={isCompletedView} />
+          <AnalysisStepCard
+            key={card.title}
+            index={card.index}
+            title={card.title}
+            body={card.body}
+            progress={card.progress}
+            scores={"scores" in card ? card.scores : undefined}
+            completedView={isCompletedView}
+            isActiveCompleted={isCompletedView && card.index === activeCompletedIndex}
+            onCompletedStreamComplete={onCompletedCardStreamComplete}
+          />
         ))}
       </div>
-      <div className="fixed right-6 top-[104px] z-20 grid w-[min(500px,34vw)] gap-3">
+      <div className={`${railClassName} right-6`}>
         {rightCards.map((card) => (
-          <AnalysisStepCard key={card.title} title={card.title} body={card.body} progress={card.progress} scores={"scores" in card ? card.scores : undefined} completedView={isCompletedView} />
+          <AnalysisStepCard
+            key={card.title}
+            index={card.index}
+            title={card.title}
+            body={card.body}
+            progress={card.progress}
+            scores={"scores" in card ? card.scores : undefined}
+            completedView={isCompletedView}
+            isActiveCompleted={isCompletedView && card.index === activeCompletedIndex}
+            onCompletedStreamComplete={onCompletedCardStreamComplete}
+          />
         ))}
       </div>
     </>
@@ -833,44 +899,68 @@ function AnalysisCardConnectors({ visibleIndexes }: { visibleIndexes: number[] }
 }
 
 function AnalysisStepCard({
+  index,
   title,
   body,
   progress,
   scores,
   completedView,
+  isActiveCompleted,
+  onCompletedStreamComplete,
 }: {
+  index: number;
   title: string;
   body: string;
   progress: number;
   scores?: Array<{ label: string; value: number; comment?: string }>;
   completedView: boolean;
+  isActiveCompleted: boolean;
+  onCompletedStreamComplete: (index: number) => void;
 }) {
   const complete = progress >= 100;
-  const displayBody = useStreamingText(body, completedView ? 22 : 0);
+  const shouldStream = completedView && isActiveCompleted;
+  const { text: displayBody, isComplete: bodyStreamComplete } = useStreamingText(body, shouldStream, COMPLETED_CARD_STREAM_INTERVAL_MS);
+  const streamNotifiedRef = useRef(false);
+
+  useEffect(() => {
+    if (!completedView || !isActiveCompleted) {
+      streamNotifiedRef.current = false;
+      return;
+    }
+    if (!bodyStreamComplete || streamNotifiedRef.current) return;
+
+    streamNotifiedRef.current = true;
+    onCompletedStreamComplete(index);
+  }, [bodyStreamComplete, completedView, index, isActiveCompleted, onCompletedStreamComplete]);
 
   return (
     <article className="glass-panel rounded-xl p-4 transition">
       <div className="mb-2 flex items-center justify-between gap-4">
-        <h2 className="text-xs font-black uppercase tracking-[0.16em] text-text-muted">{title}</h2>
+        <h2 className="text-xs font-black uppercase tracking-[0.16em] text-text-primary">{title}</h2>
         {complete ? <CheckCircle2 className="h-4 w-4 text-accent-info" aria-hidden="true" /> : <Loader2 className="h-4 w-4 animate-spin text-accent-info" aria-hidden="true" />}
       </div>
       {scores ? (
-        <div className="grid gap-2">
-          {scores.map((score) => (
-            <div key={score.label} className="rounded-lg border border-white/10 bg-black/20 px-3 py-2">
-              <div className="mb-1.5 flex items-center justify-between gap-3">
-                <span className="text-xs font-black text-text-muted">{score.label}</span>
-                <span className="text-sm font-black tabular-nums text-text-primary">{Math.round(score.value)}</span>
-              </div>
-              <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
-                <div className="h-full rounded-full bg-accent-info transition-[width] duration-500 ease-out" style={{ width: `${clampInt(score.value, 0, 100)}%` }} />
-              </div>
-              {score.comment ? <p className="mt-1.5 text-xs font-bold leading-5 text-text-muted">{score.comment}</p> : null}
+        <div>
+          <p className="text-sm font-black leading-6 text-text-primary">{displayBody}</p>
+          {bodyStreamComplete ? (
+            <div className="mt-3 grid gap-2">
+              {scores.map((score) => (
+                <div key={score.label} className="rounded-lg border border-white/10 bg-black/20 px-3 py-2">
+                  <div className="mb-1.5 flex items-center justify-between gap-3">
+                    <span className="text-xs font-black text-text-primary">{score.label}</span>
+                    <span className="text-sm font-black tabular-nums text-text-primary">{Math.round(score.value)}</span>
+                  </div>
+                  <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
+                    <div className="h-full rounded-full bg-accent-info transition-[width] duration-700 ease-out" style={{ width: `${clampInt(score.value, 0, 100)}%` }} />
+                  </div>
+                  {score.comment ? <p className="mt-1.5 text-xs font-bold leading-5 text-text-primary">{cleanAnalysisCopy(score.comment, 58)}</p> : null}
+                </div>
+              ))}
             </div>
-          ))}
+          ) : null}
         </div>
       ) : (
-        <p className="text-sm font-bold leading-6 text-text-primary">{displayBody}</p>
+        <p className="text-sm font-black leading-6 text-text-primary">{displayBody}</p>
       )}
       {!scores && !completedView ? (
         <div className="mt-3 flex items-center gap-3">
@@ -884,11 +974,11 @@ function AnalysisStepCard({
   );
 }
 
-function useStreamingText(text: string, charsPerTick: number) {
-  const [visibleLength, setVisibleLength] = useState(charsPerTick > 0 ? 0 : text.length);
+function useStreamingText(text: string, enabled: boolean, intervalMs: number) {
+  const [visibleLength, setVisibleLength] = useState(enabled ? 0 : text.length);
 
   useEffect(() => {
-    if (charsPerTick <= 0) {
+    if (!enabled) {
       setVisibleLength(text.length);
       return;
     }
@@ -896,43 +986,45 @@ function useStreamingText(text: string, charsPerTick: number) {
     setVisibleLength(0);
     const interval = window.setInterval(() => {
       setVisibleLength((length) => {
-        const nextLength = Math.min(text.length, length + charsPerTick);
+        const nextLength = Math.min(text.length, length + 1);
         if (nextLength >= text.length) window.clearInterval(interval);
         return nextLength;
       });
-    }, 42);
+    }, intervalMs);
 
     return () => window.clearInterval(interval);
-  }, [charsPerTick, text]);
+  }, [enabled, intervalMs, text]);
 
-  return text.slice(0, visibleLength);
+  return { text: text.slice(0, visibleLength), isComplete: visibleLength >= text.length };
 }
 
 function FinalRevealCard({ displayName, result, onOpenResult }: { displayName: string; result: LibraryAnalysisResult; onOpenResult: () => void }) {
   const name = `${displayName || "회원"}님`;
   const calculation = result.saju.calculation;
-  const sajuLine = calculation ? `${koreanDayMaster(calculation)}, 우세 기운은 ${dominantElementText(calculation)}로 확인 완료.` : result.saju.currentFlow;
+  const sajuLine = calculation ? `${koreanDayMaster(calculation)}, 우세 기운은 ${dominantElementText(calculation)}로 확인했어요.` : result.saju.currentFlow;
+  const body = [
+    `${name}의 얼굴 비율, 이목구비 신호, 대칭성, 관상 리듬을 한 번에 정리했어요.`,
+    sajuLine,
+    `야옹이 눈에는 ${cleanAnalysisCopy(result.readingType.displayName, 32)} 신호가 가장 선명해요. 이제 최종 결과로 넘어갈 차례입니다.`,
+  ].join("\n");
+  const { text: streamedBody, isComplete } = useStreamingText(body, true, COMPLETED_CARD_STREAM_INTERVAL_MS);
 
   return (
     <section className="fixed bottom-8 left-1/2 z-30 w-[min(980px,72vw)] -translate-x-1/2">
       <article className="glass-panel rounded-2xl border-accent-info/[0.35] p-5 shadow-2xl shadow-black/40">
         <p className="text-xs font-black uppercase tracking-[0.16em] text-accent-info">§11 FINAL ASSESSMENT</p>
-        <h2 className="mt-2 truncate text-2xl font-black text-text-primary">{result.mainCopy}</h2>
-        <p className="mt-3 text-sm font-semibold leading-6 text-text-muted">
-          {name}의 얼굴 비율, 이목구비 신호, 대칭성, 관상 리듬을 한 번에 정리했어.
-          <br />
-          {sajuLine}
-          <br />
-          야옹이 눈에는 {result.readingType.displayName} 쪽 신호가 제일 크게 잡혔고, 이제 진짜 리포트로 넘어갈 차례야.
-        </p>
-        <button
-          type="button"
-          onClick={onOpenResult}
-          className="mt-5 inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-accent-info/45 bg-accent-info/20 px-5 text-sm font-black text-text-primary transition hover:bg-accent-info/30"
-        >
-          <ArrowRight className="h-4 w-4" aria-hidden="true" />
-          결과 페이지로 이동
-        </button>
+        <h2 className="mt-2 truncate text-2xl font-black text-text-primary">{cleanAnalysisCopy(result.mainCopy, 42)}</h2>
+        <p className="mt-3 whitespace-pre-line text-sm font-semibold leading-6 text-text-primary">{streamedBody}</p>
+        {isComplete ? (
+          <button
+            type="button"
+            onClick={onOpenResult}
+            className="mt-5 inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-accent-info/45 bg-accent-info/20 px-5 text-sm font-black text-text-primary transition hover:bg-accent-info/30"
+          >
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            결과 페이지로 이동
+          </button>
+        ) : null}
       </article>
     </section>
   );
@@ -941,30 +1033,45 @@ function FinalRevealCard({ displayName, result, onOpenResult }: { displayName: s
 function buildCompletedAnalysisCards(result: LibraryAnalysisResult): CompletedAnalysisCard[] {
   const calculation = result.saju.calculation;
   const elementSummary = elementCountItems(calculation)
+    .filter((item) => item.count > 0)
     .map((item) => `${item.icon} ${item.label} ${item.count}`)
-    .join(" / ");
-  const sajuIntro = calculation ? `${koreanPillarSummary(calculation)}. 우세 오행은 ${dominantElementText(calculation)}. ${elementSummary}` : "";
+    .join(" · ");
+  const sajuIntro = calculation ? `우세 기운은 ${dominantElementText(calculation)} 쪽이에요. ${elementSummary}` : cleanAnalysisCopy(result.saju.currentFlow, 70);
+  const matchTypes = result.romanticMatch.bestTypes.slice(0, 3).join(", ");
 
   return [
-    { title: "§1 FACE GEOMETRY", body: `${result.geometry.symmetry} ${result.geometry.faceShape} ${result.parts.forehead.metricsText} ${result.parts.forehead.comment}` },
-    { title: "§2 SYMMETRY MAP", body: `${result.geometry.goldenRatio} ${result.geometry.thirds} ${result.geometry.fifths}` },
-    { title: "§3 EYES SIGNAL", body: `${result.parts.eyes.metricsText} ${result.parts.eyes.comment}` },
-    { title: "§4 NOSE FLOW", body: `${result.parts.nose.metricsText} ${result.parts.nose.comment}` },
-    { title: "§5 MOUTH TONE", body: `${result.parts.mouth.metricsText} ${result.parts.mouth.comment}` },
-    { title: "§6 JAW BALANCE", body: `${result.parts.jaw.metricsText} ${result.parts.jaw.comment}` },
-    { title: "§7 IMPRESSION SIGNAL", body: `${result.parts.impression.metricsText} ${result.parts.impression.comment}` },
+    { title: "§1 FACE GEOMETRY", body: cleanAnalysisCopy(`${result.geometry.symmetry} ${result.geometry.faceShape}`, 96) },
+    { title: "§2 SYMMETRY MAP", body: cleanAnalysisCopy(`${result.geometry.goldenRatio} ${result.geometry.thirds}`, 96) },
+    { title: "§3 EYES SIGNAL", body: cleanAnalysisCopy(`${result.parts.eyes.metricsText} ${result.parts.eyes.comment}`, 92) },
+    { title: "§4 NOSE FLOW", body: cleanAnalysisCopy(`${result.parts.nose.metricsText} ${result.parts.nose.comment}`, 92) },
+    { title: "§5 MOUTH TONE", body: cleanAnalysisCopy(`${result.parts.mouth.metricsText} ${result.parts.mouth.comment}`, 92) },
+    { title: "§6 JAW BALANCE", body: cleanAnalysisCopy(`${result.parts.jaw.metricsText} ${result.parts.jaw.comment}`, 92) },
+    { title: "§7 IMPRESSION SIGNAL", body: cleanAnalysisCopy(`${result.parts.impression.metricsText} ${result.parts.impression.comment}`, 92) },
     {
       title: "§8 AESTHETIC INDEX",
-      body: "인상 지표 계산 완료",
+      body: "호감도와 신뢰감 신호를 고양이식 점수판으로 정리했어요.",
       scores: [
         { label: "호감도", value: result.scores.likability, comment: result.scores.comments[0] },
         { label: "신뢰감", value: result.scores.trust, comment: result.scores.comments[1] },
-        { label: "대칭성", value: result.scores.symmetry, comment: result.scores.comments[2] },
+        { label: "균형감", value: result.scores.balance, comment: result.scores.comments[3] },
       ],
     },
-    { title: "§9 SAJU RHYTHM", body: `${sajuIntro} ${result.saju.elementBalance} ${result.saju.currentFlow}` },
-    { title: "§10 ROMANCE MATCH", body: `${result.romanticMatch.bestTypes.join(", ")} 타입과 케미 좋음. ${result.romanticMatch.why} ${result.romanticMatch.caution}` },
+    { title: "§9 SAJU RHYTHM", body: cleanAnalysisCopy(`${sajuIntro} ${result.saju.strength}`, 104) },
+    { title: "§10 CHEMI MATCH", body: cleanAnalysisCopy(`${matchTypes} 타입과 케미가 잘 맞습니다. ${result.romanticMatch.why}`, 104) },
   ];
+}
+
+function cleanAnalysisCopy(input: string, maxLength: number) {
+  const normalized = stripHanja(input)
+    .replace(/피부/g, "전체 인상")
+    .replace(/처방전?/g, "추천")
+    .replace(/학생/g, "님")
+    .replace(/연애/g, "관계")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (normalized.length <= maxLength) return normalized;
+  return `${normalized.slice(0, maxLength - 1).trim()}…`;
 }
 
 function stepProgress(overallProgress: number, index: number) {
@@ -980,10 +1087,10 @@ function getFacePositionHint(landmarks: Landmark[] | null) {
   const centerX = 1 - (Math.min(...xs) + Math.max(...xs)) / 2;
   const centerY = (Math.min(...ys) + Math.max(...ys)) / 2;
 
-  if (centerX < 0.42) return "얼굴을 화면 중앙보다 조금 오른쪽에 맞춰줘";
-  if (centerX > 0.58) return "얼굴을 화면 중앙보다 조금 왼쪽에 맞춰줘";
-  if (centerY < 0.34) return "얼굴을 화면 중앙보다 조금 아래로 맞춰줘";
-  if (centerY > 0.66) return "얼굴을 화면 중앙보다 조금 위로 맞춰줘";
+  if (centerX < 0.42) return "얼굴을 화면 중앙보다 조금 오른쪽에 맞춰 주세요";
+  if (centerX > 0.58) return "얼굴을 화면 중앙보다 조금 왼쪽에 맞춰 주세요";
+  if (centerY < 0.34) return "얼굴을 화면 중앙보다 조금 아래로 맞춰 주세요";
+  if (centerY > 0.66) return "얼굴을 화면 중앙보다 조금 위로 맞춰 주세요";
   return null;
 }
 
@@ -998,26 +1105,26 @@ function getStatusLabel({
   isModelLoading: boolean;
   hasFace: boolean;
 }) {
-  if (flow === "revealing") return "관상 리포트 정리 완료";
-  if (flow === "submitting") return "관상 리포트 작성 중";
+  if (flow === "revealing") return "고양이 관상 노트가 열리고 있어요";
+  if (flow === "submitting") return "야옹이가 관상 좌표를 유심히 보고 있어요";
   if (cameraStatus !== "ready") return "카메라 준비 중";
   if (isModelLoading) return "관상 엔진 로딩 중";
-  if (hasFace) return "얼굴 인식 완료, 자동 분석 중";
+  if (hasFace) return "야옹이가 관상 좌표를 유심히 보고 있어요";
   return "정면 스캔 대기";
 }
 
 function cameraStatusCopy(status: ReturnType<typeof useCamera>["status"]) {
   if (status === "requesting") return "카메라 여는 중";
-  if (status === "denied") return "카메라 권한이 막혔어";
-  if (status === "error") return "카메라가 삐끗했어";
+  if (status === "denied") return "카메라 권한이 막혀 있습니다";
+  if (status === "error") return "카메라가 잠시 멈췄습니다";
   return "카메라 준비 중";
 }
 
 function apiErrorCopy(code: string | undefined) {
-  if (code === "not_enough_books") return "분석 후보 데이터가 부족해. 관리자 데이터를 먼저 확인해야 해.";
-  if (code === "invalid_request") return "입력값이 빠졌어. 처음부터 한 번만 다시 가자.";
-  if (code === "session_create_failed") return "세션 저장이 실패했어. 잠깐 뒤 다시 시도해줘.";
-  return "분석실이 잠깐 삐끗했어. 다시 가보자.";
+  if (code === "not_enough_books") return "분석 후보 데이터가 부족합니다. 관리자 데이터를 먼저 확인해 주세요.";
+  if (code === "invalid_request") return "입력값이 빠졌습니다. 처음부터 한 번만 다시 진행해 주세요.";
+  if (code === "session_create_failed") return "세션 저장이 실패했습니다. 잠시 뒤 다시 시도해 주세요.";
+  return "분석실이 잠시 멈췄습니다. 다시 시도해 주세요.";
 }
 
 function delay(ms: number) {

@@ -9,6 +9,9 @@ import { honorific } from "@/lib/korean/name";
 import { dominantElementText, elementCountItems, koreanDayMaster, koreanPillarSummary, stripHanja } from "@/lib/saju/display";
 import type { DetailComment, LibraryAnalysisResult } from "@/types/session";
 
+const RESULT_SECTION_COUNT = 6;
+const RESULT_SECTION_DURATION_MS = 7_200;
+
 export type ResultPayload = {
   id: string;
   createdAt: string;
@@ -50,7 +53,7 @@ export function ResultPage({ sessionId }: { sessionId: string }) {
       <main className="grid min-h-screen place-items-center bg-bg-primary px-5 text-text-primary">
         <div className="text-center">
           <Loader2 className="mx-auto h-9 w-9 animate-spin text-accent-info" aria-hidden="true" />
-          <p className="mt-4 text-lg font-black">관상 리포트 불러오는 중</p>
+          <p className="mt-4 text-lg font-black">관상 리포트를 불러오고 있습니다</p>
         </div>
       </main>
     );
@@ -60,8 +63,8 @@ export function ResultPage({ sessionId }: { sessionId: string }) {
     return (
       <main className="grid min-h-screen place-items-center bg-bg-primary px-5 text-text-primary">
         <section className="glass-panel max-w-md rounded-2xl p-6 text-center">
-          <h1 className="text-2xl font-black">결과를 찾지 못했어</h1>
-          <p className="mt-3 text-sm font-bold leading-6 text-text-muted">학번과 생년월일로 다시 찾아보거나, 새로 분석을 시작해줘.</p>
+          <h1 className="text-2xl font-black">결과를 찾지 못했습니다</h1>
+          <p className="mt-3 text-sm font-bold leading-6 text-text-muted">학번과 생년월일로 다시 찾아보시거나 새 분석을 시작해 주세요.</p>
           <div className="mt-5 grid gap-2 sm:grid-cols-2">
             <Link href="/lookup" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border border-border bg-bg-card px-5 text-sm font-bold text-text-primary transition hover:bg-bg-card-hover">
               <RefreshCw className="h-5 w-5" aria-hidden="true" />
@@ -86,133 +89,120 @@ export function ResultContent({ payload }: { payload: ResultPayload }) {
   const name = honorific(displayName);
   const calculation = result.saju.calculation;
   const elementItems = elementCountItems(calculation);
-  const partCards = buildPartCards(result);
+  const partCards = buildPartCards(result).slice(0, 4);
   const dominantText = dominantElementText(calculation);
+  const maxElement = maxElementCount(elementItems);
+  const topScore = topScoreItem(result.scores);
+  const [activeSection, setActiveSection] = useState(0);
+  const [autoPaused, setAutoPaused] = useState(false);
+
+  useEffect(() => {
+    if (autoPaused || prefersReducedMotion() || activeSection >= RESULT_SECTION_COUNT - 1) return;
+
+    const timeout = window.setTimeout(() => {
+      setActiveSection((current) => Math.min(RESULT_SECTION_COUNT - 1, current + 1));
+    }, RESULT_SECTION_DURATION_MS);
+
+    return () => window.clearTimeout(timeout);
+  }, [activeSection, autoPaused]);
+
+  const goToSection = (index: number) => {
+    setAutoPaused(true);
+    setActiveSection(clampInt(index, 0, RESULT_SECTION_COUNT - 1));
+  };
 
   return (
-    <main className="min-h-screen bg-black text-text-primary">
-      <section className="scanline relative overflow-hidden px-5 pb-12 pt-6 md:px-8">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_12%,rgb(var(--accent-info-rgb)_/_0.16),transparent_30rem),linear-gradient(180deg,rgb(255_255_255_/_0.04),transparent_22rem)]" />
-
-        <header className="relative z-20 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3 rounded-lg border border-border bg-black/[0.45] px-3 py-2.5 text-xs font-bold uppercase tracking-[0.14em] text-text-muted backdrop-blur">
-            <span className="grid h-8 w-8 place-items-center rounded-md border border-white/10 bg-white/[0.08]">
+    <main className="relative h-screen overflow-hidden bg-[#070807] text-text-primary">
+      <header className="fixed left-0 right-0 top-0 z-40 border-b border-white/10 bg-black/55 px-5 py-3 backdrop-blur md:px-8">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
+          <div className="flex min-w-0 items-center gap-3 text-xs font-black text-text-muted">
+            <span className="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-white/10 bg-white/[0.08]">
               <AppIcon className="h-5 w-5" />
             </span>
-            <span>AI 관상가 고양이 / Live Result</span>
+            <span className="truncate">도서관 관상 리포트</span>
           </div>
-          <Link href="/" className="inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-border bg-black/45 px-4 text-sm font-black text-text-primary transition hover:border-border-bright hover:bg-white/10">
+          <Link href="/" className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-lg border border-border bg-black/45 px-4 text-sm font-black text-text-primary transition hover:border-border-bright hover:bg-white/10">
             <RotateCcw className="h-4 w-4" aria-hidden="true" />
             다시 분석하기
           </Link>
-        </header>
-
-        <div className="relative z-10 mx-auto grid min-h-[calc(100vh-6.5rem)] max-w-7xl items-center gap-8 py-10 lg:grid-cols-[0.92fr_1.08fr]">
-          <ResultFacePanel displayName={displayName} faceImageUrl={faceImageUrl} />
-
-          <section className="min-w-0">
-            <p className="text-xs font-black uppercase tracking-[0.2em] text-accent-warn">AI 관상가 고양이</p>
-            <h1 className="mt-3 overflow-hidden text-ellipsis whitespace-nowrap text-[clamp(2.2rem,5vw,5.4rem)] font-black leading-none text-text-primary">
-              {cleanCopy(result.mainCopy || result.readingType.headline)}
-            </h1>
-
-            <div className="mt-6 grid gap-4 md:grid-cols-[1.1fr_0.9fr]">
-              <article className="rounded-2xl border border-border bg-bg-card/70 p-5 shadow-2xl shadow-black/35">
-                <p className="text-xs font-black uppercase tracking-[0.16em] text-accent-info">TYPE</p>
-                <h2 className="mt-2 text-3xl font-black text-text-primary">{cleanCopy(result.readingType.displayName)}</h2>
-                <p className="mt-3 text-base font-bold leading-7 text-text-muted">{cleanCopy(result.readingType.description)}</p>
-                <div className="mt-5 flex flex-wrap gap-2">
-                  {result.physiognomy.keywords.slice(0, 5).map((keyword) => (
-                    <span key={keyword} className="rounded-full border border-accent-info/30 bg-accent-info/10 px-3 py-1.5 text-xs font-black text-accent-info">
-                      {cleanCopy(keyword)}
-                    </span>
-                  ))}
-                </div>
-              </article>
-
-              <article className="rounded-2xl border border-border bg-bg-card/70 p-5 shadow-2xl shadow-black/35">
-                <p className="text-xs font-black uppercase tracking-[0.16em] text-accent-info">SAJU RHYTHM</p>
-                <h2 className="mt-2 text-2xl font-black text-text-primary">{koreanDayMaster(calculation)}</h2>
-                <p className="mt-3 text-sm font-bold leading-6 text-text-muted">우세 기운: {dominantText}</p>
-                <div className="mt-4 grid gap-2">
-                  {elementItems.map((item) => (
-                    <ElementBar key={item.element} icon={item.icon} label={item.label} value={item.count} max={maxElementCount(elementItems)} />
-                  ))}
-                </div>
-              </article>
-            </div>
-
-            <article className="mt-4 rounded-2xl border border-accent-info/25 bg-accent-info/10 p-5">
-              <p className="text-xs font-black uppercase tracking-[0.16em] text-accent-info">FINAL MEOW</p>
-              <p className="mt-2 text-lg font-black leading-8 text-text-primary">
-                {cleanCopy(result.physiognomy.summary)}
-              </p>
-              <p className="mt-3 text-sm font-bold leading-6 text-text-muted">
-                {cleanCopy(result.saju.strength)} {cleanCopy(result.saju.advice)} 야옹이 기준으로는 “조용히 보고 있다가 꽂히면 오래 파는 타입” 신호가 꽤 선명해요.
-              </p>
-            </article>
-          </section>
         </div>
-      </section>
+      </header>
 
-      <section className="mx-auto grid max-w-7xl gap-6 px-5 py-10 md:px-8">
-        <ReportSection eyebrow="PERSONA" title={`${name} 타입 리포트`}>
-          <div className="grid gap-4 lg:grid-cols-3">
-            <TextPanel title="관상 총평" text={`${cleanCopy(result.physiognomySummary)} ${cleanCopy(result.physiognomy.strengths.join(" "))}`} />
-            <TextPanel title="사주 리듬" text={`${koreanPillarSummary(calculation)}. ${cleanCopy(result.saju.elementBalance)} ${cleanCopy(result.saju.currentFlow)}`} />
-            <TextPanel title="주의할 흐름" text={cleanCopy(result.physiognomy.cautions.join(" "))} />
+      <div className="h-screen transition-transform duration-700 ease-out" style={{ transform: `translateY(-${activeSection * 100}vh)` }}>
+        <StorySection active={activeSection === 0} index={0} eyebrow="첫 장면" title={cleanCopy(result.mainCopy || result.readingType.headline)} lines={[cleanCopy(result.readingType.description), `${name}의 핵심 타입은 ${cleanCopy(result.readingType.displayName)}입니다.`, cleanCopy(result.physiognomy.summary)]}>
+          <div className="grid items-center gap-8 lg:grid-cols-[0.92fr_1.08fr]">
+            <ResultFacePanel displayName={displayName} faceImageUrl={faceImageUrl} />
+
+            <div className="grid gap-4">
+              <SummaryCard title="타입" value={cleanCopy(result.readingType.displayName)} description={cleanCopy(result.physiognomySummary)} />
+              <ChipList items={result.physiognomy.keywords.slice(0, 4)} />
+              <EvidenceDisclosure>
+                <TextPanel title="사주 리듬" text={`${koreanPillarSummary(calculation)}. ${cleanCopy(result.saju.currentFlow)}`} />
+              </EvidenceDisclosure>
+            </div>
           </div>
-        </ReportSection>
+        </StorySection>
 
-        <ReportSection eyebrow="FACE READING" title="이목구비 관상 리포트">
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <StorySection active={activeSection === 1} index={1} eyebrow="얼굴 신호" title="이목구비 관상 리포트" lines={[cleanCopy(result.physiognomy.summary), cleanCopy(result.physiognomy.strengths[0] ?? result.geometry.symmetry), cleanCopy(result.physiognomy.cautions[0] ?? result.geometry.faceShape)]}>
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             {partCards.map((part) => (
-              <PartCard key={part.title} title={part.title} part={part.part} />
+              <SignalCard key={part.title} title={part.title} text={cleanCopy(part.part.metricsText)} />
             ))}
           </div>
-        </ReportSection>
-
-        <div className="grid gap-6 lg:grid-cols-[0.92fr_1.08fr]">
-          <ReportSection eyebrow="INDEX" title="인상 지표">
-            <ScoreGrid scores={result.scores} />
-          </ReportSection>
-
-          <ReportSection eyebrow="ROMANCE MATCH" title="연애 궁합">
-            <div className="grid gap-4">
-              <div className="grid gap-3 md:grid-cols-2">
-                {result.romanticMatch.bestTypes.map((type) => (
-                  <div key={type} className="rounded-xl border border-accent-info/25 bg-accent-info/10 p-4">
-                    <HeartHandshake className="h-5 w-5 text-accent-info" aria-hidden="true" />
-                    <p className="mt-3 text-lg font-black text-text-primary">{cleanCopy(type)}</p>
-                  </div>
-                ))}
-              </div>
-              <TextPanel title="왜 잘 맞냐면" text={cleanCopy(result.romanticMatch.why)} />
-              <TextPanel title="데이트 추천" text={cleanCopy(result.romanticMatch.dateStyle)} />
-              <TextPanel title="고양이의 경고" text={cleanCopy(result.romanticMatch.caution)} />
+          <EvidenceDisclosure>
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {buildPartCards(result).map((part) => (
+                <PartCard key={part.title} title={part.title} part={part.part} />
+              ))}
             </div>
-          </ReportSection>
-        </div>
+          </EvidenceDisclosure>
+        </StorySection>
 
-        <ReportSection eyebrow="FIVE ELEMENTS" title="오행 밸런스">
+        <StorySection active={activeSection === 2} index={2} eyebrow="인상 지표" title="인상 지표" lines={[`가장 강하게 잡힌 지표는 ${topScore.label} ${Math.round(topScore.value)}점입니다.`, cleanCopy(result.scores.comments[0] ?? "전반적인 인상 균형은 안정적입니다."), "숫자는 절대 평가가 아니라 인상 신호를 보기 쉽게 정리한 값입니다."]}>
+          <ScoreGrid scores={result.scores} compact />
+          <EvidenceDisclosure>
+            <div className="grid gap-4 md:grid-cols-2">
+              <TextPanel title="대칭과 균형" text={`${cleanCopy(result.geometry.symmetry)} ${cleanCopy(result.geometry.goldenRatio)}`} />
+              <TextPanel title="전체 비례" text={`${cleanCopy(result.geometry.thirds)} ${cleanCopy(result.geometry.fifths)} ${cleanCopy(result.geometry.faceShape)}`} />
+            </div>
+          </EvidenceDisclosure>
+        </StorySection>
+
+        <StorySection active={activeSection === 3} index={3} eyebrow="사주와 오행" title="사주와 다섯 기운" lines={[`생년월일 기준 흐름은 ${cleanCopy(koreanDayMaster(calculation))}로 읽힙니다.`, `우세한 기운은 ${cleanCopy(dominantText)}입니다.`, `${cleanCopy(result.saju.strength)} ${cleanCopy(result.saju.advice)}`]}>
           <div className="grid gap-3 md:grid-cols-5">
             {elementItems.map((item) => (
-              <div key={item.element} className="rounded-xl border border-border bg-bg-card/70 p-4">
-                <div className="text-3xl" aria-hidden="true">
-                  {item.icon}
-                </div>
-                <p className="mt-3 text-lg font-black text-text-primary">{item.label}</p>
-                <p className="mt-1 text-sm font-bold text-text-muted">{item.count}칸 감지</p>
+              <ElementChip key={item.element} icon={item.icon} label={item.label} value={item.count} max={maxElement} />
+            ))}
+          </div>
+          <EvidenceDisclosure>
+            <div className="grid gap-4 lg:grid-cols-2">
+              <TextPanel title="기운 해석" text={`${cleanCopy(result.saju.elementBalance)} ${cleanCopy(result.saju.currentFlow)}`} />
+              <TextPanel title="계산 기준" text={koreanPillarSummary(calculation)} />
+            </div>
+          </EvidenceDisclosure>
+        </StorySection>
+
+        <StorySection active={activeSection === 4} index={4} eyebrow="관계 궁합" title="관계 궁합" lines={[cleanCopy(result.romanticMatch.why), cleanCopy(result.romanticMatch.dateStyle), cleanCopy(result.romanticMatch.caution)]}>
+          <div className="grid gap-3 md:grid-cols-2">
+            {result.romanticMatch.bestTypes.map((type) => (
+              <div key={type} className="rounded-xl border border-accent-info/25 bg-accent-info/10 p-4">
+                <HeartHandshake className="h-5 w-5 text-accent-info" aria-hidden="true" />
+                <p className="mt-3 text-lg font-black text-text-primary">{cleanCopy(type)}</p>
+                <p className="mt-1 text-sm font-bold text-text-muted">잘 맞는 사람</p>
               </div>
             ))}
           </div>
-        </ReportSection>
+          <EvidenceDisclosure>
+            <div className="grid gap-4 md:grid-cols-3">
+              <TextPanel title="케미 포인트" text={cleanCopy(result.romanticMatch.why)} />
+              <TextPanel title="함께하기 좋은 흐름" text={cleanCopy(result.romanticMatch.dateStyle)} />
+              <TextPanel title="주의할 점" text={cleanCopy(result.romanticMatch.caution)} />
+            </div>
+          </EvidenceDisclosure>
+        </StorySection>
 
-        <ReportSection eyebrow="FINAL CURATION" title={`지금 ${name}에게 필요한 책`} id="books">
-          <p className="max-w-3xl text-sm font-bold leading-6 text-text-muted">
-            리포트가 끝났다고 생각한 순간, 야옹이가 마지막으로 도서관 레이더를 켰습니다. 지금 {name}에게 빌릴 명분이 가장 센 책만 골랐어요.
-          </p>
-          <ul className="mt-5 grid gap-2 md:grid-cols-3">
+        <StorySection active={activeSection === 5} index={5} eyebrow="책 추천" title={`지금 ${name}에게 필요한 책`} lines={["리포트의 핵심 신호를 도서관 책 추천으로 연결했습니다.", cleanCopy(result.sajuSummary), "표지와 네이버 책 링크는 아래 추천 카드에서 바로 확인하실 수 있습니다."]} id="books">
+          <ul className="grid gap-2 md:grid-cols-3">
             {result.readingNeeds.map((need) => (
               <li key={need} className="rounded-lg border border-accent-info/20 bg-accent-info/10 px-4 py-3 text-sm font-black leading-6 text-text-primary">
                 {cleanCopy(need)}
@@ -224,18 +214,29 @@ export function ResultContent({ payload }: { payload: ResultPayload }) {
               <BookRecommendationCard key={`${book.bookId}-${index}`} book={{ ...book, reason: cleanCopy(book.reason), actionCopy: cleanCopy(book.actionCopy) }} index={index} />
             ))}
           </div>
-        </ReportSection>
+        </StorySection>
+      </div>
 
-        <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-bg-card/65 px-4 py-3 text-xs font-bold leading-5 text-text-faint">
+      <nav className="fixed bottom-5 left-1/2 z-40 flex -translate-x-1/2 items-center gap-2 rounded-full border border-border bg-black/55 px-3 py-2 backdrop-blur" aria-label="결과 섹션">
+        {Array.from({ length: RESULT_SECTION_COUNT }, (_, index) => (
+          <button
+            key={index}
+            type="button"
+            className={["h-2.5 rounded-full transition-all", activeSection === index ? "w-8 bg-accent-info" : "w-2.5 bg-white/30 hover:bg-white/55"].join(" ")}
+            aria-label={`${index + 1}번째 섹션 보기`}
+            aria-current={activeSection === index ? "step" : undefined}
+            onClick={() => goToSection(index)}
+          />
+        ))}
+      </nav>
+
+      {activeSection === RESULT_SECTION_COUNT - 1 ? (
+        <footer className="fixed bottom-5 right-5 z-40 max-w-xl rounded-xl border border-border bg-black/55 px-4 py-3 text-xs font-bold leading-5 text-text-faint backdrop-blur">
           <span className="inline-flex items-center gap-2">
             <ShieldCheck className="h-4 w-4 text-accent-info" aria-hidden="true" />본 분석은 흥미용 해석이며, 의학적 소견이나 절대 평가가 아닙니다.
           </span>
-          <Link href="/" className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-border bg-black/30 px-4 text-sm font-black text-text-primary transition hover:bg-white/10">
-            <RotateCcw className="h-4 w-4" aria-hidden="true" />
-            다시 분석하기
-          </Link>
-        </div>
-      </section>
+        </footer>
+      ) : null}
     </main>
   );
 }
@@ -246,24 +247,16 @@ function ResultFacePanel({ displayName, faceImageUrl }: { displayName: string; f
   const shouldShowImage = Boolean(faceImageUrl && !imageFailed);
 
   return (
-    <div className="relative mx-auto aspect-[4/5] w-full max-w-[520px] overflow-hidden rounded-[2rem] border border-white/15 bg-bg-card/70 shadow-2xl shadow-black/50">
+    <div className="relative mx-auto aspect-[4/5] w-full max-w-[300px] overflow-hidden rounded-[1.5rem] border border-white/15 bg-bg-card/70 shadow-2xl shadow-black/50 lg:max-w-[340px]">
       {shouldShowImage ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={faceImageUrl ?? ""} alt={`${name} 얼굴 분석 이미지`} className="h-full w-full object-cover" onError={() => setImageFailed(true)} />
       ) : (
         <div className="flex h-full flex-col items-center justify-center gap-4 px-6 text-center">
           <CameraOff className="h-10 w-10 text-accent-info" aria-hidden="true" />
-          <p className="max-w-sm text-base font-black leading-7 text-text-primary">얼굴 이미지는 24시간 이후 삭제됐어요.</p>
+          <p className="max-w-sm text-base font-black leading-7 text-text-primary">얼굴 이미지는 24시간 이후 삭제되었습니다.</p>
         </div>
       )}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,transparent_0,transparent_44%,rgb(0_0_0_/_0.42)_100%)]" />
-      {FACE_MARKERS.map((marker, index) => (
-        <span
-          key={`${marker.x}-${marker.y}`}
-          className="absolute h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/90 shadow-[0_0_22px_rgb(141_222_215_/_0.75)]"
-          style={{ left: `${marker.x}%`, top: `${marker.y}%`, animationDelay: `${index * 90}ms` }}
-        />
-      ))}
     </div>
   );
 }
@@ -281,23 +274,75 @@ function AppIcon({ className }: { className?: string }) {
   );
 }
 
-const FACE_MARKERS = [
-  { x: 50, y: 24 },
-  { x: 38, y: 40 },
-  { x: 62, y: 40 },
-  { x: 50, y: 52 },
-  { x: 42, y: 66 },
-  { x: 58, y: 66 },
-  { x: 50, y: 78 },
-];
+function StorySection({ active, index, eyebrow, title, lines, id, children }: { active: boolean; index: number; eyebrow: string; title: string; lines: string[]; id?: string; children: ReactNode }) {
+  const streamedLines = useTypewriterLines(lines, index, active);
 
-function ReportSection({ eyebrow, title, id, children }: { eyebrow: string; title: string; id?: string; children: ReactNode }) {
   return (
-    <section id={id} className="rounded-2xl border border-border bg-bg-card/62 p-5 shadow-2xl shadow-black/25 md:p-6">
-      <p className="text-xs font-black uppercase tracking-[0.16em] text-accent-warn">{eyebrow}</p>
-      <h2 className="mt-2 text-2xl font-black text-text-primary md:text-3xl">{title}</h2>
-      <div className="mt-5">{children}</div>
+    <section id={id} className="scanline relative h-screen overflow-hidden px-5 pb-14 pt-28 md:px-8">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_82%_18%,rgb(var(--accent-info-rgb)_/_0.14),transparent_24rem),linear-gradient(180deg,rgb(255_255_255_/_0.04),transparent_18rem)]" />
+      <div className="relative z-10 mx-auto grid h-[calc(100vh-10.5rem)] max-w-7xl content-center gap-6">
+        <div className="max-w-6xl">
+          <p className="text-xs font-black tracking-[0.18em] text-accent-warn">{eyebrow}</p>
+          {index === 0 ? (
+            <h1 className="mt-3 overflow-hidden text-ellipsis whitespace-nowrap text-[clamp(2rem,4.1vw,4.5rem)] font-black leading-none text-text-primary">{title}</h1>
+          ) : (
+            <h2 className="mt-3 overflow-hidden text-ellipsis whitespace-nowrap text-[clamp(1.9rem,4.5vw,4.4rem)] font-black leading-none text-text-primary">{title}</h2>
+          )}
+          <div className="mt-5 grid max-w-3xl gap-2.5" aria-live="polite">
+            {streamedLines.map((line, lineIndex) => (
+              <p key={`${index}-${lineIndex}`} className="rounded-xl border border-white/10 bg-white/[0.045] px-4 py-2.5 text-sm font-bold leading-6 text-text-muted md:text-base">
+                {line}
+              </p>
+            ))}
+          </div>
+        </div>
+        <div className="grid gap-4">{children}</div>
+      </div>
     </section>
+  );
+}
+
+function SummaryCard({ title, value, description }: { title: string; value: string; description: string }) {
+  return (
+    <article className="rounded-2xl border border-border bg-bg-card/70 p-5 shadow-2xl shadow-black/35">
+      <p className="text-xs font-black tracking-[0.16em] text-accent-info">{title}</p>
+      <h2 className="mt-2 text-3xl font-black text-text-primary">{value}</h2>
+      <p className="mt-3 text-sm font-bold leading-6 text-text-muted">{description}</p>
+    </article>
+  );
+}
+
+function SignalCard({ title, text }: { title: string; text: string }) {
+  return (
+    <article className="rounded-xl border border-border bg-bg-card/70 p-4">
+      <h3 className="text-xl font-black text-text-primary">{title}</h3>
+      <p className="mt-2 text-sm font-bold leading-6 text-text-muted">{text}</p>
+    </article>
+  );
+}
+
+function ChipList({ items }: { items: string[] }) {
+  return (
+    <div className="flex flex-wrap gap-2">
+      {items.map((item) => (
+        <span key={item} className="rounded-full border border-accent-info/30 bg-accent-info/10 px-3 py-1.5 text-xs font-black text-accent-info">
+          {cleanCopy(item)}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+function EvidenceDisclosure({ label = "더보기", children }: { label?: string; children: ReactNode }) {
+  return (
+    <details className="group rounded-xl border border-border bg-black/20 p-4">
+      <summary className="cursor-pointer list-none text-sm font-black text-accent-info transition hover:text-text-primary">
+        {label}
+        <span className="ml-2 text-text-faint group-open:hidden">+</span>
+        <span className="ml-2 hidden text-text-faint group-open:inline">-</span>
+      </summary>
+      <div className="mt-4">{children}</div>
+    </details>
   );
 }
 
@@ -320,7 +365,7 @@ function PartCard({ title, part }: { title: string; part: DetailComment }) {
   );
 }
 
-function ScoreGrid({ scores }: { scores: LibraryAnalysisResult["scores"] }) {
+function ScoreGrid({ scores, compact = false }: { scores: LibraryAnalysisResult["scores"]; compact?: boolean }) {
   const items = [
     ["호감도", scores.likability],
     ["신뢰감", scores.trust],
@@ -330,9 +375,9 @@ function ScoreGrid({ scores }: { scores: LibraryAnalysisResult["scores"] }) {
   ] as const;
 
   return (
-    <div className="grid gap-3">
+    <div className={compact ? "grid gap-3 md:grid-cols-5" : "grid gap-3"}>
       {items.map(([label, value], index) => (
-        <div key={label} className="rounded-xl border border-border bg-black/20 p-3">
+        <div key={label} className="rounded-xl border border-border bg-bg-card/70 p-3">
           <div className="mb-2 flex items-center justify-between gap-3 text-sm font-black">
             <span className="inline-flex items-center gap-2 text-text-primary">
               <Gauge className="h-4 w-4 text-accent-info" aria-hidden="true" />
@@ -350,21 +395,22 @@ function ScoreGrid({ scores }: { scores: LibraryAnalysisResult["scores"] }) {
   );
 }
 
-function ElementBar({ icon, label, value, max }: { icon: string; label: string; value: number; max: number }) {
+function ElementChip({ icon, label, value, max }: { icon: string; label: string; value: number; max: number }) {
   const width = max <= 0 ? 0 : Math.max(8, Math.round((value / max) * 100));
 
   return (
-    <div>
-      <div className="mb-1 flex items-center justify-between gap-3 text-xs font-black text-text-muted">
-        <span>
-          {icon} {label}
+    <article className="rounded-xl border border-border bg-bg-card/70 p-4">
+      <div className="flex items-center justify-between gap-3">
+        <span className="text-3xl" aria-hidden="true">
+          {icon}
         </span>
-        <span>{value}</span>
+        <span className="text-lg font-black tabular-nums text-accent-info">{value}</span>
       </div>
-      <div className="h-2 overflow-hidden rounded-full bg-white/10">
+      <h3 className="mt-3 text-lg font-black text-text-primary">{label}</h3>
+      <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10">
         <div className="h-full rounded-full bg-accent-info" style={{ width: `${width}%` }} />
       </div>
-    </div>
+    </article>
   );
 }
 
@@ -381,6 +427,86 @@ function buildPartCards(result: LibraryAnalysisResult) {
 
 function maxElementCount(items: Array<{ count: number }>) {
   return Math.max(1, ...items.map((item) => item.count));
+}
+
+function topScoreItem(scores: LibraryAnalysisResult["scores"]) {
+  const items = [
+    { label: "호감도", value: scores.likability },
+    { label: "신뢰감", value: scores.trust },
+    { label: "대칭성", value: scores.symmetry },
+    { label: "균형감", value: scores.balance },
+    { label: "인상 매력도", value: scores.attractiveness },
+  ];
+
+  return items.reduce((top, item) => (item.value > top.value ? item : top), items[0]);
+}
+
+function useTypewriterLines(lines: string[], sectionIndex: number, active: boolean) {
+  const [visibleLines, setVisibleLines] = useState<string[]>(() => (active || prefersReducedMotion() ? [lines[0] ?? ""] : []));
+
+  useEffect(() => {
+    if (!active) {
+      setVisibleLines([]);
+      return;
+    }
+
+    if (prefersReducedMotion()) {
+      setVisibleLines(lines);
+      return;
+    }
+
+    let cancelled = false;
+    let lineIndex = 0;
+    let charIndex = 0;
+    let timeout: number | undefined;
+
+    setVisibleLines(lines.length > 0 ? [""] : []);
+
+    const tick = () => {
+      if (cancelled || lineIndex >= lines.length) return;
+
+      const currentLine = lines[lineIndex] ?? "";
+      const nextText = currentLine.slice(0, charIndex + 1);
+      setVisibleLines((current) => {
+        const next = current.slice(0, lineIndex + 1);
+        next[lineIndex] = nextText;
+        return next;
+      });
+
+      charIndex += 1;
+
+      if (charIndex <= currentLine.length) {
+        timeout = window.setTimeout(tick, 18 + Math.min(14, sectionIndex * 2));
+        return;
+      }
+
+      lineIndex += 1;
+      charIndex = 0;
+
+      if (lineIndex < lines.length) {
+        setVisibleLines((current) => [...current, ""]);
+        timeout = window.setTimeout(tick, 260);
+      }
+    };
+
+    timeout = window.setTimeout(tick, 180);
+
+    return () => {
+      cancelled = true;
+      if (timeout) window.clearTimeout(timeout);
+    };
+  }, [active, lines, sectionIndex]);
+
+  return visibleLines.filter((line, index) => line.length > 0 || index === 0);
+}
+
+function clampInt(value: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function prefersReducedMotion() {
+  if (typeof window === "undefined" || typeof window.matchMedia !== "function") return false;
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
 function withResultFallback(result: LibraryAnalysisResult): LibraryAnalysisResult {
@@ -448,5 +574,15 @@ function withResultFallback(result: LibraryAnalysisResult): LibraryAnalysisResul
 }
 
 function cleanCopy(input: string) {
-  return stripHanja(input).replace(/피부/g, "전체 인상");
+  return stripHanja(input)
+    .replace(/피부/g, "전체 인상")
+    .replace(new RegExp(["연", "애"].join(""), "g"), "관계 궁합")
+    .replace(/데이트/g, "함께하는 시간")
+    .replace(/해줘/g, "해 주세요")
+    .replace(/했어/g, "했습니다")
+    .replace(/돼요/g, "됩니다")
+    .replace(/됐어요/g, "되었습니다")
+    .replace(/좋아요/g, "좋습니다")
+    .replace(/골랐어요/g, "골랐습니다")
+    .replace(/이건/g, "이 책은");
 }

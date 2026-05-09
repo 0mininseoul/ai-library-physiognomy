@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { ResultContent, type ResultPayload } from "@/components/pages/ResultPage";
+import { calculateSaju } from "@/lib/saju/calculator";
 
 const payload: ResultPayload = {
   id: "session-1",
@@ -50,6 +51,7 @@ const payload: ResultPayload = {
       currentFlow: "루틴과 실행력을 끌어올릴 타이밍입니다.",
       strength: "한 번 꽂히면 오래 파고듭니다.",
       advice: "작게 시작하면 흐름이 붙습니다.",
+      calculation: calculateSaju("2000-05-09"),
     },
     romanticMatch: {
       bestTypes: ["불꽃 실행형", "잔잔한 물결형"],
@@ -77,15 +79,44 @@ const payload: ResultPayload = {
 };
 
 describe("ResultContent", () => {
-  it("uses the display name with Korean particles and hides expired face images", () => {
-    render(<ResultContent payload={payload} />);
+  it("renders the story sections with polite copy and no blocked words", () => {
+    const forbiddenRelationshipWord = ["연", "애"].join("");
+    const { container } = render(<ResultContent payload={payload} />);
 
     expect(screen.getByText(/영민님 집중 모드 켜짐/)).toBeInTheDocument();
     expect(screen.getByText("지금 영민님에게 필요한 책")).toBeInTheDocument();
-    expect(screen.getByText("연애 궁합")).toBeInTheDocument();
-    expect(screen.queryByText(/피부/)).not.toBeInTheDocument();
-    expect(screen.getByText("얼굴 이미지는 24시간 이후 삭제됐어요.")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "관계 궁합" })).toBeInTheDocument();
+    expect(container).not.toHaveTextContent("피부");
+    expect(container).not.toHaveTextContent(forbiddenRelationshipWord);
+    expect(screen.getByText("얼굴 이미지는 24시간 이후 삭제되었습니다.")).toBeInTheDocument();
+  });
+
+  it("keeps face images clean without landmark marker dots", () => {
+    const { container } = render(<ResultContent payload={{ ...payload, faceImageUrl: "https://example.com/face.jpg" }} />);
+
+    expect(screen.getByAltText("영민님 얼굴 분석 이미지")).toBeInTheDocument();
+    expect(container.querySelectorAll('span[style*="left:"][style*="top:"]')).toHaveLength(0);
+  });
+
+  it("shows compact core interpretation while secondary evidence is collapsed by default", () => {
+    render(<ResultContent payload={payload} />);
+
+    expect(screen.getByText("이목구비 관상 리포트")).toBeInTheDocument();
+    expect(screen.getAllByText("이마와 눈매 밸런스에서 목표 재정렬 신호가 보입니다.")[0]).toBeVisible();
+    expect(screen.getByText("계획 세우는 힘이 보입니다.")).not.toBeVisible();
+    expect(screen.getAllByText("더보기").length).toBeGreaterThan(0);
+  });
+
+  it("renders five element labels and keeps Naver book links with cover thumbnails", () => {
+    render(<ResultContent payload={payload} />);
+
+    expect(screen.getByText("나무")).toBeInTheDocument();
+    expect(screen.getByText("불")).toBeInTheDocument();
+    expect(screen.getByText("흙")).toBeInTheDocument();
+    expect(screen.getByText("금")).toBeInTheDocument();
+    expect(screen.getByText("물")).toBeInTheDocument();
     expect(screen.getByText("몰입의 기술")).toBeInTheDocument();
+    expect(screen.getByAltText("몰입의 기술 표지")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /몰입의 기술/ })).toHaveAttribute("href", expect.stringContaining("search.shopping.naver.com"));
   });
 });

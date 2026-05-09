@@ -8,5 +8,6 @@ dist
 coverage
 .DS_Store
 *.log
+tsconfig.tsbuildinfo
 data/books/books.raw.json
 data/books/books.normalized.json
