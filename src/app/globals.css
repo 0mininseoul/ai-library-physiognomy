@@ -102,6 +102,17 @@ select {
   opacity: 0.23;
 }
 
+.live-camera-feed::-webkit-media-controls,
+.cat-gatekeeper-source-video::-webkit-media-controls {
+  display: none !important;
+}
+
+.live-camera-feed::-webkit-media-controls-overlay-play-button,
+.cat-gatekeeper-source-video::-webkit-media-controls-overlay-play-button {
+  display: none !important;
+  opacity: 0 !important;
+}
+
 .tabular-nums {
   font-variant-numeric: tabular-nums;
 }
@@ -137,6 +148,7 @@ select {
   height: 1px;
   width: 1px;
   opacity: 0;
+  pointer-events: none;
 }
 
 .cat-gatekeeper-canvas {

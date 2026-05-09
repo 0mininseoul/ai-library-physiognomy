@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { ArrowRight, Camera, CheckCircle2, Loader2, RefreshCcw, ScanFace } from "lucide-react";
 import { BOOK_CATEGORIES } from "@/lib/books/categories";
 import { FaceMeshOverlay } from "@/components/analyze/FaceMeshOverlay";
+import { applyConnectedBlackKeyToImageData } from "@/lib/chroma/blackKey";
 import { captureVideoFrame } from "@/lib/capture/screenshot";
 import { averageLandmarks, computeFaceMetrics } from "@/lib/facemesh/metricsCalculator";
 import { displayGivenName } from "@/lib/korean/name";
@@ -203,16 +204,30 @@ export function AnalyzePage() {
 
   return (
     <main className="relative h-screen overflow-hidden bg-black text-text-primary">
-      <video ref={videoRef} className="absolute inset-0 h-full w-full scale-x-[-1] object-cover opacity-90" muted playsInline autoPlay />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_44%,transparent_0,transparent_30%,rgb(0_0_0_/_0.34)_68%,rgb(0_0_0_/_0.78)_100%)]" />
+      <video
+        ref={videoRef}
+        className="live-camera-feed pointer-events-none absolute inset-0 h-full w-full scale-x-[-1] object-cover opacity-100"
+        muted
+        playsInline
+        autoPlay
+        controls={false}
+        disablePictureInPicture
+        controlsList="nodownload nofullscreen noremoteplayback"
+      />
+      <div
+        className={
+          flow === "entry"
+            ? "absolute inset-0 bg-[radial-gradient(circle_at_50%_44%,transparent_0,transparent_45%,rgb(0_0_0_/_0.16)_82%,rgb(0_0_0_/_0.38)_100%)]"
+            : "absolute inset-0 bg-[radial-gradient(circle_at_50%_44%,transparent_0,transparent_30%,rgb(0_0_0_/_0.34)_68%,rgb(0_0_0_/_0.78)_100%)]"
+        }
+      />
       <div className="absolute inset-x-0 top-0 z-20 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
       {flow === "entry" ? <CatGatekeeperOverlay /> : null}
       {flow !== "entry" ? <FaceMeshOverlay result={face.result} /> : null}
 
       <header className="fixed left-7 top-6 z-30 flex items-center gap-3 rounded-lg border border-border bg-black/[0.45] px-3 py-2.5 text-xs font-bold uppercase tracking-[0.14em] text-text-muted backdrop-blur">
         <span className="grid h-8 w-8 place-items-center rounded-md border border-white/10 bg-white/[0.08]">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/icon.svg" alt="" className="h-5 w-5" />
+          <AppIcon className="h-5 w-5" />
         </span>
         <span>AI 관상가 고양이 / Live Face Scan</span>
       </header>
@@ -539,6 +554,19 @@ function DateSelect({
   );
 }
 
+function AppIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 64 64" aria-hidden="true">
+      <rect width="64" height="64" rx="14" fill="#111315" />
+      <circle cx="32" cy="34" r="18" fill="#8dded7" />
+      <path d="M18 24 12 12l15 7M46 24l6-12-15 7" fill="#8dded7" />
+      <circle cx="25" cy="34" r="3" fill="#111315" />
+      <circle cx="39" cy="34" r="3" fill="#111315" />
+      <path d="M27 43c3 3 7 3 10 0" fill="none" stroke="#111315" strokeWidth="4" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 function ChromaKeyCatSequence({ className, onPhaseChange }: { className: string; onPhaseChange: (phase: "entering" | "resting") => void }) {
   const entryVideoRef = useRef<HTMLVideoElement>(null);
   const restingVideoRef = useRef<HTMLVideoElement>(null);
@@ -554,6 +582,7 @@ function ChromaKeyCatSequence({ className, onPhaseChange }: { className: string;
     let animationFrame = 0;
     let stopped = false;
     let lastPaintAt = 0;
+    let lastPlayAttemptAt = 0;
     let activeVideo = entryVideo;
     let phase: "entering" | "resting" = "entering";
 
@@ -571,70 +600,6 @@ function ChromaKeyCatSequence({ className, onPhaseChange }: { className: string;
       return { width, height };
     };
 
-    const applyBlackKey = (imageData: ImageData) => {
-      const pixels = imageData.data;
-      const alphaMask = new Uint8Array(imageData.width * imageData.height);
-
-      for (let index = 0; index < pixels.length; index += 4) {
-        const red = pixels[index] ?? 0;
-        const green = pixels[index + 1] ?? 0;
-        const blue = pixels[index + 2] ?? 0;
-        const max = Math.max(red, green, blue);
-        const min = Math.min(red, green, blue);
-        const colorSpread = max - min;
-
-        if (max < 30) {
-          pixels[index + 3] = 0;
-        } else if (max < 70 && colorSpread < 22) {
-          const featheredAlpha = Math.round(((max - 30) / 40) * 255);
-          pixels[index + 3] = Math.max(0, Math.min(pixels[index + 3] ?? 255, featheredAlpha));
-        }
-
-        const alpha = pixels[index + 3] ?? 255;
-        alphaMask[index / 4] = alpha > 12 ? 1 : 0;
-      }
-
-      for (let y = 4; y < imageData.height - 4; y += 1) {
-        for (let x = 4; x < imageData.width - 4; x += 1) {
-          const pixelIndex = y * imageData.width + x;
-          if (!alphaMask[pixelIndex]) continue;
-
-          let edgeDistance = 5;
-          for (let dy = -4; dy <= 4; dy += 1) {
-            for (let dx = -4; dx <= 4; dx += 1) {
-              if (dx === 0 && dy === 0) continue;
-              const neighborIndex = pixelIndex + dy * imageData.width + dx;
-              if (alphaMask[neighborIndex]) continue;
-              edgeDistance = Math.min(edgeDistance, Math.max(Math.abs(dx), Math.abs(dy)));
-            }
-          }
-
-          if (edgeDistance === 5) continue;
-
-          const offset = pixelIndex * 4;
-          const red = pixels[offset] ?? 0;
-          const green = pixels[offset + 1] ?? 0;
-          const blue = pixels[offset + 2] ?? 0;
-          const max = Math.max(red, green, blue);
-          const min = Math.min(red, green, blue);
-          const lowSaturation = max - min < 58;
-          const brightHalo = max > 150 && lowSaturation;
-
-          if (edgeDistance <= 2 || (edgeDistance <= 4 && brightHalo)) {
-            pixels[offset + 3] = 0;
-          } else if (brightHalo) {
-            pixels[offset + 3] = Math.round((pixels[offset + 3] ?? 255) * 0.04);
-          } else if (edgeDistance <= 3) {
-            pixels[offset + 3] = Math.round((pixels[offset + 3] ?? 255) * 0.08);
-          } else if (edgeDistance <= 4) {
-            pixels[offset + 3] = Math.round((pixels[offset + 3] ?? 255) * 0.28);
-          } else {
-            pixels[offset + 3] = Math.round((pixels[offset + 3] ?? 255) * 0.5);
-          }
-        }
-      }
-    };
-
     function switchToResting() {
       if (phase === "resting" || stopped) return;
       phase = "resting";
@@ -647,6 +612,11 @@ function ChromaKeyCatSequence({ className, onPhaseChange }: { className: string;
     const paint = (timestamp: number) => {
       if (stopped) return;
 
+      if (activeVideo.paused && !activeVideo.ended && timestamp - lastPlayAttemptAt > 800) {
+        lastPlayAttemptAt = timestamp;
+        void activeVideo.play().catch(() => undefined);
+      }
+
       if (phase === "entering" && entryVideo.duration > 0 && entryVideo.currentTime >= entryVideo.duration - 0.08) {
         switchToResting();
       }
@@ -657,7 +627,7 @@ function ChromaKeyCatSequence({ className, onPhaseChange }: { className: string;
         context.drawImage(activeVideo, 0, 0, width, height);
 
         const imageData = context.getImageData(0, 0, width, height);
-        applyBlackKey(imageData);
+        applyConnectedBlackKeyToImageData(imageData);
         context.putImageData(imageData, 0, 0);
         lastPaintAt = timestamp;
       }
@@ -681,6 +651,12 @@ function ChromaKeyCatSequence({ className, onPhaseChange }: { className: string;
     restingVideo.muted = true;
     entryVideo.playsInline = true;
     restingVideo.playsInline = true;
+    entryVideo.controls = false;
+    restingVideo.controls = false;
+    entryVideo.disablePictureInPicture = true;
+    restingVideo.disablePictureInPicture = true;
+    entryVideo.setAttribute("webkit-playsinline", "true");
+    restingVideo.setAttribute("webkit-playsinline", "true");
     entryVideo.load();
     restingVideo.load();
     entryVideo.addEventListener("ended", switchToResting);
@@ -703,8 +679,33 @@ function ChromaKeyCatSequence({ className, onPhaseChange }: { className: string;
 
   return (
     <>
-      <video ref={entryVideoRef} className="cat-gatekeeper-source-video" src="/cats/neko1-alpha.webm" muted autoPlay playsInline preload="auto" />
-      <video ref={restingVideoRef} className="cat-gatekeeper-source-video" src="/cats/neko2-alpha.webm" muted playsInline preload="auto" loop />
+      <video
+        ref={entryVideoRef}
+        className="cat-gatekeeper-source-video"
+        src="/cats/neko1-alpha.webm"
+        muted
+        playsInline
+        preload="auto"
+        tabIndex={-1}
+        aria-hidden="true"
+        disablePictureInPicture
+        controls={false}
+        controlsList="nodownload nofullscreen noremoteplayback"
+      />
+      <video
+        ref={restingVideoRef}
+        className="cat-gatekeeper-source-video"
+        src="/cats/neko2-alpha.webm"
+        muted
+        playsInline
+        preload="auto"
+        loop
+        tabIndex={-1}
+        aria-hidden="true"
+        disablePictureInPicture
+        controls={false}
+        controlsList="nodownload nofullscreen noremoteplayback"
+      />
       <canvas ref={canvasRef} className={className} />
     </>
   );

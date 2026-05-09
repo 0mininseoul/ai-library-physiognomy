@@ -97,8 +97,7 @@ export function ResultContent({ payload }: { payload: ResultPayload }) {
         <header className="relative z-20 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3 rounded-lg border border-border bg-black/[0.45] px-3 py-2.5 text-xs font-bold uppercase tracking-[0.14em] text-text-muted backdrop-blur">
             <span className="grid h-8 w-8 place-items-center rounded-md border border-white/10 bg-white/[0.08]">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/icon.svg" alt="" className="h-5 w-5" />
+              <AppIcon className="h-5 w-5" />
             </span>
             <span>AI 관상가 고양이 / Live Result</span>
           </div>
@@ -266,6 +265,19 @@ function ResultFacePanel({ displayName, faceImageUrl }: { displayName: string; f
         />
       ))}
     </div>
+  );
+}
+
+function AppIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 64 64" aria-hidden="true">
+      <rect width="64" height="64" rx="14" fill="#111315" />
+      <circle cx="32" cy="34" r="18" fill="#8dded7" />
+      <path d="M18 24 12 12l15 7M46 24l6-12-15 7" fill="#8dded7" />
+      <circle cx="25" cy="34" r="3" fill="#111315" />
+      <circle cx="39" cy="34" r="3" fill="#111315" />
+      <path d="M27 43c3 3 7 3 10 0" fill="none" stroke="#111315" strokeWidth="4" strokeLinecap="round" />
+    </svg>
   );
 }
 
