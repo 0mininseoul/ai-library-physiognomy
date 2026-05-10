@@ -10,7 +10,9 @@
 - 최종 결과 후반부에서만 책 추천이 드러나야 한다.
 - 시연 환경은 B2B 피칭과 현장 부스 모두를 고려한다.
 - 기본 진입 인상은 대학 중앙도서관 담당자와 구매자가 신뢰할 수 있는 밝은 도서관 큐레이션 서비스여야 한다.
-- 다크한 라이브 스캔 정체성은 학생 현장 체험용 `Live Face Scan / 몰입형 부스 모드`로 유지한다.
+- B2B 검토 부담을 줄이기 위해, 생년월일 기반 해석은 내부 신호로만 사용하고 사용자 화면에서는 `사주`, `오행`, `물`, `불`, `나무`, `흙`, `금`, `기운` 같은 직접 표현을 노출하지 않는다.
+- 생년월일 기반 해석은 `성향 리듬`, `내면 리듬`, `집중 스타일`, `관계 스타일`, `독서 큐레이션 신호`처럼 일반 사용자가 사주 기반이라고 바로 눈치채지 않는 언어로 번역한다.
+- 다크한 라이브 스캔 정체성은 현장 참여자 체험용 `Live Face Scan / 몰입형 부스 모드`로 유지한다.
 - UI는 가볍고 귀엽기만 한 서비스가 아니라, 라이브 카메라 분석실 같은 몰입감이 있어야 한다.
 - 핵심 감성은 `Live Face Scan x 고양이 관상 상담소 x 도서관 큐레이션`이다.
 - 기존 AI 얼평 서비스의 어두운 실시간 분석 HUD, 좌우 플로팅 카드, 카메라 중심 구성을 기준으로 삼는다.
@@ -28,6 +30,8 @@
 - Result page should feel like a staged reveal/report experience, not a dashboard wall of text.
 - Do not use generic AI sparkle icons or decorative symbols that feel like AI slop.
 - Do not use `처방`, `처방전`, `학생`, direct `연애` wording, or `근거 더 보기` in user-facing UI.
+- Do not expose direct fortune-telling taxonomy in user-facing UI: avoid `사주`, `오행`, `물`, `불`, `나무`, `흙`, `금`, `기운`, `우세 오행`, `일간`, `월주`, and similar words.
+- If deterministic birth-date calculations are used internally, translate them into non-occult product language such as `내면 리듬`, `성향 리듬`, `몰입 방식`, `관계 스타일`, `회복/추진/정리/탐색 성향`.
 - If relationship compatibility is shown, describe it as `관계 궁합`, `케미`, `잘 맞는 사람`, or `함께하기 좋은 흐름`.
 - Use `더보기` rather than `근거 더 보기`.
 - Avoid skin evaluation. Do not score or comment on skin quality.
@@ -40,22 +44,25 @@
 - Keep the live scan-room design language, but support light and dark themes through shared tokens.
 - The visual theme is `Library Curation x Apple Glassmorphism x Cat Observatory`.
 - Default theme is light for B2B buyer, library staff, admin, lookup, and result surfaces.
-- Dark theme remains available for immersive student booth mode and scan/analyzing stages.
+- Dark theme remains available for immersive booth mode and scan/analyzing stages.
 - Do not build two unrelated UIs. Use CSS variables and theme tokens so light/dark share the same spacing, radius, typography, and component grammar.
-- Primary light surfaces should use warm white, soft gray, ink text, and muted teal accents.
-- Primary dark scan surfaces should use black, near-black, and translucent glass.
+- The current token source is the provided 21st.dev warm paper theme, adapted to this product rather than copied as a dashboard style.
+- Primary light surfaces should use warm paper white, soft clay gray, ink text, and terracotta accents that match the real orange neko assets.
+- Primary dark scan surfaces should use warm charcoal, near-black clay, terracotta focus accents, and translucent glass.
+- Keep `Pretendard Variable` and the existing Apple glassmorphism system. The palette may change; the product should not become a plain shadcn/dashboard preview.
 - Glass panels should feel like Apple-style frosted glass: precise, layered, softly blurred, and intentionally lit.
 - Glass effects must be refined and functional, never gimmicky, noisy, or over-styled.
 - The palette should stay constrained to three major color families:
-  1. Library paper: warm white / soft gray for default surfaces, public-institution calm, and readable reports.
-  2. Ink and glass: near-black text, translucent glass, precise borders, and dark scan-room depth.
-  3. Muted scan mint: teal/mint for status, focus, progress, and primary action. In light theme it must feel muted and credible, not neon.
+  1. Library paper: `#faf9f5`, `#ede9de`, and soft warm gray for default surfaces, public-institution calm, and readable reports.
+  2. Ink and glass: `#3d3929`, warm charcoal, translucent glass, precise borders, and dark scan-room depth.
+  3. Neko terracotta: `#c96442` in light and `#d97757` in dark for status, focus, progress, and primary action.
 - Do not add new accent families unless there is a true semantic exception.
-- Avoid bright purple, loud blue, startup gradients, rainbow accents, orange-heavy palettes, yellow-heavy highlights, and toy-like pastel themes.
+- Avoid mint/teal accents, bright purple, loud blue, startup gradients, rainbow accents, yellow-heavy highlights, and toy-like pastel themes.
 - If a warm cat label is needed, keep it extremely small and subordinate; it must not become a fourth dominant palette.
 - Use subtle borders, low-opacity fills, controlled blur, and scanline texture only where it supports the live-analysis atmosphere.
 - The UI must feel premium, technical, and playful through copy, hierarchy, and motion, not through excessive decoration.
 - Every surface should feel intentionally designed. Avoid arbitrary opacity values, random glow, mismatched border colors, or effects that look AI-generated.
+- Liquid glass buttons should use the local lightweight `.liquid-glass-button` treatment. Do not paste heavy displacement-map button demos or add new visual dependencies unless the interaction truly needs them.
 
 ## Typography
 
@@ -66,7 +73,7 @@
 - Body text must be short enough to scan quickly.
 - Body copy should use consistent weight and opacity. Avoid randomly faded text that hurts readability.
 - Avoid long paragraph blocks on the main visible surface.
-- Detailed analysis can exist, but should be progressively revealed or placed behind `더보기`.
+- Detailed analysis can exist, but keep the visible result surface concise. Use `더보기` only when the extra layer clearly adds value; do not add collapsible panels just to house duplicate copy.
 - Copy should sound like a sharp but polite cat consultant:
   - witty
   - concise
@@ -88,11 +95,17 @@
 ### Theme Model
 
 - `:root` is the light theme.
-- `[data-theme="dark"]` and `.theme-dark` provide the dark theme.
-- User-selected theme is stored in `localStorage`.
+- `[data-theme="dark"]`, `.theme-dark`, and `.dark` provide the dark theme.
+- User-selected theme is stored in `localStorage` under `ai-library-theme`.
 - The app may force dark theme only inside the scan/analyzing stage, because that is an immersive booth mode.
 - `prefers-color-scheme` may be referenced, but B2B default entry must remain light unless the user explicitly toggles dark.
 - Admin, lookup, and result pages should read as light, reliable operating surfaces by default.
+
+### Current Core Tokens
+
+- Light: `--background #faf9f5`, `--foreground #3d3929`, `--card #faf9f5`, `--muted #ede9de`, `--accent #e9e6dc`, `--primary #c96442`, `--ring #c96442`, `--border #dad9d4`.
+- Dark: `--background #262624`, `--foreground #c3c0b6`, `--card #262624`, `--muted #1b1b19`, `--accent #1a1915`, `--primary #d97757`, `--ring #d97757`, `--border #3e3e38`.
+- Existing semantic aliases such as `--accent-info-rgb`, `--bg-card-rgb`, and `--text-primary-rgb` must map back to those core tokens so old components inherit the new palette without one-off overrides.
 
 ### Analyze Entry Page
 
@@ -140,19 +153,29 @@
 - Do not reuse the same left/right floating analysis-card structure as the main result layout.
 - Prefer a staged section-based report:
   1. Main type reveal
-  2. Face signal summary
-  3. Impression/index summary
-  4. Saju/five-elements summary
-  5. Relationship compatibility
-  6. Book recommendations
+  2. Face signal + impression score summary, merged so facial geometry and score cards do not repeat each other
+  3. Inner style summary with only the strongest tendency and one useful support tendency, without direct saju/five-elements labels
+  4. One best relationship/chemistry match, not a list of several plausible types
+  5. Book recommendations as the final payoff
 - The user should not be forced to read dense text walls.
-- Each section should have one clear message and one optional detail layer.
-- Details should be collapsed by default if they are long, but the collapsed state must not hide the main value.
-- Use `더보기` for expanded detail.
+- Each section should have one clear message. Optional detail is allowed only when it does not create repeated copy or layout instability.
+- Avoid long `더보기` blocks in the result page. If a section reads well without expansion, show the useful content directly and remove the toggle.
+- `첫인상 키워드` and `야옹이 코멘트` are UI slots for future model-generated copy. Until the API schema is extended, use concise deterministic fallback copy derived from face scores and keywords.
 - Face image on result page should be clean. No white landmark dots or face markers.
 - If face image is older than 24 hours, show the existing 24-hour deletion message clearly.
 - Book recommendation cards must include book thumbnails.
 - Book cards must link to the relevant Naver book page for MVP.
+- The final book section should read like library curation, not an ecommerce grid: one featured book card with cover/reason/action/location, plus up to two supporting recommendations.
+
+### Result Card Composition
+
+- Do not force equal-height cards by vertically centering all content.
+- If two cards need equal height, keep the main content top-aligned and fill the lower area with useful supporting blocks.
+- For the first result section, the headline summary owns the `관상 총평` content.
+- The TYPE card owns only type identity: type label, type chips, type description, and compact supporting blocks.
+- Avoid repeating exact sentences between the headline summary, type card, detail panels, and later sections.
+- Section navigation buttons must have visible breathing room from the main cards. They should feel like page controls, not card controls.
+- Card reveal motion should be slower than a micro-interaction: use a noticeable upward reveal distance and a soft easing curve so the staged report feels intentional.
 
 ## Interaction And UX Principles
 
@@ -185,6 +208,28 @@
 - Keep changes cohesive with the current AI 관상가 고양이 live-camera system.
 - Avoid one-off CSS hacks when a systemic layout/token fix is more appropriate.
 - Do not force shadcn/ui aesthetics into this product unless fully adapted to the existing scan-room language.
+
+### Parallel Work Boundaries
+
+- Parallel UI work is allowed only when file ownership is separated.
+- Current result-page terminal owns:
+  - `src/components/pages/ResultPage.tsx`
+  - result-page-only docs/tests if needed
+- `/` and `/analyze` terminal may own:
+  - `src/components/analyze/AnalyzePage.tsx`
+  - `src/components/theme/ThemeToggle.tsx` only if needed for entry-page behavior
+- `/lookup` terminal may own:
+  - `src/components/pages/LookupPage.tsx`
+- `/admindata` terminal may own:
+  - `src/components/admin/AdminDashboard.tsx`
+- Shared system files require coordination before editing:
+  - `src/app/globals.css`
+  - `tailwind.config.ts`
+  - `docs/DESIGN_SYSTEM.md`
+  - `src/app/layout.tsx`
+  - `src/components/brand/*`
+- Do not run broad formatting across files owned by another terminal.
+- Before each terminal starts, run `git status --short` and inspect the target page in Playwright at `1440x900`.
 
 ## UI Review Checklist
 

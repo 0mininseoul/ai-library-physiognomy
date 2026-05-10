@@ -4,7 +4,7 @@ export default function TermsPage() {
       <article className="glass-panel mx-auto max-w-3xl rounded-2xl p-6 leading-7 md:p-8">
         <p className="text-sm font-black text-accent-info">AI 관상가 고양이</p>
         <h1 className="mt-2 text-3xl font-black">이용약관</h1>
-        <p className="mt-6">AI 관상가 고양이는 관상과 사주 컨셉을 활용한 엔터테인먼트형 독서 큐레이션 서비스예요.</p>
+        <p className="mt-6">AI 관상가 고양이는 관상 콘셉트와 성향 해석을 활용한 엔터테인먼트형 독서 큐레이션 서비스예요.</p>
         <p className="mt-4">
           서비스 결과는 의학적, 심리학적, 법적 판단이 아니며 대학 도서관 도서 탐색을 돕기 위한 추천 콘텐츠예요.
         </p>

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { FormEvent, InputHTMLAttributes } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Camera, CheckCircle2, Loader2, RefreshCcw, ScanFace } from "lucide-react";
+import { BrandLogo } from "@/components/brand/BrandLogo";
 import { BOOK_CATEGORIES } from "@/lib/books/categories";
 import { FaceMeshOverlay } from "@/components/analyze/FaceMeshOverlay";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
@@ -11,7 +12,7 @@ import { applyConnectedBlackKeyToImageData } from "@/lib/chroma/blackKey";
 import { captureVideoFrame } from "@/lib/capture/screenshot";
 import { averageLandmarks, computeFaceMetrics } from "@/lib/facemesh/metricsCalculator";
 import { displayGivenName, softenFormalPolite } from "@/lib/korean/name";
-import { dominantElementText, elementCountItems, stripHanja } from "@/lib/saju/display";
+import { stripHanja } from "@/lib/saju/display";
 import { useCamera } from "@/hooks/useCamera";
 import { useFaceLandmarker } from "@/hooks/useFaceLandmarker";
 import type { Landmark } from "@/types/face";
@@ -44,8 +45,8 @@ const ANALYSIS_CARDS = [
   { title: "§6 JAW BALANCE", body: "턱선, 하관 안정감, 얼굴형 밸런스를 정리 중." },
   { title: "§7 IMPRESSION SIGNAL", body: "표정 안정감과 전체 인상 리듬을 분리 중." },
   { title: "§8 AESTHETIC INDEX", body: "호감도, 신뢰감, 균형감 지표를 스코어로 환산 중." },
-  { title: "§9 SAJU RHYTHM", body: "생년월일 기반 오행 분포와 현재 리듬을 대조 중." },
-  { title: "§10 FINAL REPORT", body: "관상과 사주 해석을 한 줄 결론까지 정리 중." },
+  { title: "§9 INNER RHYTHM", body: "관상 신호와 내면 성향 패턴을 조용히 대조 중." },
+  { title: "§10 FINAL ASSESSMENT", body: "관상 신호를 한 줄 결론까지 정리 중." },
 ] as const;
 
 export function AnalyzePage() {
@@ -245,13 +246,23 @@ export function AnalyzePage() {
       {flow === "entry" ? <CatGatekeeperOverlay /> : null}
       {flow !== "entry" ? <FaceMeshOverlay result={face.result} /> : null}
 
-      <header className="fixed left-7 top-6 z-30 flex items-center gap-3 rounded-lg border border-border bg-bg-card/65 px-3 py-2.5 text-xs font-bold uppercase tracking-[0.14em] text-text-muted shadow-glass backdrop-blur">
-        <span className="grid h-8 w-8 place-items-center rounded-md border border-border bg-bg-card/70">
-          <AppIcon className="h-5 w-5" />
-        </span>
-        <span>AI 관상가 고양이 / Live Face Scan</span>
-      </header>
-      {flow === "entry" ? <ThemeToggle className="fixed left-[22rem] top-6 z-30 max-md:left-auto max-md:right-6" /> : null}
+      {flow === "entry" ? (
+        <>
+          <header className="entry-brand-header fixed left-7 top-6 z-30 flex h-14 items-center gap-4 rounded-xl px-4 text-[0.94rem] font-black uppercase tracking-[0.03em] max-md:left-4">
+            <span className="entry-brand-mark grid h-10 w-10 shrink-0 place-items-center rounded-lg">
+              <BrandLogo className="h-10 w-10 object-contain" />
+            </span>
+            <span className="whitespace-nowrap">AI 관상가 고양이 / Live Face Scan</span>
+          </header>
+        </>
+      ) : (
+        <header className="fixed left-7 top-6 z-30 flex h-12 items-center gap-3 rounded-lg border border-border bg-bg-card/65 px-3 text-xs font-bold uppercase tracking-[0.14em] text-text-muted shadow-glass backdrop-blur">
+          <span className="grid h-8 w-8 place-items-center rounded-md border border-border bg-bg-card/70">
+            <BrandLogo className="h-8 w-8 object-contain" />
+          </span>
+          <span>AI 관상가 고양이 / Live Face Scan</span>
+        </header>
+      )}
 
       {flow === "entry" ? (
         <EntryModal
@@ -373,35 +384,40 @@ function EntryModal({
   }
 
   return (
-    <section className="fixed bottom-5 right-6 z-30 max-h-[calc(100vh-2.5rem)] w-[min(452px,calc(100vw-2.5rem))] overflow-y-auto md:right-8">
-      <form onSubmit={submit} className="glass-panel relative rounded-2xl p-4">
-        <div className="mb-3 flex items-center justify-between">
-          <div className="flex items-center gap-2 text-sm font-black uppercase tracking-[0.08em] text-text-muted">
-            <Camera className="h-4 w-4 text-accent-info" aria-hidden="true" />
-            CAMERA INPUT
+    <section className="fixed bottom-6 right-6 z-30 max-h-[calc(100vh-3rem)] w-[min(420px,calc(100vw-2.5rem))] overflow-y-auto md:right-8">
+      <form onSubmit={submit} className="glass-panel relative rounded-2xl px-5 py-4">
+        <div className="mb-3 flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <div className="flex items-center gap-2 text-sm font-black uppercase tracking-[0.08em] text-text-muted">
+              <Camera className="h-4 w-4 text-accent-info" aria-hidden="true" />
+              CAMERA INPUT
+            </div>
+            <div className="mt-1 text-[0.68rem] font-bold uppercase tracking-[0.14em] text-text-faint">{cameraBadgeCopy(cameraStatus)}</div>
           </div>
-          <div className="text-xs uppercase tracking-[0.16em] text-text-faint">{cameraBadgeCopy(cameraStatus)}</div>
+          <ThemeToggle className="h-10 min-h-10 rounded-lg px-3 text-xs" />
         </div>
 
-        <div className="mb-4 rounded-xl bg-bg-card/60 px-4 py-3 shadow-[inset_0_1px_0_rgb(255_255_255_/_0.10)]">
-          <p className="text-sm font-bold leading-6 text-text-muted">
+        <div className="mb-5 rounded-xl border border-border/70 bg-bg-card/68 px-4 py-3 shadow-[inset_0_1px_0_rgb(255_255_255_/_0.16)]">
+          <p className="text-[0.82rem] font-bold leading-5 text-text-muted">
             <span className="block">정보를 채운 뒤 정면 얼굴이 잡히면 자동 분석돼요.</span>
             <span className="block">얼굴 이미지는 결과 화면에서 24시간까지만 표시돼요.</span>
           </p>
         </div>
 
-        <div className="mb-4 flex items-start justify-between gap-4">
+        <div className="mb-5 flex items-start justify-between gap-4">
           <div>
             <p className="text-sm font-black text-accent-info">AI 관상가 고양이</p>
-            <h1 className="mt-1.5 text-2xl font-black leading-tight text-text-primary md:text-3xl">
+            <h1 className="mt-1 text-[1.72rem] font-extrabold leading-tight text-text-primary">
               야옹이가 관상 봐드립니다
             </h1>
           </div>
         </div>
 
         <div className="grid gap-3">
-          <DarkInput label="이름" name="name" value={name} placeholder="박영민" autoComplete="name" onChange={(event) => setName(event.target.value)} />
-          <DarkInput label="학번(또는 사번)" name="studentId" value={studentId} placeholder="20260000" inputMode="numeric" autoComplete="off" onChange={(event) => setStudentId(event.target.value)} />
+          <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:gap-5">
+            <DarkInput label="이름" name="name" value={name} placeholder="박영민" autoComplete="name" onChange={(event) => setName(event.target.value)} />
+            <DarkInput label="학번(또는 사번)" name="studentId" value={studentId} placeholder="20260000" inputMode="numeric" autoComplete="off" onChange={(event) => setStudentId(event.target.value)} />
+          </div>
 
           <fieldset className="grid gap-2">
             <legend className="text-sm font-black text-text-primary">성별</legend>
@@ -414,10 +430,10 @@ function EntryModal({
                   key={option.value}
                   type="button"
                   className={[
-                    "min-h-12 rounded-lg border px-4 text-sm font-black transition",
+                    "liquid-glass-button min-h-10 rounded-lg border px-4 text-sm font-bold transition",
                     gender === option.value
-                      ? "border-accent-info/70 bg-accent-info/[0.14] text-text-primary shadow-[0_0_0_1px_rgb(141_222_215_/_0.16)]"
-                      : "border-transparent bg-bg-card/70 text-text-muted shadow-[inset_0_1px_0_rgb(255_255_255_/_0.07)] hover:bg-bg-card-hover",
+                      ? "border-accent-info/80 bg-accent-info/[0.16] text-text-primary shadow-[0_0_0_1px_rgb(var(--accent-info-rgb)_/_0.18)]"
+                      : "border-border/60 bg-bg-card/82 text-text-muted shadow-[inset_0_1px_0_rgb(255_255_255_/_0.18)] hover:border-border-bright/70 hover:bg-bg-card-hover",
                   ].join(" ")}
                   onClick={() => setGender(option.value)}
                 >
@@ -436,13 +452,13 @@ function EntryModal({
             onDayChange={setBirthDay}
           />
 
-          <label className="grid gap-2 text-sm font-black text-text-primary" htmlFor="favoriteCategory">
+          <label className="grid min-w-0 gap-2 text-sm font-black text-text-primary" htmlFor="favoriteCategory">
             <span>선호하는 책 카테고리</span>
             <select
               id="favoriteCategory"
               name="favoriteCategory"
               value={favoriteCategory}
-              className="h-12 rounded-lg border border-transparent bg-bg-card/70 px-4 text-sm font-black text-text-primary shadow-[inset_0_1px_0_rgb(255_255_255_/_0.07)] outline-none transition focus:border-accent-info/60 focus:ring-2 focus:ring-accent-info/25"
+              className="h-11 w-full min-w-0 rounded-lg border border-border/30 bg-bg-card/76 px-4 text-sm font-semibold text-text-primary shadow-[inset_0_1px_0_rgb(255_255_255_/_0.14)] outline-none transition focus:border-accent-info/60 focus:ring-2 focus:ring-accent-info/25"
               onChange={(event) => setFavoriteCategory(event.target.value)}
             >
               {BOOK_CATEGORIES.map((category) => (
@@ -453,7 +469,7 @@ function EntryModal({
             </select>
           </label>
 
-          <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-transparent bg-bg-card/70 p-4 text-sm text-text-muted shadow-[inset_0_1px_0_rgb(255_255_255_/_0.07)] transition hover:bg-bg-card-hover">
+          <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-border/30 bg-bg-card/76 p-3 text-sm text-text-muted shadow-[inset_0_1px_0_rgb(255_255_255_/_0.14)] transition hover:bg-bg-card-hover">
             <input className="mt-1 h-4 w-4 accent-[var(--accent-info)]" type="checkbox" checked={consentAccepted} onChange={(event) => setConsentAccepted(event.target.checked)} />
             <span className="font-medium leading-6">
               개인정보처리방침 및 이용약관 동의
@@ -470,7 +486,7 @@ function EntryModal({
 
         <button
           type="submit"
-          className="mt-5 inline-flex min-h-[3.1rem] w-full items-center justify-center gap-2 rounded-xl border border-accent-info/30 bg-accent-info/[0.18] px-5 py-3.5 text-sm font-black text-text-primary shadow-glass transition hover:bg-accent-info/25 disabled:cursor-not-allowed disabled:opacity-[0.45]"
+          className="liquid-glass-button mt-4 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-accent-info/55 bg-accent-info/[0.24] px-5 py-3 text-sm font-black text-text-primary transition hover:bg-accent-info/[0.32] disabled:cursor-not-allowed disabled:opacity-[0.45]"
           disabled={cameraStatus === "requesting"}
         >
           <ScanFace className="h-5 w-5" aria-hidden="true" />
@@ -540,7 +556,7 @@ function BirthDateSelects({
   return (
     <fieldset className="grid gap-2">
       <legend className="text-sm font-black text-text-primary">생년월일</legend>
-      <div className="grid grid-cols-[1.15fr_0.85fr_0.85fr] gap-2">
+      <div className="grid grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)_minmax(0,0.85fr)] gap-2">
         <DateSelect label="년도" value={year} values={years} suffix="년" onChange={onYearChange} />
         <DateSelect label="월" value={month} values={months} suffix="월" onChange={onMonthChange} />
         <DateSelect label="일" value={day} values={days} suffix="일" onChange={onDayChange} />
@@ -563,11 +579,11 @@ function DateSelect({
   onChange: (value: string) => void;
 }) {
   return (
-    <label className="grid gap-1 text-xs font-black uppercase tracking-[0.08em] text-text-faint">
+    <label className="grid min-w-0 gap-1 text-xs font-black uppercase tracking-[0.08em] text-text-faint">
       <select
         aria-label={label}
         value={value}
-        className="h-12 rounded-lg border border-transparent bg-bg-card/70 px-4 text-sm font-black text-text-primary shadow-[inset_0_1px_0_rgb(255_255_255_/_0.07)] outline-none transition focus:border-accent-info/60 focus:ring-2 focus:ring-accent-info/25"
+        className="h-11 w-full min-w-0 rounded-lg border border-border/30 bg-bg-card/76 px-4 text-sm font-semibold text-text-primary shadow-[inset_0_1px_0_rgb(255_255_255_/_0.14)] outline-none transition focus:border-accent-info/60 focus:ring-2 focus:ring-accent-info/25"
         onChange={(event) => onChange(event.target.value)}
       >
         {values.map((nextValue) => (
@@ -578,19 +594,6 @@ function DateSelect({
         ))}
       </select>
     </label>
-  );
-}
-
-function AppIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 64 64" aria-hidden="true">
-      <rect width="64" height="64" rx="14" fill="#111315" />
-      <circle cx="32" cy="34" r="18" fill="#8dded7" />
-      <path d="M18 24 12 12l15 7M46 24l6-12-15 7" fill="#8dded7" />
-      <circle cx="25" cy="34" r="3" fill="#111315" />
-      <circle cx="39" cy="34" r="3" fill="#111315" />
-      <path d="M27 43c3 3 7 3 10 0" fill="none" stroke="#111315" strokeWidth="4" strokeLinecap="round" />
-    </svg>
   );
 }
 
@@ -743,12 +746,12 @@ function DarkInput(props: InputHTMLAttributes<HTMLInputElement> & { label: strin
   const inputId = id ?? name;
 
   return (
-    <label className="grid gap-2 text-sm font-black text-text-primary" htmlFor={inputId}>
+    <label className="grid min-w-0 gap-2 text-sm font-black text-text-primary" htmlFor={inputId}>
       <span>{label}</span>
       <input
         id={inputId}
         name={name}
-        className={`h-12 rounded-lg border border-transparent bg-bg-card/70 px-4 text-sm font-black text-text-primary shadow-[inset_0_1px_0_rgb(255_255_255_/_0.07)] outline-none transition placeholder:text-text-faint focus:border-accent-info/60 focus:ring-2 focus:ring-accent-info/25 ${className}`.trim()}
+        className={`h-11 w-full min-w-0 rounded-lg border border-border/30 bg-bg-card/76 px-4 text-sm font-semibold text-text-primary shadow-[inset_0_1px_0_rgb(255_255_255_/_0.14)] outline-none transition placeholder:font-semibold placeholder:text-text-faint focus:border-accent-info/60 focus:ring-2 focus:ring-accent-info/25 ${className}`.trim()}
         {...inputProps}
       />
     </label>
@@ -1044,12 +1047,8 @@ function FinalRevealCard({ displayName, onOpenResult }: { displayName: string; o
 
 function buildCompletedAnalysisCards(result: LibraryAnalysisResult): CompletedAnalysisCard[] {
   const calculation = result.saju.calculation;
-  const elementSummary = elementCountItems(calculation)
-    .filter((item) => item.count > 0)
-    .map((item) => `${item.icon} ${item.label} ${item.count}`)
-    .join(" · ");
-  const sajuIntro = calculation ? `우세 기운은 ${dominantElementText(calculation)} 쪽이에요. ${elementSummary}` : cleanAnalysisCopy(result.saju.currentFlow, 66);
-  const matchTypes = result.romanticMatch.bestTypes.slice(0, 3).join(", ");
+  const rhythmSummary = calculation ? rhythmPercentSummary(calculation) : cleanAnalysisCopy(result.saju.currentFlow, 66);
+  const matchTypes = result.romanticMatch.bestTypes.slice(0, 1).join(", ");
 
   return [
     { title: "§1 FACE GEOMETRY", body: cleanAnalysisCopy(`${result.geometry.symmetry} ${result.geometry.faceShape}`, 82) },
@@ -1068,9 +1067,28 @@ function buildCompletedAnalysisCards(result: LibraryAnalysisResult): CompletedAn
         { label: "균형감", value: result.scores.balance, comment: result.scores.comments[3] },
       ],
     },
-    { title: "§9 SAJU RHYTHM", body: cleanAnalysisCopy(`${sajuIntro} ${result.saju.strength}`, 86) },
+    { title: "§9 INNER RHYTHM", body: cleanAnalysisCopy(`성향 분포는 ${rhythmSummary}로 읽혀요. ${result.saju.strength}`, 86) },
     { title: "§10 CHEMI MATCH", body: cleanAnalysisCopy(`${matchTypes} 타입과 흐름이 잘 맞아요. ${result.romanticMatch.why}`, 86) },
   ];
+}
+
+function rhythmPercentSummary(calculation: NonNullable<LibraryAnalysisResult["saju"]["calculation"]>) {
+  const entries = [
+    ["탐색", calculation.elementCounts.wood],
+    ["추진", calculation.elementCounts.fire],
+    ["정리", calculation.elementCounts.earth],
+    ["판단", calculation.elementCounts.metal],
+    ["몰입", calculation.elementCounts.water],
+  ] as const;
+  const total = Math.max(
+    1,
+    entries.reduce((sum, [, count]) => sum + count, 0),
+  );
+
+  return entries
+    .filter(([, count]) => count > 0)
+    .map(([label, count]) => `${label} ${Math.round((count / total) * 100)}%`)
+    .join(" · ");
 }
 
 function cleanAnalysisCopy(input: string, maxLength: number) {
@@ -1079,9 +1097,35 @@ function cleanAnalysisCopy(input: string, maxLength: number) {
     .replace(/처방전?/g, "추천")
     .replace(/학생/g, "님")
     .replace(/연애/g, "관계")
+    .replace(/연인/g, "상대")
+    .replace(/상대과/g, "상대와")
     .replace(/데이트/g, "함께하는 시간")
+    .replace(/함께하는 시간를/g, "함께하는 시간을")
+    .replace(/함께하는 시간가/g, "함께하는 시간이")
     .replace(/근거 더 보기/g, "더보기")
     .replace(/근거/g, "설명")
+    .replace(/(\d{4})년\s*[^,.!?]+년,\s*[^,.!?]+월,\s*[^,.!?]+일에 태어난\s*[^,.!?]+?(?:이네요|이에요|입니다|입니다\.)?/g, "내면 흐름이 꽤 선명해요")
+    .replace(/생년월일(?:에서|로|을|를|의| 기반| 신호| 리듬)?/g, "내면")
+    .replace(/[갑을병정무기경신임계]?\s*나무\s*일간답게/g, "차분한 탐색 성향답게")
+    .replace(/흘러가는\s*물처럼/g, "잠깐 속도를 낮추듯")
+    .replace(/물처럼/g, "잠깐 속도를 낮추듯")
+    .replace(/지식의\s*바다/g, "지식 탐색")
+    .replace(/불꽃/g, "에너지")
+    .replace(/잔잔한\s*물결/g, "차분한 조율")
+    .replace(/물결/g, "조율")
+    .replace(/(?:목|나무)의?\s*(?:기운|리듬|흐름)/g, "탐색 성향")
+    .replace(/(?:화|불)의?\s*(?:기운|리듬|흐름)/g, "추진 성향")
+    .replace(/(?:토|흙)의?\s*(?:기운|리듬|흐름)/g, "정리 성향")
+    .replace(/(?:금)의?\s*(?:기운|리듬|흐름)/g, "판단 성향")
+    .replace(/(?:수|물)의?\s*(?:기운|리듬|흐름)/g, "깊게 몰입하는 성향")
+    .replace(/우세한?\s*기운/g, "가장 또렷한 성향")
+    .replace(/우세\s*오행/g, "주요 성향")
+    .replace(/오행/g, "성향 패턴")
+    .replace(/사주/g, "내면 성향")
+    .replace(/일간|월주|년주|일주|시주/g, "내면 신호")
+    .replace(/기운/g, "성향")
+    .replace(/강한\s+깊게 몰입하는 성향/g, "깊게 몰입하는 성향")
+    .replace(/강한\s+(탐색|추진|정리|판단)\s*성향/g, "또렷한 $1 성향")
     .replace(/해줘/g, "해 주세요")
     .replace(/했어/g, "했어요")
     .replace(/…|\.\.\./g, "")
@@ -1133,8 +1177,8 @@ function getStatusLabel({
   hasFace: boolean;
 }) {
   if (flow === "revealing") return "고양이 관상 노트가 열리고 있어요";
-  if (flow === "submitting") return "야옹이가 관상 좌표를 유심히 보고 있어요";
   if (cameraStatus !== "ready") return "카메라 준비 중";
+  if (flow === "scanning" || flow === "submitting") return "야옹이가 관상 좌표를 유심히 보고 있어요";
   if (isModelLoading) return "관상 엔진 로딩 중";
   if (hasFace) return "야옹이가 관상 좌표를 유심히 보고 있어요";
   return "정면 스캔 대기";

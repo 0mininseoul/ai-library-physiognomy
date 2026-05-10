@@ -14,7 +14,7 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
       aria-pressed={isDark}
       onClick={toggleTheme}
       className={[
-        "inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl border border-border bg-bg-card/70 px-3 text-sm font-black text-text-primary shadow-glass backdrop-blur-xl transition hover:border-border-bright hover:bg-bg-card-hover",
+        "liquid-glass-button inline-flex min-h-11 shrink-0 items-center justify-center gap-2 rounded-xl border border-border bg-bg-card/72 px-3 text-sm font-black text-text-primary backdrop-blur-xl transition hover:border-border-bright hover:bg-bg-card-hover",
         className,
       ].join(" ")}
     >
@@ -23,4 +23,3 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
     </button>
   );
 }
-

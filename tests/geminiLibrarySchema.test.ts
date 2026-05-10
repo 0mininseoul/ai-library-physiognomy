@@ -66,7 +66,8 @@ describe("normalizeLibraryAnalysis", () => {
     expect(result.readingType.code).toBe("focus_reboot");
     expect(result.mainCopy).toBe("영민님 집중 모드 켜짐");
     expect(result.parts.impression.comment).toContain("차분하게");
-    expect(result.romanticMatch.bestTypes).toContain("불꽃 실행형");
+    expect(result.romanticMatch.bestTypes).toContain("에너지 실행형");
+    expect(JSON.stringify(result)).not.toMatch(/사주|오행|생년월일|물 기운|불꽃 실행형|잔잔한 물결형|월주/);
     expect(result.recommendations).toHaveLength(3);
   });
 

@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import type { InputHTMLAttributes, ReactNode } from "react";
-import { BarChart3, Loader2, LockKeyhole, RefreshCw, ShieldAlert } from "lucide-react";
+import { BarChart3, BookOpen, Clock3, Loader2, LockKeyhole, RefreshCw, ShieldAlert, Users } from "lucide-react";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import type { AdminMetrics } from "@/lib/admin/metrics";
 
@@ -66,7 +66,7 @@ export function AdminDashboard() {
       <main className="grid min-h-screen place-items-center bg-bg-primary px-5 text-text-primary">
         <div className="text-center">
           <Loader2 className="mx-auto h-9 w-9 animate-spin text-accent-info" aria-hidden="true" />
-          <p className="mt-4 text-lg font-black">관리자 데이터 불러오는 중</p>
+          <p className="mt-4 text-lg font-semibold">관리자 대시보드 불러오는 중</p>
         </div>
       </main>
     );
@@ -159,21 +159,24 @@ function AdminInput(props: InputHTMLAttributes<HTMLInputElement> & { label: stri
 
 export function AdminDashboardContent({ metrics, onRefresh }: { metrics: AdminMetrics; onRefresh?: () => void }) {
   const recommendedBookRows = useMemo(() => aggregateBooks(metrics.recommendedBooks), [metrics.recommendedBooks]);
+  const peakHour = useMemo(() => findPeakHour(metrics.hourlyParticipants), [metrics.hourlyParticipants]);
+  const averageRecommendations = metrics.todayParticipants > 0 ? metrics.todayRecommendedBookCount / metrics.todayParticipants : 0;
+  const maxBookCount = Math.max(1, ...recommendedBookRows.map((book) => book.count));
 
   return (
-    <main className="min-h-screen bg-bg-primary text-text-primary">
+    <main className="admin-dashboard-shell min-h-screen bg-bg-primary text-text-primary">
       <div className="mx-auto grid w-full max-w-7xl gap-5 px-5 py-6 md:px-8 md:py-8">
-        <header className="glass-panel flex flex-col justify-between gap-5 rounded-2xl p-5 md:flex-row md:items-end md:p-7">
+        <header className="admin-panel flex flex-col justify-between gap-5 rounded-xl p-5 md:flex-row md:items-end md:p-6">
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-accent-info">AI 관상가 고양이</p>
-            <h1 className="mt-3 text-[clamp(2rem,4vw,4.75rem)] font-black leading-none">관리자 데이터</h1>
-            <p className="mt-4 text-sm font-semibold leading-6 text-text-muted">부스 운영 흐름, 추천 집계, 참여 세션을 한 화면에서 확인해요.</p>
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-accent-info">AI 관상가 고양이</p>
+            <h1 className="mt-2 text-3xl font-bold leading-tight md:text-4xl">관리자 대시보드</h1>
+            <p className="mt-3 text-sm font-medium leading-6 text-text-muted">오늘의 참여 흐름, 추천 분포, 세션 기록을 확인합니다.</p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <ThemeToggle />
             <button
               type="button"
-              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-border bg-bg-card/70 px-4 text-sm font-black text-text-primary transition hover:border-border-bright hover:bg-bg-card-hover"
+              className="inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-border bg-bg-card/80 px-4 text-sm font-semibold text-text-primary transition hover:border-border-bright hover:bg-bg-card-hover"
               onClick={onRefresh}
             >
               <RefreshCw className="h-4 w-4" aria-hidden="true" />
@@ -182,63 +185,69 @@ export function AdminDashboardContent({ metrics, onRefresh }: { metrics: AdminMe
           </div>
         </header>
 
-        <section className="grid gap-4 md:grid-cols-2">
-          <AdminStatCard label="오늘 참여자 수" value={metrics.todayParticipants} />
-          <AdminStatCard label="오늘 추천된 책 수" value={metrics.todayRecommendedBookCount} />
+        <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <MetricCard label="오늘 참여자" value={metrics.todayParticipants} unit="명" icon={<Users className="h-4 w-4" aria-hidden="true" />} />
+          <MetricCard label="추천 도서" value={metrics.todayRecommendedBookCount} unit="권" icon={<BookOpen className="h-4 w-4" aria-hidden="true" />} />
+          <MetricCard label="피크 시간대" value={peakHour ? `${peakHour.hour}시` : "-"} helper={peakHour ? `${peakHour.count}명 참여` : "데이터 없음"} icon={<Clock3 className="h-4 w-4" aria-hidden="true" />} />
+          <MetricCard label="세션당 추천" value={formatDecimal(averageRecommendations)} unit="권" icon={<BarChart3 className="h-4 w-4" aria-hidden="true" />} />
         </section>
 
-        <section className="glass-panel rounded-2xl p-5 md:p-6">
-          <div className="flex items-center justify-between gap-3">
-            <div>
-              <p className="text-xs font-black uppercase tracking-[0.16em] text-accent-info">PARTICIPANTS</p>
-              <h2 className="mt-2 text-2xl font-black">오늘 시간대별 참여자 수</h2>
-            </div>
-            <p className="rounded-full border border-accent-info/25 bg-accent-info/10 px-3 py-1 text-sm font-black text-accent-info">{metrics.todayParticipants}명</p>
-          </div>
+        <Panel className="p-5 md:p-6">
+          <SectionHeader eyebrow="PARTICIPANTS" title="오늘 시간대별 참여자 수" aside={`${metrics.todayParticipants}명`} />
           <HourlyChart values={metrics.hourlyParticipants} />
+        </Panel>
+
+        <section className="grid gap-4 lg:grid-cols-2">
+          <HorizontalBarChart eyebrow="PREFERENCE" title="선호 독서 카테고리" values={metrics.categoryDistribution} limit={6} />
+          <HorizontalBarChart eyebrow="RECOMMEND" title="추천 분야 분포" values={metrics.recommendationCategoryDistribution} limit={6} />
+          <Panel className="p-5 md:p-6">
+            <SectionHeader eyebrow="TAGS" title="추천 태그 TOP" />
+            <HorizontalBarList values={metrics.recommendationTagDistribution} limit={10} />
+          </Panel>
+
+          <Panel className="p-5 md:p-6">
+            <SectionHeader eyebrow="BOOK RANKING" title="오늘 추천된 책" aside={recommendedBookRows.length ? `${recommendedBookRows.length}종` : undefined} />
+            {recommendedBookRows.length ? (
+              <div className="mt-5 overflow-x-auto">
+                <table className="w-full min-w-[640px] border-separate border-spacing-0 text-left text-sm">
+                  <thead className="text-xs font-semibold uppercase tracking-[0.1em] text-text-faint">
+                    <tr>
+                      <TableHead>책</TableHead>
+                      <TableHead>저자</TableHead>
+                      <TableHead>추천</TableHead>
+                      <TableHead>태그</TableHead>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {recommendedBookRows.map((book) => (
+                      <tr key={book.key} className="align-top">
+                        <TableCell strong>{book.title}</TableCell>
+                        <TableCell>{book.author}</TableCell>
+                        <TableCell>
+                          <div className="flex min-w-24 items-center gap-3">
+                            <span className="w-5 font-semibold tabular-nums text-text-primary">{book.count}</span>
+                            <div className="h-2 flex-1 rounded-full bg-bg-raised">
+                              <div className="h-full rounded-full bg-accent-info" style={{ width: `${(book.count / maxBookCount) * 100}%` }} />
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell>{book.tags.join(", ") || book.category || "-"}</TableCell>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <EmptyState label="아직 추천된 책이 없습니다." />
+            )}
+          </Panel>
         </section>
 
-        <section className="grid gap-4 lg:grid-cols-3">
-          <DistributionPanel title="선호 독서 카테고리 분포" values={metrics.categoryDistribution} />
-          <DistributionPanel title="추천 분야 분포" values={metrics.recommendationCategoryDistribution} />
-          <DistributionPanel title="추천 태그 분포" values={metrics.recommendationTagDistribution} />
-        </section>
-
-        <section className="glass-panel rounded-2xl p-5 md:p-6">
-          <p className="text-xs font-black uppercase tracking-[0.16em] text-accent-info">BOOK LIST</p>
-          <h2 className="mt-2 text-2xl font-black">오늘 추천된 책</h2>
-          <div className="mt-5 overflow-x-auto">
-            <table className="w-full min-w-[760px] border-separate border-spacing-0 text-left text-sm">
-              <thead className="text-xs font-black uppercase tracking-[0.1em] text-text-faint">
-                <tr>
-                  <TableHead>책</TableHead>
-                  <TableHead>저자</TableHead>
-                  <TableHead>분야</TableHead>
-                  <TableHead>추천 수</TableHead>
-                  <TableHead>태그</TableHead>
-                </tr>
-              </thead>
-              <tbody>
-                {recommendedBookRows.map((book) => (
-                  <tr key={book.key} className="align-top">
-                    <TableCell strong>{book.title}</TableCell>
-                    <TableCell>{book.author}</TableCell>
-                    <TableCell accent>{book.category || "-"}</TableCell>
-                    <TableCell strong>{book.count}</TableCell>
-                    <TableCell>{book.tags.join(", ") || "-"}</TableCell>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
-
-        <section className="glass-panel rounded-2xl p-5 md:p-6">
-          <p className="text-xs font-black uppercase tracking-[0.16em] text-accent-info">SESSIONS</p>
-          <h2 className="mt-2 text-2xl font-black">오늘 참여 세션</h2>
+        <Panel className="p-5 md:p-6">
+          <SectionHeader eyebrow="SESSIONS" title="최근 참여 세션" />
           <div className="mt-5 overflow-x-auto">
             <table className="w-full min-w-[640px] border-separate border-spacing-0 text-left text-sm">
-              <thead className="text-xs font-black uppercase tracking-[0.1em] text-text-faint">
+              <thead className="text-xs font-semibold uppercase tracking-[0.1em] text-text-faint">
                 <tr>
                   <TableHead>시간</TableHead>
                   <TableHead>이름</TableHead>
@@ -247,31 +256,57 @@ export function AdminDashboardContent({ metrics, onRefresh }: { metrics: AdminMe
                 </tr>
               </thead>
               <tbody>
-                {metrics.sessions.map((session) => (
-                  <tr key={`${session.createdAt}-${session.maskedStudentId}`}>
-                    <TableCell strong>{formatTime(session.createdAt)}</TableCell>
-                    <TableCell strong>{session.displayName}</TableCell>
-                    <TableCell>{session.maskedStudentId}</TableCell>
-                    <TableCell accent>{session.readingTypeCode}</TableCell>
+                {metrics.sessions.length ? (
+                  metrics.sessions.map((session) => (
+                    <tr key={`${session.createdAt}-${session.maskedStudentId}`}>
+                      <TableCell strong>{formatTime(session.createdAt)}</TableCell>
+                      <TableCell strong>{session.displayName}</TableCell>
+                      <TableCell>{session.maskedStudentId}</TableCell>
+                      <TableCell accent>{session.readingTypeCode}</TableCell>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <TableCell colSpan={4}>아직 참여 세션이 없습니다.</TableCell>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
-        </section>
+        </Panel>
       </div>
     </main>
   );
 }
 
-function AdminStatCard({ label, value }: { label: string; value: number | string }) {
+function Panel({ children, className = "" }: { children: ReactNode; className?: string }) {
+  return <section className={`admin-panel rounded-xl ${className}`.trim()}>{children}</section>;
+}
+
+function SectionHeader({ eyebrow, title, aside }: { eyebrow: string; title: string; aside?: ReactNode }) {
   return (
-    <section className="glass-panel rounded-2xl p-5">
-      <div className="flex items-center justify-between gap-3">
-        <p className="text-sm font-bold text-text-muted">{label}</p>
-        <BarChart3 className="h-5 w-5 text-accent-info" aria-hidden="true" />
+    <div className="flex items-start justify-between gap-4">
+      <div>
+        <p className="text-xs font-bold uppercase tracking-[0.16em] text-accent-info">{eyebrow}</p>
+        <h2 className="mt-2 text-xl font-semibold leading-tight md:text-2xl">{title}</h2>
       </div>
-      <p className="mt-3 text-4xl font-black tabular-nums text-text-primary">{value}</p>
+      {aside ? <div className="rounded-full border border-border bg-bg-card px-3 py-1 text-sm font-semibold text-accent-info">{aside}</div> : null}
+    </div>
+  );
+}
+
+function MetricCard({ label, value, unit, helper, icon }: { label: string; value: number | string; unit?: string; helper?: string; icon: ReactNode }) {
+  return (
+    <section className="admin-panel rounded-xl p-4">
+      <div className="flex items-center justify-between gap-3">
+        <p className="text-sm font-semibold text-text-muted">{label}</p>
+        <span className="grid h-8 w-8 place-items-center rounded-lg border border-border bg-bg-raised/60 text-accent-info">{icon}</span>
+      </div>
+      <p className="mt-4 text-3xl font-semibold tabular-nums text-text-primary">
+        {value}
+        {unit ? <span className="ml-1 text-base font-semibold text-text-muted">{unit}</span> : null}
+      </p>
+      {helper ? <p className="mt-1 text-xs font-medium text-text-faint">{helper}</p> : null}
     </section>
   );
 }
@@ -280,58 +315,73 @@ function HourlyChart({ values }: { values: Array<{ hour: number; count: number }
   const max = Math.max(1, ...values.map((value) => value.count));
 
   return (
-    <div className="mt-5 grid grid-cols-12 gap-2 md:grid-cols-[repeat(24,minmax(0,1fr))]">
+    <div className="admin-chart-grid mt-6 grid grid-cols-12 gap-2 rounded-xl border border-border bg-bg-card/60 p-3 md:grid-cols-[repeat(24,minmax(0,1fr))]">
       {values.map((value) => (
         <div key={value.hour} className="grid gap-2">
-          <div className="flex h-32 items-end rounded-lg border border-border bg-bg-card/70 px-1">
+          <div className="flex h-36 items-end rounded-md bg-bg-raised/60 px-1.5">
             <div
-              className="w-full rounded-md bg-accent-info"
-              style={{ height: `${Math.max(value.count ? 10 : 0, (value.count / max) * 100)}%` }}
+              className="w-full rounded-t-md bg-accent-info"
+              style={{ height: `${Math.max(value.count ? 12 : 0, (value.count / max) * 100)}%` }}
               title={`${value.hour}시 ${value.count}명`}
             />
           </div>
-          <p className="text-center text-[11px] font-black text-text-faint">{value.hour}</p>
+          <p className="text-center text-[11px] font-semibold text-text-faint">{value.hour}</p>
         </div>
       ))}
     </div>
   );
 }
 
-function DistributionPanel({ title, values }: { title: string; values: Record<string, number> }) {
+function HorizontalBarChart({ eyebrow, title, values, limit = 6 }: { eyebrow: string; title: string; values: Record<string, number>; limit?: number }) {
+  return (
+    <Panel className="p-5">
+      <SectionHeader eyebrow={eyebrow} title={title} />
+      <HorizontalBarList values={values} limit={limit} />
+    </Panel>
+  );
+}
+
+function HorizontalBarList({ values, limit = 6 }: { values: Record<string, number>; limit?: number }) {
   const entries = Object.entries(values).sort((a, b) => b[1] - a[1]);
+  const visibleEntries = entries.slice(0, limit);
   const max = Math.max(1, ...entries.map((entry) => entry[1]));
+  const total = entries.reduce((sum, entry) => sum + entry[1], 0);
 
   return (
-    <section className="glass-panel rounded-2xl p-5">
-      <h2 className="text-lg font-black">{title}</h2>
-      <div className="mt-4 grid gap-3">
+      <div className="mt-5 grid gap-4">
         {entries.length ? (
-          entries.map(([label, count]) => (
+          visibleEntries.map(([label, count]) => (
             <div key={label}>
-              <div className="flex justify-between gap-3 text-sm font-bold">
-                <span className="text-text-muted">{label}</span>
-                <span className="text-accent-info">{count}</span>
+              <div className="flex justify-between gap-3 text-sm font-medium">
+                <span className="min-w-0 truncate text-text-muted">{label}</span>
+                <span className="shrink-0 font-semibold tabular-nums text-text-primary">
+                  {count}
+                  {total ? <span className="ml-1 text-xs font-medium text-text-faint">({Math.round((count / total) * 100)}%)</span> : null}
+                </span>
               </div>
-              <div className="mt-2 h-2 rounded-full bg-bg-raised/70">
+              <div className="mt-2 h-2.5 rounded-full bg-bg-raised">
                 <div className="h-full rounded-full bg-accent-info" style={{ width: `${(count / max) * 100}%` }} />
               </div>
             </div>
           ))
         ) : (
-          <p className="text-sm font-bold text-text-faint">아직 데이터 없음</p>
+          <EmptyState label="아직 데이터 없음" />
         )}
       </div>
-    </section>
   );
 }
 
-function TableHead({ children }: { children: ReactNode }) {
-  return <th className="border-b border-border py-3 pr-4">{children}</th>;
+function EmptyState({ label }: { label: string }) {
+  return <p className="mt-5 rounded-lg border border-dashed border-border bg-bg-card/50 px-4 py-4 text-center text-sm font-medium text-text-faint">{label}</p>;
 }
 
-function TableCell({ children, strong = false, accent = false }: { children: ReactNode; strong?: boolean; accent?: boolean }) {
+function TableHead({ children }: { children: ReactNode }) {
+  return <th className="border-b border-border py-3 pr-4 font-semibold">{children}</th>;
+}
+
+function TableCell({ children, strong = false, accent = false, colSpan }: { children: ReactNode; strong?: boolean; accent?: boolean; colSpan?: number }) {
   return (
-    <td className={["border-b border-border py-3 pr-4", strong ? "font-black text-text-primary" : "font-bold text-text-muted", accent ? "text-accent-info" : ""].join(" ")}>
+    <td colSpan={colSpan} className={["border-b border-border py-3 pr-4", strong ? "font-semibold text-text-primary" : "font-medium text-text-muted", accent ? "text-accent-info" : ""].join(" ")}>
       {children}
     </td>
   );
@@ -376,4 +426,20 @@ function formatTime(value: string) {
     hour: "2-digit",
     minute: "2-digit",
   }).format(new Date(value));
+}
+
+function findPeakHour(values: Array<{ hour: number; count: number }>) {
+  const peak = values.reduce<{ hour: number; count: number } | null>((current, value) => {
+    if (!current || value.count > current.count) return value;
+    return current;
+  }, null);
+
+  return peak && peak.count > 0 ? peak : null;
+}
+
+function formatDecimal(value: number) {
+  return new Intl.NumberFormat("ko-KR", {
+    maximumFractionDigits: 1,
+    minimumFractionDigits: value > 0 && value < 10 ? 1 : 0,
+  }).format(value);
 }

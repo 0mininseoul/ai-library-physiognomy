@@ -55,7 +55,7 @@ const rawSchema = z.object({
     advice: z.string().min(1),
   }),
   romantic_match: z.object({
-    best_types: z.array(z.string().min(1)).min(2).max(4),
+    best_types: z.array(z.string().min(1)).min(1).max(2),
     why: z.string().min(1),
     date_style: z.string().min(1),
     caution: z.string().min(1),
@@ -149,7 +149,26 @@ function clean(input: string) {
     .replace(/처방전?/g, "추천")
     .replace(/학생/g, "님")
     .replace(/연애/g, "관계 궁합")
+    .replace(/연인/g, "상대")
     .replace(/데이트/g, "함께하는 시간")
+    .replace(/생년월일(?:에서|로|을|를|의| 기반| 신호| 리듬)?/g, "내면")
+    .replace(/[갑을병정무기경신임계]?\s*나무\s*일간답게/g, "차분한 탐색 성향답게")
+    .replace(/불꽃/g, "에너지")
+    .replace(/잔잔한\s*물결/g, "차분한 조율")
+    .replace(/물결/g, "조율")
+    .replace(/(?:목|나무)의?\s*(?:기운|리듬|흐름)/g, "탐색 성향")
+    .replace(/(?:화|불)의?\s*(?:기운|리듬|흐름)/g, "추진 성향")
+    .replace(/(?:토|흙)의?\s*(?:기운|리듬|흐름)/g, "정리 성향")
+    .replace(/(?:금)의?\s*(?:기운|리듬|흐름)/g, "판단 성향")
+    .replace(/(?:수|물)의?\s*(?:기운|리듬|흐름)/g, "깊게 몰입하는 성향")
+    .replace(/우세한?\s*기운/g, "가장 또렷한 성향")
+    .replace(/우세\s*오행/g, "주요 성향")
+    .replace(/오행/g, "성향 패턴")
+    .replace(/사주/g, "내면 성향")
+    .replace(/일간|월주|년주|일주|시주/g, "내면 신호")
+    .replace(/기운/g, "성향")
+    .replace(/강한\s+깊게 몰입하는 성향/g, "깊게 몰입하는 성향")
+    .replace(/강한\s+(탐색|추진|정리|판단)\s*성향/g, "또렷한 $1 성향")
     .replace(/근거 더 보기/g, "더보기")
     .replace(/근거/g, "설명")
     .replace(/해줘/g, "해 주세요")

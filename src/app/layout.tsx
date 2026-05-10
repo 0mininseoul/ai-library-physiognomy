@@ -5,7 +5,12 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "AI 관상가 고양이",
-  description: "고양이 관상가가 얼굴과 사주 리듬을 읽어주는 캠퍼스 큐레이션 서비스",
+  description: "고양이 관상가가 얼굴과 성향 신호를 읽어주는 캠퍼스 큐레이션 서비스",
+  icons: {
+    icon: [{ url: "/favicon.png", type: "image/png", sizes: "512x512" }],
+    shortcut: "/favicon.png",
+    apple: [{ url: "/brand/ai-library-logo.png", type: "image/png", sizes: "512x512" }],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

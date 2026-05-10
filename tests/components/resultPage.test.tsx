@@ -82,7 +82,7 @@ const payload: ResultPayload = {
         naverBookUrl: "https://search.shopping.naver.com/book/search?query=%EC%83%9D%EA%B0%81%20%EC%A0%95%EB%A6%AC%EC%9D%98%20%ED%9E%98",
         callNumber: "181.4 박74ㅅ",
         locationLabel: "중앙도서관 4층",
-        reason: "복잡한 생각을 정리하는 데 좋습니다.",
+        reason: "넘쳐나는 물 기운을 원하는 방향으로 흐르게 하는 데 좋습니다.",
         actionCopy: "머릿속 탭을 정리하고 싶을 때 펼쳐보세요.",
       },
       {
@@ -132,7 +132,7 @@ describe("ResultContent", () => {
 
     expect(screen.getByText("야옹이가 본 영민님의 얼굴")).toBeInTheDocument();
     expect(screen.getByText("지금 영민님에게 필요한 책이에요")).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "영민님은 이런 사람이랑 잘 맞아요" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "영민님은 이런 사람과 흐름이 좋아요" })).toBeInTheDocument();
     expect(container).not.toHaveTextContent("피부");
     expect(container).not.toHaveTextContent(forbiddenRelationshipWord);
     expect(screen.getByText("얼굴 이미지는 24시간 이후 삭제되었어요.")).toBeInTheDocument();
@@ -145,25 +145,38 @@ describe("ResultContent", () => {
     expect(container.querySelectorAll('span[style*="left:"][style*="top:"]')).toHaveLength(0);
   });
 
-  it("shows compact core interpretation while secondary evidence is collapsed by default", () => {
+  it("keeps core interpretation compact without duplicate expandable detail", () => {
     render(<ResultContent payload={payload} />);
 
     expect(screen.getByText("야옹이가 본 영민님의 얼굴")).toBeInTheDocument();
     expect(screen.getByText("균형 좌표")).toBeInTheDocument();
     expect(screen.getByText("눈 신호")).toBeInTheDocument();
     expect(screen.getByText("하관 리듬")).toBeInTheDocument();
-    expect(screen.getByText("계획 세우는 힘이 보여요.")).not.toBeVisible();
-    expect(screen.getAllByText("더보기").length).toBeGreaterThan(0);
+    expect(screen.queryByText("계획 세우는 힘이 보여요.")).not.toBeInTheDocument();
+    expect(screen.queryByText("더보기")).not.toBeInTheDocument();
   });
 
-  it("renders five element labels and keeps Naver book links with cover thumbnails", () => {
-    render(<ResultContent payload={payload} />);
+  it("renders internal style as strong/support signals and keeps Naver book links with cover thumbnails", () => {
+    const { container } = render(<ResultContent payload={payload} />);
+    const pageText = container.textContent ?? "";
 
-    expect(screen.getByText("나무")).toBeInTheDocument();
-    expect(screen.getByText("불")).toBeInTheDocument();
-    expect(screen.getByText("흙")).toBeInTheDocument();
-    expect(screen.getByText("금")).toBeInTheDocument();
-    expect(screen.getByText("물")).toBeInTheDocument();
+    expect(screen.getByText("가장 또렷한 성향")).toBeInTheDocument();
+    expect(screen.getByText("보완하면 좋은 성향")).toBeInTheDocument();
+    expect(screen.getByText("탐색")).toBeInTheDocument();
+    expect(screen.getByText("몰입")).toBeInTheDocument();
+    expect(pageText).toMatch(/탐색\s*\d+%/);
+    expect(pageText).toMatch(/몰입\s*\d+%/);
+    expect(screen.getByText("에너지 실행형")).toBeInTheDocument();
+    expect(screen.queryByText("차분한 조율형")).not.toBeInTheDocument();
+    expect(container).not.toHaveTextContent("생년월일");
+    expect(container).not.toHaveTextContent("오행");
+    expect(container).not.toHaveTextContent("사주");
+    expect(container).not.toHaveTextContent("목 기운");
+    expect(container).not.toHaveTextContent("토 기운");
+    expect(container).not.toHaveTextContent("물 기운");
+    expect(container).not.toHaveTextContent("물의 리듬");
+    expect(container).not.toHaveTextContent("불꽃 실행형");
+    expect(container).not.toHaveTextContent("잔잔한 물결형");
     expect(screen.getByText("몰입의 기술")).toBeInTheDocument();
     expect(screen.getByText("생각 정리의 힘")).toBeInTheDocument();
     expect(screen.getByText("루틴 회복 수업")).toBeInTheDocument();
