@@ -9,6 +9,8 @@
 - 사용자는 처음에는 "책 추천 서비스"보다 "고양이가 내 관상을 진지하게 보는 인터랙티브 체험"처럼 느껴야 한다.
 - 최종 결과 후반부에서만 책 추천이 드러나야 한다.
 - 시연 환경은 B2B 피칭과 현장 부스 모두를 고려한다.
+- 기본 진입 인상은 대학 중앙도서관 담당자와 구매자가 신뢰할 수 있는 밝은 도서관 큐레이션 서비스여야 한다.
+- 다크한 라이브 스캔 정체성은 학생 현장 체험용 `Live Face Scan / 몰입형 부스 모드`로 유지한다.
 - UI는 가볍고 귀엽기만 한 서비스가 아니라, 라이브 카메라 분석실 같은 몰입감이 있어야 한다.
 - 핵심 감성은 `Live Face Scan x 고양이 관상 상담소 x 도서관 큐레이션`이다.
 - 기존 AI 얼평 서비스의 어두운 실시간 분석 HUD, 좌우 플로팅 카드, 카메라 중심 구성을 기준으로 삼는다.
@@ -35,15 +37,19 @@
 
 ## Color And Visual Direction
 
-- Keep the current dark cinematic scan-room design language, but refine it through an Apple glassmorphism style.
-- The visual theme is `Live Camera x Apple Glassmorphism x Cat Observatory`.
-- Primary surfaces should be black, near-black, and translucent glass.
+- Keep the live scan-room design language, but support light and dark themes through shared tokens.
+- The visual theme is `Library Curation x Apple Glassmorphism x Cat Observatory`.
+- Default theme is light for B2B buyer, library staff, admin, lookup, and result surfaces.
+- Dark theme remains available for immersive student booth mode and scan/analyzing stages.
+- Do not build two unrelated UIs. Use CSS variables and theme tokens so light/dark share the same spacing, radius, typography, and component grammar.
+- Primary light surfaces should use warm white, soft gray, ink text, and muted teal accents.
+- Primary dark scan surfaces should use black, near-black, and translucent glass.
 - Glass panels should feel like Apple-style frosted glass: precise, layered, softly blurred, and intentionally lit.
 - Glass effects must be refined and functional, never gimmicky, noisy, or over-styled.
 - The palette should stay constrained to three major color families:
-  1. Core black: `#050607`, `#0B0D0F`, `#111417` for background, depth, and dark HUD structure.
-  2. Glass white: `#FFFFFF`, `rgba(255,255,255,0.72)`, `rgba(255,255,255,0.12)` for text, borders, frosted surfaces, and light reflection.
-  3. Scan mint: `#8DDED7`, `#5FBDB6`, `#D7FFF8` for scan status, primary action, focus, and progress.
+  1. Library paper: warm white / soft gray for default surfaces, public-institution calm, and readable reports.
+  2. Ink and glass: near-black text, translucent glass, precise borders, and dark scan-room depth.
+  3. Muted scan mint: teal/mint for status, focus, progress, and primary action. In light theme it must feel muted and credible, not neon.
 - Do not add new accent families unless there is a true semantic exception.
 - Avoid bright purple, loud blue, startup gradients, rainbow accents, orange-heavy palettes, yellow-heavy highlights, and toy-like pastel themes.
 - If a warm cat label is needed, keep it extremely small and subordinate; it must not become a fourth dominant palette.
@@ -78,6 +84,15 @@
 - Avoid mixing unrelated card styles, button styles, icon styles, or panel densities on the same page.
 - Do not rely on decorative clutter to make a screen feel designed. Use hierarchy, spacing, glass layering, and motion discipline.
 - If something feels like a generic AI-generated UI, simplify it and realign it to the three-color Apple glass HUD system.
+
+### Theme Model
+
+- `:root` is the light theme.
+- `[data-theme="dark"]` and `.theme-dark` provide the dark theme.
+- User-selected theme is stored in `localStorage`.
+- The app may force dark theme only inside the scan/analyzing stage, because that is an immersive booth mode.
+- `prefers-color-scheme` may be referenced, but B2B default entry must remain light unless the user explicitly toggles dark.
+- Admin, lookup, and result pages should read as light, reliable operating surfaces by default.
 
 ### Analyze Entry Page
 

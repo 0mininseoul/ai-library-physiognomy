@@ -4,6 +4,7 @@ import { FormEvent, useState } from "react";
 import type { InputHTMLAttributes } from "react";
 import { useRouter } from "next/navigation";
 import { Search, SearchCheck } from "lucide-react";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 export function LookupPage() {
   const router = useRouter();
@@ -36,6 +37,9 @@ export function LookupPage() {
 
   return (
     <main className="min-h-screen bg-bg-primary text-text-primary">
+      <div className="fixed right-8 top-6 z-30">
+        <ThemeToggle />
+      </div>
       <section className="mx-auto grid min-h-screen w-full max-w-4xl items-center gap-8 px-5 py-8 md:grid-cols-[minmax(0,1fr)_18rem] md:px-8">
         <form onSubmit={submit} className="glass-panel rounded-2xl p-6 md:p-8">
           <p className="text-sm font-black text-accent-info">AI 관상가 고양이</p>
@@ -49,7 +53,7 @@ export function LookupPage() {
 
           {status === "error" ? (
             <p role="alert" className="mt-5 rounded-xl border border-accent-info/35 bg-accent-info/10 px-4 py-3 text-sm font-bold text-text-primary">
-              최근 30일 안에 완료된 결과를 찾지 못했습니다. 학번과 생년월일을 다시 확인해 주세요.
+              최근 30일 안에 완료된 결과를 찾지 못했어요. 학번과 생년월일을 다시 확인해 주세요.
             </p>
           ) : null}
 
@@ -66,7 +70,7 @@ export function LookupPage() {
         <aside className="glass-panel rounded-2xl p-6 text-center">
           <SearchCheck className="mx-auto h-9 w-9 text-accent-info" aria-hidden="true" />
           <p className="mt-4 text-lg font-black leading-7">최근 결과를 조용히 추적 중</p>
-          <p className="mt-3 text-sm font-semibold leading-6 text-text-muted">얼굴 이미지는 생성 후 24시간까지만 결과 화면에 표시됩니다.</p>
+          <p className="mt-3 text-sm font-semibold leading-6 text-text-muted">운영 담당자가 보기에도 안전한 30일 재조회 흐름이에요.</p>
         </aside>
       </section>
     </main>
@@ -83,7 +87,7 @@ function DarkLookupInput(props: InputHTMLAttributes<HTMLInputElement> & { label:
       <input
         id={inputId}
         name={name}
-        className={`h-12 rounded-xl border border-border bg-bg-card/70 px-4 text-sm font-bold text-text-primary outline-none transition placeholder:text-text-faint focus:border-accent-info focus:ring-2 focus:ring-accent-info/25 ${className}`.trim()}
+        className={`h-12 rounded-xl border border-border bg-bg-card/80 px-4 text-sm font-bold text-text-primary outline-none transition placeholder:text-text-faint focus:border-accent-info focus:ring-2 focus:ring-accent-info/25 ${className}`.trim()}
         {...inputProps}
       />
     </label>

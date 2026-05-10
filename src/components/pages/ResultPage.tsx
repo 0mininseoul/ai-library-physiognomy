@@ -5,8 +5,9 @@ import type { ReactNode, WheelEvent } from "react";
 import Link from "next/link";
 import { CameraOff, ChevronLeft, ChevronRight, Gauge, HeartHandshake, Loader2, RefreshCw, RotateCcw, ShieldCheck } from "lucide-react";
 import { BookRecommendationCard } from "@/components/result/BookRecommendationCard";
-import { honorific } from "@/lib/korean/name";
-import { dominantElementText, elementCountItems, koreanDayMaster, koreanPillarSummary, stripHanja } from "@/lib/saju/display";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { honorific, softenFormalPolite } from "@/lib/korean/name";
+import { dominantElementText, elementCountItems, stripHanja } from "@/lib/saju/display";
 import type { DetailComment, LibraryAnalysisResult } from "@/types/session";
 
 const RESULT_SECTION_COUNT = 6;
@@ -53,7 +54,7 @@ export function ResultPage({ sessionId }: { sessionId: string }) {
       <main className="grid min-h-screen place-items-center bg-bg-primary px-5 text-text-primary">
         <div className="text-center">
           <Loader2 className="mx-auto h-9 w-9 animate-spin text-accent-info" aria-hidden="true" />
-          <p className="mt-4 text-lg font-black">관상 리포트를 불러오고 있습니다</p>
+          <p className="mt-4 text-lg font-black">관상 리포트를 불러오고 있어요</p>
         </div>
       </main>
     );
@@ -63,7 +64,7 @@ export function ResultPage({ sessionId }: { sessionId: string }) {
     return (
       <main className="grid min-h-screen place-items-center bg-bg-primary px-5 text-text-primary">
         <section className="glass-panel max-w-md rounded-2xl p-6 text-center">
-          <h1 className="text-2xl font-black">결과를 찾지 못했습니다</h1>
+          <h1 className="text-2xl font-black">결과를 찾지 못했어요</h1>
           <p className="mt-3 text-sm font-bold leading-6 text-text-muted">학번과 생년월일로 다시 찾아보시거나 새 분석을 시작해 주세요.</p>
           <div className="mt-5 grid gap-2 sm:grid-cols-2">
             <Link href="/lookup" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border border-border bg-bg-card px-5 text-sm font-bold text-text-primary transition hover:bg-bg-card-hover">
@@ -113,18 +114,21 @@ export function ResultContent({ payload }: { payload: ResultPayload }) {
 
   return (
     <main data-testid="result-horizontal-shell" className="result-shell relative h-screen overflow-hidden bg-bg-primary text-text-primary" onWheel={handleWheel}>
-      <header className="fixed left-0 right-0 top-0 z-40 border-b border-white/10 bg-black/45 px-8 py-4 backdrop-blur-2xl">
+      <header className="fixed left-0 right-0 top-0 z-40 border-b border-border bg-bg-card/78 px-8 py-4 shadow-glass backdrop-blur-2xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
           <div className="flex min-w-0 items-center gap-3 text-xs font-black tracking-[0.08em] text-text-muted">
-            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-white/[0.12] bg-white/[0.08] shadow-glass">
+            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-border bg-bg-card/70 shadow-glass">
               <AppIcon className="h-5 w-5" />
             </span>
             <span className="truncate uppercase">AI 관상가 고양이 / Live Result</span>
           </div>
-          <Link href="/" className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl border border-white/[0.12] bg-white/[0.06] px-4 text-sm font-black text-text-primary shadow-glass transition hover:border-accent-info/[0.45] hover:bg-white/[0.1]">
-            <RotateCcw className="h-4 w-4" aria-hidden="true" />
-            다시 분석하기
-          </Link>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <Link href="/" className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl border border-border bg-bg-card/70 px-4 text-sm font-black text-text-primary shadow-glass transition hover:border-border-bright hover:bg-bg-card-hover">
+              <RotateCcw className="h-4 w-4" aria-hidden="true" />
+              다시 분석하기
+            </Link>
+          </div>
         </div>
       </header>
 
@@ -133,7 +137,7 @@ export function ResultContent({ payload }: { payload: ResultPayload }) {
         className="flex h-screen transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
         style={{ transform: `translateX(-${activeSection * 100}vw)` }}
       >
-        <StorySection active={activeSection === 0} index={0} eyebrow="TYPE REVEAL" title={cleanCopy(result.mainCopy || result.readingType.headline)} lines={[`${name}의 핵심 타입은 ${cleanCopy(result.readingType.displayName)}입니다.`, compactCopy(result.physiognomy.summary, 92)]}>
+        <StorySection active={activeSection === 0} index={0} eyebrow="FACE REVEAL" title={`야옹이가 본 ${name}의 얼굴`} lines={[`${name}의 핵심 타입은 ${cleanCopy(result.readingType.displayName)}이에요.`, compactCopy(result.physiognomy.summary, 92)]}>
           <div className="grid min-h-0 grid-cols-[21rem_minmax(0,1fr)] items-stretch gap-6">
             <ResultFacePanel displayName={displayName} faceImageUrl={faceImageUrl} />
 
@@ -147,7 +151,7 @@ export function ResultContent({ payload }: { payload: ResultPayload }) {
           </div>
         </StorySection>
 
-        <StorySection active={activeSection === 1} index={1} eyebrow="FACE SIGNAL" title="얼굴 신호 3개만 딱 집었어요" lines={[compactCopy(result.physiognomy.summary, 92), "자세한 이목구비 분석은 더보기 안에 차분히 넣어두었습니다."]}>
+        <StorySection active={activeSection === 1} index={1} eyebrow="FACE SIGNAL" title={`야옹이가 본 ${name}의 인상`} lines={[compactCopy(result.physiognomy.summary, 92), "자세한 이목구비 분석은 더보기 안에 차분히 넣어두었어요."]}>
           <div className="grid min-h-0 gap-4 lg:grid-cols-3">
             {faceSignals.map((signal) => (
               <SignalCard key={signal.title} title={signal.title} kicker={signal.kicker} text={signal.text} />
@@ -162,7 +166,7 @@ export function ResultContent({ payload }: { payload: ResultPayload }) {
           </EvidenceDisclosure>
         </StorySection>
 
-        <StorySection active={activeSection === 2} index={2} eyebrow="IMPRESSION INDEX" title="인상 신호 점수판" lines={[`가장 강하게 잡힌 신호는 ${topScore.label} ${Math.round(topScore.value)}점입니다.`, "숫자는 절대 평가가 아니라 리포트를 읽기 쉽게 정리한 인상 신호입니다."]}>
+        <StorySection active={activeSection === 2} index={2} eyebrow="IMPRESSION INDEX" title={`${name}의 인상 신호는 이렇게 읽혀요`} lines={[`가장 강하게 잡힌 신호는 ${topScore.label} ${Math.round(topScore.value)}점이에요.`, "숫자는 절대 평가가 아니라 리포트를 읽기 쉽게 정리한 인상 신호예요."]}>
           <ScoreGrid scores={result.scores} compact />
           <EvidenceDisclosure>
             <div className="grid gap-4 md:grid-cols-2">
@@ -172,7 +176,7 @@ export function ResultContent({ payload }: { payload: ResultPayload }) {
           </EvidenceDisclosure>
         </StorySection>
 
-        <StorySection active={activeSection === 3} index={3} eyebrow="FIVE ELEMENTS" title="사주와 다섯 기운" lines={[`우세한 기운은 ${cleanCopy(dominantText)}입니다.`, `${cleanCopy(result.saju.strength)} ${cleanCopy(result.saju.advice)}`]}>
+        <StorySection active={activeSection === 3} index={3} eyebrow="FIVE ELEMENTS" title={`${name}은 ${cleanCopy(dominantText)} 흐름이 강한 분이네요`} lines={[`우세한 기운은 ${cleanCopy(dominantText)}이에요.`, `${cleanCopy(result.saju.strength)} ${cleanCopy(result.saju.advice)}`]}>
           <div className="grid gap-3 md:grid-cols-5">
             {elementItems.map((item) => (
               <ElementChip key={item.element} icon={item.icon} label={item.label} value={item.count} max={maxElement} />
@@ -181,12 +185,12 @@ export function ResultContent({ payload }: { payload: ResultPayload }) {
           <EvidenceDisclosure>
             <div className="grid gap-4 lg:grid-cols-2">
               <TextPanel title="기운 해석" text={`${cleanCopy(result.saju.elementBalance)} ${cleanCopy(result.saju.currentFlow)}`} />
-              <TextPanel title="계산 기준" text={koreanPillarSummary(calculation)} />
+              <TextPanel title="야옹이 한 줄 코멘트" text={cleanCopy(result.saju.advice)} />
             </div>
           </EvidenceDisclosure>
         </StorySection>
 
-        <StorySection active={activeSection === 4} index={4} eyebrow="CHEMI MATCH" title="함께 있으면 흐름이 좋은 타입" lines={[cleanCopy(result.romanticMatch.why), cleanCopy(result.romanticMatch.caution)]}>
+        <StorySection active={activeSection === 4} index={4} eyebrow="CHEMI MATCH" title={`${name}은 이런 사람이랑 잘 맞아요`} lines={[cleanCopy(result.romanticMatch.why), cleanCopy(result.romanticMatch.caution)]}>
           <div className="grid gap-4 md:grid-cols-3">
             {result.romanticMatch.bestTypes.map((type) => (
               <div key={type} className="glass-card min-h-36 rounded-2xl p-5">
@@ -205,7 +209,7 @@ export function ResultContent({ payload }: { payload: ResultPayload }) {
           </EvidenceDisclosure>
         </StorySection>
 
-        <StorySection active={activeSection === 5} index={5} eyebrow="BOOK CURATION" title={`지금 ${name}에게 필요한 책`} lines={["리포트의 핵심 신호를 도서관 책 추천으로 연결했습니다.", "표지와 네이버 책 링크는 아래 추천 카드에서 바로 확인하실 수 있습니다."]} id="books">
+        <StorySection active={activeSection === 5} index={5} eyebrow="BOOK CURATION" title={`지금 ${name}에게 필요한 책이에요`} lines={["리포트의 핵심 신호를 도서관 책 추천으로 연결했어요.", "표지와 네이버 책 링크는 아래 추천 카드에서 바로 확인하실 수 있어요."]} id="books">
           <ul className="grid gap-2 md:grid-cols-3">
             {result.readingNeeds.map((need) => (
               <li key={need} className="rounded-xl border border-accent-info/20 bg-accent-info/10 px-4 py-3 text-sm font-black leading-6 text-text-primary">
@@ -223,7 +227,7 @@ export function ResultContent({ payload }: { payload: ResultPayload }) {
 
       <button
         type="button"
-        className="fixed left-8 top-1/2 z-40 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full border border-white/[0.12] bg-black/35 text-text-primary shadow-glass backdrop-blur-2xl transition hover:border-accent-info/[0.45] disabled:cursor-not-allowed disabled:opacity-35"
+        className="fixed left-8 top-1/2 z-40 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full border border-border bg-bg-card/65 text-text-primary shadow-glass backdrop-blur-2xl transition hover:border-border-bright disabled:cursor-not-allowed disabled:opacity-35"
         aria-label="이전 섹션"
         disabled={activeSection === 0}
         onClick={() => goBy(-1)}
@@ -232,7 +236,7 @@ export function ResultContent({ payload }: { payload: ResultPayload }) {
       </button>
       <button
         type="button"
-        className="fixed right-8 top-1/2 z-40 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full border border-white/[0.12] bg-black/35 text-text-primary shadow-glass backdrop-blur-2xl transition hover:border-accent-info/[0.45] disabled:cursor-not-allowed disabled:opacity-35"
+        className="fixed right-8 top-1/2 z-40 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full border border-border bg-bg-card/65 text-text-primary shadow-glass backdrop-blur-2xl transition hover:border-border-bright disabled:cursor-not-allowed disabled:opacity-35"
         aria-label="다음 섹션"
         disabled={activeSection === RESULT_SECTION_COUNT - 1}
         onClick={() => goBy(1)}
@@ -240,12 +244,12 @@ export function ResultContent({ payload }: { payload: ResultPayload }) {
         <ChevronRight className="h-5 w-5" aria-hidden="true" />
       </button>
 
-      <nav className="fixed bottom-5 left-1/2 z-40 flex -translate-x-1/2 items-center gap-2 rounded-full border border-white/[0.12] bg-black/45 px-3 py-2 shadow-glass backdrop-blur-2xl" aria-label="결과 섹션">
+      <nav className="fixed bottom-5 left-1/2 z-40 flex -translate-x-1/2 items-center gap-2 rounded-full border border-border bg-bg-card/75 px-3 py-2 shadow-glass backdrop-blur-2xl" aria-label="결과 섹션">
         {Array.from({ length: RESULT_SECTION_COUNT }, (_, index) => (
           <button
             key={index}
             type="button"
-            className={["h-2.5 rounded-full transition-all", activeSection === index ? "w-8 bg-accent-info" : "w-2.5 bg-white/25 hover:bg-white/55"].join(" ")}
+            className={["h-2.5 rounded-full transition-all", activeSection === index ? "w-8 bg-accent-info" : "w-2.5 bg-bg-raised hover:bg-text-faint"].join(" ")}
             aria-label={`${index + 1}번째 섹션 보기`}
             aria-current={activeSection === index ? "step" : undefined}
             onClick={() => goToSection(index)}
@@ -254,9 +258,9 @@ export function ResultContent({ payload }: { payload: ResultPayload }) {
       </nav>
 
       {activeSection === RESULT_SECTION_COUNT - 1 ? (
-        <footer className="fixed right-8 top-24 z-40 max-w-md rounded-xl border border-white/[0.12] bg-black/45 px-4 py-3 text-xs font-bold leading-5 text-text-faint shadow-glass backdrop-blur-2xl">
+        <footer className="fixed right-8 top-24 z-40 max-w-md rounded-xl border border-border bg-bg-card/75 px-4 py-3 text-xs font-bold leading-5 text-text-faint shadow-glass backdrop-blur-2xl">
           <span className="inline-flex items-center gap-2">
-            <ShieldCheck className="h-4 w-4 text-accent-info" aria-hidden="true" />본 분석은 흥미용 해석이며, 의학적 소견이나 절대 평가가 아닙니다.
+            <ShieldCheck className="h-4 w-4 text-accent-info" aria-hidden="true" />본 분석은 흥미용 해석이며, 의학적 소견이나 절대 평가가 아니에요.
           </span>
         </footer>
       ) : null}
@@ -277,7 +281,7 @@ function ResultFacePanel({ displayName, faceImageUrl }: { displayName: string; f
       ) : (
         <div className="flex h-full w-full flex-col items-center justify-center gap-4 px-6 text-center">
           <CameraOff className="h-10 w-10 text-accent-info" aria-hidden="true" />
-          <p className="max-w-[14rem] text-base font-black leading-7 text-text-primary">얼굴 이미지는 24시간 이후 삭제되었습니다.</p>
+          <p className="max-w-[14rem] text-base font-black leading-7 text-text-primary">얼굴 이미지는 24시간 이후 삭제되었어요.</p>
         </div>
       )}
     </div>
@@ -303,15 +307,15 @@ function StorySection({ active, index, eyebrow, title, lines, id, children }: { 
   return (
     <section id={id} className="scanline relative h-screen w-screen shrink-0 overflow-hidden px-20 pb-20 pt-28">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_16%,rgb(var(--accent-info-rgb)_/_0.12),transparent_28rem),radial-gradient(circle_at_10%_90%,rgb(255_255_255_/_0.055),transparent_26rem),linear-gradient(180deg,rgb(255_255_255_/_0.035),transparent_18rem)]" />
-      <div className="relative z-10 mx-auto grid h-[calc(100vh-12rem)] max-w-7xl content-center gap-6">
-        <div className="min-h-[12.5rem] max-w-6xl">
+      <div className="relative z-10 mx-auto grid h-[calc(100vh-9rem)] max-w-7xl grid-rows-[auto_minmax(0,1fr)] content-start gap-5">
+        <div className="max-w-6xl">
           <p className="text-xs font-black uppercase tracking-[0.18em] text-accent-info">{eyebrow}</p>
           {index === 0 ? (
-            <h1 className="mt-3 overflow-hidden text-ellipsis whitespace-nowrap text-[clamp(2.9rem,5vw,4.9rem)] font-black leading-[0.98] text-text-primary">{title}</h1>
+            <h1 className="mt-3 max-w-[72rem] text-[clamp(2.45rem,4.4vw,4.45rem)] font-black leading-[1.02] text-text-primary">{title}</h1>
           ) : (
-            <h2 className="mt-3 overflow-hidden text-ellipsis whitespace-nowrap text-[clamp(2.5rem,4.8vw,4.5rem)] font-black leading-[0.98] text-text-primary">{title}</h2>
+            <h2 className="mt-3 max-w-[72rem] text-[clamp(2.25rem,4vw,4.1rem)] font-black leading-[1.04] text-text-primary">{title}</h2>
           )}
-          <div className="mt-5 grid min-h-[6.9rem] max-w-4xl content-start gap-2.5 overflow-hidden" aria-live="polite">
+          <div className="mt-5 grid min-h-[5.9rem] max-w-5xl content-start gap-2.5 overflow-hidden" aria-live="polite">
             {streamedLines.map((line, lineIndex) => (
               <p key={`${index}-${lineIndex}`} className="glass-strip px-4 py-2.5 text-sm font-bold leading-6 text-text-muted md:text-base">
                 {line}
@@ -319,7 +323,7 @@ function StorySection({ active, index, eyebrow, title, lines, id, children }: { 
             ))}
           </div>
         </div>
-        <div className="grid min-h-0 gap-4">{children}</div>
+        <div className="grid min-h-0 content-start gap-4">{children}</div>
       </div>
     </section>
   );
@@ -362,8 +366,6 @@ function EvidenceDisclosure({ label = "더보기", children }: { label?: string;
     <details className="glass-card group rounded-2xl p-4">
       <summary className="cursor-pointer list-none text-sm font-black text-accent-info transition hover:text-text-primary">
         {label}
-        <span className="ml-2 text-text-faint group-open:hidden">+</span>
-        <span className="ml-2 hidden text-text-faint group-open:inline">-</span>
       </summary>
       <div className="mt-4">{children}</div>
     </details>
@@ -372,7 +374,7 @@ function EvidenceDisclosure({ label = "더보기", children }: { label?: string;
 
 function TextPanel({ title, text }: { title: string; text: string }) {
   return (
-    <article className="rounded-2xl border border-white/10 bg-black/20 p-4">
+    <article className="rounded-2xl border border-border bg-bg-card/55 p-4">
       <h3 className="text-base font-black text-text-primary">{title}</h3>
       <p className="mt-2 text-sm font-bold leading-6 text-text-muted">{text}</p>
     </article>
@@ -381,8 +383,8 @@ function TextPanel({ title, text }: { title: string; text: string }) {
 
 function PartCard({ title, part }: { title: string; part: DetailComment }) {
   return (
-    <article className="rounded-2xl border border-white/10 bg-black/20 p-4">
-      <p className="text-xs font-black uppercase tracking-[0.14em] text-accent-info">{part.metricsText}</p>
+    <article className="rounded-2xl border border-border bg-bg-card/55 p-4">
+      <p className="text-xs font-black uppercase tracking-[0.14em] text-accent-info">{cleanCopy(part.metricsText)}</p>
       <h3 className="mt-2 text-xl font-black text-text-primary">{title}</h3>
       <p className="mt-3 text-sm font-bold leading-6 text-text-muted">{cleanCopy(part.comment)}</p>
     </article>
@@ -409,7 +411,7 @@ function ScoreGrid({ scores, compact = false }: { scores: LibraryAnalysisResult[
             </span>
             <span className="tabular-nums text-accent-info">{Math.round(value)}</span>
           </div>
-          <div className="h-2 overflow-hidden rounded-full bg-white/10">
+          <div className="h-2 overflow-hidden rounded-full bg-bg-raised/70">
             <div className="h-full rounded-full bg-accent-info" style={{ width: `${Math.max(0, Math.min(100, value))}%` }} />
           </div>
           {scores.comments[index] ? <p className="mt-2 text-xs font-bold leading-5 text-text-muted">{cleanCopy(scores.comments[index] ?? "")}</p> : null}
@@ -431,7 +433,7 @@ function ElementChip({ icon, label, value, max }: { icon: string; label: string;
         <span className="text-lg font-black tabular-nums text-accent-info">{value}</span>
       </div>
       <h3 className="mt-3 text-lg font-black text-text-primary">{label}</h3>
-      <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10">
+      <div className="mt-3 h-2 overflow-hidden rounded-full bg-bg-raised/70">
         <div className="h-full rounded-full bg-accent-info" style={{ width: `${width}%` }} />
       </div>
     </article>
@@ -543,8 +545,8 @@ function prefersReducedMotion() {
 function withResultFallback(result: LibraryAnalysisResult): LibraryAnalysisResult {
   const oldResult = result as Partial<LibraryAnalysisResult>;
   const legacyParts = oldResult.parts as (Partial<LibraryAnalysisResult["parts"]> & { skin?: DetailComment }) | undefined;
-  const physiognomySummary = cleanCopy(oldResult.physiognomySummary ?? "얼굴 비율과 인상 신호를 바탕으로 관상 리포트를 구성했습니다.");
-  const sajuSummary = cleanCopy(oldResult.sajuSummary ?? "생년월일 리듬을 현재 컨디션 흐름과 함께 해석했습니다.");
+  const physiognomySummary = cleanCopy(oldResult.physiognomySummary ?? "얼굴 비율과 인상 신호를 바탕으로 관상 리포트를 구성했어요.");
+  const sajuSummary = cleanCopy(oldResult.sajuSummary ?? "생년월일 리듬을 현재 컨디션 흐름과 함께 해석했어요.");
 
   return {
     ...result,
@@ -553,22 +555,22 @@ function withResultFallback(result: LibraryAnalysisResult): LibraryAnalysisResul
       code: oldResult.readingType?.code ?? result.readingType.code,
       displayName: cleanCopy(oldResult.readingType?.displayName ?? "딥다이브 학자형"),
       headline: cleanCopy(oldResult.readingType?.headline ?? "관상 리포트 도착"),
-      description: cleanCopy(oldResult.readingType?.description ?? "깊게 관찰하고 차분하게 파고드는 타입입니다."),
+      description: cleanCopy(oldResult.readingType?.description ?? "깊게 관찰하고 차분하게 파고드는 타입이에요."),
     },
     geometry: oldResult.geometry ?? {
-      symmetry: "좌우 중심축과 눈·입꼬리 기준의 균형을 확인했습니다.",
-      goldenRatio: "얼굴 폭과 높이 비율에서 전체 인상 균형을 읽었습니다.",
-      thirds: "상안·중안·하안의 분포로 사고와 실행 흐름을 나눠봤습니다.",
-      fifths: "오등분 기준으로 눈 사이 간격과 얼굴 폭의 안정감을 비교했습니다.",
-      faceShape: "전체 윤곽은 인상 강도와 부드러움이 같이 보이는 타입입니다.",
+      symmetry: "좌우 중심축과 눈·입꼬리 기준의 균형을 확인했어요.",
+      goldenRatio: "얼굴 폭과 높이 비율에서 전체 인상 균형을 읽었어요.",
+      thirds: "상안·중안·하안의 분포로 사고와 실행 흐름을 나눠봤어요.",
+      fifths: "오등분 기준으로 눈 사이 간격과 얼굴 폭의 안정감을 비교했어요.",
+      faceShape: "전체 윤곽은 인상 강도와 부드러움이 같이 보이는 타입이에요.",
     },
     parts: {
-      forehead: legacyParts?.forehead ?? { metricsText: "이마 면적과 눈썹 라인 기준", comment: "계획을 세우는 힘이 보이고, 머릿속 회의가 길어질 때가 있습니다." },
-      eyes: legacyParts?.eyes ?? { metricsText: "눈매 각도와 좌우 차이 기준", comment: "관찰력이 빠르고 표정 변화가 생각보다 솔직하게 드러나는 편입니다." },
-      nose: legacyParts?.nose ?? { metricsText: "콧대 길이와 폭 기준", comment: "추진력은 있는데 시작 전 계산이 한 번 들어가는 타입입니다." },
-      mouth: legacyParts?.mouth ?? { metricsText: "입술 비율과 입꼬리 기준", comment: "말을 아끼다가 핵심에서 꽤 선명하게 표현하는 흐름입니다." },
-      jaw: legacyParts?.jaw ?? { metricsText: "턱선과 하관 안정감 기준", comment: "버티는 힘은 있지만 피로가 쌓이면 표정 리듬이 바로 달라질 수 있습니다." },
-      impression: legacyParts?.impression ?? legacyParts?.skin ?? { metricsText: "표정 안정감과 전체 인상 기준", comment: "차분한 첫인상 안에 은근한 탐구심이 같이 잡힙니다." },
+      forehead: legacyParts?.forehead ?? { metricsText: "이마 면적과 눈썹 라인 기준", comment: "계획을 세우는 힘이 보이고, 머릿속 회의가 길어질 때가 있어요." },
+      eyes: legacyParts?.eyes ?? { metricsText: "눈매 각도와 좌우 차이 기준", comment: "관찰력이 빠르고 표정 변화가 생각보다 솔직하게 드러나는 편이에요." },
+      nose: legacyParts?.nose ?? { metricsText: "콧대 길이와 폭 기준", comment: "추진력은 있는데 시작 전 계산이 한 번 들어가는 타입이에요." },
+      mouth: legacyParts?.mouth ?? { metricsText: "입술 비율과 입꼬리 기준", comment: "말을 아끼다가 핵심에서 꽤 선명하게 표현하는 흐름이에요." },
+      jaw: legacyParts?.jaw ?? { metricsText: "턱선과 하관 안정감 기준", comment: "버티는 힘은 있지만 피로가 쌓이면 표정 리듬이 바로 달라질 수 있어요." },
+      impression: legacyParts?.impression ?? legacyParts?.skin ?? { metricsText: "표정 안정감과 전체 인상 기준", comment: "차분한 첫인상 안에 은근한 탐구심이 같이 잡혀요." },
     },
     scores: oldResult.scores ?? {
       likability: 78,
@@ -576,7 +578,7 @@ function withResultFallback(result: LibraryAnalysisResult): LibraryAnalysisResul
       symmetry: 74,
       balance: 77,
       attractiveness: 75,
-      comments: ["전반적인 인상 균형은 안정적입니다.", "눈 주변 신호가 리포트의 핵심입니다.", "하관은 버티는 힘 쪽으로 읽힙니다.", "표정 변화가 리듬을 빠르게 드러냅니다.", "관상 키워드는 집중과 재정렬입니다."],
+      comments: ["전반적인 인상 균형은 안정적이에요.", "눈 주변 신호가 리포트의 핵심이에요.", "하관은 버티는 힘 쪽으로 읽혀요.", "표정 변화가 리듬을 빠르게 드러내요.", "관상 키워드는 집중과 재정렬이에요."],
     },
     physiognomy: oldResult.physiognomy ?? {
       keywords: ["집중", "재정렬", "관찰력"],
@@ -587,15 +589,15 @@ function withResultFallback(result: LibraryAnalysisResult): LibraryAnalysisResul
     saju: oldResult.saju ?? {
       keywords: ["리듬", "균형", "회복"],
       elementBalance: sajuSummary,
-      currentFlow: "지금은 속도를 더 내기보다 방향을 다듬는 흐름이 강합니다.",
-      strength: "한 번 꽂히면 오래 파고드는 지속력이 강점입니다.",
-      advice: "루틴을 작게 쪼개면 기운이 더 안정적으로 붙습니다.",
+      currentFlow: "지금은 속도를 더 내기보다 방향을 다듬는 흐름이 강해요.",
+      strength: "한 번 꽂히면 오래 파고드는 지속력이 강점이에요.",
+      advice: "루틴을 작게 쪼개면 기운이 더 안정적으로 붙어요.",
     },
     romanticMatch: oldResult.romanticMatch ?? {
       bestTypes: ["불꽃 실행형", "잔잔한 물결형"],
-      why: "깊게 생각하는 리듬을 상대가 가볍게 환기해줄 때 케미가 좋습니다.",
-      dateStyle: "조용한 전시, 책방, 산책처럼 대화가 천천히 열리는 코스가 잘 맞습니다.",
-      caution: "답장이 늦다고 바로 의미 부여하면 고양이 귀 접힙니다. 천천히 확인하는 쪽이 좋아요.",
+      why: "깊게 생각하는 리듬을 상대가 가볍게 환기해줄 때 케미가 좋아요.",
+      dateStyle: "조용한 전시, 책방, 산책처럼 대화가 천천히 열리는 코스가 잘 맞아요.",
+      caution: "답장이 늦다고 바로 의미 부여하면 고양이 귀 접혀요. 천천히 확인하는 쪽이 좋아요.",
     },
     physiognomySummary,
     sajuSummary,
@@ -605,7 +607,7 @@ function withResultFallback(result: LibraryAnalysisResult): LibraryAnalysisResul
 }
 
 function cleanCopy(input: string) {
-  return stripHanja(input)
+  const cleaned = stripHanja(input)
     .replace(/피부/g, "전체 인상")
     .replace(/처방전?/g, "추천")
     .replace(/학생/g, "님")
@@ -614,16 +616,22 @@ function cleanCopy(input: string) {
     .replace(new RegExp(["연", "애"].join(""), "g"), "관계 궁합")
     .replace(/데이트/g, "함께하는 시간")
     .replace(/해줘/g, "해 주세요")
-    .replace(/했어/g, "했습니다")
-    .replace(/돼요/g, "됩니다")
-    .replace(/됐어요/g, "되었습니다")
-    .replace(/좋아요/g, "좋습니다")
-    .replace(/골랐어요/g, "골랐습니다")
+    .replace(/했어/g, "했어요")
     .replace(/이건/g, "이 책은");
+
+  return softenFormalPolite(cleaned);
 }
 
 function compactCopy(input: string, maxLength: number) {
   const cleaned = cleanCopy(input).replace(/\s+/g, " ").trim();
   if (cleaned.length <= maxLength) return cleaned;
-  return `${cleaned.slice(0, maxLength - 1).trim()}…`;
+  const clipped = cleaned.slice(0, maxLength);
+  const stops = ["입니다.", "합니다.", "해요.", "예요.", "이에요.", "습니다.", ".", "!", "?"];
+  const bestStop = stops.reduce((best, stop) => {
+    const position = clipped.lastIndexOf(stop);
+    return position > best ? position + stop.length : best;
+  }, -1);
+
+  if (bestStop > Math.floor(maxLength * 0.35)) return clipped.slice(0, bestStop).trim();
+  return clipped.replace(/[,\s/·:;]+$/g, "").trim();
 }

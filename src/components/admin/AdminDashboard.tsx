@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import type { InputHTMLAttributes, ReactNode } from "react";
 import { BarChart3, Loader2, LockKeyhole, RefreshCw, ShieldAlert } from "lucide-react";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import type { AdminMetrics } from "@/lib/admin/metrics";
 
 const ADMIN_AUTH_STORAGE_KEY = "ai-library-admin-auth";
@@ -76,7 +77,7 @@ export function AdminDashboard() {
       <main className="grid min-h-screen place-items-center bg-bg-primary px-5 text-text-primary">
         <section className="glass-panel max-w-md rounded-2xl p-6 text-center">
           <ShieldAlert className="mx-auto h-10 w-10 text-accent-info" aria-hidden="true" />
-          <h1 className="mt-4 text-2xl font-black">관리자 인증이 필요합니다</h1>
+          <h1 className="mt-4 text-2xl font-black">관리자 인증이 필요해요</h1>
           <p className="mt-3 text-sm font-bold leading-6 text-text-muted">관리자 계정으로 접속한 뒤 다시 불러와 주세요.</p>
           <button
             type="button"
@@ -111,11 +112,14 @@ function AdminLogin({ onSubmit }: { onSubmit: (token: string) => void }) {
 
   return (
     <main className="grid min-h-screen place-items-center bg-bg-primary px-5 text-text-primary">
+      <div className="fixed right-8 top-6 z-30">
+        <ThemeToggle />
+      </div>
       <form onSubmit={submit} className="glass-panel w-full max-w-md rounded-2xl p-6">
         <LockKeyhole className="h-10 w-10 text-accent-info" aria-hidden="true" />
         <p className="mt-5 text-xs font-black uppercase tracking-[0.18em] text-accent-info">AI 관상가 고양이</p>
         <h1 className="mt-2 text-3xl font-black">관리자 로그인</h1>
-        <p className="mt-3 text-sm font-semibold leading-6 text-text-muted">운영 데이터는 관리자 인증 후 확인할 수 있습니다.</p>
+        <p className="mt-3 text-sm font-semibold leading-6 text-text-muted">운영 데이터는 관리자 인증 후 확인할 수 있어요.</p>
 
         <div className="mt-6 grid gap-4">
           <AdminInput label="아이디" name="adminUser" value={user} autoComplete="username" onChange={(event) => setUser(event.target.value)} />
@@ -146,7 +150,7 @@ function AdminInput(props: InputHTMLAttributes<HTMLInputElement> & { label: stri
       <input
         id={inputId}
         name={name}
-        className={`h-12 rounded-xl border border-border bg-bg-card/70 px-4 text-sm font-bold text-text-primary outline-none transition placeholder:text-text-faint focus:border-accent-info focus:ring-2 focus:ring-accent-info/25 ${className}`.trim()}
+        className={`h-12 rounded-xl border border-border bg-bg-card/80 px-4 text-sm font-bold text-text-primary outline-none transition placeholder:text-text-faint focus:border-accent-info focus:ring-2 focus:ring-accent-info/25 ${className}`.trim()}
         {...inputProps}
       />
     </label>
@@ -163,16 +167,19 @@ export function AdminDashboardContent({ metrics, onRefresh }: { metrics: AdminMe
           <div>
             <p className="text-xs font-black uppercase tracking-[0.18em] text-accent-info">AI 관상가 고양이</p>
             <h1 className="mt-3 text-[clamp(2rem,4vw,4.75rem)] font-black leading-none">관리자 데이터</h1>
-            <p className="mt-4 text-sm font-semibold leading-6 text-text-muted">부스 운영 흐름, 추천 집계, 참여 세션을 한 화면에서 확인합니다.</p>
+            <p className="mt-4 text-sm font-semibold leading-6 text-text-muted">부스 운영 흐름, 추천 집계, 참여 세션을 한 화면에서 확인해요.</p>
           </div>
-          <button
-            type="button"
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-border bg-bg-card/70 px-4 text-sm font-black text-text-primary transition hover:border-border-bright hover:bg-bg-card-hover"
-            onClick={onRefresh}
-          >
-            <RefreshCw className="h-4 w-4" aria-hidden="true" />
-            새로고침
-          </button>
+          <div className="flex flex-wrap items-center gap-2">
+            <ThemeToggle />
+            <button
+              type="button"
+              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-border bg-bg-card/70 px-4 text-sm font-black text-text-primary transition hover:border-border-bright hover:bg-bg-card-hover"
+              onClick={onRefresh}
+            >
+              <RefreshCw className="h-4 w-4" aria-hidden="true" />
+              새로고침
+            </button>
+          </div>
         </header>
 
         <section className="grid gap-4 md:grid-cols-2">
@@ -305,7 +312,7 @@ function DistributionPanel({ title, values }: { title: string; values: Record<st
                 <span className="text-text-muted">{label}</span>
                 <span className="text-accent-info">{count}</span>
               </div>
-              <div className="mt-2 h-2 rounded-full bg-white/10">
+              <div className="mt-2 h-2 rounded-full bg-bg-raised/70">
                 <div className="h-full rounded-full bg-accent-info" style={{ width: `${(count / max) * 100}%` }} />
               </div>
             </div>

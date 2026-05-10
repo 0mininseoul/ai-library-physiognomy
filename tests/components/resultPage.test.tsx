@@ -130,12 +130,12 @@ describe("ResultContent", () => {
     const forbiddenRelationshipWord = ["연", "애"].join("");
     const { container } = render(<ResultContent payload={payload} />);
 
-    expect(screen.getByText(/영민님 집중 모드 켜짐/)).toBeInTheDocument();
-    expect(screen.getByText("지금 영민님에게 필요한 책")).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "함께 있으면 흐름이 좋은 타입" })).toBeInTheDocument();
+    expect(screen.getByText("야옹이가 본 영민님의 얼굴")).toBeInTheDocument();
+    expect(screen.getByText("지금 영민님에게 필요한 책이에요")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "영민님은 이런 사람이랑 잘 맞아요" })).toBeInTheDocument();
     expect(container).not.toHaveTextContent("피부");
     expect(container).not.toHaveTextContent(forbiddenRelationshipWord);
-    expect(screen.getByText("얼굴 이미지는 24시간 이후 삭제되었습니다.")).toBeInTheDocument();
+    expect(screen.getByText("얼굴 이미지는 24시간 이후 삭제되었어요.")).toBeInTheDocument();
   });
 
   it("keeps face images clean without landmark marker dots", () => {
@@ -148,11 +148,11 @@ describe("ResultContent", () => {
   it("shows compact core interpretation while secondary evidence is collapsed by default", () => {
     render(<ResultContent payload={payload} />);
 
-    expect(screen.getByText("얼굴 신호 3개만 딱 집었어요")).toBeInTheDocument();
+    expect(screen.getByText("야옹이가 본 영민님의 얼굴")).toBeInTheDocument();
     expect(screen.getByText("균형 좌표")).toBeInTheDocument();
     expect(screen.getByText("눈 신호")).toBeInTheDocument();
     expect(screen.getByText("하관 리듬")).toBeInTheDocument();
-    expect(screen.getByText("계획 세우는 힘이 보입니다.")).not.toBeVisible();
+    expect(screen.getByText("계획 세우는 힘이 보여요.")).not.toBeVisible();
     expect(screen.getAllByText("더보기").length).toBeGreaterThan(0);
   });
 

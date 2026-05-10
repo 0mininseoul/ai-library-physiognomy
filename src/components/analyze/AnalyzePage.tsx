@@ -6,11 +6,12 @@ import { useRouter } from "next/navigation";
 import { ArrowRight, Camera, CheckCircle2, Loader2, RefreshCcw, ScanFace } from "lucide-react";
 import { BOOK_CATEGORIES } from "@/lib/books/categories";
 import { FaceMeshOverlay } from "@/components/analyze/FaceMeshOverlay";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { applyConnectedBlackKeyToImageData } from "@/lib/chroma/blackKey";
 import { captureVideoFrame } from "@/lib/capture/screenshot";
 import { averageLandmarks, computeFaceMetrics } from "@/lib/facemesh/metricsCalculator";
-import { displayGivenName } from "@/lib/korean/name";
-import { dominantElementText, elementCountItems, koreanDayMaster, stripHanja } from "@/lib/saju/display";
+import { displayGivenName, softenFormalPolite } from "@/lib/korean/name";
+import { dominantElementText, elementCountItems, stripHanja } from "@/lib/saju/display";
 import { useCamera } from "@/hooks/useCamera";
 import { useFaceLandmarker } from "@/hooks/useFaceLandmarker";
 import type { Landmark } from "@/types/face";
@@ -27,9 +28,10 @@ const TARGET_SAMPLE_COUNT = 12;
 const CAPTURE_SETTLE_MS = 650;
 const MIN_ANALYSIS_DURATION_MS = 12_000;
 const CARD_REVEAL_INTERVAL_MS = 1_350;
-const COMPLETED_CARD_STREAM_INTERVAL_MS = 48;
-const COMPLETED_CARD_NEXT_DELAY_MS = 520;
-const CAT_ENTRY_START_DELAY_MS = 1_000;
+const COMPLETED_CARD_STREAM_INTERVAL_MS = 20;
+const COMPLETED_CARD_STREAM_CHARS_PER_TICK = 2;
+const COMPLETED_CARD_NEXT_DELAY_MS = 420;
+const CAT_ENTRY_START_DELAY_MS = 2_000;
 const CAT_ENTRY_FALLBACK_MS = 12_000;
 const CAT_CANVAS_MAX_WIDTH = 960;
 
@@ -106,7 +108,7 @@ export function AnalyzePage() {
         await delay(CAPTURE_SETTLE_MS);
 
         const video = videoRef.current;
-        if (!video || video.readyState < 2) throw new Error("카메라 프레임이 아직 덜 올라왔어. 다시 한 번만 가자.");
+        if (!video || video.readyState < 2) throw new Error("카메라 프레임이 아직 안정화되지 않았어요. 다시 한 번만 진행해 주세요.");
 
         const selectedSamples = samples.length > 0 ? samples : sampleRef.current;
         const landmarks = averageLandmarks(selectedSamples.slice(-TARGET_SAMPLE_COUNT));
@@ -133,7 +135,7 @@ export function AnalyzePage() {
         setFlow("revealing");
       } catch (caught) {
         startedRef.current = false;
-        setAnalysisError(caught instanceof Error ? caught.message : "분석실이 잠시 멈췄습니다. 다시 시도해 주세요.");
+        setAnalysisError(caught instanceof Error ? caught.message : "분석실이 잠시 멈췄어요. 다시 시도해 주세요.");
         setFlow("error");
       }
     },
@@ -227,7 +229,7 @@ export function AnalyzePage() {
   const showFinalCard = flow === "revealing" && completedResult && completedSessionId && completedRevealFinished;
 
   return (
-    <main className="relative h-screen overflow-hidden bg-black text-text-primary">
+    <main data-theme={flow === "entry" ? undefined : "dark"} className="relative h-screen overflow-hidden bg-bg-primary text-text-primary">
       <video
         ref={videoRef}
         className="live-camera-feed pointer-events-none absolute inset-0 h-full w-full scale-x-[-1] object-cover opacity-100"
@@ -238,23 +240,18 @@ export function AnalyzePage() {
         disablePictureInPicture
         controlsList="nodownload nofullscreen noremoteplayback"
       />
-      <div
-        className={
-          flow === "entry"
-            ? "absolute inset-0 bg-[radial-gradient(circle_at_50%_44%,transparent_0,transparent_45%,rgb(0_0_0_/_0.16)_82%,rgb(0_0_0_/_0.38)_100%)]"
-            : "absolute inset-0 bg-[radial-gradient(circle_at_50%_44%,transparent_0,transparent_30%,rgb(0_0_0_/_0.34)_68%,rgb(0_0_0_/_0.78)_100%)]"
-        }
-      />
+      <div className={flow === "entry" ? "camera-entry-vignette absolute inset-0" : "camera-scan-vignette absolute inset-0"} />
       <div className="absolute inset-x-0 top-0 z-20 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
       {flow === "entry" ? <CatGatekeeperOverlay /> : null}
       {flow !== "entry" ? <FaceMeshOverlay result={face.result} /> : null}
 
-      <header className="fixed left-7 top-6 z-30 flex items-center gap-3 rounded-lg border border-border bg-black/[0.45] px-3 py-2.5 text-xs font-bold uppercase tracking-[0.14em] text-text-muted backdrop-blur">
-        <span className="grid h-8 w-8 place-items-center rounded-md border border-white/10 bg-white/[0.08]">
+      <header className="fixed left-7 top-6 z-30 flex items-center gap-3 rounded-lg border border-border bg-bg-card/65 px-3 py-2.5 text-xs font-bold uppercase tracking-[0.14em] text-text-muted shadow-glass backdrop-blur">
+        <span className="grid h-8 w-8 place-items-center rounded-md border border-border bg-bg-card/70">
           <AppIcon className="h-5 w-5" />
         </span>
         <span>AI 관상가 고양이 / Live Face Scan</span>
       </header>
+      {flow === "entry" ? <ThemeToggle className="fixed left-[22rem] top-6 z-30 max-md:left-auto max-md:right-6" /> : null}
 
       {flow === "entry" ? (
         <EntryModal
@@ -267,19 +264,19 @@ export function AnalyzePage() {
         />
       ) : (
         <>
-          {flow === "revealing" ? <TopStatus label="고양이 관상 노트가 열리고 있어요" /> : <AnalysisHud flow={flow} displayName={displayName} progress={progress} statusLabel={statusLabel} />}
+          {flow === "revealing" ? <TopStatus label="야옹이가 관상 좌표를 유심히 보고 있어요" /> : <AnalysisHud flow={flow} displayName={displayName} progress={progress} statusLabel={statusLabel} />}
           <FloatingCards
             progress={progress}
             revealCount={revealCount}
             completedCards={completedCards}
             activeCompletedIndex={completedCards && !completedRevealFinished ? Math.max(0, revealCount - 1) : null}
+            finalCardVisible={Boolean(showFinalCard)}
             onCompletedCardStreamComplete={handleCompletedCardStreamComplete}
           />
 
           {showFinalCard ? (
             <FinalRevealCard
               displayName={displayName}
-              result={completedResult}
               onOpenResult={() => {
                 stopCamera();
                 router.push(`/result/${completedSessionId}`);
@@ -291,7 +288,7 @@ export function AnalyzePage() {
             <div className="fixed inset-0 z-50 grid place-items-center bg-black/[0.78] px-6">
               <div className="glass-panel max-w-lg rounded-2xl p-8 text-center">
                 <Camera className="mx-auto h-10 w-10 text-accent-info" aria-hidden="true" />
-                <h1 className="mt-4 text-2xl font-extrabold text-text-primary">관상 분석실이 잠시 멈췄습니다</h1>
+                <h1 className="mt-4 text-2xl font-extrabold text-text-primary">관상 분석실이 잠시 멈췄어요</h1>
                 <p className="mt-3 text-sm font-semibold leading-6 text-text-muted">{analysisError}</p>
                 <button
                   type="button"
@@ -308,7 +305,7 @@ export function AnalyzePage() {
       )}
 
       {cameraStatus !== "ready" ? (
-        <div className="fixed bottom-8 left-7 z-20 w-[min(390px,calc(100vw-3.5rem))] rounded-xl border border-border bg-black/50 px-4 py-4 text-sm font-semibold text-text-muted shadow-2xl shadow-black/30 backdrop-blur">
+        <div className="fixed bottom-8 left-7 z-20 w-[min(390px,calc(100vw-3.5rem))] rounded-xl border border-border bg-bg-card/75 px-4 py-4 text-sm font-semibold text-text-muted shadow-glass backdrop-blur-xl">
           <div className="flex items-start gap-3">
             {cameraStatus === "requesting" ? (
               <Loader2 className="mt-0.5 h-4 w-4 animate-spin text-accent-info" aria-hidden="true" />
@@ -317,7 +314,7 @@ export function AnalyzePage() {
             )}
             <div>
               <p className="font-black text-text-primary">{cameraStatusCopy(cameraStatus)}</p>
-              <p className="mt-1 text-xs font-medium leading-5 text-text-faint">{cameraError ?? "브라우저 카메라 권한을 허용하면 실시간 화면이 바로 켜집니다."}</p>
+              <p className="mt-1 text-xs font-medium leading-5 text-text-faint">{friendlyCameraError(cameraStatus, cameraError)}</p>
             </div>
           </div>
         </div>
@@ -376,24 +373,24 @@ function EntryModal({
   }
 
   return (
-    <section className="fixed bottom-4 right-5 z-30 max-h-[calc(100vh-2rem)] w-[min(520px,calc(100vw-2.5rem))] overflow-y-auto md:bottom-6 md:right-8">
-      <form onSubmit={submit} className="glass-panel relative rounded-2xl p-6 md:p-7">
-        <div className="mb-5 flex items-center justify-between">
+    <section className="fixed bottom-5 right-6 z-30 max-h-[calc(100vh-2.5rem)] w-[min(452px,calc(100vw-2.5rem))] overflow-y-auto md:right-8">
+      <form onSubmit={submit} className="glass-panel relative rounded-2xl p-4">
+        <div className="mb-3 flex items-center justify-between">
           <div className="flex items-center gap-2 text-sm font-black uppercase tracking-[0.08em] text-text-muted">
             <Camera className="h-4 w-4 text-accent-info" aria-hidden="true" />
             CAMERA INPUT
           </div>
-          <div className="text-xs uppercase tracking-[0.16em] text-text-faint">{cameraStatus}</div>
+          <div className="text-xs uppercase tracking-[0.16em] text-text-faint">{cameraBadgeCopy(cameraStatus)}</div>
         </div>
 
-        <div className="mb-7 rounded-xl border border-border bg-black/[0.35] px-4 py-3">
+        <div className="mb-4 rounded-xl bg-bg-card/60 px-4 py-3 shadow-[inset_0_1px_0_rgb(255_255_255_/_0.10)]">
           <p className="text-sm font-bold leading-6 text-text-muted">
-            <span className="block">정보를 채운 뒤 정면 얼굴이 잡히면 자동 분석됩니다.</span>
-            <span className="block">얼굴 이미지는 결과 화면에서 24시간까지만 표시됩니다.</span>
+            <span className="block">정보를 채운 뒤 정면 얼굴이 잡히면 자동 분석돼요.</span>
+            <span className="block">얼굴 이미지는 결과 화면에서 24시간까지만 표시돼요.</span>
           </p>
         </div>
 
-        <div className="mb-7 flex items-start justify-between gap-4">
+        <div className="mb-4 flex items-start justify-between gap-4">
           <div>
             <p className="text-sm font-black text-accent-info">AI 관상가 고양이</p>
             <h1 className="mt-1.5 text-2xl font-black leading-tight text-text-primary md:text-3xl">
@@ -402,11 +399,11 @@ function EntryModal({
           </div>
         </div>
 
-        <div className="grid gap-5">
+        <div className="grid gap-3">
           <DarkInput label="이름" name="name" value={name} placeholder="박영민" autoComplete="name" onChange={(event) => setName(event.target.value)} />
           <DarkInput label="학번(또는 사번)" name="studentId" value={studentId} placeholder="20260000" inputMode="numeric" autoComplete="off" onChange={(event) => setStudentId(event.target.value)} />
 
-          <fieldset className="grid gap-2.5">
+          <fieldset className="grid gap-2">
             <legend className="text-sm font-black text-text-primary">성별</legend>
             <div className="grid grid-cols-2 gap-3">
               {[
@@ -417,10 +414,10 @@ function EntryModal({
                   key={option.value}
                   type="button"
                   className={[
-                    "min-h-12 rounded-xl border px-4 text-sm font-black transition",
+                    "min-h-12 rounded-lg border px-4 text-sm font-black transition",
                     gender === option.value
-                      ? "border-accent-info bg-accent-info/[0.12] text-text-primary shadow-[0_0_0_1px_rgb(141_222_215_/_0.20)]"
-                      : "border-border bg-bg-card/70 text-text-muted hover:border-border-bright hover:bg-bg-card-hover",
+                      ? "border-accent-info/70 bg-accent-info/[0.14] text-text-primary shadow-[0_0_0_1px_rgb(141_222_215_/_0.16)]"
+                      : "border-transparent bg-bg-card/70 text-text-muted shadow-[inset_0_1px_0_rgb(255_255_255_/_0.07)] hover:bg-bg-card-hover",
                   ].join(" ")}
                   onClick={() => setGender(option.value)}
                 >
@@ -439,13 +436,13 @@ function EntryModal({
             onDayChange={setBirthDay}
           />
 
-          <label className="grid gap-2.5 text-sm font-black text-text-primary" htmlFor="favoriteCategory">
+          <label className="grid gap-2 text-sm font-black text-text-primary" htmlFor="favoriteCategory">
             <span>선호하는 책 카테고리</span>
             <select
               id="favoriteCategory"
               name="favoriteCategory"
               value={favoriteCategory}
-              className="h-12 rounded-xl border border-border bg-bg-card/70 px-4 text-sm font-black text-text-primary outline-none transition focus:border-accent-info focus:ring-2 focus:ring-accent-info/25"
+              className="h-12 rounded-lg border border-transparent bg-bg-card/70 px-4 text-sm font-black text-text-primary shadow-[inset_0_1px_0_rgb(255_255_255_/_0.07)] outline-none transition focus:border-accent-info/60 focus:ring-2 focus:ring-accent-info/25"
               onChange={(event) => setFavoriteCategory(event.target.value)}
             >
               {BOOK_CATEGORIES.map((category) => (
@@ -456,11 +453,11 @@ function EntryModal({
             </select>
           </label>
 
-          <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-border bg-bg-card/70 p-4 text-sm text-text-muted transition hover:border-border-bright">
+          <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-transparent bg-bg-card/70 p-4 text-sm text-text-muted shadow-[inset_0_1px_0_rgb(255_255_255_/_0.07)] transition hover:bg-bg-card-hover">
             <input className="mt-1 h-4 w-4 accent-[var(--accent-info)]" type="checkbox" checked={consentAccepted} onChange={(event) => setConsentAccepted(event.target.checked)} />
             <span className="font-medium leading-6">
               개인정보처리방침 및 이용약관 동의
-              <span className="mt-1 block text-xs text-text-faint">얼굴 이미지는 24시간 이후 삭제됩니다.</span>
+              <span className="mt-1 block text-xs text-text-faint">얼굴 이미지는 24시간 이후 삭제돼요.</span>
             </span>
           </label>
         </div>
@@ -473,7 +470,7 @@ function EntryModal({
 
         <button
           type="submit"
-          className="mt-5 inline-flex min-h-[3.25rem] w-full items-center justify-center gap-2 rounded-xl border border-accent-info/40 bg-accent-info/[0.18] px-5 py-4 text-sm font-black text-text-primary shadow-glass transition hover:bg-accent-info/25 disabled:cursor-not-allowed disabled:opacity-[0.45]"
+          className="mt-5 inline-flex min-h-[3.1rem] w-full items-center justify-center gap-2 rounded-xl border border-accent-info/30 bg-accent-info/[0.18] px-5 py-3.5 text-sm font-black text-text-primary shadow-glass transition hover:bg-accent-info/25 disabled:cursor-not-allowed disabled:opacity-[0.45]"
           disabled={cameraStatus === "requesting"}
         >
           <ScanFace className="h-5 w-5" aria-hidden="true" />
@@ -482,7 +479,7 @@ function EntryModal({
 
         {cameraStatus === "denied" || cameraStatus === "error" ? (
           <button type="button" className="mt-3 w-full text-sm font-bold text-accent-info underline underline-offset-4" onClick={onRetryCamera}>
-            {cameraError ?? "카메라 권한 다시 요청"}
+            카메라 권한 다시 요청
           </button>
         ) : null}
       </form>
@@ -541,7 +538,7 @@ function BirthDateSelects({
   }, [day, days, onDayChange]);
 
   return (
-    <fieldset className="grid gap-2.5">
+    <fieldset className="grid gap-2">
       <legend className="text-sm font-black text-text-primary">생년월일</legend>
       <div className="grid grid-cols-[1.15fr_0.85fr_0.85fr] gap-2">
         <DateSelect label="년도" value={year} values={years} suffix="년" onChange={onYearChange} />
@@ -570,7 +567,7 @@ function DateSelect({
       <select
         aria-label={label}
         value={value}
-        className="h-12 rounded-xl border border-border bg-bg-card/70 px-4 text-sm font-black text-text-primary outline-none transition focus:border-accent-info focus:ring-2 focus:ring-accent-info/25"
+        className="h-12 rounded-lg border border-transparent bg-bg-card/70 px-4 text-sm font-black text-text-primary shadow-[inset_0_1px_0_rgb(255_255_255_/_0.07)] outline-none transition focus:border-accent-info/60 focus:ring-2 focus:ring-accent-info/25"
         onChange={(event) => onChange(event.target.value)}
       >
         {values.map((nextValue) => (
@@ -746,12 +743,12 @@ function DarkInput(props: InputHTMLAttributes<HTMLInputElement> & { label: strin
   const inputId = id ?? name;
 
   return (
-    <label className="grid gap-2.5 text-sm font-black text-text-primary" htmlFor={inputId}>
+    <label className="grid gap-2 text-sm font-black text-text-primary" htmlFor={inputId}>
       <span>{label}</span>
       <input
         id={inputId}
         name={name}
-        className={`h-12 rounded-xl border border-border bg-bg-card/70 px-4 text-sm font-black text-text-primary outline-none transition placeholder:text-text-faint focus:border-accent-info focus:ring-2 focus:ring-accent-info/25 ${className}`.trim()}
+        className={`h-12 rounded-lg border border-transparent bg-bg-card/70 px-4 text-sm font-black text-text-primary shadow-[inset_0_1px_0_rgb(255_255_255_/_0.07)] outline-none transition placeholder:text-text-faint focus:border-accent-info/60 focus:ring-2 focus:ring-accent-info/25 ${className}`.trim()}
         {...inputProps}
       />
     </label>
@@ -807,12 +804,14 @@ function FloatingCards({
   revealCount,
   completedCards,
   activeCompletedIndex,
+  finalCardVisible,
   onCompletedCardStreamComplete,
 }: {
   progress: number;
   revealCount: number;
   completedCards: CompletedAnalysisCard[] | null;
   activeCompletedIndex: number | null;
+  finalCardVisible: boolean;
   onCompletedCardStreamComplete: (index: number) => void;
 }) {
   const sourceCards = completedCards ?? ANALYSIS_CARDS;
@@ -824,15 +823,30 @@ function FloatingCards({
   }));
   const leftCards = visibleCards.filter((card) => card.index % 2 === 0);
   const rightCards = visibleCards.filter((card) => card.index % 2 === 1);
-  const railClassName = [
-    "fixed top-[104px] z-20 grid w-[min(500px,34vw)] content-start gap-3 overflow-y-auto pr-1",
-    isCompletedView ? "bottom-6" : "bottom-40",
+  const rightRailRef = useRef<HTMLDivElement>(null);
+  const railBaseClassName = "fixed z-20 grid w-[min(500px,34vw)] content-start gap-3 overflow-y-auto pr-1";
+  const leftRailClassName = [
+    railBaseClassName,
+    "left-6",
+    isCompletedView ? "top-[96px] bottom-6" : "top-[104px] bottom-40",
   ].join(" ");
+  const rightRailClassName = [
+    railBaseClassName,
+    "right-6",
+    isCompletedView && finalCardVisible ? "top-[78px] bottom-[15rem]" : isCompletedView ? "top-[96px] bottom-6" : "top-[104px] bottom-40",
+  ].join(" ");
+
+  useEffect(() => {
+    if (!isCompletedView || !finalCardVisible) return;
+    const rail = rightRailRef.current;
+    if (!rail) return;
+    rail.scrollTo({ top: rail.scrollHeight, behavior: "smooth" });
+  }, [finalCardVisible, isCompletedView, visibleCards.length]);
 
   return (
     <>
       <AnalysisCardConnectors visibleIndexes={visibleCards.map((card) => card.index)} />
-      <div className={`${railClassName} left-6`}>
+      <div className={leftRailClassName}>
         {leftCards.map((card) => (
           <AnalysisStepCard
             key={card.title}
@@ -847,7 +861,7 @@ function FloatingCards({
           />
         ))}
       </div>
-      <div className={`${railClassName} right-6`}>
+      <div ref={rightRailRef} className={rightRailClassName}>
         {rightCards.map((card) => (
           <AnalysisStepCard
             key={card.title}
@@ -934,7 +948,7 @@ function AnalysisStepCard({
   }, [bodyStreamComplete, completedView, index, isActiveCompleted, onCompletedStreamComplete]);
 
   return (
-    <article className="glass-panel rounded-xl p-4 transition">
+    <article className={["glass-panel rounded-xl p-4 transition", completedView ? "min-h-[132px]" : ""].join(" ")}>
       <div className="mb-2 flex items-center justify-between gap-4">
         <h2 className="text-xs font-black uppercase tracking-[0.16em] text-text-primary">{title}</h2>
         {complete ? <CheckCircle2 className="h-4 w-4 text-accent-info" aria-hidden="true" /> : <Loader2 className="h-4 w-4 animate-spin text-accent-info" aria-hidden="true" />}
@@ -953,14 +967,14 @@ function AnalysisStepCard({
                   <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
                     <div className="h-full rounded-full bg-accent-info transition-[width] duration-700 ease-out" style={{ width: `${clampInt(score.value, 0, 100)}%` }} />
                   </div>
-                  {score.comment ? <p className="mt-1.5 text-xs font-bold leading-5 text-text-primary">{cleanAnalysisCopy(score.comment, 58)}</p> : null}
+                  {score.comment ? <p className="mt-1.5 text-xs font-bold leading-5 text-text-primary">{cleanAnalysisCopy(score.comment, 44)}</p> : null}
                 </div>
               ))}
             </div>
           ) : null}
         </div>
       ) : (
-        <p className="text-sm font-black leading-6 text-text-primary">{displayBody}</p>
+        <p className={["text-sm font-black leading-6 text-text-primary", completedView ? "min-h-[72px]" : ""].join(" ")}>{displayBody}</p>
       )}
       {!scores && !completedView ? (
         <div className="mt-3 flex items-center gap-3">
@@ -986,7 +1000,7 @@ function useStreamingText(text: string, enabled: boolean, intervalMs: number) {
     setVisibleLength(0);
     const interval = window.setInterval(() => {
       setVisibleLength((length) => {
-        const nextLength = Math.min(text.length, length + 1);
+        const nextLength = Math.min(text.length, length + COMPLETED_CARD_STREAM_CHARS_PER_TICK);
         if (nextLength >= text.length) window.clearInterval(interval);
         return nextLength;
       });
@@ -998,14 +1012,12 @@ function useStreamingText(text: string, enabled: boolean, intervalMs: number) {
   return { text: text.slice(0, visibleLength), isComplete: visibleLength >= text.length };
 }
 
-function FinalRevealCard({ displayName, result, onOpenResult }: { displayName: string; result: LibraryAnalysisResult; onOpenResult: () => void }) {
+function FinalRevealCard({ displayName, onOpenResult }: { displayName: string; onOpenResult: () => void }) {
   const name = `${displayName || "회원"}님`;
-  const calculation = result.saju.calculation;
-  const sajuLine = calculation ? `${koreanDayMaster(calculation)}, 우세 기운은 ${dominantElementText(calculation)}로 확인했어요.` : result.saju.currentFlow;
   const body = [
-    `${name}의 얼굴 비율, 이목구비 신호, 대칭성, 관상 리듬을 한 번에 정리했어요.`,
-    sajuLine,
-    `야옹이 눈에는 ${cleanAnalysisCopy(result.readingType.displayName, 32)} 신호가 가장 선명해요. 이제 최종 결과로 넘어갈 차례입니다.`,
+    `${name}은 겉으로는 차분해 보여도, 머릿속에서는 다음 수를 계속 맞춰보는 사람이에요.`,
+    "괜히 빠르게 튀기보다 납득되는 방향을 찾고, 한번 정하면 조용히 오래 밀고 가는 쪽이에요.",
+    "야옹이 판정은 이거예요. 말보다 결과로 증명하는 타입이에요.",
   ].join("\n");
   const { text: streamedBody, isComplete } = useStreamingText(body, true, COMPLETED_CARD_STREAM_INTERVAL_MS);
 
@@ -1013,7 +1025,7 @@ function FinalRevealCard({ displayName, result, onOpenResult }: { displayName: s
     <section className="fixed bottom-8 left-1/2 z-30 w-[min(980px,72vw)] -translate-x-1/2">
       <article className="glass-panel rounded-2xl border-accent-info/[0.35] p-5 shadow-2xl shadow-black/40">
         <p className="text-xs font-black uppercase tracking-[0.16em] text-accent-info">§11 FINAL ASSESSMENT</p>
-        <h2 className="mt-2 truncate text-2xl font-black text-text-primary">{cleanAnalysisCopy(result.mainCopy, 42)}</h2>
+        <h2 className="mt-2 text-2xl font-black text-text-primary">{`${name}은 조용히 강한 실행형이에요`}</h2>
         <p className="mt-3 whitespace-pre-line text-sm font-semibold leading-6 text-text-primary">{streamedBody}</p>
         {isComplete ? (
           <button
@@ -1036,17 +1048,17 @@ function buildCompletedAnalysisCards(result: LibraryAnalysisResult): CompletedAn
     .filter((item) => item.count > 0)
     .map((item) => `${item.icon} ${item.label} ${item.count}`)
     .join(" · ");
-  const sajuIntro = calculation ? `우세 기운은 ${dominantElementText(calculation)} 쪽이에요. ${elementSummary}` : cleanAnalysisCopy(result.saju.currentFlow, 70);
+  const sajuIntro = calculation ? `우세 기운은 ${dominantElementText(calculation)} 쪽이에요. ${elementSummary}` : cleanAnalysisCopy(result.saju.currentFlow, 66);
   const matchTypes = result.romanticMatch.bestTypes.slice(0, 3).join(", ");
 
   return [
-    { title: "§1 FACE GEOMETRY", body: cleanAnalysisCopy(`${result.geometry.symmetry} ${result.geometry.faceShape}`, 96) },
-    { title: "§2 SYMMETRY MAP", body: cleanAnalysisCopy(`${result.geometry.goldenRatio} ${result.geometry.thirds}`, 96) },
-    { title: "§3 EYES SIGNAL", body: cleanAnalysisCopy(`${result.parts.eyes.metricsText} ${result.parts.eyes.comment}`, 92) },
-    { title: "§4 NOSE FLOW", body: cleanAnalysisCopy(`${result.parts.nose.metricsText} ${result.parts.nose.comment}`, 92) },
-    { title: "§5 MOUTH TONE", body: cleanAnalysisCopy(`${result.parts.mouth.metricsText} ${result.parts.mouth.comment}`, 92) },
-    { title: "§6 JAW BALANCE", body: cleanAnalysisCopy(`${result.parts.jaw.metricsText} ${result.parts.jaw.comment}`, 92) },
-    { title: "§7 IMPRESSION SIGNAL", body: cleanAnalysisCopy(`${result.parts.impression.metricsText} ${result.parts.impression.comment}`, 92) },
+    { title: "§1 FACE GEOMETRY", body: cleanAnalysisCopy(`${result.geometry.symmetry} ${result.geometry.faceShape}`, 82) },
+    { title: "§2 SYMMETRY MAP", body: cleanAnalysisCopy(`${result.geometry.goldenRatio} ${result.geometry.thirds}`, 82) },
+    { title: "§3 EYES SIGNAL", body: cleanAnalysisCopy(`${result.parts.eyes.metricsText} ${result.parts.eyes.comment}`, 78) },
+    { title: "§4 NOSE FLOW", body: cleanAnalysisCopy(`${result.parts.nose.metricsText} ${result.parts.nose.comment}`, 78) },
+    { title: "§5 MOUTH TONE", body: cleanAnalysisCopy(`${result.parts.mouth.metricsText} ${result.parts.mouth.comment}`, 78) },
+    { title: "§6 JAW BALANCE", body: cleanAnalysisCopy(`${result.parts.jaw.metricsText} ${result.parts.jaw.comment}`, 78) },
+    { title: "§7 IMPRESSION SIGNAL", body: cleanAnalysisCopy(`${result.parts.impression.metricsText} ${result.parts.impression.comment}`, 78) },
     {
       title: "§8 AESTHETIC INDEX",
       body: "호감도와 신뢰감 신호를 고양이식 점수판으로 정리했어요.",
@@ -1056,8 +1068,8 @@ function buildCompletedAnalysisCards(result: LibraryAnalysisResult): CompletedAn
         { label: "균형감", value: result.scores.balance, comment: result.scores.comments[3] },
       ],
     },
-    { title: "§9 SAJU RHYTHM", body: cleanAnalysisCopy(`${sajuIntro} ${result.saju.strength}`, 104) },
-    { title: "§10 CHEMI MATCH", body: cleanAnalysisCopy(`${matchTypes} 타입과 케미가 잘 맞습니다. ${result.romanticMatch.why}`, 104) },
+    { title: "§9 SAJU RHYTHM", body: cleanAnalysisCopy(`${sajuIntro} ${result.saju.strength}`, 86) },
+    { title: "§10 CHEMI MATCH", body: cleanAnalysisCopy(`${matchTypes} 타입과 흐름이 잘 맞아요. ${result.romanticMatch.why}`, 86) },
   ];
 }
 
@@ -1070,11 +1082,23 @@ function cleanAnalysisCopy(input: string, maxLength: number) {
     .replace(/데이트/g, "함께하는 시간")
     .replace(/근거 더 보기/g, "더보기")
     .replace(/근거/g, "설명")
+    .replace(/해줘/g, "해 주세요")
+    .replace(/했어/g, "했어요")
+    .replace(/…|\.\.\./g, "")
     .replace(/\s+/g, " ")
     .trim();
+  const softened = softenFormalPolite(normalized);
 
-  if (normalized.length <= maxLength) return normalized;
-  return `${normalized.slice(0, maxLength - 1).trim()}…`;
+  if (softened.length <= maxLength) return softened;
+  const clipped = softened.slice(0, maxLength);
+  const sentenceStops = ["입니다.", "합니다.", "해요.", "예요.", "이에요.", "줘요.", "네요.", "어요.", "아요.", ".", "!", "?"];
+  const bestStop = sentenceStops.reduce((best, stop) => {
+    const position = clipped.lastIndexOf(stop);
+    return position > best ? position + stop.length : best;
+  }, -1);
+
+  if (bestStop > Math.floor(maxLength * 0.55)) return clipped.slice(0, bestStop).trim();
+  return clipped.replace(/[,\s/·:;]+$/g, "").trim();
 }
 
 function stepProgress(overallProgress: number, index: number) {
@@ -1118,16 +1142,30 @@ function getStatusLabel({
 
 function cameraStatusCopy(status: ReturnType<typeof useCamera>["status"]) {
   if (status === "requesting") return "카메라 여는 중";
-  if (status === "denied") return "카메라 권한이 막혀 있습니다";
-  if (status === "error") return "카메라가 잠시 멈췄습니다";
+  if (status === "denied") return "카메라 권한이 막혀 있어요";
+  if (status === "error") return "카메라가 잠시 멈췄어요";
   return "카메라 준비 중";
 }
 
+function cameraBadgeCopy(status: ReturnType<typeof useCamera>["status"]) {
+  if (status === "requesting") return "요청 중";
+  if (status === "ready") return "준비됨";
+  if (status === "denied") return "권한 필요";
+  if (status === "error") return "오류";
+  return "대기";
+}
+
+function friendlyCameraError(status: ReturnType<typeof useCamera>["status"], error: string | null) {
+  if (status === "denied") return "브라우저 주소창에서 카메라 권한을 허용하면 실시간 화면이 켜져요.";
+  if (status === "error") return error?.includes("NotFound") ? "연결된 카메라를 찾지 못했어요." : "카메라가 잠시 멈췄어요. 권한과 연결 상태를 확인해 주세요.";
+  return "브라우저 카메라 권한을 허용하면 실시간 화면이 바로 켜져요.";
+}
+
 function apiErrorCopy(code: string | undefined) {
-  if (code === "not_enough_books") return "분석 후보 데이터가 부족합니다. 관리자 데이터를 먼저 확인해 주세요.";
-  if (code === "invalid_request") return "입력값이 빠졌습니다. 처음부터 한 번만 다시 진행해 주세요.";
-  if (code === "session_create_failed") return "세션 저장이 실패했습니다. 잠시 뒤 다시 시도해 주세요.";
-  return "분석실이 잠시 멈췄습니다. 다시 시도해 주세요.";
+  if (code === "not_enough_books") return "분석 후보 데이터가 부족해요. 관리자 데이터를 먼저 확인해 주세요.";
+  if (code === "invalid_request") return "입력값이 빠졌어요. 처음부터 한 번만 다시 진행해 주세요.";
+  if (code === "session_create_failed") return "세션 저장이 실패했어요. 잠시 뒤 다시 시도해 주세요.";
+  return "분석실이 잠시 멈췄어요. 다시 시도해 주세요.";
 }
 
 function delay(ms: number) {

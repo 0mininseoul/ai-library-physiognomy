@@ -74,7 +74,7 @@ export function useCamera(options?: { persistGlobal?: boolean }) {
         }
       }
       if (startIdRef.current !== startId) return;
-      const message = err instanceof Error ? err.message : "카메라를 열 수 없습니다";
+      const message = err instanceof Error ? err.message : "카메라를 열 수 없어요";
       setError(message);
       setStatus(message.toLowerCase().includes("permission") ? "denied" : "error");
     }

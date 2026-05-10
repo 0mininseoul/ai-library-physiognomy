@@ -78,4 +78,70 @@ describe("normalizeLibraryAnalysis", () => {
       }),
     ).toThrow();
   });
+
+  it("removes banned user-facing terms while normalizing Gemini output", () => {
+    const result = normalizeLibraryAnalysis({
+      reading_type: {
+        code: "focus_reboot",
+        display_name: "집중 처방형",
+        headline: "영민 학생에게 필요한 처방",
+        description: "피부 근거가 아니라 얼굴 균형 설명입니다.",
+      },
+      main_copy: "영민 학생 연애 처방",
+      geometry: {
+        symmetry: "대칭 근거",
+        golden_ratio: "비율 근거",
+        thirds: "상중하안 근거",
+        fifths: "오등분 근거",
+        face_shape: "얼굴형 근거",
+      },
+      parts: {
+        forehead: { metrics_text: "피부 근거", comment: "영민 학생에게 해줘" },
+        eyes: { metrics_text: "눈 근거", comment: "연애 데이트 흐름" },
+        nose: { metrics_text: "코 근거", comment: "처방전이 필요해요" },
+        mouth: { metrics_text: "입 근거", comment: "좋아요" },
+        jaw: { metrics_text: "턱 근거", comment: "골랐어요" },
+        impression: { metrics_text: "피부 근거", comment: "이건 근거입니다." },
+      },
+      scores: {
+        likability: 82,
+        trust: 79,
+        symmetry: 77,
+        balance: 81,
+        attractiveness: 80,
+        comments: ["피부", "처방", "학생", "연애", "근거"],
+      },
+      physiognomy: {
+        keywords: ["피부", "처방", "연애"],
+        summary: "피부 근거입니다.",
+        strengths: ["처방이 좋아요", "학생에게 맞아요"],
+        cautions: ["연애 근거", "데이트 근거"],
+      },
+      saju: {
+        keywords: ["루틴", "실행", "회복"],
+        element_balance: "근거",
+        current_flow: "처방",
+        strength: "학생",
+        advice: "연애",
+      },
+      romantic_match: {
+        best_types: ["연애형", "데이트형"],
+        why: "연애 근거",
+        date_style: "데이트",
+        caution: "학생",
+      },
+      reading_needs: ["피부", "처방", "연애"],
+      recommendations: [
+        { book_id: "1", reason: "피부 근거", action_copy: "처방" },
+        { book_id: "2", reason: "학생 연애", action_copy: "데이트" },
+        { book_id: "3", reason: "근거", action_copy: "좋아요" },
+      ],
+    });
+
+    const serialized = JSON.stringify(result);
+    expect(serialized).not.toMatch(/피부|처방|학생|연애|데이트|근거/);
+    expect(result.parts.forehead.metricsText).toContain("전체 인상");
+    expect(result.romanticMatch.why).toContain("관계 궁합");
+    expect(result.recommendations[2].actionCopy).toBe("좋아요");
+  });
 });

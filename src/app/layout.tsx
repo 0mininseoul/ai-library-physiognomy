@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
+import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -9,9 +10,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko">
+    <html lang="ko" suppressHydrationWarning>
       <body>
-        {children}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(() => { try { const stored = localStorage.getItem("ai-library-theme"); const theme = stored === "dark" ? "dark" : "light"; document.documentElement.dataset.theme = theme; document.documentElement.style.colorScheme = theme; } catch (_) { document.documentElement.dataset.theme = "light"; document.documentElement.style.colorScheme = "light"; } })();`,
+          }}
+        />
+        <ThemeProvider>{children}</ThemeProvider>
         <Analytics />
       </body>
     </html>

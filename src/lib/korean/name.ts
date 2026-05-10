@@ -51,3 +51,26 @@ export function honorific(name: string): string {
   const trimmed = name.trim();
   return trimmed ? `${trimmed}님` : "회원님";
 }
+
+export function softenFormalPolite(input: string): string {
+  return input
+    .replace(/아닙니다/g, "아니에요")
+    .replace(/했습니다/g, "했어요")
+    .replace(/있습니다/g, "있어요")
+    .replace(/없습니다/g, "없어요")
+    .replace(/좋습니다/g, "좋아요")
+    .replace(/맞습니다/g, "맞아요")
+    .replace(/보입니다/g, "보여요")
+    .replace(/읽힙니다/g, "읽혀요")
+    .replace(/드러납니다/g, "드러나요")
+    .replace(/붙습니다/g, "붙어요")
+    .replace(/합니다/g, "해요")
+    .replace(/됩니다/g, "돼요")
+    .replace(/되었습니다/g, "되었어요")
+    .replace(/습니다/g, "어요")
+    .replace(/([가-힣A-Za-z0-9)%]+)입니다/g, (match, word: string) => {
+      const last = [...word].at(-1) ?? "";
+      if (/^[가-힣]$/.test(last)) return `${word}${hasFinalConsonant(word) ? "이에요" : "예요"}`;
+      return `${word}예요`;
+    });
+}

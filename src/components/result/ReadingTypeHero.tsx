@@ -22,7 +22,7 @@ export function ReadingTypeHero({ result, displayName }: ReadingTypeHeroProps) {
             {headline}
           </h1>
           <p className="mt-4 max-w-3xl text-sm font-semibold leading-6 text-text-muted md:text-base">
-            {name}의 얼굴 비율, 이목구비 신호, 사주 리듬을 엮어 만든 관상 리포트입니다.
+            {name}의 얼굴 비율, 이목구비 신호, 사주 리듬을 엮어 만든 관상 리포트예요.
           </p>
           <div className="mt-4 flex flex-wrap gap-2">
             {(result.physiognomy?.keywords ?? [result.readingType.displayName]).slice(0, 5).map((keyword) => (

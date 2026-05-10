@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { softenFormalPolite } from "@/lib/korean/name";
 import { isReadingTypeCode } from "@/lib/reading-types/types";
 import { stripHanja } from "@/lib/saju/display";
 
@@ -143,5 +144,17 @@ function toDetailComment(input: z.infer<typeof detailCommentSchema>) {
 }
 
 function clean(input: string) {
-  return stripHanja(input);
+  const sanitized = stripHanja(input)
+    .replace(/피부/g, "전체 인상")
+    .replace(/처방전?/g, "추천")
+    .replace(/학생/g, "님")
+    .replace(/연애/g, "관계 궁합")
+    .replace(/데이트/g, "함께하는 시간")
+    .replace(/근거 더 보기/g, "더보기")
+    .replace(/근거/g, "설명")
+    .replace(/해줘/g, "해 주세요")
+    .replace(/했어/g, "했어요")
+    .replace(/이건/g, "이 책은");
+
+  return softenFormalPolite(sanitized).trim();
 }
