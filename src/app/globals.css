@@ -477,25 +477,19 @@ select {
   height: 100%;
   width: 100%;
   opacity: 0.001;
+  z-index: 0;
   pointer-events: none;
   object-fit: contain;
-}
-
-.cat-gatekeeper-direct-video {
-  opacity: 0.98;
-  mix-blend-mode: screen;
-  filter: contrast(1.04) saturate(1.08) brightness(1.02);
+  transform: translateZ(0);
 }
 
 .cat-gatekeeper-canvas {
+  position: relative;
+  z-index: 1;
   display: block;
   width: 100%;
   aspect-ratio: 16 / 9;
   filter: contrast(1.04) saturate(1.05) brightness(1);
-}
-
-.cat-gatekeeper-canvas--hidden {
-  opacity: 0;
 }
 
 .result-card-reveal {

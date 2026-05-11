@@ -604,8 +604,6 @@ function ChromaKeyCatSequence({ className, onPhaseChange }: { className: string;
   const entryVideoRef = useRef<HTMLVideoElement>(null);
   const restingVideoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [useDirectPlayback, setUseDirectPlayback] = useState(false);
-  const [directPhase, setDirectPhase] = useState<"entering" | "resting">("entering");
 
   useEffect(() => {
     const entryVideo = entryVideoRef.current;
@@ -614,10 +612,9 @@ function ChromaKeyCatSequence({ className, onPhaseChange }: { className: string;
     const context = canvas?.getContext("2d", { willReadFrequently: true });
     if (!entryVideo || !restingVideo || !canvas || !context) return;
 
-    const directPlayback = isDesktopSafari();
-    setUseDirectPlayback(directPlayback);
-    const entrySource = selectCatVideoSource("entering", directPlayback);
-    const restingSource = selectCatVideoSource("resting", directPlayback);
+    const preferSafariSource = isDesktopSafari();
+    const entrySource = selectCatVideoSource("entering", preferSafariSource);
+    const restingSource = selectCatVideoSource("resting", preferSafariSource);
     if (entryVideo.getAttribute("src") !== entrySource) entryVideo.src = entrySource;
     if (restingVideo.getAttribute("src") !== restingSource) restingVideo.src = restingSource;
 
@@ -645,7 +642,6 @@ function ChromaKeyCatSequence({ className, onPhaseChange }: { className: string;
     function switchToResting() {
       if (phase === "resting" || stopped) return;
       phase = "resting";
-      setDirectPhase("resting");
       activeVideo = restingVideo!;
       onPhaseChange("resting");
       restingVideo!.currentTime = 0;
@@ -680,7 +676,6 @@ function ChromaKeyCatSequence({ className, onPhaseChange }: { className: string;
 
     const start = () => {
       onPhaseChange("entering");
-      setDirectPhase("entering");
       entryVideo.currentTime = 0;
       restingVideo.currentTime = 0;
       void restingVideo.play().then(() => restingVideo.pause()).catch(() => undefined);
@@ -725,7 +720,7 @@ function ChromaKeyCatSequence({ className, onPhaseChange }: { className: string;
     <>
       <video
         ref={entryVideoRef}
-        className={["cat-gatekeeper-source-video", useDirectPlayback && directPhase === "entering" ? "cat-gatekeeper-direct-video" : ""].join(" ")}
+        className="cat-gatekeeper-source-video"
         src={CAT_VIDEO_SOURCES.entering.webm}
         muted
         playsInline
@@ -738,7 +733,7 @@ function ChromaKeyCatSequence({ className, onPhaseChange }: { className: string;
       />
       <video
         ref={restingVideoRef}
-        className={["cat-gatekeeper-source-video", useDirectPlayback && directPhase === "resting" ? "cat-gatekeeper-direct-video" : ""].join(" ")}
+        className="cat-gatekeeper-source-video"
         src={CAT_VIDEO_SOURCES.resting.webm}
         muted
         playsInline
@@ -750,13 +745,13 @@ function ChromaKeyCatSequence({ className, onPhaseChange }: { className: string;
         controls={false}
         controlsList="nodownload nofullscreen noremoteplayback"
       />
-      <canvas ref={canvasRef} className={[className, useDirectPlayback ? "cat-gatekeeper-canvas--hidden" : ""].join(" ")} />
+      <canvas ref={canvasRef} className={className} />
     </>
   );
 }
 
-function selectCatVideoSource(phase: keyof typeof CAT_VIDEO_SOURCES, directPlayback = isDesktopSafari()) {
-  return directPlayback ? CAT_VIDEO_SOURCES[phase].safari : CAT_VIDEO_SOURCES[phase].webm;
+function selectCatVideoSource(phase: keyof typeof CAT_VIDEO_SOURCES, preferSafariSource = isDesktopSafari()) {
+  return preferSafariSource ? CAT_VIDEO_SOURCES[phase].safari : CAT_VIDEO_SOURCES[phase].webm;
 }
 
 function isDesktopSafari() {
