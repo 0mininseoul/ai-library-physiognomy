@@ -6,6 +6,7 @@ import { selectBookCandidates } from "@/lib/books/recommender";
 import { buildLibraryPrompt } from "@/lib/gemini/libraryPrompt";
 import { normalizeLibraryAnalysis } from "@/lib/gemini/librarySchema";
 import { getGeminiClient } from "@/lib/gemini/client";
+import { calibrateFaceScores } from "@/lib/facemesh/scoreCalibration";
 import { displayGivenName } from "@/lib/korean/name";
 import { calculateSaju } from "@/lib/saju/calculator";
 import { getServerSupabase } from "@/lib/supabase/server";
@@ -32,6 +33,7 @@ export async function POST(req: NextRequest) {
   const supabase = getServerSupabase();
   const displayName = displayGivenName(body.input.name);
   const saju = calculateSaju(body.input.birthDate);
+  const calibratedScores = calibrateFaceScores(body.metrics);
   const provider = new SupabaseBookProvider(supabase);
   const books = await provider.listActiveBooks();
   const candidates = selectBookCandidates({
@@ -78,7 +80,7 @@ export async function POST(req: NextRequest) {
     const ai = getGeminiClient();
     const response = await ai.models.generateContent({
       model: LIBRARY_ANALYSIS_MODEL,
-      contents: buildLibraryPrompt({ input: body.input, displayName, metrics: body.metrics, saju, candidates }),
+      contents: buildLibraryPrompt({ input: body.input, displayName, metrics: body.metrics, calibratedScores, saju, candidates }),
       config: {
         responseMimeType: "application/json",
         responseSchema: {
@@ -154,12 +156,49 @@ export async function POST(req: NextRequest) {
             romantic_match: {
               type: Type.OBJECT,
               properties: {
-                best_types: { type: Type.ARRAY, items: { type: Type.STRING }, minItems: 2, maxItems: 4 },
+                best_types: { type: Type.ARRAY, items: { type: Type.STRING }, minItems: 1, maxItems: 1 },
                 why: { type: Type.STRING },
                 date_style: { type: Type.STRING },
                 caution: { type: Type.STRING },
               },
               required: ["best_types", "why", "date_style", "caution"],
+            },
+            section_copy: {
+              type: Type.OBJECT,
+              properties: {
+                face_reveal: textArraySchema(2),
+                face_signal: textArraySchema(2),
+                inner_style: textArraySchema(2),
+                chemi_match: textArraySchema(2),
+                book_curation: textArraySchema(2),
+              },
+              required: ["face_reveal", "face_signal", "inner_style", "chemi_match", "book_curation"],
+            },
+            inner_style: {
+              type: Type.OBJECT,
+              properties: {
+                dominant_label: { type: Type.STRING },
+                dominant_emoji: { type: Type.STRING },
+                dominant_headline: { type: Type.STRING },
+                dominant_detail: { type: Type.STRING },
+                growth_label: { type: Type.STRING },
+                growth_emoji: { type: Type.STRING },
+                growth_headline: { type: Type.STRING },
+                growth_detail: { type: Type.STRING },
+                growth_action: { type: Type.STRING },
+              },
+              required: ["dominant_label", "dominant_emoji", "dominant_headline", "dominant_detail", "growth_label", "growth_emoji", "growth_headline", "growth_detail", "growth_action"],
+            },
+            chemi_match: {
+              type: Type.OBJECT,
+              properties: {
+                type_label: { type: Type.STRING },
+                headline: { type: Type.STRING },
+                why: { type: Type.STRING },
+                friction: { type: Type.STRING },
+                good_scene: { type: Type.STRING },
+              },
+              required: ["type_label", "headline", "why", "friction", "good_scene"],
             },
             reading_needs: { type: Type.ARRAY, items: { type: Type.STRING }, minItems: 3, maxItems: 6 },
             recommendations: {
@@ -170,19 +209,29 @@ export async function POST(req: NextRequest) {
                   book_id: { type: Type.STRING },
                   reason: { type: Type.STRING },
                   action_copy: { type: Type.STRING },
+                  fit_reason: { type: Type.STRING },
+                  reading_moment: { type: Type.STRING },
                 },
-                required: ["book_id", "reason", "action_copy"],
+                required: ["book_id", "reason", "action_copy", "fit_reason", "reading_moment"],
               },
               minItems: 3,
               maxItems: 3,
             },
           },
-          required: ["reading_type", "main_copy", "geometry", "parts", "scores", "physiognomy", "saju", "romantic_match", "reading_needs", "recommendations"],
+          required: ["reading_type", "main_copy", "geometry", "parts", "scores", "physiognomy", "saju", "romantic_match", "section_copy", "inner_style", "chemi_match", "reading_needs", "recommendations"],
         },
       },
     });
 
     const normalized = normalizeLibraryAnalysis(JSON.parse(response.text ?? "{}"));
+    const resultScores = {
+      ...normalized.scores,
+      likability: calibratedScores.likability,
+      trust: calibratedScores.trust,
+      symmetry: calibratedScores.symmetry,
+      balance: calibratedScores.balance,
+      attractiveness: calibratedScores.attractiveness,
+    };
     const candidateById = new Map(candidates.map((book) => [book.sourceId, book]));
     const recommendedDatabaseIds: string[] = [];
     const finalRecommendations = normalized.recommendations.map((item) => {
@@ -201,10 +250,12 @@ export async function POST(req: NextRequest) {
         locationLabel: book.locationLabel,
         reason: item.reason,
         actionCopy: item.actionCopy,
+        fitReason: item.fitReason,
+        readingMoment: item.readingMoment,
       };
     });
 
-    const resultJson = { ...normalized, saju: { ...normalized.saju, calculation: saju }, recommendations: finalRecommendations };
+    const resultJson = { ...normalized, scores: resultScores, calibratedScores, saju: { ...normalized.saju, calculation: saju }, recommendations: finalRecommendations };
     const { error: updateError } = await supabase
       .from("library_sessions")
       .update({
@@ -236,6 +287,10 @@ function detailCommentSchema() {
     },
     required: ["metrics_text", "comment"],
   };
+}
+
+function textArraySchema(maxItems: number) {
+  return { type: Type.ARRAY, items: { type: Type.STRING }, minItems: 1, maxItems };
 }
 
 function naverBookUrl(title: string, author: string) {

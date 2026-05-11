@@ -151,7 +151,8 @@ describe("ResultContent", () => {
     expect(screen.getByText("야옹이가 본 영민님의 얼굴")).toBeInTheDocument();
     expect(screen.getByText("균형 좌표")).toBeInTheDocument();
     expect(screen.getByText("눈 신호")).toBeInTheDocument();
-    expect(screen.getByText("하관 리듬")).toBeInTheDocument();
+    expect(screen.getByText("코와 입의 흐름")).toBeInTheDocument();
+    expect(screen.queryByText("하관 리듬")).not.toBeInTheDocument();
     expect(screen.queryByText("계획 세우는 힘이 보여요.")).not.toBeInTheDocument();
     expect(screen.queryByText("더보기")).not.toBeInTheDocument();
   });
@@ -164,8 +165,8 @@ describe("ResultContent", () => {
     expect(screen.getByText("보완하면 좋은 성향")).toBeInTheDocument();
     expect(screen.getByText("탐색")).toBeInTheDocument();
     expect(screen.getByText("몰입")).toBeInTheDocument();
-    expect(pageText).toMatch(/탐색\s*\d+%/);
-    expect(pageText).toMatch(/몰입\s*\d+%/);
+    expect(pageText).not.toMatch(/탐색\s*\d+%/);
+    expect(pageText).not.toMatch(/몰입\s*\d+%/);
     expect(screen.getByText("에너지 실행형")).toBeInTheDocument();
     expect(screen.queryByText("차분한 조율형")).not.toBeInTheDocument();
     expect(container).not.toHaveTextContent("생년월일");
@@ -177,6 +178,8 @@ describe("ResultContent", () => {
     expect(container).not.toHaveTextContent("물의 리듬");
     expect(container).not.toHaveTextContent("불꽃 실행형");
     expect(container).not.toHaveTextContent("잔잔한 물결형");
+    expect(screen.getByText("왜 이 책인지")).toBeInTheDocument();
+    expect(screen.getByText("읽기 좋은 순간")).toBeInTheDocument();
     expect(screen.getByText("몰입의 기술")).toBeInTheDocument();
     expect(screen.getByText("생각 정리의 힘")).toBeInTheDocument();
     expect(screen.getByText("루틴 회복 수업")).toBeInTheDocument();

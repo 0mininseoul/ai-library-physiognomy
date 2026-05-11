@@ -20,15 +20,21 @@ export async function GET(_req: NextRequest, { params }: { params: { id: string 
   const isVisible = visibleUntil ? visibleUntil.getTime() > Date.now() : isFaceImageVisible(new Date(data.created_at));
 
   if (data.face_image_path && isVisible) {
-    const signed = await supabase.storage.from("face-images").createSignedUrl(data.face_image_path, 60 * 5);
-    faceImageUrl = signed.data?.signedUrl ?? null;
+    faceImageUrl = `/api/result/${data.id}/face-image`;
   }
 
-  return Response.json({
-    id: data.id,
-    createdAt: data.created_at,
-    displayName: data.display_name,
-    result: data.result_json,
-    faceImageUrl,
-  });
+  return Response.json(
+    {
+      id: data.id,
+      createdAt: data.created_at,
+      displayName: data.display_name,
+      result: data.result_json,
+      faceImageUrl,
+    },
+    {
+      headers: {
+        "Cache-Control": "no-store, max-age=0",
+      },
+    },
+  );
 }

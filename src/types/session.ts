@@ -1,4 +1,5 @@
 import type { ReadingTypeCode } from "@/lib/reading-types/types";
+import type { CalibratedFaceScores } from "@/lib/facemesh/scoreCalibration";
 import type { SajuCalculation } from "@/lib/saju/calculator";
 
 export type Gender = "male" | "female";
@@ -24,6 +25,8 @@ export type BookRecommendation = {
   tags?: string[];
   reason: string;
   actionCopy: string;
+  fitReason?: string;
+  readingMoment?: string;
 };
 
 export type DetailComment = {
@@ -86,4 +89,30 @@ export type LibraryAnalysisResult = {
   sajuSummary: string;
   readingNeeds: string[];
   recommendations: BookRecommendation[];
+  calibratedScores?: CalibratedFaceScores;
+  sectionCopy?: {
+    faceReveal: string[];
+    faceSignal: string[];
+    innerStyle: string[];
+    chemiMatch: string[];
+    bookCuration: string[];
+  };
+  innerStyleInsight?: {
+    dominantLabel: string;
+    dominantEmoji: string;
+    dominantHeadline: string;
+    dominantDetail: string;
+    growthLabel: string;
+    growthEmoji: string;
+    growthHeadline: string;
+    growthDetail: string;
+    growthAction: string;
+  };
+  chemiInsight?: {
+    typeLabel: string;
+    headline: string;
+    why: string;
+    friction: string;
+    goodScene: string;
+  };
 };

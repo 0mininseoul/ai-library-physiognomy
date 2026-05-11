@@ -403,6 +403,19 @@ select {
   background: var(--camera-scan-vignette);
 }
 
+.analysis-stage .glass-panel {
+  backdrop-filter: blur(26px) saturate(1.18);
+}
+
+.analysis-card-column {
+  scrollbar-width: none;
+  mask-image: linear-gradient(to bottom, transparent, black 1.4rem, black calc(100% - 1.4rem), transparent);
+}
+
+.analysis-card-column::-webkit-scrollbar {
+  display: none;
+}
+
 .scanline::after {
   content: "";
   position: absolute;

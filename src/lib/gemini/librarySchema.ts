@@ -9,6 +9,39 @@ const detailCommentSchema = z.object({
 });
 
 const scoreSchema = z.number().min(0).max(100);
+const sectionCopySchema = z
+  .object({
+    face_reveal: z.array(z.string().min(1)).min(1).max(2).optional(),
+    face_signal: z.array(z.string().min(1)).min(1).max(2).optional(),
+    inner_style: z.array(z.string().min(1)).min(1).max(2).optional(),
+    chemi_match: z.array(z.string().min(1)).min(1).max(2).optional(),
+    book_curation: z.array(z.string().min(1)).min(1).max(2).optional(),
+  })
+  .optional();
+
+const innerStyleSchema = z
+  .object({
+    dominant_label: z.string().min(1),
+    dominant_emoji: z.string().min(1),
+    dominant_headline: z.string().min(1),
+    dominant_detail: z.string().min(1),
+    growth_label: z.string().min(1),
+    growth_emoji: z.string().min(1),
+    growth_headline: z.string().min(1),
+    growth_detail: z.string().min(1),
+    growth_action: z.string().min(1),
+  })
+  .optional();
+
+const chemiInsightSchema = z
+  .object({
+    type_label: z.string().min(1),
+    headline: z.string().min(1),
+    why: z.string().min(1),
+    friction: z.string().min(1),
+    good_scene: z.string().min(1),
+  })
+  .optional();
 
 const rawSchema = z.object({
   reading_type: z.object({
@@ -60,6 +93,9 @@ const rawSchema = z.object({
     date_style: z.string().min(1),
     caution: z.string().min(1),
   }),
+  section_copy: sectionCopySchema,
+  inner_style: innerStyleSchema,
+  chemi_match: chemiInsightSchema,
   physiognomy_summary: z.string().min(1).optional(),
   saju_summary: z.string().min(1).optional(),
   reading_needs: z.array(z.string().min(1)).min(3).max(6),
@@ -69,6 +105,8 @@ const rawSchema = z.object({
         book_id: z.string().min(1),
         reason: z.string().min(1),
         action_copy: z.string().min(1),
+        fit_reason: z.string().min(1).optional(),
+        reading_moment: z.string().min(1).optional(),
       }),
     )
     .length(3),
@@ -132,7 +170,38 @@ export function normalizeLibraryAnalysis(input: unknown) {
       bookId: item.book_id,
       reason: clean(item.reason),
       actionCopy: clean(item.action_copy),
+      fitReason: item.fit_reason ? clean(item.fit_reason) : undefined,
+      readingMoment: item.reading_moment ? clean(item.reading_moment) : undefined,
     })),
+    sectionCopy: {
+      faceReveal: cleanArray(raw.section_copy?.face_reveal),
+      faceSignal: cleanArray(raw.section_copy?.face_signal),
+      innerStyle: cleanArray(raw.section_copy?.inner_style),
+      chemiMatch: cleanArray(raw.section_copy?.chemi_match),
+      bookCuration: cleanArray(raw.section_copy?.book_curation),
+    },
+    innerStyleInsight: raw.inner_style
+      ? {
+          dominantLabel: clean(raw.inner_style.dominant_label),
+          dominantEmoji: cleanEmoji(raw.inner_style.dominant_emoji),
+          dominantHeadline: clean(raw.inner_style.dominant_headline),
+          dominantDetail: clean(raw.inner_style.dominant_detail),
+          growthLabel: clean(raw.inner_style.growth_label),
+          growthEmoji: cleanEmoji(raw.inner_style.growth_emoji),
+          growthHeadline: clean(raw.inner_style.growth_headline),
+          growthDetail: clean(raw.inner_style.growth_detail),
+          growthAction: clean(raw.inner_style.growth_action),
+        }
+      : undefined,
+    chemiInsight: raw.chemi_match
+      ? {
+          typeLabel: clean(raw.chemi_match.type_label),
+          headline: clean(raw.chemi_match.headline),
+          why: clean(raw.chemi_match.why),
+          friction: clean(raw.chemi_match.friction),
+          goodScene: clean(raw.chemi_match.good_scene),
+        }
+      : undefined,
   };
 }
 
@@ -167,6 +236,8 @@ function clean(input: string) {
     .replace(/사주/g, "내면 성향")
     .replace(/일간|월주|년주|일주|시주/g, "내면 신호")
     .replace(/기운/g, "성향")
+    .replace(/명리/g, "내면 성향")
+    .replace(/운세/g, "오늘의 흐름")
     .replace(/강한\s+깊게 몰입하는 성향/g, "깊게 몰입하는 성향")
     .replace(/강한\s+(탐색|추진|정리|판단)\s*성향/g, "또렷한 $1 성향")
     .replace(/근거 더 보기/g, "더보기")
@@ -176,4 +247,12 @@ function clean(input: string) {
     .replace(/이건/g, "이 책은");
 
   return softenFormalPolite(sanitized).trim();
+}
+
+function cleanArray(input?: string[]) {
+  return input?.map(clean).filter(Boolean) ?? [];
+}
+
+function cleanEmoji(input: string) {
+  return input.trim().slice(0, 4) || "🐾";
 }

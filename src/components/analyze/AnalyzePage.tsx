@@ -38,15 +38,13 @@ const CAT_CANVAS_MAX_WIDTH = 960;
 
 const ANALYSIS_CARDS = [
   { title: "§1 FACE GEOMETRY", body: "얼굴 외곽, 상중하안 비율, 중심축을 계측 중." },
-  { title: "§2 SYMMETRY MAP", body: "좌우 눈·광대·입꼬리 기준으로 대칭성 편차를 비교 중." },
-  { title: "§3 EYES SIGNAL", body: "눈매 각도와 눈 주변 긴장도를 관상 신호로 변환 중." },
-  { title: "§4 NOSE FLOW", body: "콧대 길이와 콧방울 폭에서 추진력 패턴을 읽는 중." },
-  { title: "§5 MOUTH TONE", body: "입술 비율과 입꼬리 각도로 표현 습관을 분석 중." },
-  { title: "§6 JAW BALANCE", body: "턱선, 하관 안정감, 얼굴형 밸런스를 정리 중." },
-  { title: "§7 IMPRESSION SIGNAL", body: "표정 안정감과 전체 인상 리듬을 분리 중." },
-  { title: "§8 AESTHETIC INDEX", body: "호감도, 신뢰감, 균형감 지표를 스코어로 환산 중." },
-  { title: "§9 INNER RHYTHM", body: "관상 신호와 내면 성향 패턴을 조용히 대조 중." },
-  { title: "§10 FINAL ASSESSMENT", body: "관상 신호를 한 줄 결론까지 정리 중." },
+  { title: "§2 EYES SIGNAL", body: "눈매 각도와 눈 주변 긴장도를 관상 신호로 변환 중." },
+  { title: "§3 NOSE & MOUTH", body: "코와 입의 비율에서 표현 리듬을 읽는 중." },
+  { title: "§4 JAW BALANCE", body: "턱선, 하관 안정감, 얼굴형 밸런스를 정리 중." },
+  { title: "§5 IMPRESSION SCORE", body: "호감도, 신뢰감, 균형감 지표를 스코어로 환산 중." },
+  { title: "§6 INNER STYLE", body: "관상 신호와 내면 성향 패턴을 조용히 대조 중." },
+  { title: "§7 CHEMI MATCH", body: "함께 있을 때 편한 흐름을 하나로 좁히는 중." },
+  { title: "§8 FLOW READY", body: "결과 페이지에서 보여줄 핵심 문장만 고르는 중." },
 ] as const;
 
 export function AnalyzePage() {
@@ -230,7 +228,7 @@ export function AnalyzePage() {
   const showFinalCard = flow === "revealing" && completedResult && completedSessionId && completedRevealFinished;
 
   return (
-    <main data-theme={flow === "entry" ? undefined : "dark"} className="relative h-screen overflow-hidden bg-bg-primary text-text-primary">
+    <main className={["relative h-screen overflow-hidden bg-bg-primary text-text-primary", flow !== "entry" ? "analysis-stage" : ""].join(" ")}>
       <video
         ref={videoRef}
         className="live-camera-feed pointer-events-none absolute inset-0 h-full w-full scale-x-[-1] object-cover opacity-100"
@@ -288,6 +286,7 @@ export function AnalyzePage() {
           {showFinalCard ? (
             <FinalRevealCard
               displayName={displayName}
+              result={completedResult}
               onOpenResult={() => {
                 stopCamera();
                 router.push(`/result/${completedSessionId}`);
@@ -826,30 +825,32 @@ function FloatingCards({
   }));
   const leftCards = visibleCards.filter((card) => card.index % 2 === 0);
   const rightCards = visibleCards.filter((card) => card.index % 2 === 1);
+  const leftRailRef = useRef<HTMLDivElement>(null);
   const rightRailRef = useRef<HTMLDivElement>(null);
-  const railBaseClassName = "fixed z-20 grid w-[min(500px,34vw)] content-start gap-3 overflow-y-auto pr-1";
+  const railBaseClassName = "analysis-card-column fixed z-20 grid w-[min(470px,31vw)] content-start gap-3 overflow-y-auto pr-1";
   const leftRailClassName = [
     railBaseClassName,
     "left-6",
-    isCompletedView ? "top-[96px] bottom-6" : "top-[104px] bottom-40",
+    isCompletedView ? "top-[96px] bottom-8" : "top-[104px] bottom-40",
   ].join(" ");
   const rightRailClassName = [
     railBaseClassName,
     "right-6",
-    isCompletedView && finalCardVisible ? "top-[78px] bottom-[15rem]" : isCompletedView ? "top-[96px] bottom-6" : "top-[104px] bottom-40",
+    isCompletedView && finalCardVisible ? "top-[96px] bottom-[17.5rem]" : isCompletedView ? "top-[96px] bottom-8" : "top-[104px] bottom-40",
   ].join(" ");
 
   useEffect(() => {
-    if (!isCompletedView || !finalCardVisible) return;
-    const rail = rightRailRef.current;
-    if (!rail) return;
-    rail.scrollTo({ top: rail.scrollHeight, behavior: "smooth" });
-  }, [finalCardVisible, isCompletedView, visibleCards.length]);
+    if (!isCompletedView) return;
+    for (const rail of [leftRailRef.current, rightRailRef.current]) {
+      if (!rail) continue;
+      rail.scrollTo({ top: rail.scrollHeight, behavior: "smooth" });
+    }
+  }, [isCompletedView, visibleCards.length]);
 
   return (
     <>
       <AnalysisCardConnectors visibleIndexes={visibleCards.map((card) => card.index)} />
-      <div className={leftRailClassName}>
+      <div ref={leftRailRef} className={leftRailClassName}>
         {leftCards.map((card) => (
           <AnalysisStepCard
             key={card.title}
@@ -951,7 +952,7 @@ function AnalysisStepCard({
   }, [bodyStreamComplete, completedView, index, isActiveCompleted, onCompletedStreamComplete]);
 
   return (
-    <article className={["glass-panel rounded-xl p-4 transition", completedView ? "min-h-[132px]" : ""].join(" ")}>
+    <article className={["glass-panel rounded-xl p-4 transition", completedView ? "min-h-[120px]" : ""].join(" ")}>
       <div className="mb-2 flex items-center justify-between gap-4">
         <h2 className="text-xs font-black uppercase tracking-[0.16em] text-text-primary">{title}</h2>
         {complete ? <CheckCircle2 className="h-4 w-4 text-accent-info" aria-hidden="true" /> : <Loader2 className="h-4 w-4 animate-spin text-accent-info" aria-hidden="true" />}
@@ -970,14 +971,14 @@ function AnalysisStepCard({
                   <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
                     <div className="h-full rounded-full bg-accent-info transition-[width] duration-700 ease-out" style={{ width: `${clampInt(score.value, 0, 100)}%` }} />
                   </div>
-                  {score.comment ? <p className="mt-1.5 text-xs font-bold leading-5 text-text-primary">{cleanAnalysisCopy(score.comment, 44)}</p> : null}
+                  {score.comment ? <p className="mt-1.5 text-xs font-bold leading-5 text-text-primary">{cleanAnalysisCopy(score.comment, 58)}</p> : null}
                 </div>
               ))}
             </div>
           ) : null}
         </div>
       ) : (
-        <p className={["text-sm font-black leading-6 text-text-primary", completedView ? "min-h-[72px]" : ""].join(" ")}>{displayBody}</p>
+        <p className={["text-sm font-black leading-6 text-text-primary", completedView ? "min-h-[58px]" : ""].join(" ")}>{displayBody}</p>
       )}
       {!scores && !completedView ? (
         <div className="mt-3 flex items-center gap-3">
@@ -1015,20 +1016,21 @@ function useStreamingText(text: string, enabled: boolean, intervalMs: number) {
   return { text: text.slice(0, visibleLength), isComplete: visibleLength >= text.length };
 }
 
-function FinalRevealCard({ displayName, onOpenResult }: { displayName: string; onOpenResult: () => void }) {
+function FinalRevealCard({ displayName, result, onOpenResult }: { displayName: string; result: LibraryAnalysisResult | null; onOpenResult: () => void }) {
   const name = `${displayName || "회원"}님`;
+  const dominantLabel = result?.innerStyleInsight?.dominantLabel ?? "몰입";
   const body = [
-    `${name}은 겉으로는 차분해 보여도, 머릿속에서는 다음 수를 계속 맞춰보는 사람이에요.`,
-    "괜히 빠르게 튀기보다 납득되는 방향을 찾고, 한번 정하면 조용히 오래 밀고 가는 쪽이에요.",
-    "야옹이 판정은 이거예요. 말보다 결과로 증명하는 타입이에요.",
+    cleanAnalysisCopy(`${name}은 ${result?.physiognomySummary ?? "겉으로는 차분해 보여도 안쪽에서는 생각이 꽤 오래 이어지는 분이에요."}`, 118),
+    cleanAnalysisCopy(result?.innerStyleInsight?.dominantDetail ?? result?.sajuSummary ?? "머릿속에 탭이 여러 개 열려 있어도, 중요한 것 하나는 끝까지 붙잡는 쪽이에요.", 118),
+    cleanAnalysisCopy(`야옹이 최종 판정은 이거예요. ${dominantLabel}이 선명해서, 말보다 흐름으로 설득하는 타입이에요.`, 118),
   ].join("\n");
   const { text: streamedBody, isComplete } = useStreamingText(body, true, COMPLETED_CARD_STREAM_INTERVAL_MS);
 
   return (
-    <section className="fixed bottom-8 left-1/2 z-30 w-[min(980px,72vw)] -translate-x-1/2">
+    <section className="fixed bottom-8 left-1/2 z-30 w-[min(880px,calc(100vw-39rem))] min-w-[34rem] -translate-x-1/2">
       <article className="glass-panel rounded-2xl border-accent-info/[0.35] p-5 shadow-2xl shadow-black/40">
-        <p className="text-xs font-black uppercase tracking-[0.16em] text-accent-info">§11 FINAL ASSESSMENT</p>
-        <h2 className="mt-2 text-2xl font-black text-text-primary">{`${name}은 조용히 강한 실행형이에요`}</h2>
+        <p className="text-xs font-black uppercase tracking-[0.16em] text-accent-info">FINAL ASSESSMENT</p>
+        <h2 className="mt-2 text-2xl font-black text-text-primary">{`${name}은 ${dominantLabel}이 선명한 타입이에요`}</h2>
         <p className="mt-3 whitespace-pre-line text-sm font-semibold leading-6 text-text-primary">{streamedBody}</p>
         {isComplete ? (
           <button
@@ -1046,20 +1048,17 @@ function FinalRevealCard({ displayName, onOpenResult }: { displayName: string; o
 }
 
 function buildCompletedAnalysisCards(result: LibraryAnalysisResult): CompletedAnalysisCard[] {
-  const calculation = result.saju.calculation;
-  const rhythmSummary = calculation ? rhythmPercentSummary(calculation) : cleanAnalysisCopy(result.saju.currentFlow, 66);
-  const matchTypes = result.romanticMatch.bestTypes.slice(0, 1).join(", ");
+  const innerLabel = result.innerStyleInsight?.dominantLabel ?? cleanAnalysisCopy(result.saju.strength, 42);
+  const growthLabel = result.innerStyleInsight?.growthLabel ?? cleanAnalysisCopy(result.saju.advice, 42);
+  const matchTypes = result.chemiInsight?.typeLabel ?? result.romanticMatch.bestTypes.slice(0, 1).join(", ");
 
   return [
-    { title: "§1 FACE GEOMETRY", body: cleanAnalysisCopy(`${result.geometry.symmetry} ${result.geometry.faceShape}`, 82) },
-    { title: "§2 SYMMETRY MAP", body: cleanAnalysisCopy(`${result.geometry.goldenRatio} ${result.geometry.thirds}`, 82) },
-    { title: "§3 EYES SIGNAL", body: cleanAnalysisCopy(`${result.parts.eyes.metricsText} ${result.parts.eyes.comment}`, 78) },
-    { title: "§4 NOSE FLOW", body: cleanAnalysisCopy(`${result.parts.nose.metricsText} ${result.parts.nose.comment}`, 78) },
-    { title: "§5 MOUTH TONE", body: cleanAnalysisCopy(`${result.parts.mouth.metricsText} ${result.parts.mouth.comment}`, 78) },
-    { title: "§6 JAW BALANCE", body: cleanAnalysisCopy(`${result.parts.jaw.metricsText} ${result.parts.jaw.comment}`, 78) },
-    { title: "§7 IMPRESSION SIGNAL", body: cleanAnalysisCopy(`${result.parts.impression.metricsText} ${result.parts.impression.comment}`, 78) },
+    { title: "§1 FACE GEOMETRY", body: cleanAnalysisCopy(`${result.geometry.symmetry} ${result.geometry.faceShape} 야옹이 확대경 기준으로는 중심선과 얼굴형 리듬을 먼저 봤어요.`, 152) },
+    { title: "§2 EYES SIGNAL", body: cleanAnalysisCopy(`${result.parts.eyes.metricsText} ${result.parts.eyes.comment} 눈 신호는 첫인상에서 생각보다 빠르게 읽혀요.`, 152) },
+    { title: "§3 NOSE & MOUTH", body: cleanAnalysisCopy(`${result.parts.nose.metricsText} ${result.parts.nose.comment} ${result.parts.mouth.comment}`, 164) },
+    { title: "§4 JAW BALANCE", body: cleanAnalysisCopy(`${result.parts.jaw.metricsText} ${result.parts.jaw.comment} 하관은 끝까지 남는 인상이라 야옹이가 꽤 오래 봤어요.`, 152) },
     {
-      title: "§8 AESTHETIC INDEX",
+      title: "§5 IMPRESSION SCORE",
       body: "호감도와 신뢰감 신호를 고양이식 점수판으로 정리했어요.",
       scores: [
         { label: "호감도", value: result.scores.likability, comment: result.scores.comments[0] },
@@ -1067,28 +1066,10 @@ function buildCompletedAnalysisCards(result: LibraryAnalysisResult): CompletedAn
         { label: "균형감", value: result.scores.balance, comment: result.scores.comments[3] },
       ],
     },
-    { title: "§9 INNER RHYTHM", body: cleanAnalysisCopy(`성향 분포는 ${rhythmSummary}로 읽혀요. ${result.saju.strength}`, 86) },
-    { title: "§10 CHEMI MATCH", body: cleanAnalysisCopy(`${matchTypes} 타입과 흐름이 잘 맞아요. ${result.romanticMatch.why}`, 86) },
+    { title: "§6 INNER STYLE", body: cleanAnalysisCopy(`${innerLabel}이 가장 또렷하고, ${growthLabel}은 보완하면 좋아요. ${result.innerStyleInsight?.dominantDetail ?? result.saju.strength}`, 156) },
+    { title: "§7 CHEMI MATCH", body: cleanAnalysisCopy(`${matchTypes} 타입과 흐름이 잘 맞아요. ${result.chemiInsight?.why ?? result.romanticMatch.why}`, 156) },
+    { title: "§8 FLOW READY", body: cleanAnalysisCopy("야옹이가 결과 화면에서 보여줄 핵심 문장만 골랐어요. 이제 긴 설명보다 바로 읽히는 리포트로 넘어갈 차례예요.", 140) },
   ];
-}
-
-function rhythmPercentSummary(calculation: NonNullable<LibraryAnalysisResult["saju"]["calculation"]>) {
-  const entries = [
-    ["탐색", calculation.elementCounts.wood],
-    ["추진", calculation.elementCounts.fire],
-    ["정리", calculation.elementCounts.earth],
-    ["판단", calculation.elementCounts.metal],
-    ["몰입", calculation.elementCounts.water],
-  ] as const;
-  const total = Math.max(
-    1,
-    entries.reduce((sum, [, count]) => sum + count, 0),
-  );
-
-  return entries
-    .filter(([, count]) => count > 0)
-    .map(([label, count]) => `${label} ${Math.round((count / total) * 100)}%`)
-    .join(" · ");
 }
 
 function cleanAnalysisCopy(input: string, maxLength: number) {

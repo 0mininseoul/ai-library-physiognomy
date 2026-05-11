@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { selectBookCandidates } from "@/lib/books/recommender";
+import { bestsellerPenalty, selectBookCandidates } from "@/lib/books/recommender";
 import type { LibraryBook } from "@/lib/books/types";
 
 const books: LibraryBook[] = [
@@ -31,9 +31,28 @@ describe("selectBookCandidates", () => {
 
     expect(selected.map((book) => book.title)).toEqual(["감정 공부", "하루 공부"]);
   });
+
+  it("does not let obvious bestsellers dominate equally relevant discovery picks", () => {
+    const selected = selectBookCandidates({
+      books: [
+        book("1", "불편한 편의점", "소설", ["소설", "회복"]),
+        book("120", "무명의 회복 노트", "소설", ["소설", "회복", "감정"], "작은 실패를 지나 다시 시작하는 사람을 위한 조용한 이야기입니다."),
+      ],
+      favoriteCategory: "소설",
+      desiredTags: ["회복"],
+      limit: 1,
+    });
+
+    expect(selected[0].title).toBe("무명의 회복 노트");
+  });
+
+  it("detects likely bestseller candidates for prompt cautioning", () => {
+    expect(bestsellerPenalty(book("1", "아몬드", "소설", ["소설"]))).toBeGreaterThan(0);
+    expect(bestsellerPenalty(book("150", "캠퍼스 고양이의 독서법", "소설", ["소설"]))).toBe(0);
+  });
 });
 
-function book(sourceId: string, title: string, category: string, tags: string[]): LibraryBook {
+function book(sourceId: string, title: string, category: string, tags: string[], description = title): LibraryBook {
   return {
     source: "naver",
     sourceId,
@@ -43,7 +62,7 @@ function book(sourceId: string, title: string, category: string, tags: string[])
     publisher: "출판사",
     publishedYear: 2024,
     category,
-    description: title,
+    description,
     coverUrl: null,
     callNumber: "000.000",
     locationLabel: `${category} 추천 서가`,

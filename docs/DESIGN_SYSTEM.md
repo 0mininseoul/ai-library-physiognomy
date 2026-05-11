@@ -5,7 +5,7 @@
 
 ## Product / Design Context
 
-- `AI 관상가 고양이`는 대학 도서관 부스에서 체험하는 관상/사주 기반 책 추천 서비스다.
+- `AI 관상가 고양이`는 대학 도서관 부스에서 체험하는 관상/성향 기반 책 추천 서비스다.
 - 사용자는 처음에는 "책 추천 서비스"보다 "고양이가 내 관상을 진지하게 보는 인터랙티브 체험"처럼 느껴야 한다.
 - 최종 결과 후반부에서만 책 추천이 드러나야 한다.
 - 시연 환경은 B2B 피칭과 현장 부스 모두를 고려한다.
@@ -17,11 +17,13 @@
 - 핵심 감성은 `Live Face Scan x 고양이 관상 상담소 x 도서관 큐레이션`이다.
 - 기존 AI 얼평 서비스의 어두운 실시간 분석 HUD, 좌우 플로팅 카드, 카메라 중심 구성을 기준으로 삼는다.
 - 단, 문구는 공격적 얼평이 아니라 유머러스하고 MZ스럽지만 존댓말인 고양이 상담 톤으로 간다.
+- 재미는 비속어, 반말, 조롱, 거친 밈이 아니라 `정확해서 웃긴 관찰`, 생활감 있는 비유, 고양이 캐릭터의 정중한 코멘트에서 만든다.
 
 ## Non-Negotiable Design Rules
 
 - PC-first is the current implementation priority. Optimize and inspect `1440x900` first for the booth/demo flow.
 - Mobile fit is a later hardening pass; do not let mobile constraints weaken the PC booth experience in this round.
+- Until mobile is explicitly designed, mobile visitors should be routed to a dedicated PC-only 안내 page rather than seeing a broken camera/result experience.
 - Preserve the live webcam as the primary visual surface on the analyze flow.
 - Do not replace the live camera experience with generic cards, landing pages, or SaaS-style panels.
 - Before scan starts, do not show face mesh, dots, scan lines, or invasive overlays on the user's face.
@@ -36,6 +38,7 @@
 - Use `더보기` rather than `근거 더 보기`.
 - Avoid skin evaluation. Do not score or comment on skin quality.
 - All Korean copy must use polite speech. No 반말.
+- Do not use profanity, hostile roast language, or casual male-community meme slang. Keep the tone polite and funny.
 - User name should use `~님`, not `학생`.
 - The result headline must stay on one line where possible.
 
@@ -97,7 +100,7 @@
 - `:root` is the light theme.
 - `[data-theme="dark"]`, `.theme-dark`, and `.dark` provide the dark theme.
 - User-selected theme is stored in `localStorage` under `ai-library-theme`.
-- The app may force dark theme only inside the scan/analyzing stage, because that is an immersive booth mode.
+- Do not force `[data-theme="dark"]` inside scan/analyzing if the user entered in light theme. The analysis stage may use dark HUD overlays, but the selected theme remains authoritative.
 - `prefers-color-scheme` may be referenced, but B2B default entry must remain light unless the user explicitly toggles dark.
 - Admin, lookup, and result pages should read as light, reliable operating surfaces by default.
 
@@ -144,6 +147,10 @@
 - After analysis completes, cards should reveal one by one.
 - Text should stream character-by-character at a readable pace.
 - Do not instantly dump long paragraphs.
+- Completed analysis cards should be limited to roughly 8 cards plus final assessment. If content exceeds one screen, the left/right columns should auto-scroll instead of clipping text or overlapping the final card.
+- Analysis copy should be short by design, not hard-truncated with visible ellipsis.
+- Analysis completed copy may be witty, but must stay polite. No 욕설, 반말, or insulting roast phrasing.
+- Do not mention books, borrowing, or recommendations inside the analysis HUD. Book curation appears only in the final result section.
 - Cards need face-point connector lines where relevant, similar to the original AI 얼평 service.
 - The final assessment card appears bottom-center after the staged card reveal.
 
@@ -166,6 +173,10 @@
 - Book recommendation cards must include book thumbnails.
 - Book cards must link to the relevant Naver book page for MVP.
 - The final book section should read like library curation, not an ecommerce grid: one featured book card with cover/reason/action/location, plus up to two supporting recommendations.
+- Featured recommendation should not default to the most famous or bestseller-like title. The representative book should be the strongest personal fit. Obvious bestseller candidates may appear as supporting books only when genuinely relevant.
+- Bestseller-like titles need an explicit fit advantage before they can appear as the featured recommendation. Personal fit, library curation value, and specificity beat popularity.
+- Book recommendation trust copy should explain `왜 이 책인지`, `읽기 좋은 순간`, and `도서관 위치` in separated blocks.
+- Shared previews should use `/og-image.png` as the 1200x630 Open Graph image and keep the 512x512 cat logo for favicon/apple icon surfaces.
 
 ### Result Card Composition
 
@@ -176,6 +187,10 @@
 - Avoid repeating exact sentences between the headline summary, type card, detail panels, and later sections.
 - Section navigation buttons must have visible breathing room from the main cards. They should feel like page controls, not card controls.
 - Card reveal motion should be slower than a micro-interaction: use a noticeable upward reveal distance and a soft easing curve so the staged report feels intentional.
+- `FACE REVEAL` owns broad 관상 총평. `FACE SIGNAL` owns measurable face signals only.
+- Visible symmetry scores should use calibrated app scores, not raw Gemini guesses. In normal live-camera conditions, symmetry should rarely exceed `90`.
+- `INNER STYLE` should not show percentages or gauges. Use two readable cards instead: strongest tendency and one support tendency.
+- `CHEMI MATCH` should show one best-matching person type only. Multiple plausible types reduce trust.
 
 ## Interaction And UX Principles
 

@@ -92,10 +92,10 @@ export function ResultContent({ payload }: { payload: ResultPayload }) {
   const name = honorific(displayName);
   const calculation = result.saju.calculation;
   const rhythmItems = rhythmSignalItems(calculation);
-  const innerStyle = innerStyleProfile(rhythmItems);
+  const innerStyle = innerStyleProfile(result, rhythmItems);
   const matchProfile = buildMatchProfile(result, innerStyle.strong);
   const topScore = topScoreItem(result.scores);
-  const topScores = topScoreItems(result.scores, 3);
+  const topScores = topScoreItems(result.scores, 4);
   const [activeSection, setActiveSection] = useState(0);
   const faceSignals = useMemo(() => buildFaceSignals(result), [result]);
 
@@ -140,8 +140,8 @@ export function ResultContent({ payload }: { payload: ResultPayload }) {
         className="flex h-screen transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
         style={{ transform: `translateX(-${activeSection * 100}vw)` }}
       >
-        <StorySection active={activeSection === 0} index={0} eyebrow="FACE REVEAL" title={`야옹이가 본 ${name}의 얼굴`} lines={buildOpeningSummaryLines(result)}>
-          <div className="grid min-h-0 grid-cols-[26rem_minmax(0,1fr)] items-stretch gap-7">
+        <StorySection active={activeSection === 0} index={0} eyebrow="FACE REVEAL" title={`야옹이가 본 ${name}의 얼굴`} lines={sectionLines(result, "faceReveal", buildOpeningSummaryLines(result))}>
+          <div className="grid min-h-0 grid-cols-[28rem_minmax(0,1fr)] items-stretch gap-7">
             <RevealItem active={activeSection === 0} delay={120} className="min-h-0">
               <ResultFacePanel displayName={displayName} faceImageUrl={faceImageUrl} />
             </RevealItem>
@@ -156,14 +156,14 @@ export function ResultContent({ payload }: { payload: ResultPayload }) {
           </div>
         </StorySection>
 
-        <StorySection active={activeSection === 1} index={1} eyebrow="FACE SIGNAL" title={`야옹이가 본 ${name}의 인상`} lines={[compactCopy(result.physiognomy.summary, 104), `가장 또렷한 신호는 ${topScore.label} ${Math.round(topScore.value)}점이에요.`]}>
+        <StorySection active={activeSection === 1} index={1} eyebrow="FACE SIGNAL" title={`야옹이가 본 ${name}의 얼굴 신호`} lines={sectionLines(result, "faceSignal", buildFaceSignalSummaryLines(result, topScore))}>
           <div className="grid min-h-0 gap-5 lg:grid-cols-[0.86fr_1.14fr]">
             <RevealItem active={activeSection === 1} delay={120}>
               <ImpressionScorePanel scores={topScores} />
             </RevealItem>
             <RevealItem active={activeSection === 1} delay={220}>
               <div className="grid h-full min-h-0 gap-3">
-                {faceSignals.map((signal) => (
+                {faceSignals.slice(0, 3).map((signal) => (
                   <SignalCard key={signal.title} title={signal.title} kicker={signal.kicker} text={signal.text} compact />
                 ))}
               </div>
@@ -171,7 +171,7 @@ export function ResultContent({ payload }: { payload: ResultPayload }) {
           </div>
         </StorySection>
 
-        <StorySection active={activeSection === 2} index={2} eyebrow="INNER STYLE" title={`${name}은 ${innerStyle.strong.title}`} lines={buildInnerStyleSummaryLines(innerStyle)}>
+        <StorySection active={activeSection === 2} index={2} eyebrow="INNER STYLE" title={`${name}은 ${innerStyle.strong.title}`} lines={sectionLines(result, "innerStyle", buildInnerStyleSummaryLines(innerStyle))}>
           <div className="grid min-h-0 gap-5 lg:grid-cols-[1fr_1fr]">
             <RevealItem active={activeSection === 2} delay={120}>
               <InnerStyleCard tone="strong" title="가장 또렷한 성향" item={innerStyle.strong} />
@@ -182,13 +182,13 @@ export function ResultContent({ payload }: { payload: ResultPayload }) {
           </div>
         </StorySection>
 
-        <StorySection active={activeSection === 3} index={3} eyebrow="CHEMI MATCH" title={`${name}은 이런 사람과 흐름이 좋아요`} lines={[matchProfile.summary, matchProfile.caution]}>
+        <StorySection active={activeSection === 3} index={3} eyebrow="CHEMI MATCH" title={`${name}은 이런 사람과 흐름이 좋아요`} lines={sectionLines(result, "chemiMatch", [matchProfile.summary, matchProfile.caution])}>
           <RevealItem active={activeSection === 3} delay={140}>
             <MatchFocusCard match={matchProfile} />
           </RevealItem>
         </StorySection>
 
-        <StorySection active={activeSection === 4} index={4} eyebrow="BOOK CURATION" title={`지금 ${name}에게 필요한 책이에요`} lines={buildBookSectionLines(result)} id="books">
+        <StorySection active={activeSection === 4} index={4} eyebrow="BOOK CURATION" title={`지금 ${name}에게 필요한 책이에요`} lines={sectionLines(result, "bookCuration", buildBookSectionLines(result))} id="books">
           <RevealItem active={activeSection === 4} delay={140}>
             <BookCurationSection result={result} />
           </RevealItem>
@@ -197,7 +197,7 @@ export function ResultContent({ payload }: { payload: ResultPayload }) {
 
       <button
         type="button"
-        className="fixed left-8 top-1/2 z-40 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full border border-border bg-bg-card/65 text-text-primary shadow-glass backdrop-blur-2xl transition hover:border-border-bright disabled:cursor-not-allowed disabled:opacity-35"
+        className="fixed left-10 top-1/2 z-40 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full border border-border bg-bg-card/65 text-text-primary shadow-glass backdrop-blur-2xl transition hover:border-border-bright disabled:cursor-not-allowed disabled:opacity-35"
         aria-label="이전 섹션"
         disabled={activeSection === 0}
         onClick={() => goBy(-1)}
@@ -206,7 +206,7 @@ export function ResultContent({ payload }: { payload: ResultPayload }) {
       </button>
       <button
         type="button"
-        className="fixed right-8 top-1/2 z-40 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full border border-border bg-bg-card/65 text-text-primary shadow-glass backdrop-blur-2xl transition hover:border-border-bright disabled:cursor-not-allowed disabled:opacity-35"
+        className="fixed right-10 top-1/2 z-40 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full border border-border bg-bg-card/65 text-text-primary shadow-glass backdrop-blur-2xl transition hover:border-border-bright disabled:cursor-not-allowed disabled:opacity-35"
         aria-label="다음 섹션"
         disabled={activeSection === RESULT_SECTION_COUNT - 1}
         onClick={() => goBy(1)}
@@ -241,13 +241,41 @@ export function ResultContent({ payload }: { payload: ResultPayload }) {
 function ResultFacePanel({ displayName, faceImageUrl }: { displayName: string; faceImageUrl: string | null }) {
   const name = honorific(displayName);
   const [imageFailed, setImageFailed] = useState(false);
+  const [retryNonce, setRetryNonce] = useState(0);
   const shouldShowImage = Boolean(faceImageUrl && !imageFailed);
+  const imageSrc = faceImageUrl && retryNonce > 0 ? `${faceImageUrl}${faceImageUrl.includes("?") ? "&" : "?"}retry=${retryNonce}` : faceImageUrl;
 
   return (
     <div className="glass-card relative mx-auto flex h-full min-h-[25rem] w-full overflow-hidden rounded-[1.75rem]">
       {shouldShowImage ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={faceImageUrl ?? ""} alt={`${name} 얼굴 분석 이미지`} className="h-full w-full object-cover" onError={() => setImageFailed(true)} />
+        <img
+          src={imageSrc ?? ""}
+          alt={`${name} 얼굴 분석 이미지`}
+          className="h-full w-full object-cover"
+          onError={() => {
+            if (retryNonce === 0) {
+              setRetryNonce(1);
+              return;
+            }
+            setImageFailed(true);
+          }}
+        />
+      ) : faceImageUrl ? (
+        <div className="flex h-full w-full flex-col items-center justify-center gap-4 px-6 text-center">
+          <CameraOff className="h-10 w-10 text-accent-info" aria-hidden="true" />
+          <p className="max-w-[14rem] text-base font-black leading-7 text-text-primary">이미지를 다시 불러오고 있어요.</p>
+          <button
+            type="button"
+            className="text-sm font-bold text-accent-info underline underline-offset-4"
+            onClick={() => {
+              setImageFailed(false);
+              setRetryNonce((value) => value + 1);
+            }}
+          >
+            한 번 더 불러오기
+          </button>
+        </div>
       ) : (
         <div className="flex h-full w-full flex-col items-center justify-center gap-4 px-6 text-center">
           <CameraOff className="h-10 w-10 text-accent-info" aria-hidden="true" />
@@ -263,9 +291,9 @@ function StorySection({ active, index, eyebrow, title, lines, id, children }: { 
   const readableLines = useMemo(() => streamedLines.flatMap(splitReadableSentences), [streamedLines]);
 
   return (
-    <section id={id} className="scanline relative h-screen w-screen shrink-0 overflow-hidden px-20 pb-20 pt-28">
+    <section id={id} className="scanline relative h-screen w-screen shrink-0 overflow-hidden px-28 pb-20 pt-28">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_16%,rgb(var(--accent-info-rgb)_/_0.12),transparent_28rem),radial-gradient(circle_at_10%_90%,rgb(255_255_255_/_0.055),transparent_26rem),linear-gradient(180deg,rgb(255_255_255_/_0.035),transparent_18rem)]" />
-      <div className="relative z-10 mx-auto grid h-[calc(100vh-9rem)] max-w-7xl grid-rows-[auto_minmax(0,1fr)] content-start gap-5">
+      <div className="relative z-10 mx-auto grid h-full max-w-7xl grid-rows-[auto_minmax(0,1fr)] content-start gap-5">
         <div className="max-w-6xl">
           <p className="text-xs font-black uppercase tracking-[0.18em] text-accent-info">{eyebrow}</p>
           {index === 0 ? (
@@ -285,10 +313,10 @@ function StorySection({ active, index, eyebrow, title, lines, id, children }: { 
         </div>
         <div
           className={[
-            "grid min-h-0 content-start gap-4 transition duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transform-none motion-reduce:transition-none",
-            active ? "translate-y-0 opacity-100" : "translate-y-16 opacity-0",
+            "grid min-h-0 content-start gap-4 transition duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transform-none motion-reduce:transition-none",
+            active ? "translate-y-0 opacity-100" : "translate-y-7 opacity-0",
           ].join(" ")}
-          style={{ transitionDelay: active ? "160ms" : "0ms" }}
+          style={{ transitionDelay: active ? "150ms" : "0ms" }}
         >
           {children}
         </div>
@@ -301,8 +329,8 @@ function RevealItem({ active, delay = 0, className = "", children }: { active: b
   return (
     <div
       className={[
-        "h-full transition duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transform-none motion-reduce:transition-none",
-        active ? "translate-y-0 opacity-100" : "translate-y-14 opacity-0",
+        "h-full transition duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transform-none motion-reduce:transition-none",
+        active ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0",
         className,
       ].join(" ")}
       style={{ transitionDelay: active ? `${delay}ms` : "0ms" }}
@@ -357,8 +385,8 @@ function ImpressionScorePanel({ scores }: { scores: Array<{ label: string; value
   const [primary, ...secondary] = scores;
 
   return (
-    <article className="glass-card flex h-full min-h-[23rem] rounded-3xl p-6">
-      <div className="flex h-full w-full flex-col">
+    <article className="glass-card flex min-h-[20rem] rounded-3xl p-6">
+      <div className="flex w-full flex-col">
         <p className="text-xs font-black uppercase tracking-[0.16em] text-accent-info">IMPRESSION SCORE</p>
         {primary ? (
           <>
@@ -375,7 +403,7 @@ function ImpressionScorePanel({ scores }: { scores: Array<{ label: string; value
             {primary.comment ? <p className="mt-4 text-sm font-bold leading-6 text-text-muted">{cleanCopy(primary.comment)}</p> : null}
           </>
         ) : null}
-        <div className="mt-auto grid gap-3 pt-5">
+        <div className="mt-5 grid gap-3">
           {secondary.map((score) => (
             <div key={score.label} className="rounded-2xl border border-border/60 bg-bg-card/48 px-4 py-3">
               <div className="flex items-center justify-between gap-3 text-sm font-black">
@@ -396,24 +424,24 @@ function ImpressionScorePanel({ scores }: { scores: Array<{ label: string; value
   );
 }
 
-function InnerStyleCard({ title, item, tone }: { title: string; item: RhythmProfileItem; tone: "strong" | "support" }) {
+function InnerStyleCard({ title, item, tone }: { title: string; item: InnerStyleDisplayItem; tone: "strong" | "support" }) {
   return (
-    <article className="glass-card flex h-full min-h-[21rem] rounded-3xl p-6">
-      <div className="flex h-full w-full flex-col">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <p className="text-xs font-black uppercase tracking-[0.16em] text-accent-info">{title}</p>
-            <h3 className="mt-3 text-4xl font-bold text-text-primary">{item.label}</h3>
-          </div>
-          <span className="rounded-full border border-accent-info/25 bg-accent-info/10 px-4 py-2 text-xl font-black tabular-nums text-accent-info">{item.percent}%</span>
+    <article className="glass-card grid h-full min-h-[21rem] grid-rows-[auto_1fr_auto] rounded-3xl p-7">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.16em] text-accent-info">{title}</p>
+          <h3 className="mt-3 text-4xl font-semibold text-text-primary">{item.label}</h3>
         </div>
-        <p className="mt-5 text-lg font-bold leading-8 text-text-primary">{item.summary}</p>
-        <p className="mt-3 text-sm font-bold leading-6 text-text-muted">{tone === "strong" ? item.description : item.supportCopy}</p>
-        <div className="mt-auto pt-6">
-          <div className="h-2.5 overflow-hidden rounded-full bg-bg-raised/70">
-            <div className="h-full rounded-full bg-accent-info" style={{ width: `${Math.max(8, item.percent)}%` }} />
-          </div>
-        </div>
+        <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl border border-accent-info/20 bg-accent-info/10 text-3xl" aria-hidden="true">
+          {item.emoji}
+        </span>
+      </div>
+      <div className="mt-6">
+        <p className="text-xl font-semibold leading-8 text-text-primary">{item.summary}</p>
+        <p className="mt-3 text-base font-semibold leading-7 text-text-muted">{item.description}</p>
+      </div>
+      <div className="mt-6 rounded-2xl border border-border/60 bg-bg-card/50 px-4 py-3">
+        <p className="text-sm font-bold leading-6 text-text-muted">{tone === "strong" ? item.note : item.action}</p>
       </div>
     </article>
   );
@@ -421,22 +449,31 @@ function InnerStyleCard({ title, item, tone }: { title: string; item: RhythmProf
 
 function MatchFocusCard({ match }: { match: MatchProfile }) {
   return (
-    <article className="glass-card grid min-h-[20rem] gap-6 rounded-3xl p-7 lg:grid-cols-[0.7fr_1fr]">
+    <article className="glass-card grid min-h-[22rem] gap-6 rounded-3xl p-7 lg:grid-cols-[0.72fr_1fr]">
       <div className="flex flex-col justify-between rounded-3xl border border-accent-info/25 bg-accent-info/10 p-6">
         <HeartHandshake className="h-7 w-7 text-accent-info" aria-hidden="true" />
-        <div>
-          <p className="text-xs font-black uppercase tracking-[0.16em] text-accent-info">BEST MATCH</p>
-          <h3 className="mt-3 text-4xl font-bold leading-tight text-text-primary">{match.label}</h3>
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.16em] text-accent-info">BEST MATCH</p>
+            <h3 className="mt-3 text-4xl font-semibold leading-tight text-text-primary">{match.label}</h3>
+          </div>
         </div>
+        <p className="mt-6 text-base font-bold leading-7 text-text-muted">{match.headline}</p>
       </div>
       <div className="grid content-center gap-4">
         <div className="rounded-2xl border border-border/60 bg-bg-card/48 p-5">
-          <p className="text-xs font-black uppercase tracking-[0.14em] text-accent-info">왜 잘 맞나요</p>
+          <p className="text-xs font-black uppercase tracking-[0.14em] text-accent-info">잘 맞는 이유</p>
           <p className="mt-3 text-base font-bold leading-7 text-text-muted">{match.reason}</p>
         </div>
-        <div className="rounded-2xl border border-border/60 bg-bg-card/48 p-5">
-          <p className="text-xs font-black uppercase tracking-[0.14em] text-accent-info">야옹이 코멘트</p>
-          <p className="mt-3 text-base font-bold leading-7 text-text-muted">{match.note}</p>
+        <div className="grid gap-4 md:grid-cols-2">
+          <div className="rounded-2xl border border-border/60 bg-bg-card/48 p-5">
+            <p className="text-xs font-black uppercase tracking-[0.14em] text-accent-info">어긋나는 순간</p>
+            <p className="mt-3 text-sm font-bold leading-6 text-text-muted">{match.friction}</p>
+          </div>
+          <div className="rounded-2xl border border-border/60 bg-bg-card/48 p-5">
+            <p className="text-xs font-black uppercase tracking-[0.14em] text-accent-info">같이 있으면 좋은 장면</p>
+            <p className="mt-3 text-sm font-bold leading-6 text-text-muted">{match.goodScene}</p>
+          </div>
         </div>
       </div>
     </article>
@@ -493,22 +530,36 @@ type RhythmProfileItem = {
   summary: string;
   description: string;
   supportCopy: string;
+  emoji: string;
   count: number;
   percent: number;
 };
 
+type InnerStyleDisplayItem = {
+  label: string;
+  title: string;
+  emoji: string;
+  summary: string;
+  description: string;
+  note: string;
+  action: string;
+};
+
 type MatchProfile = {
   label: string;
+  headline: string;
   summary: string;
   reason: string;
-  note: string;
+  friction: string;
+  goodScene: string;
   caution: string;
 };
 
-const RHYTHM_META: Record<SajuElement, { label: string; title: string; summary: string; description: string; supportCopy: string }> = {
+const RHYTHM_META: Record<SajuElement, { label: string; title: string; summary: string; description: string; supportCopy: string; emoji: string }> = {
   wood: {
     label: "탐색",
     title: "새로운 가능성을 빠르게 키우는 분이네요",
+    emoji: "🌱",
     summary: "아이디어를 발견하고 확장하는 감각이 또렷해요.",
     description: "새로운 주제에 호기심이 빨리 붙어요.",
     supportCopy: "새로운 관점을 일부러 열어두면 선택지가 더 풍성해져요.",
@@ -516,6 +567,7 @@ const RHYTHM_META: Record<SajuElement, { label: string; title: string; summary: 
   fire: {
     label: "추진",
     title: "분위기를 움직이는 실행감이 또렷한 분이네요",
+    emoji: "🔥",
     summary: "생각이 행동으로 넘어가는 속도가 장점으로 읽혀요.",
     description: "시동이 걸리면 주변 흐름까지 같이 끌어올려요.",
     supportCopy: "작은 실행 버튼을 먼저 누르면 생각이 오래 고이지 않아요.",
@@ -523,6 +575,7 @@ const RHYTHM_META: Record<SajuElement, { label: string; title: string; summary: 
   earth: {
     label: "정리",
     title: "복잡한 흐름을 안정적으로 정리하는 분이네요",
+    emoji: "🧭",
     summary: "상황을 차분히 붙잡고 균형을 맞추는 힘이 보여요.",
     description: "흩어진 정보를 구조로 묶는 데 강해요.",
     supportCopy: "해야 할 일을 작게 나누면 집중이 더 오래 유지돼요.",
@@ -530,6 +583,7 @@ const RHYTHM_META: Record<SajuElement, { label: string; title: string; summary: 
   metal: {
     label: "판단",
     title: "기준을 세우고 선명하게 판단하는 분이네요",
+    emoji: "⚖️",
     summary: "선택지가 많아도 핵심 기준을 빠르게 잡는 편이에요.",
     description: "필요한 것과 아닌 것을 가르는 감각이 있어요.",
     supportCopy: "기준을 한 줄로 적어두면 고민이 빠르게 정리돼요.",
@@ -537,6 +591,7 @@ const RHYTHM_META: Record<SajuElement, { label: string; title: string; summary: 
   water: {
     label: "몰입",
     title: "조용히 깊이를 쌓는 분이네요",
+    emoji: "🌊",
     summary: "겉으로는 차분해도 안쪽에서는 생각의 깊이가 오래 이어져요.",
     description: "한 번 꽂힌 주제는 끝까지 파고드는 쪽이에요.",
     supportCopy: "깊게 파고드는 시간과 쉬어가는 시간을 나누면 균형이 좋아져요.",
@@ -564,11 +619,20 @@ function buildFaceSignals(result: LibraryAnalysisResult) {
       text: compactCopy(`${result.parts.eyes.metricsText} ${result.parts.eyes.comment}`, 132),
     },
     {
+      title: "코와 입의 흐름",
+      kicker: "NOSE / MOUTH",
+      text: compactCopy(`${result.parts.nose.metricsText} ${result.parts.nose.comment} ${result.parts.mouth.comment}`, 136),
+    },
+    {
       title: "하관 리듬",
       kicker: "JAW",
       text: compactCopy(`${result.parts.jaw.metricsText} ${result.parts.jaw.comment}`, 132),
     },
   ];
+}
+
+function buildFaceSignalSummaryLines(result: LibraryAnalysisResult, topScore: { label: string; value: number }) {
+  return [`얼굴 비율과 이목구비 좌표에서 읽힌 신호만 따로 모았어요.`, `가장 또렷한 측정 신호는 ${topScore.label} ${Math.round(topScore.value)}점이에요.`];
 }
 
 function buildOpeningSummaryLines(result: LibraryAnalysisResult) {
@@ -578,8 +642,26 @@ function buildOpeningSummaryLines(result: LibraryAnalysisResult) {
   return [summary, compactCopy(strengths, 112)].filter(Boolean);
 }
 
-function buildInnerStyleSummaryLines(style: { strong: RhythmProfileItem; support: RhythmProfileItem }) {
-  return [`${style.strong.label} 성향이 가장 또렷하고, ${style.support.label} 성향을 보완하면 균형이 더 좋아져요.`, "복잡한 분포표 대신 지금 가장 중요한 강점과 보완점만 골랐어요."];
+type SectionCopyKey = keyof NonNullable<LibraryAnalysisResult["sectionCopy"]>;
+
+function sectionLines(result: LibraryAnalysisResult, key: SectionCopyKey, fallback: string[]) {
+  const custom = result.sectionCopy?.[key]?.map(publicResultCopy).filter(Boolean) ?? [];
+  const unique = dedupeLines(custom.length > 0 ? custom : fallback.map(publicResultCopy));
+  return unique.slice(0, 2);
+}
+
+function dedupeLines(lines: string[]) {
+  const seen = new Set<string>();
+  return lines.filter((line) => {
+    const normalized = line.replace(/\s+/g, " ").trim();
+    if (!normalized || seen.has(normalized)) return false;
+    seen.add(normalized);
+    return true;
+  });
+}
+
+function buildInnerStyleSummaryLines(style: { strong: InnerStyleDisplayItem; support: InnerStyleDisplayItem }) {
+  return [`${style.strong.label}이 가장 또렷하고, ${style.support.label}은 의식적으로 보완하면 좋아요.`, "숫자표 대신 지금 체감하기 쉬운 성향 두 가지만 골랐어요."];
 }
 
 function buildBookSectionLines(result: LibraryAnalysisResult) {
@@ -587,7 +669,30 @@ function buildBookSectionLines(result: LibraryAnalysisResult) {
   return [`${firstNeed}에 맞춰 지금 바로 집어 들기 좋은 책을 먼저 골랐어요.`, "대표 책 1권과 함께 읽기 좋은 책 2권만 간단히 추렸어요."];
 }
 
-function innerStyleProfile(items: ReturnType<typeof rhythmSignalItems>) {
+function innerStyleProfile(result: LibraryAnalysisResult, items: ReturnType<typeof rhythmSignalItems>) {
+  if (result.innerStyleInsight) {
+    return {
+      strong: {
+        label: result.innerStyleInsight.dominantLabel,
+        title: `${result.innerStyleInsight.dominantLabel}이 또렷한 분이네요`,
+        emoji: result.innerStyleInsight.dominantEmoji,
+        summary: result.innerStyleInsight.dominantHeadline,
+        description: result.innerStyleInsight.dominantDetail,
+        note: "야옹이 기준으로 이 부분은 이미 꽤 선명하게 보여요.",
+        action: result.innerStyleInsight.dominantDetail,
+      },
+      support: {
+        label: result.innerStyleInsight.growthLabel,
+        title: `${result.innerStyleInsight.growthLabel}을 보완하면 좋아요`,
+        emoji: result.innerStyleInsight.growthEmoji,
+        summary: result.innerStyleInsight.growthHeadline,
+        description: result.innerStyleInsight.growthDetail,
+        note: result.innerStyleInsight.growthDetail,
+        action: result.innerStyleInsight.growthAction,
+      },
+    };
+  }
+
   const percentItems = rhythmPercentItems(items).sort((left, right) => right.percent - left.percent) as RhythmProfileItem[];
   const strong = percentItems[0] ?? ({ ...RHYTHM_META.water, element: "water", count: 1, percent: 100 } satisfies RhythmProfileItem);
   const support =
@@ -595,7 +700,22 @@ function innerStyleProfile(items: ReturnType<typeof rhythmSignalItems>) {
       .filter((item) => item.element !== strong.element)
       .sort((left, right) => left.percent - right.percent)[0] ?? strong;
 
-  return { strong, support };
+  return {
+    strong: rhythmToDisplay(strong, "strong"),
+    support: rhythmToDisplay(support, "support"),
+  };
+}
+
+function rhythmToDisplay(item: RhythmProfileItem, tone: "strong" | "support"): InnerStyleDisplayItem {
+  return {
+    label: item.label,
+    title: item.title,
+    emoji: item.emoji,
+    summary: tone === "strong" ? item.summary : `${item.label}이 부족하면 좋은 생각도 실행 전 대기실에 오래 머물 수 있어요.`,
+    description: tone === "strong" ? item.description : item.supportCopy,
+    note: "야옹이 확대경으로 보면 이미 잘 쓰고 있는 쪽이에요.",
+    action: `${item.label}을 아주 작게 한 번만 꺼내 쓰면 균형이 훨씬 편해져요.`,
+  };
 }
 
 function rhythmPercentItems(items: ReturnType<typeof rhythmSignalItems>) {
@@ -613,19 +733,23 @@ function totalRhythmCount(items: Array<{ count: number }>) {
   );
 }
 
-function buildMatchProfile(result: LibraryAnalysisResult, strong: RhythmProfileItem): MatchProfile {
-  const rawLabel = result.romanticMatch.bestTypes[0] ?? `${strong.label}을 편하게 받아주는 사람`;
+function buildMatchProfile(result: LibraryAnalysisResult, strong: InnerStyleDisplayItem): MatchProfile {
+  const rawLabel = result.chemiInsight?.typeLabel ?? result.romanticMatch.bestTypes[0] ?? `${strong.label}을 편하게 받아주는 사람`;
   const label = compactPublicCopy(rawLabel, 34);
-  const why = publicResultCopy(result.romanticMatch.why);
+  const why = publicResultCopy(result.chemiInsight?.why ?? result.romanticMatch.why);
   const caution = publicResultCopy(result.romanticMatch.caution);
-  const reason = compactCopy(firstPublicSentence(why) || `${strong.label} 성향을 편안하게 받아주고 대화 흐름을 차분히 이어주는 사람이 잘 맞아요.`, 118);
-  const note = compactCopy(firstPublicSentence(publicResultCopy(result.romanticMatch.dateStyle)) || "조용한 대화와 가벼운 환기가 함께 있는 시간이 잘 맞아요.", 112);
+  const reason = compactCopy(firstPublicSentence(why) || `${strong.label} 성향을 편안하게 받아주고 대화 흐름을 차분히 이어주는 사람이 잘 맞아요.`, 126);
+  const headline = compactCopy(result.chemiInsight?.headline ?? `${label}과 있으면 생각이 너무 오래 고이지 않고 자연스럽게 움직여요.`, 116);
+  const friction = compactCopy(result.chemiInsight?.friction ?? firstPublicSentence(caution) ?? "혼자 의미를 오래 쌓아두면 작은 오해도 고양이 털처럼 커질 수 있어요.", 112);
+  const goodScene = compactCopy(result.chemiInsight?.goodScene ?? firstPublicSentence(publicResultCopy(result.romanticMatch.dateStyle)) ?? "조용한 대화와 가벼운 환기가 함께 있는 시간이 잘 맞아요.", 112);
 
   return {
     label,
+    headline,
     summary: `${label}과 가장 흐름이 좋아요.`,
     reason,
-    note,
+    friction,
+    goodScene,
     caution: compactCopy(firstPublicSentence(caution) || "혼자 의미를 쌓아두기보다 바로 말로 확인하면 관계 흐름이 편해져요.", 112),
   };
 }
@@ -638,7 +762,7 @@ function topScoreItems(scores: LibraryAnalysisResult["scores"], count = 3) {
   const items = [
     { label: "호감도", value: scores.likability },
     { label: "신뢰감", value: scores.trust },
-    { label: "대칭성", value: scores.symmetry },
+    { label: "대칭성", value: Math.min(scores.symmetry, 90) },
     { label: "균형감", value: scores.balance },
     { label: "인상 매력도", value: scores.attractiveness },
   ];
@@ -765,6 +889,16 @@ function withResultFallback(result: LibraryAnalysisResult): LibraryAnalysisResul
     sajuSummary,
     readingNeeds: oldResult.readingNeeds ?? ["집중 회복", "생각 정리", "실행 리듬"],
     recommendations: oldResult.recommendations ?? [],
+    calibratedScores: oldResult.calibratedScores,
+    sectionCopy: oldResult.sectionCopy ?? {
+      faceReveal: [physiognomySummary, "얼굴에서 먼저 보이는 안정감과 리듬을 중심으로 읽었어요."],
+      faceSignal: ["얼굴 비율과 이목구비 좌표에서 읽힌 신호만 따로 모았어요.", "좋고 나쁨보다 어떤 인상으로 읽히는지 중심으로 정리했어요."],
+      innerStyle: ["숫자표 대신 지금 체감하기 쉬운 성향 두 가지만 골랐어요.", "강하게 드러나는 쪽과 보완하면 편해지는 쪽을 나눠 봤어요."],
+      chemiMatch: ["잘 맞는 사람은 여러 명보다 한 유형으로 좁혀야 더 믿을 만해요.", "야옹이가 흐름이 가장 편한 타입 하나만 골랐어요."],
+      bookCuration: ["지금 필요한 독서 방향에 맞춰 바로 집어 들기 좋은 책을 골랐어요.", "대표 책 1권과 함께 읽기 좋은 책 2권만 간단히 추렸어요."],
+    },
+    innerStyleInsight: oldResult.innerStyleInsight,
+    chemiInsight: oldResult.chemiInsight,
   };
 }
 

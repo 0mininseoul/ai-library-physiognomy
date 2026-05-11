@@ -10,8 +10,10 @@ type BookRecommendationCardProps = {
 export function BookRecommendationCard({ book, index, variant = "compact" }: BookRecommendationCardProps) {
   const href = book.naverBookUrl ?? naverBookUrl(book.title, book.author);
   const featured = variant === "featured";
-  const reason = compactBookReason(book.reason, featured ? 94 : 58);
-  const actionCopy = compactBookCopy(book.actionCopy, featured ? 72 : 42);
+  const reason = compactBookReason(book.reason, featured ? 118 : 72);
+  const fitReason = compactBookReason(book.fitReason ?? book.reason, featured ? 118 : 70);
+  const readingMoment = compactBookCopy(book.readingMoment ?? book.actionCopy, featured ? 82 : 48);
+  const actionCopy = compactBookCopy(book.actionCopy, featured ? 76 : 44);
 
   if (featured) {
     return (
@@ -19,9 +21,9 @@ export function BookRecommendationCard({ book, index, variant = "compact" }: Boo
         href={href}
         target="_blank"
         rel="noreferrer"
-        className="glass-card group grid min-h-[20rem] grid-cols-[11.25rem_minmax(0,1fr)] gap-5 overflow-hidden rounded-3xl p-5 transition hover:border-accent-info/50 hover:bg-bg-card-hover/70"
+        className="glass-card group grid min-h-[20rem] grid-cols-[12.25rem_minmax(0,1fr)] gap-6 overflow-hidden rounded-3xl p-5 transition hover:border-accent-info/50 hover:bg-bg-card-hover/70"
       >
-        <div className="aspect-[3/4] w-full overflow-hidden rounded-2xl border border-border bg-bg-card shadow-2xl shadow-black/20">
+        <div className="h-[18rem] w-full overflow-hidden rounded-2xl border border-border bg-bg-card shadow-2xl shadow-black/20">
           {book.coverUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={book.coverUrl} alt={`${book.title} 표지`} className="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
@@ -37,14 +39,16 @@ export function BookRecommendationCard({ book, index, variant = "compact" }: Boo
                 <BookOpen className="h-4 w-4" aria-hidden="true" />
                 대표 추천
               </p>
-              <h3 className="mt-3 line-clamp-3 text-[1.65rem] font-bold leading-tight text-text-primary">{book.title}</h3>
+              <h3 className="mt-3 line-clamp-2 text-[1.55rem] font-semibold leading-tight text-text-primary">{book.title}</h3>
               <p className="mt-2 truncate text-base font-bold text-text-muted">{book.author}</p>
             </div>
             <ExternalLink className="h-5 w-5 shrink-0 text-accent-info transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
           </div>
 
-          <p className="mt-5 text-base font-semibold leading-7 text-text-muted">{reason}</p>
-          <p className="mt-4 rounded-2xl border border-accent-info/20 bg-accent-info/10 px-4 py-3 text-sm font-black leading-6 text-text-primary">{actionCopy}</p>
+          <div className="mt-5 grid gap-3">
+            <BookReasonBlock label="왜 이 책인지" text={fitReason || reason} />
+            <BookReasonBlock label="읽기 좋은 순간" text={readingMoment || actionCopy} compact />
+          </div>
 
           <BookLocation book={book} className="mt-4 grid gap-2 pt-1 text-sm font-bold text-text-muted" />
         </div>
@@ -57,9 +61,9 @@ export function BookRecommendationCard({ book, index, variant = "compact" }: Boo
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="glass-card group grid min-h-[10.5rem] grid-cols-[4.75rem_minmax(0,1fr)] gap-4 rounded-3xl p-4 transition hover:border-accent-info/50 hover:bg-bg-card-hover/70"
+      className="glass-card group grid min-h-[11.25rem] grid-cols-[6.25rem_minmax(0,1fr)] gap-4 overflow-hidden rounded-3xl p-4 transition hover:border-accent-info/50 hover:bg-bg-card-hover/70"
     >
-      <div className="aspect-[3/4] h-[8.5rem] overflow-hidden rounded-2xl border border-border bg-bg-card shadow-2xl shadow-black/20">
+      <div className="h-[9.25rem] w-full overflow-hidden rounded-2xl border border-border bg-bg-card shadow-2xl shadow-black/20">
         {book.coverUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={book.coverUrl} alt={`${book.title} 표지`} className="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
@@ -73,17 +77,26 @@ export function BookRecommendationCard({ book, index, variant = "compact" }: Boo
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
               <p className="text-xs font-black uppercase tracking-[0.14em] text-accent-info">함께 추천 #{index + 1}</p>
-              <h3 className="mt-1 line-clamp-2 text-lg font-black leading-tight text-text-primary">{book.title}</h3>
+              <h3 className="mt-1 text-[0.95rem] font-semibold leading-5 text-text-primary">{book.title}</h3>
               <p className="mt-1 truncate text-xs font-bold text-text-muted">{book.author}</p>
             </div>
             <ExternalLink className="h-4 w-4 shrink-0 text-accent-info transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
           </div>
 
-          <p className="mt-2 text-xs font-semibold leading-5 text-text-muted">{reason}</p>
+          <p className="mt-2 line-clamp-2 text-xs font-semibold leading-5 text-text-muted">{fitReason || reason}</p>
           <BookLocation book={book} className="mt-auto flex flex-wrap gap-x-3 gap-y-1 pt-3 text-xs font-bold text-text-muted" />
         </div>
       </div>
     </a>
+  );
+}
+
+function BookReasonBlock({ label, text, compact = false }: { label: string; text: string; compact?: boolean }) {
+  return (
+    <div className="rounded-2xl border border-accent-info/[0.18] bg-accent-info/[0.08] px-4 py-3">
+      <p className="text-xs font-black uppercase tracking-[0.12em] text-accent-info">{label}</p>
+      <p className={[compact ? "mt-1 line-clamp-2 text-sm leading-6" : "mt-2 line-clamp-3 text-sm leading-6", "font-bold text-text-muted"].join(" ")}>{text}</p>
+    </div>
   );
 }
 

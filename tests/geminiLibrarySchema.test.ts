@@ -53,11 +53,36 @@ describe("normalizeLibraryAnalysis", () => {
         date_style: "조용한 전시나 책방처럼 대화가 천천히 열리는 코스가 잘 맞습니다.",
         caution: "답장이 늦다고 바로 의미 부여하면 고양이 귀 접힙니다.",
       },
+      section_copy: {
+        face_reveal: ["영민님은 첫 화면부터 차분한 집중감이 보여요."],
+        face_signal: ["눈과 하관 좌표에서 안정적인 인상 신호가 보여요."],
+        inner_style: ["탐색은 선명하고 추진은 조금 보완하면 좋아요."],
+        chemi_match: ["가볍게 환기해주는 사람과 흐름이 좋아요."],
+        book_curation: ["지금은 집중을 좁혀주는 책이 잘 맞아요."],
+      },
+      inner_style: {
+        dominant_label: "탐색",
+        dominant_emoji: "🌱",
+        dominant_headline: "궁금한 건 끝까지 파고드는 편이에요.",
+        dominant_detail: "관심사가 생기면 자료를 모으고 연결하는 속도가 빨라요.",
+        growth_label: "추진",
+        growth_emoji: "🔥",
+        growth_headline: "시작 버튼이 조금 늦게 눌릴 수 있어요.",
+        growth_detail: "생각이 충분히 쌓일 때까지 기다리다 타이밍을 놓칠 수 있어요.",
+        growth_action: "작은 실행을 먼저 하나만 정하면 균형이 좋아져요.",
+      },
+      chemi_match: {
+        type_label: "에너지 실행형",
+        headline: "가볍게 시동을 걸어주는 사람과 흐름이 좋아요.",
+        why: "영민님의 깊은 생각을 현실 쪽으로 살짝 당겨줘요.",
+        friction: "속도를 강요하면 오히려 귀가 접힐 수 있어요.",
+        good_scene: "짧게 산책하며 생각을 말로 꺼내는 장면이 좋아요.",
+      },
       physiognomy_summary: "이목구비 균형에서 집중 테마를 뽑았습니다.",
       saju_summary: "월주 흐름은 실행 키워드와 연결됩니다.",
       reading_needs: ["집중력 회복", "실행력", "사고 확장"],
       recommendations: [
-        { book_id: "1", reason: "집중 루틴에 맞습니다.", action_copy: "첫 장만 읽어도 시동 걸림" },
+        { book_id: "1", reason: "집중 루틴에 맞습니다.", action_copy: "첫 장만 읽어도 시동 걸림", fit_reason: "탐색 성향을 집중으로 좁혀줘요.", reading_moment: "공부 시작 전 15분에 좋아요." },
         { book_id: "2", reason: "실행력을 보강합니다.", action_copy: "빌리면 오늘의 나 칭찬 가능" },
         { book_id: "3", reason: "사고를 정리합니다.", action_copy: "머릿속 탭 정리용" },
       ],
@@ -67,6 +92,10 @@ describe("normalizeLibraryAnalysis", () => {
     expect(result.mainCopy).toBe("영민님 집중 모드 켜짐");
     expect(result.parts.impression.comment).toContain("차분하게");
     expect(result.romanticMatch.bestTypes).toContain("에너지 실행형");
+    expect(result.sectionCopy?.faceReveal[0]).toContain("영민님");
+    expect(result.innerStyleInsight?.growthLabel).toBe("추진");
+    expect(result.chemiInsight?.typeLabel).toBe("에너지 실행형");
+    expect(result.recommendations[0].fitReason).toContain("탐색");
     expect(JSON.stringify(result)).not.toMatch(/사주|오행|생년월일|물 기운|불꽃 실행형|잔잔한 물결형|월주/);
     expect(result.recommendations).toHaveLength(3);
   });
