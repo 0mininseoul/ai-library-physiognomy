@@ -661,7 +661,7 @@ function dedupeLines(lines: string[]) {
 }
 
 function buildInnerStyleSummaryLines(style: { strong: InnerStyleDisplayItem; support: InnerStyleDisplayItem }) {
-  return [`${style.strong.label}이 가장 또렷하고, ${style.support.label}은 의식적으로 보완하면 좋아요.`, "숫자표 대신 지금 체감하기 쉬운 성향 두 가지만 골랐어요."];
+  return [`${style.strong.label} 성향이 가장 또렷하고, ${style.support.label} 쪽은 의식적으로 보완하면 좋아요.`, "숫자표 대신 지금 체감하기 쉬운 성향 두 가지만 골랐어요."];
 }
 
 function buildBookSectionLines(result: LibraryAnalysisResult) {
@@ -671,10 +671,13 @@ function buildBookSectionLines(result: LibraryAnalysisResult) {
 
 function innerStyleProfile(result: LibraryAnalysisResult, items: ReturnType<typeof rhythmSignalItems>) {
   if (result.innerStyleInsight) {
+    const dominantLabel = normalizeStyleDisplayLabel(result.innerStyleInsight.dominantLabel);
+    const growthLabel = normalizeStyleDisplayLabel(result.innerStyleInsight.growthLabel);
+
     return {
       strong: {
-        label: result.innerStyleInsight.dominantLabel,
-        title: `${result.innerStyleInsight.dominantLabel}이 또렷한 분이네요`,
+        label: dominantLabel,
+        title: `${dominantLabel} 타입이 또렷한 분이네요`,
         emoji: result.innerStyleInsight.dominantEmoji,
         summary: result.innerStyleInsight.dominantHeadline,
         description: result.innerStyleInsight.dominantDetail,
@@ -682,8 +685,8 @@ function innerStyleProfile(result: LibraryAnalysisResult, items: ReturnType<type
         action: result.innerStyleInsight.dominantDetail,
       },
       support: {
-        label: result.innerStyleInsight.growthLabel,
-        title: `${result.innerStyleInsight.growthLabel}을 보완하면 좋아요`,
+        label: growthLabel,
+        title: `${growthLabel} 쪽을 보완하면 좋아요`,
         emoji: result.innerStyleInsight.growthEmoji,
         summary: result.innerStyleInsight.growthHeadline,
         description: result.innerStyleInsight.growthDetail,
@@ -704,6 +707,16 @@ function innerStyleProfile(result: LibraryAnalysisResult, items: ReturnType<type
     strong: rhythmToDisplay(strong, "strong"),
     support: rhythmToDisplay(support, "support"),
   };
+}
+
+function normalizeStyleDisplayLabel(input: string) {
+  const label = cleanCopy(input)
+    .replace(/(?:이|가|은|는|을|를)\s*(?:또렷|선명|강함|강한|보완).*$/g, "")
+    .replace(/(?:타입|성향|분|쪽)$/g, "")
+    .replace(/[.,!?]+$/g, "")
+    .trim();
+
+  return label || "몰입형 사고";
 }
 
 function rhythmToDisplay(item: RhythmProfileItem, tone: "strong" | "support"): InnerStyleDisplayItem {

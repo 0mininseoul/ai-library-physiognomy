@@ -35,6 +35,10 @@ const COMPLETED_CARD_NEXT_DELAY_MS = 420;
 const CAT_ENTRY_START_DELAY_MS = 2_000;
 const CAT_ENTRY_FALLBACK_MS = 12_000;
 const CAT_CANVAS_MAX_WIDTH = 960;
+const CAT_VIDEO_SOURCES = {
+  entering: { webm: "/cats/neko1-alpha.webm", safari: "/cats/neko1-safari.mp4" },
+  resting: { webm: "/cats/neko2-alpha.webm", safari: "/cats/neko2-safari.mp4" },
+} as const;
 
 const ANALYSIS_CARDS = [
   { title: "§1 FACE GEOMETRY", body: "얼굴 외곽, 상중하안 비율, 중심축을 계측 중." },
@@ -608,6 +612,11 @@ function ChromaKeyCatSequence({ className, onPhaseChange }: { className: string;
     const context = canvas?.getContext("2d", { willReadFrequently: true });
     if (!entryVideo || !restingVideo || !canvas || !context) return;
 
+    const entrySource = selectCatVideoSource("entering");
+    const restingSource = selectCatVideoSource("resting");
+    if (entryVideo.getAttribute("src") !== entrySource) entryVideo.src = entrySource;
+    if (restingVideo.getAttribute("src") !== restingSource) restingVideo.src = restingSource;
+
     let animationFrame = 0;
     let stopped = false;
     let lastPaintAt = 0;
@@ -711,7 +720,7 @@ function ChromaKeyCatSequence({ className, onPhaseChange }: { className: string;
       <video
         ref={entryVideoRef}
         className="cat-gatekeeper-source-video"
-        src="/cats/neko1-alpha.webm"
+        src={CAT_VIDEO_SOURCES.entering.webm}
         muted
         playsInline
         preload="auto"
@@ -724,7 +733,7 @@ function ChromaKeyCatSequence({ className, onPhaseChange }: { className: string;
       <video
         ref={restingVideoRef}
         className="cat-gatekeeper-source-video"
-        src="/cats/neko2-alpha.webm"
+        src={CAT_VIDEO_SOURCES.resting.webm}
         muted
         playsInline
         preload="auto"
@@ -738,6 +747,17 @@ function ChromaKeyCatSequence({ className, onPhaseChange }: { className: string;
       <canvas ref={canvasRef} className={className} />
     </>
   );
+}
+
+function selectCatVideoSource(phase: keyof typeof CAT_VIDEO_SOURCES) {
+  return isDesktopSafari() ? CAT_VIDEO_SOURCES[phase].safari : CAT_VIDEO_SOURCES[phase].webm;
+}
+
+function isDesktopSafari() {
+  if (typeof navigator === "undefined") return false;
+  const ua = navigator.userAgent;
+  const vendor = navigator.vendor;
+  return /Safari/i.test(ua) && /Apple/i.test(vendor) && !/Chrome|Chromium|CriOS|FxiOS|Edg|OPR/i.test(ua);
 }
 
 function DarkInput(props: InputHTMLAttributes<HTMLInputElement> & { label: string }) {
@@ -762,11 +782,11 @@ function AnalysisHud({ flow, displayName, progress, statusLabel }: { flow: Flow;
 
   return (
     <>
-      <div className="fixed left-1/2 top-7 z-30 -translate-x-1/2 rounded-md border border-accent-info/[0.35] bg-black/[0.55] px-4 py-2 text-sm font-semibold text-accent-info backdrop-blur">
+      <div className="glass-panel fixed left-1/2 top-6 z-30 -translate-x-1/2 rounded-lg px-4 py-2 text-sm font-bold text-accent-info shadow-glass">
         {statusLabel}
       </div>
 
-      <section className="fixed bottom-8 left-7 z-20 w-[min(420px,calc(100vw-3.5rem))] rounded-xl border border-border bg-black/50 px-4 py-4 text-sm font-semibold text-text-muted shadow-2xl shadow-black/30 backdrop-blur">
+      <section className="glass-panel fixed bottom-5 left-6 z-20 w-[min(420px,calc(100vw-3rem))] rounded-xl px-4 py-4 text-sm font-semibold text-text-muted shadow-glass">
         <div className="mb-3 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             {flow === "submitting" ? (
@@ -778,7 +798,7 @@ function AnalysisHud({ flow, displayName, progress, statusLabel }: { flow: Flow;
           </div>
           <span className="text-2xl font-black tabular-nums text-text-primary">{Math.max(8, progress)}%</span>
         </div>
-        <div className="h-2 overflow-hidden rounded-full bg-white/10">
+        <div className="h-2 overflow-hidden rounded-full bg-bg-raised/65">
           <div className="h-full rounded-full bg-accent-info transition-[width] duration-500 ease-out" style={{ width: `${Math.max(8, progress)}%` }} />
         </div>
         <p className="mt-3 text-xs font-medium leading-5 text-text-faint">관상 좌표가 안정화되면 결과 화면으로 바로 넘어갑니다.</p>
@@ -789,7 +809,7 @@ function AnalysisHud({ flow, displayName, progress, statusLabel }: { flow: Flow;
 
 function TopStatus({ label }: { label: string }) {
   return (
-    <div className="fixed left-1/2 top-7 z-30 -translate-x-1/2 rounded-md border border-accent-info/[0.35] bg-black/[0.55] px-4 py-2 text-sm font-semibold text-accent-info backdrop-blur">
+    <div className="glass-panel fixed left-1/2 top-6 z-30 -translate-x-1/2 rounded-lg px-4 py-2 text-sm font-bold text-accent-info shadow-glass">
       {label}
     </div>
   );
@@ -831,12 +851,12 @@ function FloatingCards({
   const leftRailClassName = [
     railBaseClassName,
     "left-6",
-    isCompletedView ? "top-[96px] bottom-8" : "top-[104px] bottom-40",
+    isCompletedView ? "top-[84px] bottom-5" : "top-[86px] bottom-[8.75rem]",
   ].join(" ");
   const rightRailClassName = [
     railBaseClassName,
     "right-6",
-    isCompletedView && finalCardVisible ? "top-[96px] bottom-[17.5rem]" : isCompletedView ? "top-[96px] bottom-8" : "top-[104px] bottom-40",
+    isCompletedView && finalCardVisible ? "top-[84px] bottom-[15.5rem]" : isCompletedView ? "top-[84px] bottom-5" : "top-[86px] bottom-[8.75rem]",
   ].join(" ");
 
   useEffect(() => {
@@ -963,12 +983,12 @@ function AnalysisStepCard({
           {bodyStreamComplete ? (
             <div className="mt-3 grid gap-2">
               {scores.map((score) => (
-                <div key={score.label} className="rounded-lg border border-white/10 bg-black/20 px-3 py-2">
+                <div key={score.label} className="rounded-lg border border-border/60 bg-bg-card/55 px-3 py-2">
                   <div className="mb-1.5 flex items-center justify-between gap-3">
                     <span className="text-xs font-black text-text-primary">{score.label}</span>
                     <span className="text-sm font-black tabular-nums text-text-primary">{Math.round(score.value)}</span>
                   </div>
-                  <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
+                  <div className="h-1.5 overflow-hidden rounded-full bg-bg-raised/65">
                     <div className="h-full rounded-full bg-accent-info transition-[width] duration-700 ease-out" style={{ width: `${clampInt(score.value, 0, 100)}%` }} />
                   </div>
                   {score.comment ? <p className="mt-1.5 text-xs font-bold leading-5 text-text-primary">{cleanAnalysisCopy(score.comment, 58)}</p> : null}
@@ -982,7 +1002,7 @@ function AnalysisStepCard({
       )}
       {!scores && !completedView ? (
         <div className="mt-3 flex items-center gap-3">
-          <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-white/10">
+          <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-bg-raised/65">
             <div className="h-full rounded-full bg-accent-info transition-[width] duration-300 ease-out" style={{ width: `${progress}%` }} />
           </div>
           <span className="w-10 text-right text-xs font-black tabular-nums text-text-primary">{progress}%</span>
@@ -1018,19 +1038,20 @@ function useStreamingText(text: string, enabled: boolean, intervalMs: number) {
 
 function FinalRevealCard({ displayName, result, onOpenResult }: { displayName: string; result: LibraryAnalysisResult | null; onOpenResult: () => void }) {
   const name = `${displayName || "회원"}님`;
-  const dominantLabel = result?.innerStyleInsight?.dominantLabel ?? "몰입";
+  const dominantLabel = normalizeStyleLabel(result?.innerStyleInsight?.dominantLabel ?? "몰입형 사고");
+  const faceSummary = leadWithName(name, result?.physiognomySummary ?? "겉으로는 차분해 보여도 안쪽에서는 생각이 꽤 오래 이어지는 분이에요.", 118);
   const body = [
-    cleanAnalysisCopy(`${name}은 ${result?.physiognomySummary ?? "겉으로는 차분해 보여도 안쪽에서는 생각이 꽤 오래 이어지는 분이에요."}`, 118),
+    faceSummary,
     cleanAnalysisCopy(result?.innerStyleInsight?.dominantDetail ?? result?.sajuSummary ?? "머릿속에 탭이 여러 개 열려 있어도, 중요한 것 하나는 끝까지 붙잡는 쪽이에요.", 118),
-    cleanAnalysisCopy(`야옹이 최종 판정은 이거예요. ${dominantLabel}이 선명해서, 말보다 흐름으로 설득하는 타입이에요.`, 118),
+    cleanAnalysisCopy(`야옹이 최종 판정은 이거예요. ${dominantLabel} 성향이 선명해서, 말보다 흐름으로 설득하는 타입이에요.`, 118),
   ].join("\n");
   const { text: streamedBody, isComplete } = useStreamingText(body, true, COMPLETED_CARD_STREAM_INTERVAL_MS);
 
   return (
-    <section className="fixed bottom-8 left-1/2 z-30 w-[min(880px,calc(100vw-39rem))] min-w-[34rem] -translate-x-1/2">
-      <article className="glass-panel rounded-2xl border-accent-info/[0.35] p-5 shadow-2xl shadow-black/40">
+    <section className="fixed bottom-5 left-1/2 z-30 w-[min(880px,calc(100vw-39rem))] min-w-[34rem] -translate-x-1/2">
+      <article className="glass-panel rounded-2xl border-accent-info/[0.35] p-5 shadow-glass">
         <p className="text-xs font-black uppercase tracking-[0.16em] text-accent-info">FINAL ASSESSMENT</p>
-        <h2 className="mt-2 text-2xl font-black text-text-primary">{`${name}은 ${dominantLabel}이 선명한 타입이에요`}</h2>
+        <h2 className="mt-2 text-2xl font-black text-text-primary">{`${name}은 ${dominantLabel} 타입이에요`}</h2>
         <p className="mt-3 whitespace-pre-line text-sm font-semibold leading-6 text-text-primary">{streamedBody}</p>
         {isComplete ? (
           <button
@@ -1048,8 +1069,8 @@ function FinalRevealCard({ displayName, result, onOpenResult }: { displayName: s
 }
 
 function buildCompletedAnalysisCards(result: LibraryAnalysisResult): CompletedAnalysisCard[] {
-  const innerLabel = result.innerStyleInsight?.dominantLabel ?? cleanAnalysisCopy(result.saju.strength, 42);
-  const growthLabel = result.innerStyleInsight?.growthLabel ?? cleanAnalysisCopy(result.saju.advice, 42);
+  const innerLabel = normalizeStyleLabel(result.innerStyleInsight?.dominantLabel ?? cleanAnalysisCopy(result.saju.strength, 42));
+  const growthLabel = normalizeStyleLabel(result.innerStyleInsight?.growthLabel ?? cleanAnalysisCopy(result.saju.advice, 42));
   const matchTypes = result.chemiInsight?.typeLabel ?? result.romanticMatch.bestTypes.slice(0, 1).join(", ");
 
   return [
@@ -1066,10 +1087,26 @@ function buildCompletedAnalysisCards(result: LibraryAnalysisResult): CompletedAn
         { label: "균형감", value: result.scores.balance, comment: result.scores.comments[3] },
       ],
     },
-    { title: "§6 INNER STYLE", body: cleanAnalysisCopy(`${innerLabel}이 가장 또렷하고, ${growthLabel}은 보완하면 좋아요. ${result.innerStyleInsight?.dominantDetail ?? result.saju.strength}`, 156) },
+    { title: "§6 INNER STYLE", body: cleanAnalysisCopy(`${innerLabel} 성향이 가장 또렷하고, ${growthLabel} 쪽은 보완하면 좋아요. ${result.innerStyleInsight?.dominantDetail ?? result.saju.strength}`, 156) },
     { title: "§7 CHEMI MATCH", body: cleanAnalysisCopy(`${matchTypes} 타입과 흐름이 잘 맞아요. ${result.chemiInsight?.why ?? result.romanticMatch.why}`, 156) },
     { title: "§8 FLOW READY", body: cleanAnalysisCopy("야옹이가 결과 화면에서 보여줄 핵심 문장만 골랐어요. 이제 긴 설명보다 바로 읽히는 리포트로 넘어갈 차례예요.", 140) },
   ];
+}
+
+function normalizeStyleLabel(input: string) {
+  const label = cleanAnalysisCopy(input, 20)
+    .replace(/(?:이|가|은|는|을|를)\s*(?:또렷|선명|강함|강한|보완).*$/g, "")
+    .replace(/(?:타입|성향|분|쪽)$/g, "")
+    .replace(/[.,!?]+$/g, "")
+    .trim();
+
+  return label || "몰입형 사고";
+}
+
+function leadWithName(name: string, input: string, maxLength: number) {
+  const copy = cleanAnalysisCopy(input, maxLength);
+  if (copy.startsWith(name) || copy.startsWith(`${name.slice(0, -1)}님`)) return copy;
+  return cleanAnalysisCopy(`${name}은 ${copy}`, maxLength);
 }
 
 function cleanAnalysisCopy(input: string, maxLength: number) {

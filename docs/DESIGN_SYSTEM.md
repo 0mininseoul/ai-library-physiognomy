@@ -153,6 +153,7 @@
 - Do not mention books, borrowing, or recommendations inside the analysis HUD. Book curation appears only in the final result section.
 - Cards need face-point connector lines where relevant, similar to the original AI 얼평 service.
 - The final assessment card appears bottom-center after the staged card reveal.
+- In light mode, analysis HUD/status surfaces should remain token-based glass panels. Do not mix hardcoded black HUD cards into a light analysis stage unless the whole stage is intentionally dark.
 
 ### Result Page
 
@@ -177,6 +178,8 @@
 - Bestseller-like titles need an explicit fit advantage before they can appear as the featured recommendation. Personal fit, library curation value, and specificity beat popularity.
 - Book recommendation trust copy should explain `왜 이 책인지`, `읽기 좋은 순간`, and `도서관 위치` in separated blocks.
 - Shared previews should use `/og-image.png` as the 1200x630 Open Graph image and keep the 512x512 cat logo for favicon/apple icon surfaces.
+- Shared preview descriptions should describe the product as an `AI 도서 큐레이션 서비스`, not a generic campus curation tool.
+- Mobile visitors should see a compact PC-only notice that fits in one visible mobile viewport, with the PC URL and copy action immediately available.
 
 ### Result Card Composition
 

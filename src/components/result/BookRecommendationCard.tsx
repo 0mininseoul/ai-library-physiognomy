@@ -21,9 +21,9 @@ export function BookRecommendationCard({ book, index, variant = "compact" }: Boo
         href={href}
         target="_blank"
         rel="noreferrer"
-        className="glass-card group grid min-h-[20rem] grid-cols-[12.25rem_minmax(0,1fr)] gap-6 overflow-hidden rounded-3xl p-5 transition hover:border-accent-info/50 hover:bg-bg-card-hover/70"
+        className="glass-card group grid min-h-[18.5rem] grid-cols-[10.75rem_minmax(0,1fr)] gap-5 overflow-hidden rounded-3xl p-5 transition hover:border-accent-info/50 hover:bg-bg-card-hover/70"
       >
-        <div className="h-[18rem] w-full overflow-hidden rounded-2xl border border-border bg-bg-card shadow-2xl shadow-black/20">
+        <div className="h-[16rem] w-full overflow-hidden rounded-2xl border border-border bg-bg-card shadow-2xl shadow-black/20">
           {book.coverUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={book.coverUrl} alt={`${book.title} 표지`} className="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
@@ -35,22 +35,24 @@ export function BookRecommendationCard({ book, index, variant = "compact" }: Boo
         <div className="flex min-w-0 flex-col">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
-              <p className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.14em] text-accent-info">
+              <p className="inline-flex items-center gap-2 rounded-full border border-accent-info/20 bg-accent-info/[0.08] px-3 py-1.5 text-xs font-black uppercase tracking-[0.12em] text-accent-info">
                 <BookOpen className="h-4 w-4" aria-hidden="true" />
                 대표 추천
               </p>
-              <h3 className="mt-3 line-clamp-2 text-[1.55rem] font-semibold leading-tight text-text-primary">{book.title}</h3>
+              <h3 className="mt-3 line-clamp-2 text-[1.35rem] font-semibold leading-tight text-text-primary">{book.title}</h3>
               <p className="mt-2 truncate text-base font-bold text-text-muted">{book.author}</p>
             </div>
-            <ExternalLink className="h-5 w-5 shrink-0 text-accent-info transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true" />
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-border bg-bg-card/62 text-accent-info shadow-glass transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+              <ExternalLink className="h-4 w-4" aria-hidden="true" />
+            </span>
           </div>
 
-          <div className="mt-5 grid gap-3">
+          <div className="mt-4 grid gap-2.5">
             <BookReasonBlock label="왜 이 책인지" text={fitReason || reason} />
             <BookReasonBlock label="읽기 좋은 순간" text={readingMoment || actionCopy} compact />
           </div>
 
-          <BookLocation book={book} className="mt-4 grid gap-2 pt-1 text-sm font-bold text-text-muted" />
+          <BookLocation book={book} className="mt-auto flex flex-wrap gap-2 pt-4 text-xs font-bold text-text-muted" />
         </div>
       </a>
     );
@@ -93,9 +95,9 @@ export function BookRecommendationCard({ book, index, variant = "compact" }: Boo
 
 function BookReasonBlock({ label, text, compact = false }: { label: string; text: string; compact?: boolean }) {
   return (
-    <div className="rounded-2xl border border-accent-info/[0.18] bg-accent-info/[0.08] px-4 py-3">
-      <p className="text-xs font-black uppercase tracking-[0.12em] text-accent-info">{label}</p>
-      <p className={[compact ? "mt-1 line-clamp-2 text-sm leading-6" : "mt-2 line-clamp-3 text-sm leading-6", "font-bold text-text-muted"].join(" ")}>{text}</p>
+    <div className="rounded-2xl border border-border/70 bg-bg-card/52 px-4 py-3 shadow-[inset_0_1px_0_rgb(255_255_255_/_0.26)]">
+      <p className="text-[0.68rem] font-black uppercase tracking-[0.12em] text-accent-info">{label}</p>
+      <p className={[compact ? "mt-1 line-clamp-2 text-[0.85rem] leading-6" : "mt-2 line-clamp-3 text-[0.9rem] leading-6", "font-bold text-text-muted"].join(" ")}>{text}</p>
     </div>
   );
 }
@@ -103,11 +105,11 @@ function BookReasonBlock({ label, text, compact = false }: { label: string; text
 function BookLocation({ book, className }: { book: BookRecommendation; className: string }) {
   return (
     <div className={className}>
-      <p className="inline-flex min-w-0 items-center gap-2">
+      <p className="inline-flex min-w-0 items-center gap-2 rounded-full border border-border/65 bg-bg-card/48 px-3 py-2">
         <MapPin className="h-4 w-4 shrink-0 text-accent-info" aria-hidden="true" />
         <span className="truncate">{book.locationLabel}</span>
       </p>
-      <p className="inline-flex min-w-0 items-center gap-2">
+      <p className="inline-flex min-w-0 items-center gap-2 rounded-full border border-border/65 bg-bg-card/48 px-3 py-2">
         <Tag className="h-4 w-4 shrink-0 text-accent-info" aria-hidden="true" />
         <span className="truncate">{book.callNumber}</span>
       </p>
