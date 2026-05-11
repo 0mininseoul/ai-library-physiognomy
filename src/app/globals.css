@@ -473,12 +473,18 @@ select {
 
 .cat-gatekeeper-source-video {
   position: absolute;
-  left: -9999px;
-  top: -9999px;
-  height: 1px;
-  width: 1px;
-  opacity: 0;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0.001;
   pointer-events: none;
+  object-fit: contain;
+}
+
+.cat-gatekeeper-direct-video {
+  opacity: 0.98;
+  mix-blend-mode: screen;
+  filter: contrast(1.04) saturate(1.08) brightness(1.02);
 }
 
 .cat-gatekeeper-canvas {
@@ -486,6 +492,10 @@ select {
   width: 100%;
   aspect-ratio: 16 / 9;
   filter: contrast(1.04) saturate(1.05) brightness(1);
+}
+
+.cat-gatekeeper-canvas--hidden {
+  opacity: 0;
 }
 
 .result-card-reveal {

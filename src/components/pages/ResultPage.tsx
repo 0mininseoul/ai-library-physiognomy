@@ -293,13 +293,13 @@ function StorySection({ active, index, eyebrow, title, lines, id, children }: { 
   return (
     <section id={id} className="scanline relative h-screen w-screen shrink-0 overflow-hidden px-28 pb-20 pt-28">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_16%,rgb(var(--accent-info-rgb)_/_0.12),transparent_28rem),radial-gradient(circle_at_10%_90%,rgb(255_255_255_/_0.055),transparent_26rem),linear-gradient(180deg,rgb(255_255_255_/_0.035),transparent_18rem)]" />
-      <div className="relative z-10 mx-auto grid h-full max-w-7xl grid-rows-[auto_minmax(0,1fr)] content-start gap-5">
-        <div className="max-w-6xl">
+      <div className="relative z-10 mx-auto grid h-full w-full max-w-[92rem] grid-rows-[auto_minmax(0,1fr)] content-start gap-5">
+        <div className="w-full">
           <p className="text-xs font-black uppercase tracking-[0.18em] text-accent-info">{eyebrow}</p>
           {index === 0 ? (
-            <h1 className="mt-3 max-w-[72rem] text-5xl font-bold leading-[1.08] text-text-primary lg:text-[3.75rem] xl:text-[4rem]">{title}</h1>
+            <h1 className="mt-3 max-w-none whitespace-nowrap text-5xl font-bold leading-[1.08] text-text-primary lg:text-[3.75rem] xl:text-[4rem]">{title}</h1>
           ) : (
-            <h2 className="mt-3 max-w-[72rem] text-5xl font-bold leading-[1.1] text-text-primary lg:text-[3.45rem] xl:text-[3.75rem]">{title}</h2>
+            <h2 className="mt-3 max-w-none whitespace-nowrap text-[2.8rem] font-bold leading-[1.08] text-text-primary lg:text-[3.05rem] xl:text-[3.35rem]">{title}</h2>
           )}
           {readableLines.length > 0 ? (
             <div className="mt-6 min-h-[5.7rem] max-w-5xl overflow-hidden border-l-2 border-accent-info/55 bg-gradient-to-r from-bg-card/62 via-bg-card/38 to-transparent py-2 pl-5 pr-5" aria-live="polite">

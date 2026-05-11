@@ -39,4 +39,28 @@ describe("calibrateFaceScores", () => {
     expect(unstable.symmetry).toBeLessThan(stable.symmetry);
     expect(unstable.balance).toBeLessThanOrEqual(stable.balance);
   });
+
+  it("keeps normal visible scores at 70 or higher", () => {
+    const score = calibrateFaceScores(
+      metrics({
+        asymmetryIndex: 0.01,
+        eyes: { leftToRightDeltaMm: 1.2, outerCantalAngleDeg: -2 },
+        mouth: { upperLowerLipRatio: 0.98, philtrumRatioPct: 12, cornerAngleDeg: -3 },
+      }),
+    );
+
+    expect(Math.min(score.likability, score.trust, score.symmetry, score.balance, score.attractiveness)).toBeGreaterThanOrEqual(70);
+  });
+
+  it("allows clearly severe signals to fall below 70", () => {
+    const score = calibrateFaceScores(
+      metrics({
+        asymmetryIndex: 0.03,
+        eyes: { leftToRightDeltaMm: 3.6, outerCantalAngleDeg: -2 },
+        mouth: { upperLowerLipRatio: 0.98, philtrumRatioPct: 12, cornerAngleDeg: -8 },
+      }),
+    );
+
+    expect(score.symmetry).toBeLessThan(70);
+  });
 });
