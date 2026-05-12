@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { computeAxisScores, resolveFaceCandidates, resolveSajuKey } from "@/lib/persona/personaResolver";
+import { computeAxisScores, resolveFaceCandidates, resolvePersonaSignal, resolveSajuKey } from "@/lib/persona/personaResolver";
 import { calculateSaju } from "@/lib/saju/calculator";
 import type { FaceMetrics } from "@/types/face";
 
@@ -91,5 +91,16 @@ describe("resolveSajuKey", () => {
     const saju = calculateSaju("2000-03-15");
     const key = resolveSajuKey(saju);
     expect(["seeker_explorer", "mover_igniter", "anchor_organizer", "editor_decider", "deep_diver"]).toContain(key);
+  });
+});
+
+describe("resolvePersonaSignal", () => {
+  it("returns full persona signal with combined code", () => {
+    const saju = calculateSaju("2000-03-15");
+    const result = resolvePersonaSignal(metrics(), saju);
+    expect(result.combinedCode).toMatch(/^[a-z_]+__[a-z_]+$/);
+    expect(result.observationCards.length).toBeGreaterThanOrEqual(1);
+    expect(result.observationCards.length).toBeLessThanOrEqual(7);
+    expect(Object.keys(result.bookTagWeights).length).toBeGreaterThan(0);
   });
 });

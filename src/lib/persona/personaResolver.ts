@@ -1,7 +1,9 @@
 import type { SajuCalculation } from "@/lib/saju/calculator";
 import type { FaceMetrics } from "@/types/face";
-import type { AxisScores, FaceKey, PersonaCandidates, SajuKey } from "./types";
+import type { AxisScores, FaceKey, PersonaCandidates, PersonaSignal, SajuKey, ToneHint } from "./types";
 import { SAJU_ELEMENT_TO_KEY } from "./types";
+import { buildObservationCards } from "./observationCards";
+import { mergePersonaWeights } from "./tagWeights";
 
 const clamp = (value: number, min = 0, max = 100) => Math.min(max, Math.max(min, value));
 const round = (value: number) => Math.round(value);
@@ -116,4 +118,29 @@ export function resolveSajuKey(saju: SajuCalculation): SajuKey {
   const dominant = saju.dominantElements[0];
   if (!dominant) return "deep_diver";
   return SAJU_ELEMENT_TO_KEY[dominant];
+}
+
+const TONE_HINT: Record<SajuKey, ToneHint> = {
+  seeker_explorer: "spark",
+  mover_igniter: "spark",
+  anchor_organizer: "anchor",
+  editor_decider: "edit",
+  deep_diver: "deep",
+};
+
+export function resolvePersonaSignal(metrics: FaceMetrics, saju: SajuCalculation): PersonaSignal {
+  const axisScores = computeAxisScores(metrics);
+  const candidates = resolveFaceCandidates(axisScores);
+  const sajuKey = resolveSajuKey(saju);
+  const faceKey = candidates.primary;
+  return {
+    faceKey,
+    sajuKey,
+    combinedCode: `${faceKey}__${sajuKey}`,
+    axisScores,
+    observationCards: buildObservationCards(metrics, axisScores, saju),
+    toneHint: TONE_HINT[sajuKey],
+    candidates,
+    bookTagWeights: mergePersonaWeights(faceKey, sajuKey),
+  };
 }
