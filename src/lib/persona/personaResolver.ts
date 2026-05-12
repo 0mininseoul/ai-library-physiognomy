@@ -1,5 +1,7 @@
+import type { SajuCalculation } from "@/lib/saju/calculator";
 import type { FaceMetrics } from "@/types/face";
-import type { AxisScores } from "./types";
+import type { AxisScores, FaceKey, PersonaCandidates, SajuKey } from "./types";
+import { SAJU_ELEMENT_TO_KEY } from "./types";
 
 const clamp = (value: number, min = 0, max = 100) => Math.min(max, Math.max(min, value));
 const round = (value: number) => Math.round(value);
@@ -40,4 +42,78 @@ export function computeAxisScores(metrics: FaceMetrics): AxisScores {
     focus: focusScore(metrics),
     vitality: vitalityScore(metrics),
   };
+}
+
+const SINGLE_THRESHOLD = 70;
+const DUAL_THRESHOLD = 60;
+
+type AxisName = keyof AxisScores;
+const AXIS_TO_SINGLE: Record<AxisName, FaceKey> = {
+  balance: "balance_anchor",
+  expressive: "expressive_spark",
+  focus: "focused_thinker",
+  vitality: "vital_driver",
+};
+const DUAL_LOOKUP: Record<string, FaceKey> = {
+  "balance|focus": "balance_focus",
+  "expressive|vitality": "expressive_vital",
+  "focus|vitality": "focus_vital",
+};
+
+function dominantAxis(scores: AxisScores): AxisName | null {
+  const entries = (Object.entries(scores) as Array<[AxisName, number]>).sort((a, b) => b[1] - a[1]);
+  const [top, second] = entries;
+  if (!top) return null;
+  if (top[1] >= SINGLE_THRESHOLD && (!second || top[1] - second[1] >= 5)) return top[0];
+  return null;
+}
+
+function dualAxes(scores: AxisScores): [AxisName, AxisName] | null {
+  const qualifying = (Object.entries(scores) as Array<[AxisName, number]>).filter(([, value]) => value >= DUAL_THRESHOLD).sort((a, b) => b[1] - a[1]);
+  if (qualifying.length < 2) return null;
+  const a = qualifying[0]![0];
+  const b = qualifying[1]![0];
+  const key = [a, b].sort().join("|");
+  if (DUAL_LOOKUP[key]) return [a, b];
+  return null;
+}
+
+export function resolveFaceCandidates(scores: AxisScores): PersonaCandidates {
+  const single = dominantAxis(scores);
+  if (single) {
+    const primary = AXIS_TO_SINGLE[single];
+    const dual = dualAxes(scores);
+    const alternates: FaceKey[] = [];
+    if (dual) {
+      const dualKey = [dual[0], dual[1]].sort().join("|");
+      const dualLabel = DUAL_LOOKUP[dualKey];
+      if (dualLabel) alternates.push(dualLabel);
+    }
+    if (alternates.length === 0) {
+      const fallbackAxis = (Object.entries(scores) as Array<[AxisName, number]>).filter(([axis]) => axis !== single).sort((a, b) => b[1] - a[1])[0];
+      if (fallbackAxis && fallbackAxis[1] >= 45) alternates.push(AXIS_TO_SINGLE[fallbackAxis[0]]);
+    }
+    return { primary, alternates: alternates.slice(0, 2) };
+  }
+
+  const dual = dualAxes(scores);
+  if (dual) {
+    const dualKey = [dual[0], dual[1]].sort().join("|");
+    const primary = DUAL_LOOKUP[dualKey]!;
+    const alternates = [AXIS_TO_SINGLE[dual[0]], AXIS_TO_SINGLE[dual[1]]].filter((key, index, all) => all.indexOf(key) === index);
+    return { primary, alternates: alternates.slice(0, 2) };
+  }
+
+  const topAxis = (Object.entries(scores) as Array<[AxisName, number]>).sort((a, b) => b[1] - a[1])[0];
+  const fallback = topAxis && topAxis[1] >= 50 ? AXIS_TO_SINGLE[topAxis[0]] : null;
+  return {
+    primary: "soft_baseline",
+    alternates: fallback ? [fallback] : [],
+  };
+}
+
+export function resolveSajuKey(saju: SajuCalculation): SajuKey {
+  const dominant = saju.dominantElements[0];
+  if (!dominant) return "deep_diver";
+  return SAJU_ELEMENT_TO_KEY[dominant];
 }

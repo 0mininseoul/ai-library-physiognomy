@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { computeAxisScores } from "@/lib/persona/personaResolver";
+import { computeAxisScores, resolveFaceCandidates, resolveSajuKey } from "@/lib/persona/personaResolver";
+import { calculateSaju } from "@/lib/saju/calculator";
 import type { FaceMetrics } from "@/types/face";
 
 function metrics(overrides: Partial<FaceMetrics> = {}): FaceMetrics {
@@ -53,5 +54,42 @@ describe("computeAxisScores", () => {
     const high = computeAxisScores(metrics({ jaw: { vlineIndex: 0.16, chinProtrusionMm: 12, cheekToJawRatio: 1.45 }, nose: { lengthMm: 60, widthMm: 32, columellaAngleDeg: 95 }, faceAspectRatio: 0.78 }));
     const low = computeAxisScores(metrics({ jaw: { vlineIndex: 0.16, chinProtrusionMm: 2, cheekToJawRatio: 1.05 }, nose: { lengthMm: 38, widthMm: 32, columellaAngleDeg: 95 }, faceAspectRatio: 0.66 }));
     expect(high.vitality).toBeGreaterThan(low.vitality + 20);
+  });
+});
+
+describe("resolveFaceCandidates", () => {
+  it("returns balance_anchor when balance dominates above 70", () => {
+    const scores = { balance: 82, expressive: 40, focus: 50, vitality: 45 };
+    const result = resolveFaceCandidates(scores);
+    expect(result.primary).toBe("balance_anchor");
+    expect(result.alternates).toHaveLength(1);
+  });
+
+  it("returns focus_vital for dual high focus and vitality", () => {
+    const scores = { balance: 50, expressive: 40, focus: 68, vitality: 68 };
+    const result = resolveFaceCandidates(scores);
+    expect(result.primary).toBe("focus_vital");
+    expect(result.alternates).toContain("focused_thinker");
+  });
+
+  it("falls back to soft_baseline when no axis reaches 60", () => {
+    const scores = { balance: 50, expressive: 45, focus: 50, vitality: 40 };
+    const result = resolveFaceCandidates(scores);
+    expect(result.primary).toBe("soft_baseline");
+  });
+
+  it("prefers single dominant over dual when both qualify", () => {
+    const scores = { balance: 75, expressive: 50, focus: 62, vitality: 50 };
+    const result = resolveFaceCandidates(scores);
+    expect(result.primary).toBe("balance_anchor");
+    expect(result.alternates).toContain("balance_focus");
+  });
+});
+
+describe("resolveSajuKey", () => {
+  it("maps wood dominant element to seeker_explorer", () => {
+    const saju = calculateSaju("2000-03-15");
+    const key = resolveSajuKey(saju);
+    expect(["seeker_explorer", "mover_igniter", "anchor_organizer", "editor_decider", "deep_diver"]).toContain(key);
   });
 });
