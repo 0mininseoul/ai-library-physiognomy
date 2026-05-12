@@ -14,7 +14,11 @@
     "books:fetch:naver": "tsx scripts/books/fetch-naver-books.ts",
     "books:normalize": "tsx scripts/books/normalize-books.ts",
     "books:tag": "tsx scripts/books/tag-books.ts",
-    "books:import": "tsx scripts/books/import-books.ts"
+    "books:import": "tsx scripts/books/import-books.ts",
+    "library:parse": "tsx scripts/library/parse-gachon-excel.ts",
+    "library:fetch:cover": "tsx scripts/library/fetch-gachon-covers.ts",
+    "library:tag": "tsx scripts/library/tag-gachon-books.ts",
+    "library:import": "tsx scripts/library/import-gachon-library.ts"
   },
   "dependencies": {
     "@google/genai": "^1.50.1",
