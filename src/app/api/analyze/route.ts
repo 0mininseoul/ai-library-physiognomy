@@ -57,6 +57,7 @@ export async function POST(req: NextRequest) {
       gender: body.input.gender,
       birth_date: body.input.birthDate,
       favorite_category: body.input.favoriteCategory,
+      need_focus: body.input.needFocus,
       metrics_json: body.metrics,
       landmarks_json: body.landmarks ?? null,
       status: "analyzing",

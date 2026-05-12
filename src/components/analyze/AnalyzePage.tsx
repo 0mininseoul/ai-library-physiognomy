@@ -16,7 +16,7 @@ import { stripHanja } from "@/lib/saju/display";
 import { useCamera } from "@/hooks/useCamera";
 import { useFaceLandmarker } from "@/hooks/useFaceLandmarker";
 import type { Landmark } from "@/types/face";
-import type { Gender, LibraryAnalysisResult, StudentInput } from "@/types/session";
+import type { Gender, LibraryAnalysisResult, NeedFocus, StudentInput } from "@/types/session";
 
 type Flow = "entry" | "scanning" | "submitting" | "revealing" | "error";
 
@@ -359,6 +359,7 @@ function EntryModal({
   const [birthMonth, setBirthMonth] = useState("01");
   const [birthDay, setBirthDay] = useState("01");
   const [favoriteCategory, setFavoriteCategory] = useState<string>(BOOK_CATEGORIES[0]);
+  const [needFocus, setNeedFocus] = useState<NeedFocus | "">("");
   const [consentAccepted, setConsentAccepted] = useState(false);
 
   function submit(event: FormEvent<HTMLFormElement>) {
@@ -367,7 +368,7 @@ function EntryModal({
     const trimmedStudentId = studentId.trim();
     const birthDate = buildBirthDate(birthYear, birthMonth, birthDay);
 
-    if (!trimmedName || !trimmedStudentId || !gender || !birthDate || !favoriteCategory) {
+    if (!trimmedName || !trimmedStudentId || !gender || !birthDate || !favoriteCategory || !needFocus) {
       onError("빈칸이 있으면 고양이 수염 레이더가 흔들려요. 모두 채워 주세요.");
       return;
     }
@@ -382,6 +383,7 @@ function EntryModal({
       gender,
       birthDate,
       favoriteCategory,
+      needFocus,
       consentAccepted,
     });
   }
@@ -471,6 +473,32 @@ function EntryModal({
               ))}
             </select>
           </label>
+
+          <fieldset className="grid gap-2">
+            <legend className="text-sm font-black text-text-primary">지금 나에게 가장 필요한 것은?</legend>
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                { value: "stimulation" as const, label: "새로운 자극" },
+                { value: "comfort" as const, label: "마음 위로" },
+                { value: "utility" as const, label: "실용적인 도움" },
+                { value: "depth" as const, label: "깊은 사색" },
+              ].map((option) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  className={[
+                    "liquid-glass-button min-h-10 rounded-lg border px-3 text-sm font-bold transition",
+                    needFocus === option.value
+                      ? "border-accent-info/80 bg-accent-info/[0.16] text-text-primary shadow-[0_0_0_1px_rgb(var(--accent-info-rgb)_/_0.18)]"
+                      : "border-border/60 bg-bg-card/82 text-text-muted shadow-[inset_0_1px_0_rgb(255_255_255_/_0.18)] hover:border-border-bright/70 hover:bg-bg-card-hover",
+                  ].join(" ")}
+                  onClick={() => setNeedFocus(option.value)}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </fieldset>
 
           <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-border/30 bg-bg-card/76 p-3 text-sm text-text-muted shadow-[inset_0_1px_0_rgb(255_255_255_/_0.14)] transition hover:bg-bg-card-hover">
             <input className="mt-1 h-4 w-4 accent-[var(--accent-info)]" type="checkbox" checked={consentAccepted} onChange={(event) => setConsentAccepted(event.target.checked)} />

@@ -4,12 +4,15 @@ import type { SajuCalculation } from "@/lib/saju/calculator";
 
 export type Gender = "male" | "female";
 
+export type NeedFocus = "stimulation" | "comfort" | "utility" | "depth";
+
 export type StudentInput = {
   name: string;
   studentId: string;
   gender: Gender;
   birthDate: string;
   favoriteCategory: string;
+  needFocus: NeedFocus;
   consentAccepted: boolean;
 };
 
