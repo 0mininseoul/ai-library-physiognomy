@@ -1,11 +1,10 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { LibraryBook } from "./types";
-
-type BookSource = LibraryBook["source"];
+import type { BookSource, LibraryBook } from "./types";
 
 type BookRow = {
   id: string;
   source: string;
+  source_label: string | null;
   source_id: string;
   isbn13: string | null;
   title: string;
@@ -17,6 +16,8 @@ type BookRow = {
   cover_url: string | null;
   call_number: string;
   location_label: string;
+  location_room: string | null;
+  availability: string | null;
   tags: string[] | null;
 };
 
@@ -31,7 +32,7 @@ export class SupabaseBookProvider implements BookProvider {
     const { data, error } = await this.supabase
       .from("books")
       .select(
-        "id, source, source_id, isbn13, title, author, publisher, published_year, category, description, cover_url, call_number, location_label, tags",
+        "id, source, source_label, source_id, isbn13, title, author, publisher, published_year, category, description, cover_url, call_number, location_label, location_room, availability, tags",
       )
       .eq("active", true);
 
@@ -45,6 +46,7 @@ function toLibraryBook(row: BookRow): LibraryBook {
   return {
     id: row.id,
     source: toBookSource(row.source),
+    sourceLabel: row.source_label === "bookcuration" || row.source_label === "openlibrary" ? row.source_label : undefined,
     sourceId: row.source_id,
     isbn13: row.isbn13,
     title: row.title,
@@ -56,10 +58,13 @@ function toLibraryBook(row: BookRow): LibraryBook {
     coverUrl: row.cover_url,
     callNumber: row.call_number,
     locationLabel: row.location_label,
+    locationRoom: row.location_room ?? undefined,
+    availability: row.availability === "available" || row.availability === "checked_out" ? row.availability : null,
     tags: row.tags ?? [],
   };
 }
 
 function toBookSource(source: string): BookSource {
-  return source === "naver" ? "naver" : "data4library";
+  if (source === "naver" || source === "gachon_curation" || source === "gachon_open") return source;
+  return "data4library";
 }
