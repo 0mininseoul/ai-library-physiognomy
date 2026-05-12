@@ -1,3 +1,5 @@
+import { createHash } from "node:crypto";
+import type { NeedFocus } from "@/types/session";
 import type { LibraryBook } from "./types";
 
 export function selectBookCandidates({
@@ -49,3 +51,63 @@ const OBVIOUS_BESTSELLER_PATTERNS = [
   /돈의\s*속성/,
   /달러구트/,
 ] as const;
+
+const NEED_FOCUS_TAG_WEIGHTS: Record<NeedFocus, Record<string, number>> = {
+  stimulation: { "교양": 3, "입문서": 3, "취미": 2, "에세이": 2 },
+  comfort: { "위로": 4, "자기돌봄": 3, "에세이": 2, "문학": 2 },
+  utility: { "실행력": 3, "생산성": 3, "커리어": 3, "실용": 2 },
+  depth: { "철학 입문": 3, "고전": 3, "심화 독서": 3, "사고 정리": 2 },
+};
+
+export type PersonaScoringInput = {
+  favoriteCategory: string;
+  personaWeights: Record<string, number>;
+  needFocus: NeedFocus;
+  saltSeed: string;
+};
+
+export function scoreBookWithPersona(book: LibraryBook, input: PersonaScoringInput): number {
+  const categoryScore = book.category === input.favoriteCategory ? 8 : 0;
+  let personaTagScore = 0;
+  for (const tag of book.tags) personaTagScore += input.personaWeights[tag] ?? 0;
+  personaTagScore = Math.min(personaTagScore, 12);
+
+  let needTagScore = 0;
+  const needWeights = NEED_FOCUS_TAG_WEIGHTS[input.needFocus];
+  for (const tag of book.tags) needTagScore += needWeights[tag] ?? 0;
+  needTagScore = Math.min(needTagScore, 8);
+
+  const descriptionScore = book.description.length >= 30 ? 2 : 0;
+  const discoveryBonus = isDiscoveryFriendly(book) ? 2 : 0;
+  const salt = diversitySalt(book, input.saltSeed);
+  return categoryScore + personaTagScore + needTagScore + descriptionScore + discoveryBonus + salt - bestsellerPenalty(book);
+}
+
+function diversitySalt(book: LibraryBook, seed: string): number {
+  const hash = createHash("sha256").update(`${seed}|${book.source}|${book.sourceId}`).digest();
+  const value = hash.readUInt8(0);
+  return ((value % 5) - 2) * 0.4;
+}
+
+export type SourceMixRatio = { curationRatio: number; openRatio: number };
+
+export function enforceSourceMix(picks: LibraryBook[], pool: LibraryBook[], ratio: SourceMixRatio): LibraryBook[] {
+  if (picks.length < 3) return picks;
+  const curationCount = picks.filter((book) => book.sourceLabel === "bookcuration").length;
+  const openCount = picks.filter((book) => book.sourceLabel === "openlibrary").length;
+  const total = ratio.curationRatio + ratio.openRatio;
+  const desiredCuration = Math.round((ratio.curationRatio / total) * 3);
+  const desiredOpen = 3 - desiredCuration;
+
+  if (curationCount === desiredCuration && openCount === desiredOpen) return picks;
+
+  const minorityNeeded = curationCount > desiredCuration ? "openlibrary" : "bookcuration";
+  const replacementCandidate = pool.find((book) => book.sourceLabel === minorityNeeded && !picks.some((p) => p.sourceId === book.sourceId));
+  if (!replacementCandidate) return picks;
+
+  const indexToReplace = picks.findIndex((book) => book.sourceLabel !== minorityNeeded);
+  if (indexToReplace < 0) return picks;
+  const next = [...picks];
+  next[indexToReplace] = replacementCandidate;
+  return next;
+}
