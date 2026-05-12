@@ -1,6 +1,7 @@
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { ResultContent, type ResultPayload } from "@/components/pages/ResultPage";
+import { RESULT_FIRST_SECTION_COPY } from "@/lib/reading-types/resultFirstSectionCopy";
 import { calculateSaju } from "@/lib/saju/calculator";
 
 const payload: ResultPayload = {
@@ -138,8 +139,8 @@ describe("ResultContent", () => {
 
     expect(screen.getByAltText("가천대학교 중앙도서관")).toBeInTheDocument();
     expect(screen.getByText("야옹이가 본 영민님의 얼굴")).toBeInTheDocument();
-    expect(screen.getByText("집중 리셋형")).toBeInTheDocument();
-    expect(screen.getByText("영민님, 집중 버튼 다시 켤 타이밍이에요")).toBeInTheDocument();
+    expect(screen.getByText(RESULT_FIRST_SECTION_COPY.focus_reboot.displayName)).toBeInTheDocument();
+    expect(screen.getByText(RESULT_FIRST_SECTION_COPY.focus_reboot.headlineTemplate.replace("{nameHonorific}", "영민님"))).toBeInTheDocument();
     expect(screen.queryByText("집중 리부트형")).not.toBeInTheDocument();
     expect(screen.getByText("지금 영민님에게 필요한 책이에요")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "영민님은 이런 사람과 흐름이 좋아요" })).toBeInTheDocument();
@@ -172,9 +173,10 @@ describe("ResultContent", () => {
       vi.advanceTimersByTime(5_000);
     });
 
-    expect(screen.getByText(/영민님, 집중 버튼 다시 켤 타이밍이에요/)).toBeInTheDocument();
-    expect(screen.getAllByText(/알림은 많은데 메인 화면이 살짝 흐트러진 상태일 수 있어요/).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/하나만 먼저 잡으면 생각보다 빨리 몰입 모드로 들어가요/).length).toBeGreaterThan(0);
+    expect(screen.getByText(RESULT_FIRST_SECTION_COPY.focus_reboot.headlineTemplate.replace("{nameHonorific}", "영민님"))).toBeInTheDocument();
+    for (const sentence of RESULT_FIRST_SECTION_COPY.focus_reboot.description.split(/(?<=[.!?])\s+/)) {
+      expect(screen.getAllByText(sentence).length).toBeGreaterThan(0);
+    }
   });
 
   it("keeps face images clean without landmark marker dots", () => {

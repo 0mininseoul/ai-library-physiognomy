@@ -28,8 +28,9 @@ describe("reading types", () => {
     for (const code of READING_TYPE_CODES) {
       const copy = RESULT_FIRST_SECTION_COPY[code];
 
-      expect(copy.headlineTemplate).toContain("{nameHonorific}");
-      expect(copy.description.split(/[.!?。！？]|[.?!]\s/).filter(Boolean).length).toBeGreaterThanOrEqual(1);
+      expect(copy.headlineTemplate.match(/{nameHonorific}/g)).toHaveLength(1);
+      expect(copy.description.split(/(?<=[.!?])\s+/)).toHaveLength(2);
+      expect(copy.chips).toHaveLength(4);
       expect([copy.displayName, copy.headlineTemplate, copy.description, ...copy.chips].join(" ")).not.toMatch(forbiddenBeforeBookSection);
     }
   });
