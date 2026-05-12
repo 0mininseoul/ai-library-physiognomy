@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { Type } from "@google/genai";
 import { NextRequest } from "next/server";
 import { buildLibraryPrompt } from "@/lib/gemini/libraryPrompt";
+import { parseLooseJson } from "@/lib/gemini/jsonResilience";
 import { normalizeLibraryAnalysis } from "@/lib/gemini/librarySchema";
 import { getGeminiClient } from "@/lib/gemini/client";
 import { calibrateFaceScores } from "@/lib/facemesh/scoreCalibration";
@@ -212,17 +213,36 @@ export async function POST(req: NextRequest) {
       },
     };
 
-    let response: Awaited<ReturnType<typeof ai.models.generateContent>> | null = null;
+    let normalized: ReturnType<typeof normalizeLibraryAnalysis> | null = null;
     let lastError: unknown = null;
     let usedModel = MODEL_CHAIN[0]!;
     const modelStartedAt = Date.now();
     for (const model of MODEL_CHAIN) {
       try {
-        response = await ai.models.generateContent({
+        const candidate = await ai.models.generateContent({
           model,
           contents,
           config: genConfig,
         });
+        const finishReason = candidate.candidates?.[0]?.finishReason;
+        const rawText = candidate.text ?? "";
+        if (finishReason && finishReason !== "STOP") {
+          console.warn(`[api/analyze] model ${model} finish reason ${finishReason}`, { length: rawText.length });
+          lastError = new Error(`model_finish_${finishReason}`);
+          continue;
+        }
+        try {
+          normalized = normalizeLibraryAnalysis(parseLooseJson(rawText));
+        } catch (parseError) {
+          console.warn(`[api/analyze] model ${model} returned invalid JSON`, {
+            message: parseError instanceof Error ? parseError.message : String(parseError),
+            length: rawText.length,
+            head: rawText.slice(0, 600),
+            tail: rawText.slice(-200),
+          });
+          lastError = parseError;
+          continue;
+        }
         usedModel = model;
         break;
       } catch (error) {
@@ -230,13 +250,12 @@ export async function POST(req: NextRequest) {
         console.warn(`[api/analyze] model ${model} failed`, error);
       }
     }
-    if (!response) throw lastError ?? new Error("all_models_failed");
+    if (!normalized) throw lastError ?? new Error("all_models_failed");
     const modelMs = Date.now() - modelStartedAt;
     const uploadError = await uploadPromise;
     if (uploadError) throw uploadError;
     console.log("[api/analyze] complete", { sessionId: session.id, model: usedModel, modelMs, uploadMs, totalMs: Date.now() - startedAt });
 
-    const normalized = normalizeLibraryAnalysis(JSON.parse(response.text ?? "{}"));
     const resultScores = {
       ...normalized.scores,
       likability: calibratedScores.likability,
