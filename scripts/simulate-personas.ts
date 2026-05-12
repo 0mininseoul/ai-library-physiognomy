@@ -4,6 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 import { BOOK_CATEGORIES } from "../src/lib/books/categories";
 import { SupabaseBookProvider } from "../src/lib/books/provider";
 import { selectBookCandidates } from "../src/lib/books/recommender";
+import { isGachonLibraryBook } from "../src/lib/books/types";
 import { resolvePersonaSignal } from "../src/lib/persona/personaResolver";
 import { calculateSaju } from "../src/lib/saju/calculator";
 import type { FaceMetrics } from "../src/types/face";
@@ -45,7 +46,7 @@ async function main() {
     auth: { persistSession: false, autoRefreshToken: false },
   });
   const provider = new SupabaseBookProvider(supabase);
-  const books = await provider.listActiveBooks();
+  const books = (await provider.listActiveBooks()).filter(isGachonLibraryBook);
   console.log(`Loaded ${books.length} books`);
 
   const personaCounts = new Map<string, number>();

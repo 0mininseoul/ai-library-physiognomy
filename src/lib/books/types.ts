@@ -20,6 +20,10 @@ export type LibraryBook = {
   tags: string[];
 };
 
+export function isGachonLibraryBook(book: LibraryBook) {
+  return book.sourceLabel === "bookcuration" || book.sourceLabel === "openlibrary";
+}
+
 export type RawData4LibraryBook = {
   no?: string;
   ranking?: string;

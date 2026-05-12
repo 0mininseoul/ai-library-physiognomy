@@ -3,6 +3,7 @@ import { Type } from "@google/genai";
 import { NextRequest } from "next/server";
 import { SupabaseBookProvider } from "@/lib/books/provider";
 import { selectBookCandidates } from "@/lib/books/recommender";
+import { isGachonLibraryBook } from "@/lib/books/types";
 import { buildLibraryPrompt } from "@/lib/gemini/libraryPrompt";
 import { normalizeLibraryAnalysis } from "@/lib/gemini/librarySchema";
 import { getGeminiClient } from "@/lib/gemini/client";
@@ -43,7 +44,7 @@ export async function POST(req: NextRequest) {
   const personaV2Enabled = process.env.PERSONA_V2_ENABLED === "true";
   const personaSignal = personaV2Enabled ? resolvePersonaSignal(body.metrics, saju) : null;
   const provider = new SupabaseBookProvider(supabase);
-  const books = await provider.listActiveBooks();
+  const books = (await provider.listActiveBooks()).filter(isGachonLibraryBook);
   const candidates = selectBookCandidates({
     books,
     favoriteCategory: body.input.favoriteCategory,

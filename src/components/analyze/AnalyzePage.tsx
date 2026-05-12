@@ -51,6 +51,13 @@ const ANALYSIS_CARDS = [
   { title: "§8 FLOW READY", body: "결과 페이지에서 보여줄 핵심 문장만 고르는 중." },
 ] as const;
 
+const SUBMITTING_WAIT_MESSAGES = [
+  "Gemini가 얼굴 신호와 책 후보를 한 번 더 맞춰보고 있어요",
+  "추천 책 3권이 겹치지 않게 마지막 순서를 정리 중이에요",
+  "관상 문장, 궁합 문장, 청구기호를 결과 카드에 묶고 있어요",
+  "거의 다 왔어요. 결과 화면으로 넘기기 전에 문장만 다듬는 중이에요",
+] as const;
+
 export function AnalyzePage() {
   const router = useRouter();
   const [flow, setFlow] = useState<Flow>("entry");
@@ -62,6 +69,7 @@ export function AnalyzePage() {
   const [sampleCount, setSampleCount] = useState(0);
   const [displayProgress, setDisplayProgress] = useState(0);
   const [revealCount, setRevealCount] = useState(0);
+  const [submittingBeat, setSubmittingBeat] = useState(0);
   const [completedRevealFinished, setCompletedRevealFinished] = useState(false);
   const startedRef = useRef(false);
   const scanStartedAtRef = useRef<number | null>(null);
@@ -175,6 +183,18 @@ export function AnalyzePage() {
   }, [flow]);
 
   useEffect(() => {
+    if (flow !== "submitting") {
+      setSubmittingBeat(0);
+      return;
+    }
+
+    const interval = window.setInterval(() => {
+      setSubmittingBeat((value) => value + 1);
+    }, 2_400);
+    return () => window.clearInterval(interval);
+  }, [flow]);
+
+  useEffect(() => {
     if (flow !== "revealing" || !completedResult) return;
 
     completedStreamTimersRef.current.forEach((timer) => window.clearTimeout(timer));
@@ -226,8 +246,13 @@ export function AnalyzePage() {
     void startCamera();
   }
 
+  const waitMessage = SUBMITTING_WAIT_MESSAGES[submittingBeat % SUBMITTING_WAIT_MESSAGES.length];
   const statusLabel =
-    flow === "entry" ? getStatusLabel({ flow, cameraStatus, isModelLoading: face.isLoading, hasFace: Boolean(face.landmarks) }) : facePositionHint ?? getStatusLabel({ flow, cameraStatus, isModelLoading: face.isLoading, hasFace: Boolean(face.landmarks) });
+    flow === "entry"
+      ? getStatusLabel({ flow, cameraStatus, isModelLoading: face.isLoading, hasFace: Boolean(face.landmarks) })
+      : flow === "submitting" && progress >= 92
+        ? waitMessage
+        : facePositionHint ?? getStatusLabel({ flow, cameraStatus, isModelLoading: face.isLoading, hasFace: Boolean(face.landmarks) });
   const completedCards = useMemo(() => (completedResult ? buildCompletedAnalysisCards(completedResult) : null), [completedResult]);
   const showFinalCard = flow === "revealing" && completedResult && completedSessionId && completedRevealFinished;
 
@@ -258,8 +283,8 @@ export function AnalyzePage() {
           </header>
         </>
       ) : (
-        <header className="fixed left-7 top-6 z-30 flex h-12 items-center gap-3 rounded-lg border border-border bg-bg-card/65 px-3 text-xs font-bold uppercase tracking-[0.14em] text-text-muted shadow-glass backdrop-blur">
-          <span className="grid h-8 w-8 place-items-center rounded-md border border-border bg-bg-card/70">
+        <header className="analysis-brand-header fixed left-7 top-6 z-30 flex h-12 items-center gap-3 rounded-lg px-3 text-xs font-bold uppercase tracking-[0.14em] text-text-muted">
+          <span className="analysis-brand-mark grid h-8 w-8 place-items-center rounded-md">
             <BrandLogo className="h-8 w-8 object-contain" />
           </span>
           <span>AI 관상가 고양이 / Live Face Scan</span>
@@ -284,6 +309,7 @@ export function AnalyzePage() {
             completedCards={completedCards}
             activeCompletedIndex={completedCards && !completedRevealFinished ? Math.max(0, revealCount - 1) : null}
             finalCardVisible={Boolean(showFinalCard)}
+            waitingMessage={flow === "submitting" && revealCount >= ANALYSIS_CARDS.length ? waitMessage : null}
             onCompletedCardStreamComplete={handleCompletedCardStreamComplete}
           />
 
@@ -808,10 +834,11 @@ function DarkInput(props: InputHTMLAttributes<HTMLInputElement> & { label: strin
 
 function AnalysisHud({ flow, displayName, progress, statusLabel }: { flow: Flow; displayName: string; progress: number; statusLabel: string }) {
   const name = `${displayName || "회원"}님`;
+  const isWaitingForResult = flow === "submitting" && progress >= 92;
 
   return (
     <>
-      <div className="glass-panel fixed left-1/2 top-6 z-30 -translate-x-1/2 rounded-lg px-4 py-2 text-sm font-bold text-accent-info shadow-glass">
+      <div className="analysis-status-pill fixed left-1/2 top-6 z-30 -translate-x-1/2 rounded-lg px-4 py-2 text-sm font-bold text-accent-info">
         {statusLabel}
       </div>
 
@@ -830,7 +857,7 @@ function AnalysisHud({ flow, displayName, progress, statusLabel }: { flow: Flow;
         <div className="h-2 overflow-hidden rounded-full bg-bg-raised/65">
           <div className="h-full rounded-full bg-accent-info transition-[width] duration-500 ease-out" style={{ width: `${Math.max(8, progress)}%` }} />
         </div>
-        <p className="mt-3 text-xs font-medium leading-5 text-text-faint">관상 좌표가 안정화되면 결과 화면으로 바로 넘어갑니다.</p>
+        <p className="mt-3 text-xs font-medium leading-5 text-text-faint">{isWaitingForResult ? "서버가 결과 문장과 도서 3권을 조립하는 중이에요. 화면은 살아 있어요." : "관상 좌표가 안정화되면 결과 화면으로 바로 넘어갑니다."}</p>
       </section>
     </>
   );
@@ -838,7 +865,7 @@ function AnalysisHud({ flow, displayName, progress, statusLabel }: { flow: Flow;
 
 function TopStatus({ label }: { label: string }) {
   return (
-    <div className="glass-panel fixed left-1/2 top-6 z-30 -translate-x-1/2 rounded-lg px-4 py-2 text-sm font-bold text-accent-info shadow-glass">
+    <div className="analysis-status-pill fixed left-1/2 top-6 z-30 -translate-x-1/2 rounded-lg px-4 py-2 text-sm font-bold text-accent-info">
       {label}
     </div>
   );
@@ -856,6 +883,7 @@ function FloatingCards({
   completedCards,
   activeCompletedIndex,
   finalCardVisible,
+  waitingMessage,
   onCompletedCardStreamComplete,
 }: {
   progress: number;
@@ -863,12 +891,14 @@ function FloatingCards({
   completedCards: CompletedAnalysisCard[] | null;
   activeCompletedIndex: number | null;
   finalCardVisible: boolean;
+  waitingMessage: string | null;
   onCompletedCardStreamComplete: (index: number) => void;
 }) {
   const sourceCards = completedCards ?? ANALYSIS_CARDS;
   const isCompletedView = Boolean(completedCards);
   const visibleCards = sourceCards.slice(0, Math.max(1, revealCount)).map((card, index) => ({
     ...card,
+    body: !isCompletedView && waitingMessage && index === sourceCards.length - 1 ? waitingMessage : card.body,
     index,
     progress: isCompletedView ? 100 : stepProgress(progress, index),
   }));
