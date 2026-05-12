@@ -8,6 +8,7 @@ import { normalizeLibraryAnalysis } from "@/lib/gemini/librarySchema";
 import { getGeminiClient } from "@/lib/gemini/client";
 import { calibrateFaceScores } from "@/lib/facemesh/scoreCalibration";
 import { displayGivenName } from "@/lib/korean/name";
+import { resolvePersonaSignal } from "@/lib/persona/personaResolver";
 import { calculateSaju } from "@/lib/saju/calculator";
 import { getServerSupabase } from "@/lib/supabase/server";
 import type { FaceMetrics, Landmark } from "@/types/face";
@@ -16,7 +17,12 @@ import type { StudentInput } from "@/types/session";
 export const runtime = "nodejs";
 export const maxDuration = 300;
 
-const LIBRARY_ANALYSIS_MODEL = process.env.GEMINI_LIBRARY_MODEL ?? process.env.GEMINI_LIVE_MODEL ?? "gemini-2.5-flash";
+const PRIMARY_MODEL = process.env.GEMINI_LIBRARY_MODEL ?? "gemini-2.5-pro";
+const FALLBACK_MODELS = (process.env.GEMINI_LIBRARY_FALLBACK_MODELS ?? "gemini-2.5-flash,gemini-2.5-flash")
+  .split(",")
+  .map((m) => m.trim())
+  .filter(Boolean);
+const MODEL_CHAIN = [PRIMARY_MODEL, ...FALLBACK_MODELS];
 
 export async function POST(req: NextRequest) {
   const body = (await req.json()) as {
@@ -34,6 +40,7 @@ export async function POST(req: NextRequest) {
   const displayName = displayGivenName(body.input.name);
   const saju = calculateSaju(body.input.birthDate);
   const calibratedScores = calibrateFaceScores(body.metrics);
+  const personaSignal = resolvePersonaSignal(body.metrics, saju);
   const provider = new SupabaseBookProvider(supabase);
   const books = await provider.listActiveBooks();
   const candidates = selectBookCandidates({
@@ -79,14 +86,18 @@ export async function POST(req: NextRequest) {
     if (uploadError) throw uploadError;
 
     const ai = getGeminiClient();
-    const response = await ai.models.generateContent({
-      model: LIBRARY_ANALYSIS_MODEL,
-      contents: buildLibraryPrompt({ input: body.input, displayName, metrics: body.metrics, calibratedScores, saju, candidates }),
-      config: {
-        responseMimeType: "application/json",
-        responseSchema: {
+    const visionEnabled = process.env.GEMINI_VISION_ENABLED === "true";
+    const promptText = buildLibraryPrompt({ input: body.input, displayName, metrics: body.metrics, calibratedScores, saju, candidates, persona: personaSignal });
+    const inlineImage = visionEnabled
+      ? [{ inlineData: { data: stripDataUrl(body.imageBase64), mimeType: "image/jpeg" } }]
+      : [];
+    const contents = [{ role: "user", parts: [{ text: promptText }, ...inlineImage] }];
+    const genConfig = {
+      responseMimeType: "application/json",
+      responseSchema: {
           type: Type.OBJECT,
           properties: {
+            personaConfirmed: { type: Type.STRING },
             reading_type: {
               type: Type.OBJECT,
               properties: {
@@ -220,9 +231,28 @@ export async function POST(req: NextRequest) {
             },
           },
           required: ["reading_type", "main_copy", "geometry", "parts", "scores", "physiognomy", "saju", "romantic_match", "section_copy", "inner_style", "chemi_match", "reading_needs", "recommendations"],
-        },
       },
-    });
+    };
+
+    let response: Awaited<ReturnType<typeof ai.models.generateContent>> | null = null;
+    let lastError: unknown = null;
+    let usedModel = MODEL_CHAIN[0]!;
+    for (const model of MODEL_CHAIN) {
+      try {
+        response = await ai.models.generateContent({
+          model,
+          contents,
+          config: genConfig,
+        });
+        usedModel = model;
+        break;
+      } catch (error) {
+        lastError = error;
+        console.warn(`[api/analyze] model ${model} failed`, error);
+      }
+    }
+    if (!response) throw lastError ?? new Error("all_models_failed");
+    console.log(`[api/analyze] used model ${usedModel}`);
 
     const normalized = normalizeLibraryAnalysis(JSON.parse(response.text ?? "{}"));
     const resultScores = {
@@ -256,7 +286,19 @@ export async function POST(req: NextRequest) {
       };
     });
 
-    const resultJson = { ...normalized, scores: resultScores, calibratedScores, saju: { ...normalized.saju, calculation: saju }, recommendations: finalRecommendations };
+    const resultJson = {
+      ...normalized,
+      scores: resultScores,
+      calibratedScores,
+      persona: {
+        candidates: personaSignal.candidates,
+        confirmed: normalized.personaConfirmed ?? personaSignal.candidates.primary,
+        sajuKey: personaSignal.sajuKey,
+        axisScores: personaSignal.axisScores,
+      },
+      saju: { ...normalized.saju, calculation: saju },
+      recommendations: finalRecommendations,
+    };
     const { error: updateError } = await supabase
       .from("library_sessions")
       .update({

@@ -44,6 +44,7 @@ const chemiInsightSchema = z
   .optional();
 
 const rawSchema = z.object({
+  personaConfirmed: z.string().min(1).optional(),
   reading_type: z.object({
     code: z.string().refine(isReadingTypeCode),
     display_name: z.string().min(1),
@@ -202,6 +203,7 @@ export function normalizeLibraryAnalysis(input: unknown) {
           goodScene: clean(raw.chemi_match.good_scene),
         }
       : undefined,
+    personaConfirmed: raw.personaConfirmed,
   };
 }
 
