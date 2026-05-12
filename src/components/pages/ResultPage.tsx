@@ -92,7 +92,7 @@ export function ResultPage({ sessionId }: { sessionId: string }) {
   const wantsMobile = search?.get("m") === "1";
   const isSmall = typeof window !== "undefined" && window.innerWidth < 768;
 
-  if (mobileEnabled && (wantsMobile || isSmall)) {
+  if (wantsMobile || (mobileEnabled && isSmall)) {
     return <MobileResultPage payload={payload} />;
   }
 
