@@ -6,6 +6,7 @@ import Link from "next/link";
 import { CameraOff, ChevronLeft, ChevronRight, Gauge, HeartHandshake, Loader2, RefreshCw, RotateCcw, ShieldCheck } from "lucide-react";
 import { BrandLogo } from "@/components/brand/BrandLogo";
 import { BookRecommendationCard } from "@/components/result/BookRecommendationCard";
+import { MobileResultPage } from "@/components/result/MobileResultPage";
 import { QrCard } from "@/components/result/QrCard";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { honorific, softenFormalPolite } from "@/lib/korean/name";
@@ -82,6 +83,15 @@ export function ResultPage({ sessionId }: { sessionId: string }) {
         </section>
       </main>
     );
+  }
+
+  const mobileEnabled = process.env.NEXT_PUBLIC_RESULT_MOBILE_VIEW_ENABLED === "true";
+  const search = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+  const wantsMobile = search?.get("m") === "1";
+  const isSmall = typeof window !== "undefined" && window.innerWidth < 768;
+
+  if (mobileEnabled && (wantsMobile || isSmall)) {
+    return <MobileResultPage payload={payload} />;
   }
 
   return <ResultContent payload={payload} />;
