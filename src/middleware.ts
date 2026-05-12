@@ -31,6 +31,7 @@ function shouldBypassMobileGate(pathname: string) {
     pathname.startsWith("/brand") ||
     pathname.startsWith("/cats") ||
     pathname.startsWith("/mascot") ||
+    pathname.startsWith("/result") ||
     pathname === "/favicon.png" ||
     pathname === "/og-image.png" ||
     pathname === "/icon.png" ||
