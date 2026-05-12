@@ -30,14 +30,16 @@
 - `src/components/result/ShareableTypeCard.tsx` — PNG 공유 카드
 
 수정:
+- `src/types/session.ts` — `NeedFocus` 타입과 `StudentInput.needFocus` 필드
+- `src/components/analyze/AnalyzePage.tsx` — 4지선다 "지금 나에게 가장 필요한 것은?" + 연애·데이트 치환 제거
 - `src/lib/books/types.ts` — `sourceLabel`, `locationRoom`, `availability` 필드
 - `src/lib/books/provider.ts` — 새 컬럼 조회
-- `src/lib/books/recommender.ts` — 새 점수 + 출처 믹스 가드
+- `src/lib/books/recommender.ts` — 새 점수(needFocus 가중치 포함) + 출처 믹스 가드
 - `src/lib/reading-types/types.ts` — 16개 라벨 워딩 교체
-- `src/lib/gemini/libraryPrompt.ts` — VOICE_GUIDE 교체 + 페르소나 + 이미지
-- `src/lib/gemini/librarySchema.ts` — `personaConfirmed` 필드
-- `src/app/api/analyze/route.ts` — Vision 호출 + V2 토글
-- `src/components/pages/ResultPage.tsx` — QR + 모바일 분기 라우팅
+- `src/lib/gemini/libraryPrompt.ts` — 덜 단정적 VOICE_GUIDE + 페르소나 + 이미지 + chemi_match 성별 분기
+- `src/lib/gemini/librarySchema.ts` — `personaConfirmed` 필드 + 연애·데이트 치환 제거
+- `src/app/api/analyze/route.ts` — Vision 호출 + Gemini 모델 fallback chain + V2 토글
+- `src/components/pages/ResultPage.tsx` — QR + 모바일 분기 라우팅 + 연애·데이트 치환 제거
 - `src/components/result/BookRecommendationCard.tsx` — 청구기호/자료실/대출여부 강조
 - `package.json` — `qrcode`, `exceljs` 추가
 
@@ -57,7 +59,7 @@ pnpm add qrcode exceljs
 pnpm add -D @types/qrcode
 ```
 
-- [ ] **Step 2: `.env.example`에 토글 추가**
+- [ ] **Step 2: `.env.example`에 토글 + 모델 설정 추가**
 
 `.env.example` 끝에 추가:
 ```
@@ -65,7 +67,12 @@ pnpm add -D @types/qrcode
 PERSONA_V2_ENABLED=false
 READING_TYPE_V2_ENABLED=false
 RESULT_MOBILE_VIEW_ENABLED=false
+NEXT_PUBLIC_RESULT_MOBILE_VIEW_ENABLED=false
 GEMINI_VISION_ENABLED=false
+
+# Gemini model selection (primary first, fallback list comma-separated)
+GEMINI_LIBRARY_MODEL=gemini-2.5-pro
+GEMINI_LIBRARY_FALLBACK_MODELS=gemini-2.5-flash,gemini-2.5-flash
 ```
 
 - [ ] **Step 3: `.env.local`에도 같은 키 추가 (false 상태)**
@@ -1338,6 +1345,116 @@ git commit -m "Tag and import Gachon library books to Supabase"
 
 ---
 
+## Task 8.5: 입력 폼 4지선다 추가 + StudentInput 타입 확장
+
+**Files:**
+- Modify: `src/types/session.ts`
+- Modify: `src/components/analyze/AnalyzePage.tsx`
+
+- [ ] **Step 1: `StudentInput`에 `needFocus` 필드 추가**
+
+In `src/types/session.ts`, change `StudentInput`:
+```ts
+export type NeedFocus = "stimulation" | "comfort" | "utility" | "depth";
+
+export type StudentInput = {
+  name: string;
+  studentId: string;
+  gender: Gender;
+  birthDate: string;
+  favoriteCategory: string;
+  needFocus: NeedFocus;
+  consentAccepted: boolean;
+};
+```
+
+- [ ] **Step 2: AnalyzePage.tsx 입력 폼 추가**
+
+In `src/components/analyze/AnalyzePage.tsx`, near the existing state hooks in `EntryModal`:
+```tsx
+import type { NeedFocus } from "@/types/session";
+// ...
+  const [needFocus, setNeedFocus] = useState<NeedFocus | "">("");
+```
+
+Add a fieldset between `favoriteCategory`와 동의 체크 사이:
+```tsx
+          <fieldset className="grid gap-2">
+            <legend className="text-sm font-black text-text-primary">지금 나에게 가장 필요한 것은?</legend>
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                { value: "stimulation" as const, label: "새로운 자극" },
+                { value: "comfort" as const, label: "마음 위로" },
+                { value: "utility" as const, label: "실용적인 도움" },
+                { value: "depth" as const, label: "깊은 사색" },
+              ].map((option) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  className={[
+                    "liquid-glass-button min-h-10 rounded-lg border px-3 text-sm font-bold transition",
+                    needFocus === option.value
+                      ? "border-accent-info/80 bg-accent-info/[0.16] text-text-primary shadow-[0_0_0_1px_rgb(var(--accent-info-rgb)_/_0.18)]"
+                      : "border-border/60 bg-bg-card/82 text-text-muted shadow-[inset_0_1px_0_rgb(255_255_255_/_0.18)] hover:border-border-bright/70 hover:bg-bg-card-hover",
+                  ].join(" ")}
+                  onClick={() => setNeedFocus(option.value)}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </fieldset>
+```
+
+Update validation in `submit`:
+```tsx
+    if (!trimmedName || !trimmedStudentId || !gender || !birthDate || !favoriteCategory || !needFocus) {
+      onError("빈칸이 있으면 고양이 수염 레이더가 흔들려요. 모두 채워 주세요.");
+      return;
+    }
+```
+
+Update `onStart` call to include `needFocus`:
+```tsx
+    onStart({
+      name: trimmedName,
+      studentId: trimmedStudentId,
+      gender,
+      birthDate,
+      favoriteCategory,
+      needFocus,
+      consentAccepted,
+    });
+```
+
+- [ ] **Step 3: api/analyze/route.ts에 needFocus 저장 컬럼 추가**
+
+In `src/app/api/analyze/route.ts` `library_sessions.insert` block, add `need_focus: body.input.needFocus`. (Supabase 컬럼은 Task 2에서 마이그레이션 시 함께 추가.)
+
+In Task 2의 마이그레이션 SQL에 다음 라인 추가:
+```sql
+alter table public.library_sessions
+  add column if not exists need_focus text;
+```
+
+- [ ] **Step 4: lint + 빌드 확인**
+
+Run:
+```bash
+pnpm lint
+pnpm vitest run
+```
+Expected: PASS
+
+- [ ] **Step 5: 커밋**
+
+```bash
+git add src/types/session.ts src/components/analyze/AnalyzePage.tsx src/app/api/analyze/route.ts supabase/migrations/20260512000000_library_book_sources.sql
+git commit -m "Add need-focus 4-choice input for richer book recommendations"
+```
+
+---
+
 ## Task 9: Recommender 새 점수 함수 + 출처 믹스 가드 (TDD)
 
 **Files:**
@@ -1377,6 +1494,7 @@ describe("scoreBookWithPersona", () => {
     const score = scoreBookWithPersona(book, {
       favoriteCategory: "과학/기술",
       personaWeights: { AI: 4, "입문서": 3 },
+      needFocus: "stimulation",
       saltSeed: "seed-1",
     });
     expect(score).toBeGreaterThan(15);
@@ -1386,9 +1504,17 @@ describe("scoreBookWithPersona", () => {
     const matching = gachonBook("openlibrary", "M", "스토아 철학", "인문/철학", ["철학 입문", "에세이"]);
     const nonMatching = gachonBook("openlibrary", "N", "공룡 도감", "과학/기술", ["과학"]);
     const personaWeights = { "철학 입문": 4, "에세이": 3 };
-    const hit = scoreBookWithPersona(matching, { favoriteCategory: "인문/철학", personaWeights, saltSeed: "s" });
-    const miss = scoreBookWithPersona(nonMatching, { favoriteCategory: "인문/철학", personaWeights, saltSeed: "s" });
-    expect(hit).toBeGreaterThan(miss);
+    const base = { favoriteCategory: "인문/철학", personaWeights, needFocus: "depth" as const, saltSeed: "s" };
+    expect(scoreBookWithPersona(matching, base)).toBeGreaterThan(scoreBookWithPersona(nonMatching, base));
+  });
+
+  it("rewards books matching the needFocus axis", () => {
+    const comfortBook = gachonBook("openlibrary", "C", "위로 에세이", "시/에세이", ["위로", "에세이"]);
+    const utilityBook = gachonBook("openlibrary", "U", "생산성 마스터", "자기계발", ["실행력", "생산성"]);
+    const personaWeights = {};
+    const comfortScore = scoreBookWithPersona(comfortBook, { favoriteCategory: "시/에세이", personaWeights, needFocus: "comfort", saltSeed: "s" });
+    const utilityScore = scoreBookWithPersona(utilityBook, { favoriteCategory: "시/에세이", personaWeights, needFocus: "comfort", saltSeed: "s" });
+    expect(comfortScore).toBeGreaterThan(utilityScore);
   });
 });
 
@@ -1427,24 +1553,37 @@ Expected: FAIL (`scoreBookWithPersona`/`enforceSourceMix` not defined)
 Append to `src/lib/books/recommender.ts`:
 ```ts
 import { createHash } from "node:crypto";
+import type { NeedFocus } from "@/types/session";
+
+const NEED_FOCUS_TAG_WEIGHTS: Record<NeedFocus, Record<string, number>> = {
+  stimulation: { "교양": 3, "입문서": 3, "취미": 2, "에세이": 2 },
+  comfort: { "위로": 4, "자기돌봄": 3, "에세이": 2, "문학": 2 },
+  utility: { "실행력": 3, "생산성": 3, "커리어": 3, "실용": 2 },
+  depth: { "철학 입문": 3, "고전": 3, "심화 독서": 3, "사고 정리": 2 },
+};
 
 export type PersonaScoringInput = {
   favoriteCategory: string;
   personaWeights: Record<string, number>;
+  needFocus: NeedFocus;
   saltSeed: string;
 };
 
 export function scoreBookWithPersona(book: LibraryBook, input: PersonaScoringInput): number {
   const categoryScore = book.category === input.favoriteCategory ? 8 : 0;
   let personaTagScore = 0;
-  for (const tag of book.tags) {
-    personaTagScore += input.personaWeights[tag] ?? 0;
-  }
+  for (const tag of book.tags) personaTagScore += input.personaWeights[tag] ?? 0;
   personaTagScore = Math.min(personaTagScore, 12);
+
+  let needTagScore = 0;
+  const needWeights = NEED_FOCUS_TAG_WEIGHTS[input.needFocus];
+  for (const tag of book.tags) needTagScore += needWeights[tag] ?? 0;
+  needTagScore = Math.min(needTagScore, 8);
+
   const descriptionScore = book.description.length >= 30 ? 2 : 0;
   const discoveryBonus = isDiscoveryFriendly(book) ? 2 : 0;
   const salt = diversitySalt(book, input.saltSeed);
-  return categoryScore + personaTagScore + descriptionScore + discoveryBonus + salt - bestsellerPenalty(book);
+  return categoryScore + personaTagScore + needTagScore + descriptionScore + discoveryBonus + salt - bestsellerPenalty(book);
 }
 
 function diversitySalt(book: LibraryBook, seed: string): number {
@@ -1636,24 +1775,32 @@ import type { StudentInput } from "@/types/session";
 
 const VOICE_GUIDE = `
 문체는 존댓말이지만 거리감 있는 "~입니다"가 아니라 친구가 또박또박 짚어주는 톤이다.
-"~인 편이에요" 대신 "~인 거 보이거든요", "~잖아요", "~인 사람"을 우선한다.
+어말은 단정형보다 추정형을 우선한다: "~이실 것 같아요", "~이실지도", "~타입일 수도",
+"~분이세요"처럼 살짝 여운 있는 표현을 쓴다. 단정해서 빗나가면 거리감이 커진다.
 재미는 정확한 관찰에서 나오고, 조롱·비속어·반말·디시밈은 절대 금지한다.
-사용자가 "헐 이거 완전 내 얘긴데?"라고 느끼게 구체적으로 쓴다. 좋은 말만 늘어놓지 말고
-삐끗하는 순간도 부드럽게 짚는다. 추상적 칭찬·일반론·MBTI 같은 보편 문구는 피한다.
+사용자가 "어 이거 나일지도?"라고 느끼게 구체적으로 쓰되, 결단적 단정은 피한다.
+좋은 말만 늘어놓지 말고 삐끗하는 순간도 부드럽게 짚는다. 추상적 칭찬·일반론·MBTI 같은
+보편 문구는 피한다.
 
 외모 평가 룰:
-- 긍정적인 외모 관찰은 허용한다. 예: "눈매가 또렷해서 첫인상에 시선이 빨리 잡혀요".
+- 긍정적인 외모 관찰은 허용한다. 예: "눈매가 또렷해서 첫인상에 시선이 빨리 잡히실 것 같아요".
 - 부정적인 외모 평가/지적은 절대 금지. 어떤 형태로도 외모를 깎는 말은 쓰지 않는다.
 - 모든 사람에게 외모를 칭찬해야 할 의무는 없다. 이미지에서 자연스럽게 좋은 점이 보일 때만 언급한다.
 - 인상·표정 신호(시선의 열림, 표정 안정감, 분위기 인상)는 외모 평가가 아니라 관찰 카드로 다룬다.
 
+chemi_match 성별 분기:
+- 사용자 성별(input.gender) 정보를 참고해 best_match를 자연스럽게 표현한다.
+  남성 사용자에겐 여성 best_match를, 여성 사용자에겐 남성 best_match를 가정한다.
+- 단, 외양·체형·직업 같은 표면적 고정관념은 피하고, 성격·태도·관계 리듬 위주로 묘사한다.
+- 톤은 추정형을 유지한다: "~이런 분과 흐름이 잘 맞으실 것 같아요".
+
 좋은 예시:
-- "{name}님 머릿속 탭 47개 열어두고 메인 작업창 못 찾는 사람이에요"
-- "{name}님 답장 늦으면 의미부여 시작하는 거 보이거든요"
-- "{name}님 결정은 빠른데 그 결정의 7번째 백업 플랜까지 짜놓는 타입"
-- "{name}님 새벽 2시에 갑자기 책 꺼내드는 사람"
-- "{name}님 카페에서 한 자리 정해두고 거기만 가는 사람"
-- "{name}님 눈매가 또렷해서 첫인상에 시선이 빨리 잡히는 편이에요"
+- "{name}님 머릿속 탭 47개 열어두고 메인 작업창 못 찾으실 것 같아요"
+- "{name}님 답장 늦으면 의미부여 시작하실 것 같은 분이세요"
+- "{name}님 결정은 빠른데 그 결정의 7번째 백업 플랜까지 짜놓는 타입일 수도 있어요"
+- "{name}님 새벽 2시에 갑자기 책 꺼내들 것 같은 사람"
+- "{name}님 카페에서 한 자리 정해두고 거기만 가실 것 같은 분이세요"
+- "{name}님 눈매가 또렷해서 첫인상에 시선이 빨리 잡히실 것 같아요"
 
 나쁜 예시(이렇게 쓰지 마라):
 - "차분하고 안정적인 인상이에요" (일반론)
@@ -1663,13 +1810,14 @@ const VOICE_GUIDE = `
 - "넌 이런 사람이야" (반말)
 - "피부가 거칠어 보여요" (부정적 외모 평가 — 절대 금지)
 - "눈이 너무 작아요" (부정적 외모 평가 — 절대 금지)
+- "이 사람은 무조건 새벽형 인간입니다" (단정 — 추정형으로 바꿔라)
 `.trim();
 
 const SAFETY_GUIDE = [
   "이 서비스는 엔터테인먼트형 관상/성향 해석 콘텐츠다. 과학적 진단, 의학/정신건강/범죄/정치/종교/소득/성생활 등 고위험 속성 단정은 금지한다.",
   "사용자에게 보이는 출력에는 한자와 직접적인 명리 용어를 절대 쓰지 않는다.",
   "사용자 노출 금지 표현: 사주, 오행, 생년월일 신호, 물, 불, 나무, 흙, 금, 목, 화, 토, 수, 기운, 일간, 월주, 년주, 일주, 시주, 우세 오행.",
-  "금지 단어: 처방, 처방전, 학생, 연애, 데이트. 이름을 부를 때는 반드시 '~님'을 쓴다.",
+  "금지 단어: 처방, 처방전, 학생. 이름을 부를 때는 반드시 '~님'을 쓴다. (연애·데이트는 허용된다.)",
   "내부 계산값(사주, 오행)은 반드시 성격/행동 언어로 번역한다.",
 ].join("\n");
 
@@ -1702,6 +1850,7 @@ export function buildLibraryPrompt({
     `성별 선택값: ${input.gender}`,
     `생년월일: ${input.birthDate}`,
     `선호 독서 카테고리: ${input.favoriteCategory}`,
+    `지금 가장 필요한 것(자기성찰 답): ${input.needFocus}`,
     "─── 이미 확정된 사실 (Gemini가 재계산하지 마라) ───",
     `얼굴 4축 점수: Balance ${persona.axisScores.balance}, Expressive ${persona.axisScores.expressive}, Focus ${persona.axisScores.focus}, Vitality ${persona.axisScores.vitality}`,
     `얼굴 페르소나 후보 (primary 우선): ${persona.candidates.primary}, alternates: [${persona.candidates.alternates.join(", ") || "없음"}]`,
@@ -1781,11 +1930,21 @@ In `normalizeLibraryAnalysis` return, add at the end (before closing brace):
     personaConfirmed: raw.personaConfirmed,
 ```
 
-- [ ] **Step 2: api/analyze/route.ts에서 페르소나 통합 + Vision 이미지 전달**
+- [ ] **Step 2: api/analyze/route.ts에서 페르소나 통합 + Vision 이미지 + 모델 fallback chain**
 
 In `src/app/api/analyze/route.ts`, add imports:
 ```ts
 import { resolvePersonaSignal } from "@/lib/persona/personaResolver";
+```
+
+Replace the `LIBRARY_ANALYSIS_MODEL` constant with a fallback chain:
+```ts
+const PRIMARY_MODEL = process.env.GEMINI_LIBRARY_MODEL ?? "gemini-2.5-pro";
+const FALLBACK_MODELS = (process.env.GEMINI_LIBRARY_FALLBACK_MODELS ?? "gemini-2.5-flash,gemini-2.5-flash")
+  .split(",")
+  .map((m) => m.trim())
+  .filter(Boolean);
+const MODEL_CHAIN = [PRIMARY_MODEL, ...FALLBACK_MODELS];
 ```
 
 After computing `calibratedScores`, add:
@@ -1800,18 +1959,37 @@ Pass into `buildLibraryPrompt` and the Gemini call. Find this block:
       contents: buildLibraryPrompt({ input: body.input, displayName, metrics: body.metrics, calibratedScores, saju, candidates }),
 ```
 
-Replace with:
+Replace with the fallback chain:
 ```ts
     const visionEnabled = process.env.GEMINI_VISION_ENABLED === "true";
     const promptText = buildLibraryPrompt({ input: body.input, displayName, metrics: body.metrics, calibratedScores, saju, candidates, persona: personaSignal });
     const inlineImage = visionEnabled
       ? [{ inlineData: { data: stripDataUrl(body.imageBase64), mimeType: "image/jpeg" } }]
       : [];
+    const contents = [{ role: "user", parts: [{ text: promptText }, ...inlineImage] }];
 
-    const response = await ai.models.generateContent({
-      model: LIBRARY_ANALYSIS_MODEL,
-      contents: [{ role: "user", parts: [{ text: promptText }, ...inlineImage] }],
+    let response: Awaited<ReturnType<typeof ai.models.generateContent>> | null = null;
+    let lastError: unknown = null;
+    let usedModel = MODEL_CHAIN[0]!;
+    for (const model of MODEL_CHAIN) {
+      try {
+        response = await ai.models.generateContent({
+          model,
+          contents,
+          config: { /* keep existing responseMimeType and responseSchema as before */ },
+        });
+        usedModel = model;
+        break;
+      } catch (error) {
+        lastError = error;
+        console.warn(`[api/analyze] model ${model} failed`, error);
+      }
+    }
+    if (!response) throw lastError ?? new Error("all_models_failed");
+    console.log(`[api/analyze] used model ${usedModel}`);
 ```
+
+Note: 기존 `config: { responseMimeType, responseSchema }`는 위 try 블록 안의 `config` 위치에 그대로 옮겨야 한다.
 
 Update `responseSchema` to include `personaConfirmed`. Find:
 ```ts
@@ -2173,7 +2351,55 @@ git commit -m "Add mobile result page with shareable type card and book focus"
 
 ---
 
-## Task 15: V2 환경변수 토글 정리 + 시뮬레이션 + 부스 점검
+## Task 15: 정규식 사전 정리 + V2 토글 + 시뮬레이션 + 부스 점검
+
+### 정규식 사전 정리 (연애·데이트 치환 제거)
+
+- [ ] **Step 0a: librarySchema.ts에서 연애·데이트 치환 제거**
+
+In `src/lib/gemini/librarySchema.ts` 안의 `clean()` 함수에서 다음 라인을 삭제:
+```ts
+    .replace(/연애/g, "관계 궁합")
+    .replace(/연인/g, "상대")
+    .replace(/데이트/g, "함께하는 시간")
+```
+
+`연인` 치환도 제거 가능하지만 chemi_match에서 자연스럽게 쓰일 수 있어 보존해도 무방. 가급적 모두 제거하여 Gemini 원문 그대로 노출.
+
+- [ ] **Step 0b: ResultPage.tsx의 cleanCopy/publicResultCopy에서도 제거**
+
+In `src/components/pages/ResultPage.tsx`, find and delete:
+```ts
+    .replace(new RegExp(["연", "애"].join(""), "g"), "관계 궁합")
+    .replace(/연인/g, "상대")
+    .replace(/상대과/g, "상대와")
+    .replace(/데이트/g, "함께하는 시간")
+    .replace(/함께하는 시간를/g, "함께하는 시간을")
+    .replace(/함께하는 시간가/g, "함께하는 시간이")
+```
+
+- [ ] **Step 0c: AnalyzePage.tsx의 cleanAnalysisCopy에서도 제거**
+
+In `src/components/analyze/AnalyzePage.tsx`, find and delete:
+```ts
+    .replace(/연애/g, "관계")
+    .replace(/연인/g, "상대")
+    .replace(/상대과/g, "상대와")
+    .replace(/데이트/g, "함께하는 시간")
+    .replace(/함께하는 시간를/g, "함께하는 시간을")
+    .replace(/함께하는 시간가/g, "함께하는 시간이")
+```
+
+- [ ] **Step 0d: 커밋**
+
+```bash
+git add src/lib/gemini/librarySchema.ts src/components/pages/ResultPage.tsx src/components/analyze/AnalyzePage.tsx
+git commit -m "Allow 연애/데이트 wording in Gemini output and result copy"
+```
+
+---
+
+### V2 토글 정리 + 시뮬레이션 + 부스 점검
 
 **Files:**
 - Create: `scripts/simulate-personas.ts`
