@@ -1,0 +1,936 @@
+[
+  {
+    "sourceLabel": "bookcuration",
+    "registrationNo": "UEM902220",
+    "title": "AI x 인간지능의 시대 : AI 시대를 항해하는 사피엔스를 위한 안내서",
+    "author": "김상균",
+    "publisher": "베가북스",
+    "publishedYear": 2024,
+    "callNumber": "303.483 ㄱ673a",
+    "locationLabel": "중앙도서관",
+    "locationRoom": "북큐레이션코너(1층)",
+    "status": "이용가능",
+    "availability": null,
+    "metadataCandidates": [
+      {
+        "provider": "google_books",
+        "title": "AI x 인간지능의 시대",
+        "authors": [
+          "김상균"
+        ],
+        "publisher": "",
+        "publishedYear": "2024",
+        "isbn13": "9791192488653",
+        "coverUrl": null,
+        "description": "",
+        "score": 0.8,
+        "decision": "review_needed",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 0,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2024,
+          "candidateYear": 2024,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": false
+        },
+        "query": "intitle:AI x 인간지능의 시대 inauthor:김상균"
+      },
+      {
+        "provider": "google_books",
+        "title": "AI x 인간지능의 시대",
+        "authors": [
+          "김상균"
+        ],
+        "publisher": "",
+        "publishedYear": "2024",
+        "isbn13": "9791192488653",
+        "coverUrl": null,
+        "description": "",
+        "score": 0.8,
+        "decision": "review_needed",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 0,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2024,
+          "candidateYear": 2024,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": false
+        },
+        "query": "intitle:AI x 인간지능의 시대 inpublisher:베가북스"
+      },
+      {
+        "provider": "naver",
+        "title": "AI × 인간지능의 시대 (AI 시대를 항해하는 사피엔스를 위한 안내서)",
+        "authors": [
+          "김상균"
+        ],
+        "publisher": "베가북스",
+        "publishedYear": "20240417",
+        "isbn13": "9791192488653",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_4687411/46874114619.20260331104959.jpg",
+        "description": "“인류는 AI로 지능을 업그레이드한다.” 대한민국의 대표 인지과학자 김상균 교수의 최신작, 『AI × 인간지능의 시대』 ★ AI 시대에서 인간이 어떻게 변화해야 하는지 대답해주는 책 ★ AI를 제대로 활용하는 방법을 배우기 위해 꼭 읽어야 하는 책 ★ AI에 대한 공포와 불안에서 벗어나게 해주는 책 본인을 ‘미래학자가 아니다’라고 말하지만, ‘미래’와 관련한 주제로 수많은 책을 출간한 사람이 있다. 바로 대한민국 대표 인지과학자 김상균 교수이다. 유튜브 채널에 출연한 영상의 조회 수를 합치면 무려 500만 회가 넘는다. 이처럼 대한민국은 오래전부터 김상균 교수의 안내에 발맞추어 미래로 나아가고 있다. 수년 전부터 ‘AI가 만들어 낼 미래’에 대해 예측하던 김상균 교수는 이번 책에서 ‘인간이 AI를 활용하여 만들어 낼 미래’에 대해 말한다. 삼성, 현대, LG, SK, 메르세데스 벤츠 등 몇몇 기업에만 전달하던 인사이트를 녹여내고, 1만 명에게 받은 질문에 답한다. 한 사람이라도 더 AI 시대에 발생할 대격변에 휩쓸리지 않고, 변화의 급류를 거슬러 올라갈 수 있기를 바랐기 때문이다. 그래서 ‘누가 읽어도 이해하기 쉽도록’ 내용을 풀어썼으며, ‘AI에 대한 전문적인 지식이 없어도 이해할 수 있도록’ AI와 관련한 전문 용어는 최대한 쓰지 않았다. 프롤로그에서 ‘AI 시대가 정확히 어떤 시대인지’ 개념을 잡고, Part 1에서 ‘AI가 변화시키는 중인 현재의 모습’을 그리고, Part 2에서 ‘앞으로 AI를 어떻게 활용해야 하는지‘를 설명해주며, Part 3~Part 5에서 ‘개인, 소상공인, 기업이 앞으로 AI를 활용할 수 있는 구체적인 방법을 설명해준다. 마지막으로 Part 6에서 ‘AI와 관련하여 1만 명에게 받은 질문에 대답’한다. 남녀노소를 가리지 않고 AI를 활용할 수 있는 방법을 구체적으로 소개하고 사례를 들어 설명하므로, 전 연령 맞춤형 ‘AI 시대를 살아가는 해설서’이다.",
+        "score": 0.69,
+        "decision": "review_needed",
+        "signals": {
+          "title": 0.32,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2024,
+          "candidateYear": 2024,
+          "yearContradiction": false,
+          "hardContradiction": true,
+          "bibliographicOverride": false
+        },
+        "query": "AI x 인간지능의 시대 sort=sim"
+      },
+      {
+        "provider": "naver",
+        "title": "AI × 인간지능의 시대 (AI 시대를 항해하는 사피엔스를 위한 안내서)",
+        "authors": [
+          "김상균"
+        ],
+        "publisher": "베가북스",
+        "publishedYear": "20240417",
+        "isbn13": "9791192488653",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_4687411/46874114619.20260331104959.jpg",
+        "description": "“인류는 AI로 지능을 업그레이드한다.” 대한민국의 대표 인지과학자 김상균 교수의 최신작, 『AI × 인간지능의 시대』 ★ AI 시대에서 인간이 어떻게 변화해야 하는지 대답해주는 책 ★ AI를 제대로 활용하는 방법을 배우기 위해 꼭 읽어야 하는 책 ★ AI에 대한 공포와 불안에서 벗어나게 해주는 책 본인을 ‘미래학자가 아니다’라고 말하지만, ‘미래’와 관련한 주제로 수많은 책을 출간한 사람이 있다. 바로 대한민국 대표 인지과학자 김상균 교수이다. 유튜브 채널에 출연한 영상의 조회 수를 합치면 무려 500만 회가 넘는다. 이처럼 대한민국은 오래전부터 김상균 교수의 안내에 발맞추어 미래로 나아가고 있다. 수년 전부터 ‘AI가 만들어 낼 미래’에 대해 예측하던 김상균 교수는 이번 책에서 ‘인간이 AI를 활용하여 만들어 낼 미래’에 대해 말한다. 삼성, 현대, LG, SK, 메르세데스 벤츠 등 몇몇 기업에만 전달하던 인사이트를 녹여내고, 1만 명에게 받은 질문에 답한다. 한 사람이라도 더 AI 시대에 발생할 대격변에 휩쓸리지 않고, 변화의 급류를 거슬러 올라갈 수 있기를 바랐기 때문이다. 그래서 ‘누가 읽어도 이해하기 쉽도록’ 내용을 풀어썼으며, ‘AI에 대한 전문적인 지식이 없어도 이해할 수 있도록’ AI와 관련한 전문 용어는 최대한 쓰지 않았다. 프롤로그에서 ‘AI 시대가 정확히 어떤 시대인지’ 개념을 잡고, Part 1에서 ‘AI가 변화시키는 중인 현재의 모습’을 그리고, Part 2에서 ‘앞으로 AI를 어떻게 활용해야 하는지‘를 설명해주며, Part 3~Part 5에서 ‘개인, 소상공인, 기업이 앞으로 AI를 활용할 수 있는 구체적인 방법을 설명해준다. 마지막으로 Part 6에서 ‘AI와 관련하여 1만 명에게 받은 질문에 대답’한다. 남녀노소를 가리지 않고 AI를 활용할 수 있는 방법을 구체적으로 소개하고 사례를 들어 설명하므로, 전 연령 맞춤형 ‘AI 시대를 살아가는 해설서’이다.",
+        "score": 0.69,
+        "decision": "review_needed",
+        "signals": {
+          "title": 0.32,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2024,
+          "candidateYear": 2024,
+          "yearContradiction": false,
+          "hardContradiction": true,
+          "bibliographicOverride": false
+        },
+        "query": "AI x 인간지능의 시대 sort=date"
+      },
+      {
+        "provider": "naver",
+        "title": "AI 시대, 인간 지능의 종말",
+        "authors": [
+          "현택수"
+        ],
+        "publisher": "빠리까페",
+        "publishedYear": "20260228",
+        "isbn13": "9791124398029",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_5892456/58924562200.20260401093005.jpg",
+        "description": "AI가 인간 지능을 빠르게 대체하는 시대, ‘똑똑함’만으로 살아남을 수 있는 사회는 끝났다. IQ와 점수, 학벌과 스펙이 인간의 가치를 결정하던 시대는 지나갔다. 그렇다면 인간은 무엇으로 평가받고, 어떻게 살아가야 하는가? 이 책은 한국 사회를 중심으로, 입시와 교육, 노동과 능력주의, 인간다움과 존엄의 문제를 탐구하며 AI 시대 인간의 미래를 고민한다. 지능 경쟁에서 벗어나, 잘 살아가는 인간이 되는 길을 모색하고, 부모와 교육자에게는 아이에게 무엇을 남겨야 할지, 사회 전체에는 어떤 기준으로 사람을 평가해야 할지 깊이 있는 시사점을 제공한다. 28개의 장과 에필로그를 통해, 독자들은 AI와 경쟁하지 않고도 의미 있는 삶을 설계할 수 있는 방법을 배우게 된다. 단순한 지능을 넘어, 인간다움, 공감, 윤리적 판단, 자기 주도성을 중심으로 재정의된 새로운 사회적 기준을 제시하는 책이다. 추천 포인트 AI 시대, 인간다움과 존재 가치를 고민하는 모든 사람에게 필독 한국 사회의 교육, 경쟁, 능력주의 구조를 날카롭게 분석 부모, 교육자, 직장인, 정책 입안자 모두에게 시사점 제공 미래 사회에서 인간이 살아남는 전략과 사고의 틀 제시",
+        "score": 0.45,
+        "decision": "reject",
+        "signals": {
+          "title": 0.82,
+          "author": 0,
+          "publisher": 0,
+          "year": 0.35,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2024,
+          "candidateYear": 2026,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": false
+        },
+        "query": "AI x 인간지능의 시대 sort=sim"
+      }
+    ]
+  },
+  {
+    "sourceLabel": "bookcuration",
+    "registrationNo": "UEM924150",
+    "title": "(모두를 위한) 양자 컴퓨터 : 누구나 쉽게 이해하는 양자 컴퓨터 원리부터 활용까지",
+    "author": "Hurley, Wiliam",
+    "publisher": "한빛미디어",
+    "publishedYear": 2025,
+    "callNumber": "006.3843 H965qKㄹ",
+    "locationLabel": "중앙도서관",
+    "locationRoom": "북큐레이션코너(1층)",
+    "status": "이용가능",
+    "availability": null,
+    "metadataCandidates": [
+      {
+        "provider": "naver",
+        "title": "정지훈의 양자 컴퓨터 강의 (AI 다음의 게임 체인저 양자 컴퓨터의 모든 것)",
+        "authors": [
+          "정지훈"
+        ],
+        "publisher": "한빛미디어",
+        "publishedYear": "20250829",
+        "isbn13": "9791169214247",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_5635612/56356122467.20260331114849.jpg",
+        "description": "글로벌 빅테크가 베팅한 양자에 주목하라! 양자 컴퓨터의 기초 개념과 구현 방식, 기술 트렌드와 산업 판도, 글로벌 기업의 전략과 투자 포인트를 한눈에! AI가 이미 우리의 일상과 산업을 바꿔놓은 지금, 전 세계가 다음 주자로 주목하는 기술은 바로 양자 컴퓨팅이다. 양자 컴퓨터는 이제 단순한 이론을 넘어 현실로 다가오고 있다. 글로벌 빅테크들이 본격적으로 양자 컴퓨터 개발에 뛰어들었고, 각국 정부는 양자 주권을 선언하며 기술 패권 경쟁에 나섰다. 양자 기술은 신약 개발, 기후 시뮬레이션, 금융 최적화, AI 고도화 등 복잡한 문제들을 해결할 완전히 새로운 계산 방식을 제시한다. 하지만 아직 양자는 여전히 낯설고 어렵다. 그래서 지금, 바로 이 책이 필요하다.『정지훈의 양자 컴퓨터 강의』는 양자를 쉽고, 넓게 배울 수 있는 최고의 입문서이다. 중첩, 얽힘, 큐비트 같은 양자 컴퓨팅의 핵심 개념을 어려운 수식 없이 비유와 그림으로 풀어내고, 초전도·이온 트랩·중성 원자·광자·위상학적 큐비트 등 5가지 구현 기술의 원리와 장단점을 정리해 양자 컴퓨터의 구조와 흐름을 입체적으로 이해할 수 있도록 구성했다. 또한 IBM, 구글, 마이크로소프트, 아마존, 리게티, 아이온큐 등 글로벌 기업들의 기술 전략과 양자 경쟁의 판도가 알기 쉽게 정리되어 있어 기술 트렌드를 따라잡고 싶은 독자에게 깊은 인사이트를 준다. 다시 말해, 이 책 한 권이면 기술 트렌드와 산업 흐름, 양자 컴퓨팅의 기초 개념과 구현 방식, 기업 전략은 물론 투자 관점에서 꼭 알아야 할 핵심 포인트까지 한눈에 정리할 수 있다. AI 다음 시대가 궁금하다면 이 책에서 그 답을 찾을 수 있다. 이제, 미래로 가는 첫걸음을 이 책과 함께 시작해보자.",
+        "score": 0.74,
+        "decision": "review_needed",
+        "signals": {
+          "title": 0.86,
+          "author": 0,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": false
+        },
+        "query": "양자 컴퓨터 한빛미디어 sort=sim"
+      },
+      {
+        "provider": "naver",
+        "title": "파인만의 컴퓨터 강의 (양자 컴퓨터를 고안한 천재가 들려주는 계산 이야기)",
+        "authors": [
+          "리처드 파인만"
+        ],
+        "publisher": "한빛미디어",
+        "publishedYear": "20250625",
+        "isbn13": "9791169213974",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_5536225/55362250878.20260331113445.jpg",
+        "description": "AI, 양자 컴퓨터, 로보틱스 컴퓨터의 미래를 내다본 물리학자의 강의를 다시 만나다 “컴퓨터 과학은 우리가 주변 세상에서 어떤 것을 알 수 있고 어떤 것을 알 수 없는지를 다시금 생각하게 만든다.” - 리처드 파인만 노벨물리학상 수상자 리처드 파인만이 마지막으로 강의한 과목은 다름 아닌 컴퓨터 과학이었다. 1983년부터 1986년까지 캘리포니아 공과대학에서 계산의 물리적 본질에서 시작해 컴퓨터 이론 전반을 탐색하며, 자신만의 독창적인 시각으로 ‘컴퓨터란 무엇인가’를 깊이 있게 성찰했다. 1판의 출간 20주년을 맞아 선보이는 2판은 현대의 컴퓨터 과학을 파인만의 시점으로 재조명한다. 파인만이 처음 제안한 ‘양자역학적 컴퓨터’ 개념이 오늘날 ‘양자 컴퓨터’에 미친 영향을 살펴보며, 파인만이 AI에 관해 언급했던 내용 등 현대 컴퓨터 과학의 주요 이슈까지 추가했다. 시간이 흐를수록 더욱 빛이 나는 거장의 마지막 강의를 지금 바로 만나보자. 대상 독자 ● 하드웨어 아키텍처·계산 이론의 기초를 탄탄히 다지고 싶은 학부·대학원생 ● 파인만 특유의 시각으로 컴퓨팅 한계를 물리학적 관점에서 탐구하고 싶은 개발자 ● 컴퓨터가 어떻게 동작하며 무엇을 할 수 있는지 ‘깊이 있게’ 이해하고 싶은 모든 사람",
+        "score": 0.74,
+        "decision": "review_needed",
+        "signals": {
+          "title": 0.86,
+          "author": 0,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": false
+        },
+        "query": "양자 컴퓨터 한빛미디어 sort=sim"
+      },
+      {
+        "provider": "naver",
+        "title": "모두를 위한 양자 컴퓨터 (누구나 쉽게 이해하는 양자 컴퓨터 원리부터 활용까지)",
+        "authors": [
+          "윌리엄 헐리^플로이드 스미스"
+        ],
+        "publisher": "한빛미디어",
+        "publishedYear": "20250120",
+        "isbn13": "9791169213370",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_5246622/52466229305.20260331102503.jpg",
+        "description": "2025년은 유엔이 지정한 ‘세계 양자 과학 기술의 해’ 양자 컴퓨팅의 세계로 뛰어들다 원자의 힘을 활용한 새로운 컴퓨터가 등장하며 컴퓨터 작동 방식에 혁명을 일으키고 있다. 이 책은 양자 역학의 법칙을 이용해 문제를 해결하는 혁신적인 시스템을 소개한다. 이 시스템은 세계에서 가장 강력한 슈퍼컴퓨터로도 수백만 년이 걸릴 계산을 단 몇 분 만에 처리할 수 있다. 금융, 제약, 운송, 에너지 등 다양한 산업에서 양자 컴퓨터가 어떻게 변화를 일으킬지, 그 작동 원리를 알아본다. 박사 학위 기반 지식이 없어도 이해할 수 있도록 쉽고 친절하게 설명되어 있어 누구나 양자 컴퓨팅의 세계로 첫걸음을 내디딜 수 있다. 미래의 기술을 지금 바로 만나보자.",
+        "score": 0.74,
+        "decision": "accept",
+        "signals": {
+          "title": 0.86,
+          "author": 0,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "양자 컴퓨터 한빛미디어 sort=sim"
+      },
+      {
+        "provider": "naver",
+        "title": "정지훈의 양자 컴퓨터 강의 (AI 다음의 게임 체인저 양자 컴퓨터의 모든 것)",
+        "authors": [
+          "정지훈"
+        ],
+        "publisher": "한빛미디어",
+        "publishedYear": "20250829",
+        "isbn13": "9791169214247",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_5635612/56356122467.20260331114849.jpg",
+        "description": "글로벌 빅테크가 베팅한 양자에 주목하라! 양자 컴퓨터의 기초 개념과 구현 방식, 기술 트렌드와 산업 판도, 글로벌 기업의 전략과 투자 포인트를 한눈에! AI가 이미 우리의 일상과 산업을 바꿔놓은 지금, 전 세계가 다음 주자로 주목하는 기술은 바로 양자 컴퓨팅이다. 양자 컴퓨터는 이제 단순한 이론을 넘어 현실로 다가오고 있다. 글로벌 빅테크들이 본격적으로 양자 컴퓨터 개발에 뛰어들었고, 각국 정부는 양자 주권을 선언하며 기술 패권 경쟁에 나섰다. 양자 기술은 신약 개발, 기후 시뮬레이션, 금융 최적화, AI 고도화 등 복잡한 문제들을 해결할 완전히 새로운 계산 방식을 제시한다. 하지만 아직 양자는 여전히 낯설고 어렵다. 그래서 지금, 바로 이 책이 필요하다.『정지훈의 양자 컴퓨터 강의』는 양자를 쉽고, 넓게 배울 수 있는 최고의 입문서이다. 중첩, 얽힘, 큐비트 같은 양자 컴퓨팅의 핵심 개념을 어려운 수식 없이 비유와 그림으로 풀어내고, 초전도·이온 트랩·중성 원자·광자·위상학적 큐비트 등 5가지 구현 기술의 원리와 장단점을 정리해 양자 컴퓨터의 구조와 흐름을 입체적으로 이해할 수 있도록 구성했다. 또한 IBM, 구글, 마이크로소프트, 아마존, 리게티, 아이온큐 등 글로벌 기업들의 기술 전략과 양자 경쟁의 판도가 알기 쉽게 정리되어 있어 기술 트렌드를 따라잡고 싶은 독자에게 깊은 인사이트를 준다. 다시 말해, 이 책 한 권이면 기술 트렌드와 산업 흐름, 양자 컴퓨팅의 기초 개념과 구현 방식, 기업 전략은 물론 투자 관점에서 꼭 알아야 할 핵심 포인트까지 한눈에 정리할 수 있다. AI 다음 시대가 궁금하다면 이 책에서 그 답을 찾을 수 있다. 이제, 미래로 가는 첫걸음을 이 책과 함께 시작해보자.",
+        "score": 0.74,
+        "decision": "review_needed",
+        "signals": {
+          "title": 0.86,
+          "author": 0,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": false
+        },
+        "query": "양자 컴퓨터 한빛미디어 sort=date"
+      },
+      {
+        "provider": "naver",
+        "title": "파인만의 컴퓨터 강의 (양자 컴퓨터를 고안한 천재가 들려주는 계산 이야기)",
+        "authors": [
+          "리처드 파인만"
+        ],
+        "publisher": "한빛미디어",
+        "publishedYear": "20250625",
+        "isbn13": "9791169213974",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_5536225/55362250878.20260331113445.jpg",
+        "description": "AI, 양자 컴퓨터, 로보틱스 컴퓨터의 미래를 내다본 물리학자의 강의를 다시 만나다 “컴퓨터 과학은 우리가 주변 세상에서 어떤 것을 알 수 있고 어떤 것을 알 수 없는지를 다시금 생각하게 만든다.” - 리처드 파인만 노벨물리학상 수상자 리처드 파인만이 마지막으로 강의한 과목은 다름 아닌 컴퓨터 과학이었다. 1983년부터 1986년까지 캘리포니아 공과대학에서 계산의 물리적 본질에서 시작해 컴퓨터 이론 전반을 탐색하며, 자신만의 독창적인 시각으로 ‘컴퓨터란 무엇인가’를 깊이 있게 성찰했다. 1판의 출간 20주년을 맞아 선보이는 2판은 현대의 컴퓨터 과학을 파인만의 시점으로 재조명한다. 파인만이 처음 제안한 ‘양자역학적 컴퓨터’ 개념이 오늘날 ‘양자 컴퓨터’에 미친 영향을 살펴보며, 파인만이 AI에 관해 언급했던 내용 등 현대 컴퓨터 과학의 주요 이슈까지 추가했다. 시간이 흐를수록 더욱 빛이 나는 거장의 마지막 강의를 지금 바로 만나보자. 대상 독자 ● 하드웨어 아키텍처·계산 이론의 기초를 탄탄히 다지고 싶은 학부·대학원생 ● 파인만 특유의 시각으로 컴퓨팅 한계를 물리학적 관점에서 탐구하고 싶은 개발자 ● 컴퓨터가 어떻게 동작하며 무엇을 할 수 있는지 ‘깊이 있게’ 이해하고 싶은 모든 사람",
+        "score": 0.74,
+        "decision": "review_needed",
+        "signals": {
+          "title": 0.86,
+          "author": 0,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": false
+        },
+        "query": "양자 컴퓨터 한빛미디어 sort=date"
+      }
+    ]
+  },
+  {
+    "sourceLabel": "openlibrary",
+    "registrationNo": "UEM916730",
+    "title": "리커넥트 : 누구나 한 번은 혼자가 된다 = Reconnect",
+    "author": "장재열",
+    "publisher": "Juspeace : 갤럭시코퍼레이션",
+    "publishedYear": 2025,
+    "callNumber": "158.1 ㅈ128ㄹ",
+    "locationLabel": "오픈라이브러리",
+    "locationRoom": "프리덤광장",
+    "shelf": "",
+    "status": "이용가능",
+    "availability": "available",
+    "metadataCandidates": [
+      {
+        "provider": "google_books",
+        "title": "리커넥트",
+        "authors": [
+          "장재열"
+        ],
+        "publisher": "",
+        "publishedYear": "2025",
+        "isbn13": "9791198774798",
+        "coverUrl": null,
+        "description": "",
+        "score": 0.8,
+        "decision": "review_needed",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 0,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": false
+        },
+        "query": "intitle:리커넥트 inauthor:장재열"
+      },
+      {
+        "provider": "naver",
+        "title": "리커넥트 (누구나 한 번은 혼자가 된다)",
+        "authors": [
+          "장재열"
+        ],
+        "publisher": "저스피스",
+        "publishedYear": "20250217",
+        "isbn13": "9791198774798",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_5285697/52856971055.20260331100620.jpg",
+        "description": "“당신의 인생에도 동굴로 들어가고 싶었던 순간이 있었나요?” 장재열 상담가가 인생의 동굴에서 걸어 나온 100명에게서 발견한 생의 전환점을 만드는 연결의 힘에 대하여 ★ 베스트셀러 《마이크로 리추얼》 저자의 신작 ★ 뮤지션 지드래곤, 최재천 교수 강력 추천 흔히 ‘고립(Social isolation)’은 은둔 생활을 하는 히키코모리와 동의어쯤으로 치부된다. 혹은 대다수가 번아웃, 우울증, 외로움과 비슷한 상태 아니냐고들 착각한다. 하지만 고립은 이와 완전히 다르다. 은둔처럼 방 안에만 머물며 외부와 단절된 상태가 아니라 회사나 학교를 다니는 사람들에게도 찾아올 수 있는 상태, 즉 겉보기에는 정상적으로 사회생활 하는 것처럼 보이지만 누구와도 정서적으로 연결되지 않은 상태를 말한다. 전 국민 중 3분의 1이 고립을 경험한다는 연구 결과가 있음에도, 사회적으로 고립의 개념에 대한 논의조차 제대로 이루어지지 않는 게 현실이다. 11년간 상담가로 활동하며 4만 4천여 명을 만나온 저자는 이 책에서 그간 제대로 조명되지 않았던 고립 당사자들의 생생한 이야기를 담으며, 고립에 대한 오해와 현실의 격차부터 좁혀간다. 그는 고립은 누구나 인생에 한 번은 만나는 ‘마음이 외딴 상태’라고 짚어낸다. 이에 더해 저자는 100여 명의 고립 당사자와의 상담을 통해, 고립이라는 늪을 빠져나올 힌트는 ‘연결의 힘’에 있다는 것을 발견한다. 고립이 무엇인지, 사람들은 어떤 이유로 고립을 겪는지, 사랑하는 사람이 고립을 겪고 있을 때 도움을 주기 위한 방법까지 담은 이 책은 흔들리는 독자의 삶에 생생한 위로를 더할 것이다.",
+        "score": 0.74,
+        "decision": "accept",
+        "signals": {
+          "title": 0.86,
+          "author": 1,
+          "publisher": 0,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "리커넥트 장재열 sort=sim"
+      },
+      {
+        "provider": "naver",
+        "title": "리커넥트 (누구나 한 번은 혼자가 된다)",
+        "authors": [
+          "장재열"
+        ],
+        "publisher": "저스피스",
+        "publishedYear": "20250217",
+        "isbn13": "9791198774798",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_5285697/52856971055.20260331100620.jpg",
+        "description": "“당신의 인생에도 동굴로 들어가고 싶었던 순간이 있었나요?” 장재열 상담가가 인생의 동굴에서 걸어 나온 100명에게서 발견한 생의 전환점을 만드는 연결의 힘에 대하여 ★ 베스트셀러 《마이크로 리추얼》 저자의 신작 ★ 뮤지션 지드래곤, 최재천 교수 강력 추천 흔히 ‘고립(Social isolation)’은 은둔 생활을 하는 히키코모리와 동의어쯤으로 치부된다. 혹은 대다수가 번아웃, 우울증, 외로움과 비슷한 상태 아니냐고들 착각한다. 하지만 고립은 이와 완전히 다르다. 은둔처럼 방 안에만 머물며 외부와 단절된 상태가 아니라 회사나 학교를 다니는 사람들에게도 찾아올 수 있는 상태, 즉 겉보기에는 정상적으로 사회생활 하는 것처럼 보이지만 누구와도 정서적으로 연결되지 않은 상태를 말한다. 전 국민 중 3분의 1이 고립을 경험한다는 연구 결과가 있음에도, 사회적으로 고립의 개념에 대한 논의조차 제대로 이루어지지 않는 게 현실이다. 11년간 상담가로 활동하며 4만 4천여 명을 만나온 저자는 이 책에서 그간 제대로 조명되지 않았던 고립 당사자들의 생생한 이야기를 담으며, 고립에 대한 오해와 현실의 격차부터 좁혀간다. 그는 고립은 누구나 인생에 한 번은 만나는 ‘마음이 외딴 상태’라고 짚어낸다. 이에 더해 저자는 100여 명의 고립 당사자와의 상담을 통해, 고립이라는 늪을 빠져나올 힌트는 ‘연결의 힘’에 있다는 것을 발견한다. 고립이 무엇인지, 사람들은 어떤 이유로 고립을 겪는지, 사랑하는 사람이 고립을 겪고 있을 때 도움을 주기 위한 방법까지 담은 이 책은 흔들리는 독자의 삶에 생생한 위로를 더할 것이다.",
+        "score": 0.74,
+        "decision": "accept",
+        "signals": {
+          "title": 0.86,
+          "author": 1,
+          "publisher": 0,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "리커넥트 장재열 sort=date"
+      },
+      {
+        "provider": "naver",
+        "title": "리커넥트 (누구나 한 번은 혼자가 된다)",
+        "authors": [
+          "장재열"
+        ],
+        "publisher": "저스피스",
+        "publishedYear": "20250217",
+        "isbn13": "9791198774798",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_5285697/52856971055.20260331100620.jpg",
+        "description": "“당신의 인생에도 동굴로 들어가고 싶었던 순간이 있었나요?” 장재열 상담가가 인생의 동굴에서 걸어 나온 100명에게서 발견한 생의 전환점을 만드는 연결의 힘에 대하여 ★ 베스트셀러 《마이크로 리추얼》 저자의 신작 ★ 뮤지션 지드래곤, 최재천 교수 강력 추천 흔히 ‘고립(Social isolation)’은 은둔 생활을 하는 히키코모리와 동의어쯤으로 치부된다. 혹은 대다수가 번아웃, 우울증, 외로움과 비슷한 상태 아니냐고들 착각한다. 하지만 고립은 이와 완전히 다르다. 은둔처럼 방 안에만 머물며 외부와 단절된 상태가 아니라 회사나 학교를 다니는 사람들에게도 찾아올 수 있는 상태, 즉 겉보기에는 정상적으로 사회생활 하는 것처럼 보이지만 누구와도 정서적으로 연결되지 않은 상태를 말한다. 전 국민 중 3분의 1이 고립을 경험한다는 연구 결과가 있음에도, 사회적으로 고립의 개념에 대한 논의조차 제대로 이루어지지 않는 게 현실이다. 11년간 상담가로 활동하며 4만 4천여 명을 만나온 저자는 이 책에서 그간 제대로 조명되지 않았던 고립 당사자들의 생생한 이야기를 담으며, 고립에 대한 오해와 현실의 격차부터 좁혀간다. 그는 고립은 누구나 인생에 한 번은 만나는 ‘마음이 외딴 상태’라고 짚어낸다. 이에 더해 저자는 100여 명의 고립 당사자와의 상담을 통해, 고립이라는 늪을 빠져나올 힌트는 ‘연결의 힘’에 있다는 것을 발견한다. 고립이 무엇인지, 사람들은 어떤 이유로 고립을 겪는지, 사랑하는 사람이 고립을 겪고 있을 때 도움을 주기 위한 방법까지 담은 이 책은 흔들리는 독자의 삶에 생생한 위로를 더할 것이다.",
+        "score": 0.74,
+        "decision": "accept",
+        "signals": {
+          "title": 0.86,
+          "author": 1,
+          "publisher": 0,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "리커넥트 sort=sim"
+      },
+      {
+        "provider": "naver",
+        "title": "리커넥트 (누구나 한 번은 혼자가 된다)",
+        "authors": [
+          "장재열"
+        ],
+        "publisher": "저스피스",
+        "publishedYear": "20250217",
+        "isbn13": "9791198774798",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_5285697/52856971055.20260331100620.jpg",
+        "description": "“당신의 인생에도 동굴로 들어가고 싶었던 순간이 있었나요?” 장재열 상담가가 인생의 동굴에서 걸어 나온 100명에게서 발견한 생의 전환점을 만드는 연결의 힘에 대하여 ★ 베스트셀러 《마이크로 리추얼》 저자의 신작 ★ 뮤지션 지드래곤, 최재천 교수 강력 추천 흔히 ‘고립(Social isolation)’은 은둔 생활을 하는 히키코모리와 동의어쯤으로 치부된다. 혹은 대다수가 번아웃, 우울증, 외로움과 비슷한 상태 아니냐고들 착각한다. 하지만 고립은 이와 완전히 다르다. 은둔처럼 방 안에만 머물며 외부와 단절된 상태가 아니라 회사나 학교를 다니는 사람들에게도 찾아올 수 있는 상태, 즉 겉보기에는 정상적으로 사회생활 하는 것처럼 보이지만 누구와도 정서적으로 연결되지 않은 상태를 말한다. 전 국민 중 3분의 1이 고립을 경험한다는 연구 결과가 있음에도, 사회적으로 고립의 개념에 대한 논의조차 제대로 이루어지지 않는 게 현실이다. 11년간 상담가로 활동하며 4만 4천여 명을 만나온 저자는 이 책에서 그간 제대로 조명되지 않았던 고립 당사자들의 생생한 이야기를 담으며, 고립에 대한 오해와 현실의 격차부터 좁혀간다. 그는 고립은 누구나 인생에 한 번은 만나는 ‘마음이 외딴 상태’라고 짚어낸다. 이에 더해 저자는 100여 명의 고립 당사자와의 상담을 통해, 고립이라는 늪을 빠져나올 힌트는 ‘연결의 힘’에 있다는 것을 발견한다. 고립이 무엇인지, 사람들은 어떤 이유로 고립을 겪는지, 사랑하는 사람이 고립을 겪고 있을 때 도움을 주기 위한 방법까지 담은 이 책은 흔들리는 독자의 삶에 생생한 위로를 더할 것이다.",
+        "score": 0.74,
+        "decision": "accept",
+        "signals": {
+          "title": 0.86,
+          "author": 1,
+          "publisher": 0,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "리커넥트 sort=date"
+      }
+    ]
+  },
+  {
+    "sourceLabel": "openlibrary",
+    "registrationNo": "UEM605128",
+    "title": "희랍어 시간 : 한강 장편소설",
+    "author": "한강",
+    "publisher": "문학동네",
+    "publishedYear": 2019,
+    "callNumber": "811.32 ㅎ152ㅎ",
+    "locationLabel": "오픈라이브러리",
+    "locationRoom": "프리덤광장",
+    "shelf": "",
+    "status": "이용가능",
+    "availability": "checked_out",
+    "metadataCandidates": [
+      {
+        "provider": "google_books",
+        "title": "희랍어 시간",
+        "authors": [
+          "한강"
+        ],
+        "publisher": "문학동네",
+        "publishedYear": "2011-11-10",
+        "isbn13": "9788954616515",
+        "coverUrl": "http://books.google.com/books/content?id=td6FAAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+        "description": "이것은 한 남자와 한 여자의 이야기입니다. 말語을 잃어가는 한 여자의 침묵과 눈眼을 잃어가는 한 남자의 빛이 만나는 찰나의 이야기 이 소설을 읽는 일은, 어쩌면 한 장의 사진을 오래토록 들여다보는 것과 같은 일일지도 모르겠다. 드디어 오랜 기다림 끝에 찾아낸 것일까. 전소해버린 줄 알았던 언어의 검부러기 밑에서 올라오는 참된 음절들을. 작가는 언어가 몸을 갖추기 이전에 존재하던 것들―흔적, 이미지, 감촉, 정념으로 이루어진 세계로 우리를 데려간다. 신생의 언어와 사멸해가는 언어가 서로 만나 몸을 비벼대는 찰나, 우리는 아득한 기원의 세계로 돌아가 그곳에 동결해둔 인간의 아픔과 희열을 발견한다. 그리고 문득 깨닫게 된다. 자신의 몸이 기억하는 참된 욕망과 조우하기 위해서는 0도 근처에서 차갑게 끓어오르는 글쓰기의 언저리까지 기어이 내려가야 한다는 사실을. 그곳에서 우리는 죽음과 탄생이 새로운 몸을 얻어 환생하는, 세속의 기적을 목격하게 된다. 이렇게 아름답게, 온전하게 몰락하는 방법을 가르쳐준 소설이 우리에게 있었던가._이소연(문학평론가)",
+        "score": 0.9,
+        "decision": "review_needed",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 0,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2019,
+          "candidateYear": 2011,
+          "yearContradiction": true,
+          "hardContradiction": true,
+          "bibliographicOverride": false
+        },
+        "query": "intitle:희랍어 시간 inauthor:한강"
+      },
+      {
+        "provider": "google_books",
+        "title": "희랍어 시간",
+        "authors": [
+          "한강"
+        ],
+        "publisher": "문학동네",
+        "publishedYear": "2011-11-10",
+        "isbn13": "9788954616515",
+        "coverUrl": "http://books.google.com/books/content?id=td6FAAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+        "description": "이것은 한 남자와 한 여자의 이야기입니다. 말語을 잃어가는 한 여자의 침묵과 눈眼을 잃어가는 한 남자의 빛이 만나는 찰나의 이야기 이 소설을 읽는 일은, 어쩌면 한 장의 사진을 오래토록 들여다보는 것과 같은 일일지도 모르겠다. 드디어 오랜 기다림 끝에 찾아낸 것일까. 전소해버린 줄 알았던 언어의 검부러기 밑에서 올라오는 참된 음절들을. 작가는 언어가 몸을 갖추기 이전에 존재하던 것들―흔적, 이미지, 감촉, 정념으로 이루어진 세계로 우리를 데려간다. 신생의 언어와 사멸해가는 언어가 서로 만나 몸을 비벼대는 찰나, 우리는 아득한 기원의 세계로 돌아가 그곳에 동결해둔 인간의 아픔과 희열을 발견한다. 그리고 문득 깨닫게 된다. 자신의 몸이 기억하는 참된 욕망과 조우하기 위해서는 0도 근처에서 차갑게 끓어오르는 글쓰기의 언저리까지 기어이 내려가야 한다는 사실을. 그곳에서 우리는 죽음과 탄생이 새로운 몸을 얻어 환생하는, 세속의 기적을 목격하게 된다. 이렇게 아름답게, 온전하게 몰락하는 방법을 가르쳐준 소설이 우리에게 있었던가._이소연(문학평론가)",
+        "score": 0.9,
+        "decision": "review_needed",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 0,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2019,
+          "candidateYear": 2011,
+          "yearContradiction": true,
+          "hardContradiction": true,
+          "bibliographicOverride": false
+        },
+        "query": "intitle:희랍어 시간 inpublisher:문학동네"
+      },
+      {
+        "provider": "naver",
+        "title": "희랍어 시간 (한강 소설ㅣ2024년 노벨문학상 수상작가)",
+        "authors": [
+          "한강"
+        ],
+        "publisher": "문학동네",
+        "publishedYear": "20111110",
+        "isbn13": "9788954616515",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_3247609/32476098329.20260331114710.jpg",
+        "description": "그 여자의 침묵과 그 남자의 빛! 한국인 최초 맨부커상 수상 작가 한강의 장편소설 『희랍어 시간』. 말을 잃어가는 한 여자의 침묵과 눈을 잃어가는 한 남자의 빛이 만나는 순간을 그리고 있다. 열일곱 살 겨울, 여자는 어떤 원인이나 전조 없이 말을 잃는다. 말을 잃고 살던 그녀의 입을 다시 움직이게 한 건 낯선 외국어였던 한 개의 불어 단어였다. 시간이 흘러, 이혼을 하고 아이의 양육권을 빼앗기고 다시 말을 잃어버린 여자는 죽은 언어가 된 희랍어를 선택한다. 그곳에서 만난 희랍어 강사와 여자는 침묵을 사이에 놓고 더듬더듬 대화한다. 한편, 가족을 모두 독일에 두고 혼자 한국으로 돌아와 희랍어를 가르치는 남자는 점점 빛을 잃어가고 있다. 그는 아카데미의 수강생 중 말을 하지도, 웃지도 않는 여자를 주의 깊게 지켜보지만 그녀의 단단한 침묵에 두려움을 느끼는데….",
+        "score": 0.84,
+        "decision": "review_needed",
+        "signals": {
+          "title": 0.86,
+          "author": 1,
+          "publisher": 1,
+          "year": 0,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2019,
+          "candidateYear": 2011,
+          "yearContradiction": true,
+          "hardContradiction": true,
+          "bibliographicOverride": false
+        },
+        "query": "희랍어 시간 한강 sort=sim"
+      },
+      {
+        "provider": "naver",
+        "title": "희랍어 시간 (한강 소설ㅣ2024년 노벨문학상 수상작가)",
+        "authors": [
+          "한강"
+        ],
+        "publisher": "문학동네",
+        "publishedYear": "20111110",
+        "isbn13": "9788954616515",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_3247609/32476098329.20260331114710.jpg",
+        "description": "그 여자의 침묵과 그 남자의 빛! 한국인 최초 맨부커상 수상 작가 한강의 장편소설 『희랍어 시간』. 말을 잃어가는 한 여자의 침묵과 눈을 잃어가는 한 남자의 빛이 만나는 순간을 그리고 있다. 열일곱 살 겨울, 여자는 어떤 원인이나 전조 없이 말을 잃는다. 말을 잃고 살던 그녀의 입을 다시 움직이게 한 건 낯선 외국어였던 한 개의 불어 단어였다. 시간이 흘러, 이혼을 하고 아이의 양육권을 빼앗기고 다시 말을 잃어버린 여자는 죽은 언어가 된 희랍어를 선택한다. 그곳에서 만난 희랍어 강사와 여자는 침묵을 사이에 놓고 더듬더듬 대화한다. 한편, 가족을 모두 독일에 두고 혼자 한국으로 돌아와 희랍어를 가르치는 남자는 점점 빛을 잃어가고 있다. 그는 아카데미의 수강생 중 말을 하지도, 웃지도 않는 여자를 주의 깊게 지켜보지만 그녀의 단단한 침묵에 두려움을 느끼는데….",
+        "score": 0.84,
+        "decision": "review_needed",
+        "signals": {
+          "title": 0.86,
+          "author": 1,
+          "publisher": 1,
+          "year": 0,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2019,
+          "candidateYear": 2011,
+          "yearContradiction": true,
+          "hardContradiction": true,
+          "bibliographicOverride": false
+        },
+        "query": "희랍어 시간 문학동네 sort=sim"
+      },
+      {
+        "provider": "naver",
+        "title": "희랍어 시간 (한강 소설ㅣ2024년 노벨문학상 수상작가)",
+        "authors": [
+          "한강"
+        ],
+        "publisher": "문학동네",
+        "publishedYear": "20111110",
+        "isbn13": "9788954616515",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_3247609/32476098329.20260331114710.jpg",
+        "description": "그 여자의 침묵과 그 남자의 빛! 한국인 최초 맨부커상 수상 작가 한강의 장편소설 『희랍어 시간』. 말을 잃어가는 한 여자의 침묵과 눈을 잃어가는 한 남자의 빛이 만나는 순간을 그리고 있다. 열일곱 살 겨울, 여자는 어떤 원인이나 전조 없이 말을 잃는다. 말을 잃고 살던 그녀의 입을 다시 움직이게 한 건 낯선 외국어였던 한 개의 불어 단어였다. 시간이 흘러, 이혼을 하고 아이의 양육권을 빼앗기고 다시 말을 잃어버린 여자는 죽은 언어가 된 희랍어를 선택한다. 그곳에서 만난 희랍어 강사와 여자는 침묵을 사이에 놓고 더듬더듬 대화한다. 한편, 가족을 모두 독일에 두고 혼자 한국으로 돌아와 희랍어를 가르치는 남자는 점점 빛을 잃어가고 있다. 그는 아카데미의 수강생 중 말을 하지도, 웃지도 않는 여자를 주의 깊게 지켜보지만 그녀의 단단한 침묵에 두려움을 느끼는데….",
+        "score": 0.84,
+        "decision": "review_needed",
+        "signals": {
+          "title": 0.86,
+          "author": 1,
+          "publisher": 1,
+          "year": 0,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2019,
+          "candidateYear": 2011,
+          "yearContradiction": true,
+          "hardContradiction": true,
+          "bibliographicOverride": false
+        },
+        "query": "희랍어 시간 sort=sim"
+      }
+    ]
+  },
+  {
+    "sourceLabel": "openlibrary",
+    "registrationNo": "UEM929301",
+    "title": "어두운 바다의 등불이 되어 : 연산호 장편소설. 5-8 = Be a light in the dark sea",
+    "author": "연산호",
+    "publisher": "김영사",
+    "publishedYear": 2025,
+    "callNumber": "811.32 ㅇ255어",
+    "locationLabel": "오픈라이브러리",
+    "locationRoom": "프리덤광장",
+    "shelf": "",
+    "status": "이용가능",
+    "availability": "available",
+    "metadataCandidates": [
+      {
+        "provider": "google_books",
+        "title": "어두운 바다 의 등불 이 되어",
+        "authors": [
+          "연산호"
+        ],
+        "publisher": "",
+        "publishedYear": "2024",
+        "isbn13": "9791194330905",
+        "coverUrl": null,
+        "description": "",
+        "score": 0.77,
+        "decision": "review_needed",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 0,
+          "year": 0.65,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2024,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": false
+        },
+        "query": "intitle:어두운 바다의 등불이 되어 inauthor:연산호"
+      },
+      {
+        "provider": "google_books",
+        "title": "어두운 바다의 등불이 되어",
+        "authors": [
+          "연산호"
+        ],
+        "publisher": "",
+        "publishedYear": "2024",
+        "isbn13": "9791194330929",
+        "coverUrl": null,
+        "description": "",
+        "score": 0.77,
+        "decision": "review_needed",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 0,
+          "year": 0.65,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2024,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": false
+        },
+        "query": "intitle:어두운 바다의 등불이 되어 inauthor:연산호"
+      },
+      {
+        "provider": "naver",
+        "title": "어두운 바다의 등불이 되어 5~8 세트",
+        "authors": [
+          "연산호"
+        ],
+        "publisher": "비채",
+        "publishedYear": "20251223",
+        "isbn13": "9791173323591",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_5816458/58164585493.20260217071607.jpg",
+        "description": "‘SF 어워드’ 웹소설 부문 대상, ‘리디 어워즈’ 판타지 e북 대상을 석권한 《어두운 바다의 등불이 되어》 공식 양장본 완결. 192화부터 결말까지의 본편과 웹에서 공개된 외전 5편이 4권에 나누어 수록되며, 8권 말미 완간을 기념해 연산호 작가가 새로 집필한 특별 외전 「관찰 필요」를 붙였다. 작품 속 ‘박무현치과의원’에서 배포한 콘셉트의 2076년 달력부터 주요 등장인물인 박무현과 신해량의 신규 일러스트, 이야기의 서사를 파도의 흐름으로 구현해 파노라마처럼 펼쳐놓은 표지 디자인, 세트(1-4) 북케이스와 짝을 이루는 신규 북케이스까지, 그랜드 피날레에 걸맞은 알찬 구성으로 독자들을 찾는다.",
+        "score": 0.74,
+        "decision": "accept",
+        "signals": {
+          "title": 0.86,
+          "author": 1,
+          "publisher": 0,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "어두운 바다의 등불이 되어 연산호 sort=sim"
+      },
+      {
+        "provider": "naver",
+        "title": "어두운 바다의 등불이 되어 8",
+        "authors": [
+          "연산호"
+        ],
+        "publisher": "비채",
+        "publishedYear": "20251223",
+        "isbn13": "9791173323584",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_5913945/59139458013.20260304092909.jpg",
+        "description": "‘SF 어워드’ 웹소설 부문 대상, ‘리디 어워즈’ 판타지 e북 대상을 석권한 《어두운 바다의 등불이 되어》 공식 양장본 완결. 192화부터 결말까지의 본편과 웹에서 공개된 외전 5편이 4권에 나누어 수록되며, 8권 말미 완간을 기념해 연산호 작가가 새로 집필한 특별 외전 〈관찰 필요〉를 붙였다. 작품 속 ‘박무현치과의원’에서 배포한 콘셉트의 2076년 달력부터 주요 등장인물인 박무현과 신해량의 신규 일러스트, 이야기의 서사를 파도의 흐름으로 구현해 파노라마처럼 펼쳐놓은 표지 디자인, 세트(1-4) 북케이스와 짝을 이루는 신규 북케이스까지, 그랜드 피날레에 걸맞은 알찬 구성으로 독자들을 찾는다.",
+        "score": 0.74,
+        "decision": "accept",
+        "signals": {
+          "title": 0.86,
+          "author": 1,
+          "publisher": 0,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "어두운 바다의 등불이 되어 연산호 sort=sim"
+      },
+      {
+        "provider": "naver",
+        "title": "어두운 바다의 등불이 되어 6",
+        "authors": [
+          "연산호"
+        ],
+        "publisher": "비채",
+        "publishedYear": "20251223",
+        "isbn13": "9791173323560",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_5913787/59137878401.20260304071450.jpg",
+        "description": "‘SF 어워드’ 웹소설 부문 대상, ‘리디 어워즈’ 판타지 e북 대상을 석권한 《어두운 바다의 등불이 되어》 공식 양장본 완결. 192화부터 결말까지의 본편과 웹에서 공개된 외전 5편이 4권에 나누어 수록되며, 8권 말미 완간을 기념해 연산호 작가가 새로 집필한 특별 외전 〈관찰 필요〉를 붙였다. 작품 속 ‘박무현치과의원’에서 배포한 콘셉트의 2076년 달력부터 주요 등장인물인 박무현과 신해량의 신규 일러스트, 이야기의 서사를 파도의 흐름으로 구현해 파노라마처럼 펼쳐놓은 표지 디자인, 세트(1-4) 북케이스와 짝을 이루는 신규 북케이스까지, 그랜드 피날레에 걸맞은 알찬 구성으로 독자들을 찾는다.",
+        "score": 0.74,
+        "decision": "accept",
+        "signals": {
+          "title": 0.86,
+          "author": 1,
+          "publisher": 0,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "어두운 바다의 등불이 되어 연산호 sort=sim"
+      }
+    ]
+  },
+  {
+    "sourceLabel": "openlibrary",
+    "registrationNo": "UEM605128",
+    "title": "희랍어 시간 : 한강 장편소설",
+    "author": "한강",
+    "publisher": "문학동네",
+    "publishedYear": 2019,
+    "callNumber": "811.32 ㅎ152ㅎ",
+    "locationLabel": "오픈라이브러리",
+    "locationRoom": "프리덤광장",
+    "shelf": "",
+    "status": "이용가능",
+    "availability": "checked_out",
+    "metadataCandidates": [
+      {
+        "provider": "google_books",
+        "title": "희랍어 시간",
+        "authors": [
+          "한강"
+        ],
+        "publisher": "문학동네",
+        "publishedYear": "2011-11-10",
+        "isbn13": "9788954616515",
+        "coverUrl": "http://books.google.com/books/content?id=td6FAAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+        "description": "이것은 한 남자와 한 여자의 이야기입니다. 말語을 잃어가는 한 여자의 침묵과 눈眼을 잃어가는 한 남자의 빛이 만나는 찰나의 이야기 이 소설을 읽는 일은, 어쩌면 한 장의 사진을 오래토록 들여다보는 것과 같은 일일지도 모르겠다. 드디어 오랜 기다림 끝에 찾아낸 것일까. 전소해버린 줄 알았던 언어의 검부러기 밑에서 올라오는 참된 음절들을. 작가는 언어가 몸을 갖추기 이전에 존재하던 것들―흔적, 이미지, 감촉, 정념으로 이루어진 세계로 우리를 데려간다. 신생의 언어와 사멸해가는 언어가 서로 만나 몸을 비벼대는 찰나, 우리는 아득한 기원의 세계로 돌아가 그곳에 동결해둔 인간의 아픔과 희열을 발견한다. 그리고 문득 깨닫게 된다. 자신의 몸이 기억하는 참된 욕망과 조우하기 위해서는 0도 근처에서 차갑게 끓어오르는 글쓰기의 언저리까지 기어이 내려가야 한다는 사실을. 그곳에서 우리는 죽음과 탄생이 새로운 몸을 얻어 환생하는, 세속의 기적을 목격하게 된다. 이렇게 아름답게, 온전하게 몰락하는 방법을 가르쳐준 소설이 우리에게 있었던가._이소연(문학평론가)",
+        "score": 0.9,
+        "decision": "review_needed",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 0,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2019,
+          "candidateYear": 2011,
+          "yearContradiction": true,
+          "hardContradiction": true,
+          "bibliographicOverride": false
+        },
+        "query": "intitle:희랍어 시간 inauthor:한강"
+      },
+      {
+        "provider": "google_books",
+        "title": "희랍어 시간",
+        "authors": [
+          "한강"
+        ],
+        "publisher": "문학동네",
+        "publishedYear": "2011-11-10",
+        "isbn13": "9788954616515",
+        "coverUrl": "http://books.google.com/books/content?id=td6FAAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+        "description": "이것은 한 남자와 한 여자의 이야기입니다. 말語을 잃어가는 한 여자의 침묵과 눈眼을 잃어가는 한 남자의 빛이 만나는 찰나의 이야기 이 소설을 읽는 일은, 어쩌면 한 장의 사진을 오래토록 들여다보는 것과 같은 일일지도 모르겠다. 드디어 오랜 기다림 끝에 찾아낸 것일까. 전소해버린 줄 알았던 언어의 검부러기 밑에서 올라오는 참된 음절들을. 작가는 언어가 몸을 갖추기 이전에 존재하던 것들―흔적, 이미지, 감촉, 정념으로 이루어진 세계로 우리를 데려간다. 신생의 언어와 사멸해가는 언어가 서로 만나 몸을 비벼대는 찰나, 우리는 아득한 기원의 세계로 돌아가 그곳에 동결해둔 인간의 아픔과 희열을 발견한다. 그리고 문득 깨닫게 된다. 자신의 몸이 기억하는 참된 욕망과 조우하기 위해서는 0도 근처에서 차갑게 끓어오르는 글쓰기의 언저리까지 기어이 내려가야 한다는 사실을. 그곳에서 우리는 죽음과 탄생이 새로운 몸을 얻어 환생하는, 세속의 기적을 목격하게 된다. 이렇게 아름답게, 온전하게 몰락하는 방법을 가르쳐준 소설이 우리에게 있었던가._이소연(문학평론가)",
+        "score": 0.9,
+        "decision": "review_needed",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 0,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2019,
+          "candidateYear": 2011,
+          "yearContradiction": true,
+          "hardContradiction": true,
+          "bibliographicOverride": false
+        },
+        "query": "intitle:희랍어 시간 inpublisher:문학동네"
+      },
+      {
+        "provider": "naver",
+        "title": "희랍어 시간 (한강 소설ㅣ2024년 노벨문학상 수상작가)",
+        "authors": [
+          "한강"
+        ],
+        "publisher": "문학동네",
+        "publishedYear": "20111110",
+        "isbn13": "9788954616515",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_3247609/32476098329.20260331114710.jpg",
+        "description": "그 여자의 침묵과 그 남자의 빛! 한국인 최초 맨부커상 수상 작가 한강의 장편소설 『희랍어 시간』. 말을 잃어가는 한 여자의 침묵과 눈을 잃어가는 한 남자의 빛이 만나는 순간을 그리고 있다. 열일곱 살 겨울, 여자는 어떤 원인이나 전조 없이 말을 잃는다. 말을 잃고 살던 그녀의 입을 다시 움직이게 한 건 낯선 외국어였던 한 개의 불어 단어였다. 시간이 흘러, 이혼을 하고 아이의 양육권을 빼앗기고 다시 말을 잃어버린 여자는 죽은 언어가 된 희랍어를 선택한다. 그곳에서 만난 희랍어 강사와 여자는 침묵을 사이에 놓고 더듬더듬 대화한다. 한편, 가족을 모두 독일에 두고 혼자 한국으로 돌아와 희랍어를 가르치는 남자는 점점 빛을 잃어가고 있다. 그는 아카데미의 수강생 중 말을 하지도, 웃지도 않는 여자를 주의 깊게 지켜보지만 그녀의 단단한 침묵에 두려움을 느끼는데….",
+        "score": 0.84,
+        "decision": "review_needed",
+        "signals": {
+          "title": 0.86,
+          "author": 1,
+          "publisher": 1,
+          "year": 0,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2019,
+          "candidateYear": 2011,
+          "yearContradiction": true,
+          "hardContradiction": true,
+          "bibliographicOverride": false
+        },
+        "query": "희랍어 시간 한강 sort=sim"
+      },
+      {
+        "provider": "naver",
+        "title": "희랍어 시간 (한강 소설ㅣ2024년 노벨문학상 수상작가)",
+        "authors": [
+          "한강"
+        ],
+        "publisher": "문학동네",
+        "publishedYear": "20111110",
+        "isbn13": "9788954616515",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_3247609/32476098329.20260331114710.jpg",
+        "description": "그 여자의 침묵과 그 남자의 빛! 한국인 최초 맨부커상 수상 작가 한강의 장편소설 『희랍어 시간』. 말을 잃어가는 한 여자의 침묵과 눈을 잃어가는 한 남자의 빛이 만나는 순간을 그리고 있다. 열일곱 살 겨울, 여자는 어떤 원인이나 전조 없이 말을 잃는다. 말을 잃고 살던 그녀의 입을 다시 움직이게 한 건 낯선 외국어였던 한 개의 불어 단어였다. 시간이 흘러, 이혼을 하고 아이의 양육권을 빼앗기고 다시 말을 잃어버린 여자는 죽은 언어가 된 희랍어를 선택한다. 그곳에서 만난 희랍어 강사와 여자는 침묵을 사이에 놓고 더듬더듬 대화한다. 한편, 가족을 모두 독일에 두고 혼자 한국으로 돌아와 희랍어를 가르치는 남자는 점점 빛을 잃어가고 있다. 그는 아카데미의 수강생 중 말을 하지도, 웃지도 않는 여자를 주의 깊게 지켜보지만 그녀의 단단한 침묵에 두려움을 느끼는데….",
+        "score": 0.84,
+        "decision": "review_needed",
+        "signals": {
+          "title": 0.86,
+          "author": 1,
+          "publisher": 1,
+          "year": 0,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2019,
+          "candidateYear": 2011,
+          "yearContradiction": true,
+          "hardContradiction": true,
+          "bibliographicOverride": false
+        },
+        "query": "희랍어 시간 문학동네 sort=sim"
+      },
+      {
+        "provider": "naver",
+        "title": "희랍어 시간 (한강 소설ㅣ2024년 노벨문학상 수상작가)",
+        "authors": [
+          "한강"
+        ],
+        "publisher": "문학동네",
+        "publishedYear": "20111110",
+        "isbn13": "9788954616515",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_3247609/32476098329.20260331114710.jpg",
+        "description": "그 여자의 침묵과 그 남자의 빛! 한국인 최초 맨부커상 수상 작가 한강의 장편소설 『희랍어 시간』. 말을 잃어가는 한 여자의 침묵과 눈을 잃어가는 한 남자의 빛이 만나는 순간을 그리고 있다. 열일곱 살 겨울, 여자는 어떤 원인이나 전조 없이 말을 잃는다. 말을 잃고 살던 그녀의 입을 다시 움직이게 한 건 낯선 외국어였던 한 개의 불어 단어였다. 시간이 흘러, 이혼을 하고 아이의 양육권을 빼앗기고 다시 말을 잃어버린 여자는 죽은 언어가 된 희랍어를 선택한다. 그곳에서 만난 희랍어 강사와 여자는 침묵을 사이에 놓고 더듬더듬 대화한다. 한편, 가족을 모두 독일에 두고 혼자 한국으로 돌아와 희랍어를 가르치는 남자는 점점 빛을 잃어가고 있다. 그는 아카데미의 수강생 중 말을 하지도, 웃지도 않는 여자를 주의 깊게 지켜보지만 그녀의 단단한 침묵에 두려움을 느끼는데….",
+        "score": 0.84,
+        "decision": "review_needed",
+        "signals": {
+          "title": 0.86,
+          "author": 1,
+          "publisher": 1,
+          "year": 0,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2019,
+          "candidateYear": 2011,
+          "yearContradiction": true,
+          "hardContradiction": true,
+          "bibliographicOverride": false
+        },
+        "query": "희랍어 시간 sort=sim"
+      }
+    ]
+  }
+]

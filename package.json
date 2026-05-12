@@ -19,6 +19,7 @@
     "library:fetch:cover": "tsx scripts/library/fetch-gachon-covers.ts",
     "library:tag": "tsx scripts/library/tag-gachon-books.ts",
     "library:import": "tsx scripts/library/import-gachon-library.ts",
+    "library:audit": "tsx scripts/library/audit-gachon-metadata.ts",
     "library:simulate": "tsx scripts/simulate-personas.ts"
   },
   "dependencies": {
