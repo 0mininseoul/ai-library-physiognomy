@@ -1,25 +1,25 @@
 {
-  "generatedAt": "2026-05-12T17:14:08.228Z",
+  "generatedAt": "2026-05-12T17:20:44.570Z",
   "summary": {
     "local": {
       "total": 695,
       "missingIsbn13": 0,
       "missingDescription": 0,
-      "missingCover": 2,
+      "missingCover": 0,
       "missingTags": 0,
       "bySource": {
         "gachon_curation": {
           "total": 243,
           "missingIsbn13": 0,
           "missingDescription": 0,
-          "missingCover": 1,
+          "missingCover": 0,
           "missingTags": 0
         },
         "gachon_open": {
           "total": 452,
           "missingIsbn13": 0,
           "missingDescription": 0,
-          "missingCover": 1,
+          "missingCover": 0,
           "missingTags": 0
         }
       },
@@ -28,14 +28,14 @@
           "total": 243,
           "missingIsbn13": 0,
           "missingDescription": 0,
-          "missingCover": 1,
+          "missingCover": 0,
           "missingTags": 0
         },
         "openlibrary": {
           "total": 452,
           "missingIsbn13": 0,
           "missingDescription": 0,
-          "missingCover": 1,
+          "missingCover": 0,
           "missingTags": 0
         }
       }
@@ -48,21 +48,21 @@
         "total": 676,
         "missingIsbn13": 0,
         "missingDescription": 0,
-        "missingCover": 2,
+        "missingCover": 0,
         "missingTags": 0,
         "bySource": {
           "gachon_curation": {
             "total": 243,
             "missingIsbn13": 0,
             "missingDescription": 0,
-            "missingCover": 1,
+            "missingCover": 0,
             "missingTags": 0
           },
           "gachon_open": {
             "total": 433,
             "missingIsbn13": 0,
             "missingDescription": 0,
-            "missingCover": 1,
+            "missingCover": 0,
             "missingTags": 0
           }
         },
@@ -71,14 +71,14 @@
             "total": 243,
             "missingIsbn13": 0,
             "missingDescription": 0,
-            "missingCover": 1,
+            "missingCover": 0,
             "missingTags": 0
           },
           "openlibrary": {
             "total": 433,
             "missingIsbn13": 0,
             "missingDescription": 0,
-            "missingCover": 1,
+            "missingCover": 0,
             "missingTags": 0
           }
         }
@@ -87,21 +87,21 @@
         "total": 676,
         "missingIsbn13": 0,
         "missingDescription": 0,
-        "missingCover": 2,
+        "missingCover": 0,
         "missingTags": 0,
         "bySource": {
           "gachon_curation": {
             "total": 243,
             "missingIsbn13": 0,
             "missingDescription": 0,
-            "missingCover": 1,
+            "missingCover": 0,
             "missingTags": 0
           },
           "gachon_open": {
             "total": 433,
             "missingIsbn13": 0,
             "missingDescription": 0,
-            "missingCover": 1,
+            "missingCover": 0,
             "missingTags": 0
           }
         },
@@ -110,14 +110,14 @@
             "total": 243,
             "missingIsbn13": 0,
             "missingDescription": 0,
-            "missingCover": 1,
+            "missingCover": 0,
             "missingTags": 0
           },
           "openlibrary": {
             "total": 433,
             "missingIsbn13": 0,
             "missingDescription": 0,
-            "missingCover": 1,
+            "missingCover": 0,
             "missingTags": 0
           }
         }

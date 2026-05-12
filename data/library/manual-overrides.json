@@ -1,1 +1,24 @@
-{}
+{
+  "UEM926903": {
+    "isbn13": "9787523613269",
+    "title": "企业AI之旅",
+    "author": "Kreutzer, Ralf T",
+    "publisher": "中国科学技术出版社",
+    "publishedYear": 2025,
+    "description": "가천대학교 중앙도서관 주제어: 인공지능 / 형태사항: 318 p.:揷畫, 圖表;24 cm.",
+    "coverUrl": "https://imgservice.suning.cn/uimg1/b2c/image/0JAiIhs8iREPHyBkqW-VxA.jpg_800w_800h_4e",
+    "detailUrl": "https://product.suning.com/0071615541/12447315752.html",
+    "reason": "Suning product page metadata matches ISBN 9787523613269 and exposes the cover in og:image."
+  },
+  "UEM929301": {
+    "isbn13": "9791173323553",
+    "title": "어두운 바다의 등불이 되어 : 연산호 장편소설. 5-8 = Be a light in the dark sea",
+    "author": "연산호",
+    "publisher": "김영사",
+    "publishedYear": 2025,
+    "description": "가천대학교 중앙도서관 주제어: 한국현대소설, 장편소설, 긴소설, 판타지소설, 과학소설 / 형태사항: 4책;21 cm.",
+    "coverUrl": "https://image.yes24.com/goods/180954711/XL",
+    "detailUrl": "https://www.yes24.com/product/goods/180954711",
+    "reason": "YES24 product page metadata matches ISBN 9791173323553 and exposes the cover in og:image."
+  }
+}

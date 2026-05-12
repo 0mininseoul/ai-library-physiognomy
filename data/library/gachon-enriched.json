@@ -11134,16 +11134,16 @@
     "status": "이용가능",
     "availability": null,
     "isbn13": "9787523613269",
-    "coverUrl": null,
+    "coverUrl": "https://imgservice.suning.cn/uimg1/b2c/image/0JAiIhs8iREPHyBkqW-VxA.jpg_800w_800h_4e",
     "description": "가천대학교 중앙도서관 주제어: 인공지능 / 형태사항: 318 p.:揷畫, 圖表;24 cm.",
     "matchScore": 1,
     "matched": true,
-    "metadataSource": "gachon_library",
+    "metadataSource": "manual",
     "metadataStatus": "matched",
     "metadataScore": 1,
     "metadataCandidates": [
       {
-        "provider": "gachon_library",
+        "provider": "manual",
         "title": "企业AI之旅",
         "authors": [
           "Kreutzer, Ralf T"
@@ -11151,7 +11151,7 @@
         "publisher": "中国科学技术出版社",
         "publishedYear": 2025,
         "isbn13": "9787523613269",
-        "coverUrl": null,
+        "coverUrl": "https://imgservice.suning.cn/uimg1/b2c/image/0JAiIhs8iREPHyBkqW-VxA.jpg_800w_800h_4e",
         "description": "가천대학교 중앙도서관 주제어: 인공지능 / 형태사항: 318 p.:揷畫, 圖表;24 cm.",
         "score": 1,
         "decision": "accept",
@@ -11166,122 +11166,9 @@
           "candidateYear": 2025,
           "yearContradiction": false,
           "hardContradiction": false,
-          "bibliographicOverride": false
+          "bibliographicOverride": true
         },
-        "query": "企业AI之旅"
-      },
-      {
-        "provider": "gachon_library",
-        "title": "企业AI之旅",
-        "authors": [
-          "Kreutzer, Ralf T"
-        ],
-        "publisher": "中国科学技术出版社",
-        "publishedYear": 2025,
-        "isbn13": "9787523613269",
-        "coverUrl": null,
-        "description": "가천대학교 중앙도서관 주제어: 인공지능 / 형태사항: 318 p.:揷畫, 圖表;24 cm.",
-        "score": 1,
-        "decision": "accept",
-        "signals": {
-          "title": 1,
-          "author": 1,
-          "publisher": 1,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2025,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": false
-        },
-        "query": "企业AI之旅 Kreutzer, Ralf T"
-      },
-      {
-        "provider": "gachon_library",
-        "title": "企业AI之旅",
-        "authors": [
-          "Kreutzer, Ralf T"
-        ],
-        "publisher": "中国科学技术出版社",
-        "publishedYear": 2025,
-        "isbn13": "9787523613269",
-        "coverUrl": null,
-        "description": "가천대학교 중앙도서관 주제어: 인공지능 / 형태사항: 318 p.:揷畫, 圖表;24 cm.",
-        "score": 1,
-        "decision": "accept",
-        "signals": {
-          "title": 1,
-          "author": 1,
-          "publisher": 1,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2025,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": false
-        },
-        "query": "企业AI之旅 中国科学技术出版社"
-      },
-      {
-        "provider": "google_books",
-        "title": "企业AI之旅",
-        "authors": [
-          "Ralf Kreutzer",
-          "Marie Sirrenberg"
-        ],
-        "publisher": "",
-        "publishedYear": "2025",
-        "isbn13": "9787523613269",
-        "coverUrl": null,
-        "description": "",
-        "score": 0.6,
-        "decision": "reject",
-        "signals": {
-          "title": 1,
-          "author": 0,
-          "publisher": 0,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2025,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": false
-        },
-        "query": "intitle:企业AI之旅 inauthor:Kreutzer"
-      },
-      {
-        "provider": "google_books",
-        "title": "企业AI之旅",
-        "authors": [
-          "克罗伊策"
-        ],
-        "publisher": "",
-        "publishedYear": "2024",
-        "isbn13": "9787522131764",
-        "coverUrl": null,
-        "description": "本书主要介绍了人工智能的核心内容,应用领域以及在全球经济发展中的作用.书中首先介绍了人工智能的定义,神经网络,机器学习以及深度学习等概念,还介绍了人工智能的各种应用领域,如自然语言处理,图像处理,自动化和机器人等.同时,本书还介绍了人工智能在全球经济发展中的重要作用,包括人工智能在第四次工业革命中的核心地位.此外,本书还展望了人工智能的未来发展,指出人工智能将成为先进科技的基础学科,并将渗透到商业和日常生活的所有领域.",
-        "score": 0.57,
-        "decision": "reject",
-        "signals": {
-          "title": 1,
-          "author": 0,
-          "publisher": 0,
-          "year": 0.65,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2024,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": false
-        },
-        "query": "intitle:企业AI之旅 inpublisher:中国科学技术出版社"
+        "query": "manual:UEM926903"
       }
     ],
     "metadataNotes": []
@@ -34139,44 +34026,16 @@
     "status": "이용가능",
     "availability": "available",
     "isbn13": "9791173323553",
-    "coverUrl": null,
+    "coverUrl": "https://image.yes24.com/goods/180954711/XL",
     "description": "가천대학교 중앙도서관 주제어: 한국현대소설, 장편소설, 긴소설, 판타지소설, 과학소설 / 형태사항: 4책;21 cm.",
     "matchScore": 1,
     "matched": true,
-    "metadataSource": "gachon_library",
+    "metadataSource": "manual",
     "metadataStatus": "matched",
     "metadataScore": 1,
     "metadataCandidates": [
       {
-        "provider": "gachon_library",
-        "title": "어두운 바다의 등불이 되어 : 연산호 장편소설 . 5 - 8 = Be a light in the dark sea",
-        "authors": [
-          "연산호"
-        ],
-        "publisher": "김영사",
-        "publishedYear": 2025,
-        "isbn13": "9791173323553",
-        "coverUrl": null,
-        "description": "가천대학교 중앙도서관 주제어: 한국현대소설, 장편소설, 긴소설, 판타지소설, 과학소설 / 형태사항: 4책;21 cm.",
-        "score": 1,
-        "decision": "accept",
-        "signals": {
-          "title": 1,
-          "author": 1,
-          "publisher": 1,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2025,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": false
-        },
-        "query": "어두운 바다의 등불이 되어 : 연산호 장편소설. 5-8 = Be a light in the dark sea"
-      },
-      {
-        "provider": "gachon_library",
+        "provider": "manual",
         "title": "어두운 바다의 등불이 되어 : 연산호 장편소설. 5-8 = Be a light in the dark sea",
         "authors": [
           "연산호"
@@ -34184,7 +34043,7 @@
         "publisher": "김영사",
         "publishedYear": 2025,
         "isbn13": "9791173323553",
-        "coverUrl": null,
+        "coverUrl": "https://image.yes24.com/goods/180954711/XL",
         "description": "가천대학교 중앙도서관 주제어: 한국현대소설, 장편소설, 긴소설, 판타지소설, 과학소설 / 형태사항: 4책;21 cm.",
         "score": 1,
         "decision": "accept",
@@ -34199,93 +34058,9 @@
           "candidateYear": 2025,
           "yearContradiction": false,
           "hardContradiction": false,
-          "bibliographicOverride": false
+          "bibliographicOverride": true
         },
-        "query": "어두운 바다의 등불이 되어"
-      },
-      {
-        "provider": "gachon_library",
-        "title": "어두운 바다의 등불이 되어 : 연산호 장편소설. 5-8 = Be a light in the dark sea",
-        "authors": [
-          "연산호"
-        ],
-        "publisher": "김영사",
-        "publishedYear": 2025,
-        "isbn13": "9791173323553",
-        "coverUrl": null,
-        "description": "가천대학교 중앙도서관 주제어: 한국현대소설, 장편소설, 긴소설, 판타지소설, 과학소설 / 형태사항: 4책;21 cm.",
-        "score": 1,
-        "decision": "accept",
-        "signals": {
-          "title": 1,
-          "author": 1,
-          "publisher": 1,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2025,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": false
-        },
-        "query": "어두운 바다의 등불이 되어 연산호"
-      },
-      {
-        "provider": "gachon_library",
-        "title": "어두운 바다의 등불이 되어 : 연산호 장편소설. 5-8 = Be a light in the dark sea",
-        "authors": [
-          "연산호"
-        ],
-        "publisher": "김영사",
-        "publishedYear": 2025,
-        "isbn13": "9791173323553",
-        "coverUrl": null,
-        "description": "가천대학교 중앙도서관 주제어: 한국현대소설, 장편소설, 긴소설, 판타지소설, 과학소설 / 형태사항: 4책;21 cm.",
-        "score": 1,
-        "decision": "accept",
-        "signals": {
-          "title": 1,
-          "author": 1,
-          "publisher": 1,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2025,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": false
-        },
-        "query": "어두운 바다의 등불이 되어 김영사"
-      },
-      {
-        "provider": "gachon_library",
-        "title": "어두운 바다의 등불이 되어 : 연산호 장편소설 = Be a light in the dark sea",
-        "authors": [
-          "연산호"
-        ],
-        "publisher": "김영사",
-        "publishedYear": 2024,
-        "isbn13": "9791194330912",
-        "coverUrl": null,
-        "description": "가천대학교 중앙도서관 주제어: 한국현대소설, 장편소설, 긴소설, 판타지소설, 과학소설 / 형태사항: 4책;21 cm.",
-        "score": 0.97,
-        "decision": "accept",
-        "signals": {
-          "title": 1,
-          "author": 1,
-          "publisher": 1,
-          "year": 0.65,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2024,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": false
-        },
-        "query": "어두운 바다의 등불이 되어"
+        "query": "manual:UEM929301"
       }
     ],
     "metadataNotes": []
