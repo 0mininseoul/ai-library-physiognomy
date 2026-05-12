@@ -28,7 +28,7 @@ describe("calibrateFaceScores", () => {
     expect(score.symmetry).toBeLessThanOrEqual(96);
   });
 
-  it("lets truly excellent signals reach the high-90s", () => {
+  it("lets truly excellent signals reach 100", () => {
     const score = calibrateFaceScores(
       metrics({
         asymmetryIndex: 0.0005,
@@ -38,7 +38,7 @@ describe("calibrateFaceScores", () => {
       }),
     );
 
-    expect(Math.max(score.likability, score.trust, score.symmetry, score.balance, score.attractiveness)).toBeGreaterThanOrEqual(97);
+    expect(Math.max(score.likability, score.trust, score.symmetry, score.balance, score.attractiveness)).toBe(100);
   });
 
   it("penalizes normalized asymmetry, eye delta, and mouth tilt", () => {

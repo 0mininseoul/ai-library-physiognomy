@@ -29,15 +29,15 @@ export function calibrateFaceScores(metrics: FaceMetrics): CalibratedFaceScores 
       (1 - Math.abs(metrics.mouth.cornerAngleDeg) / 1.2) * 0.5 +
       ((metrics.phiRatioCompliance - 90) / 10) * 1.5,
     0,
-    4,
+    6,
   );
 
-  const symmetry = clamp(Math.round(94 - normalizedAsymmetryPct * 2.2 - eyePenalty * 0.7 - mouthPenalty * 0.6 + excellenceBonus), scoreFloor, 98);
+  const symmetry = clamp(Math.round(94 - normalizedAsymmetryPct * 2.2 - eyePenalty * 0.7 - mouthPenalty * 0.6 + excellenceBonus), scoreFloor, 100);
   const phi = clamp(metrics.phiRatioCompliance / 100, 0, 1);
-  const balance = clamp(Math.round(84 + phi * 9 - normalizedAsymmetryPct * 1.1 + excellenceBonus * 0.8), scoreFloor, 98);
-  const trust = clamp(Math.round((symmetry + balance) / 2 + 1), scoreFloor, 98);
-  const likability = clamp(Math.round(trust + Math.min(3, metrics.faceAspectRatio * 1.4)), scoreFloor, 98);
-  const attractiveness = clamp(Math.round((symmetry + balance + likability) / 3 + 1), scoreFloor, 98);
+  const balance = clamp(Math.round(84 + phi * 9 - normalizedAsymmetryPct * 1.1 + excellenceBonus * 0.8), scoreFloor, 100);
+  const trust = clamp(Math.round((symmetry + balance) / 2 + 1), scoreFloor, 100);
+  const likability = clamp(Math.round(trust + Math.min(3, metrics.faceAspectRatio * 1.4)), scoreFloor, 100);
+  const attractiveness = clamp(Math.round((symmetry + balance + likability) / 3 + 1), scoreFloor, 100);
 
   return {
     symmetry,
