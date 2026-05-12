@@ -938,12 +938,6 @@ function cleanCopy(input: string) {
     .replace(/학생/g, "님")
     .replace(/근거 더 보기/g, "더보기")
     .replace(/근거/g, "설명")
-    .replace(new RegExp(["연", "애"].join(""), "g"), "관계 궁합")
-    .replace(/연인/g, "상대")
-    .replace(/상대과/g, "상대와")
-    .replace(/데이트/g, "함께하는 시간")
-    .replace(/함께하는 시간를/g, "함께하는 시간을")
-    .replace(/함께하는 시간가/g, "함께하는 시간이")
     .replace(/해줘/g, "해 주세요")
     .replace(/했어/g, "했어요")
     .replace(/이건/g, "이 책은");
