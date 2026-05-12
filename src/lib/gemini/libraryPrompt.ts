@@ -5,7 +5,7 @@ import type { CalibratedFaceScores } from "@/lib/facemesh/scoreCalibration";
 import type { PersonaSignal } from "@/lib/persona/types";
 import type { SajuCalculation } from "@/lib/saju/calculator";
 import type { FaceMetrics } from "@/types/face";
-import type { StudentInput } from "@/types/session";
+import type { LibraryAnalysisResult, NeedFocus, StudentInput } from "@/types/session";
 
 const VOICE_GUIDE = `
 문체는 존댓말이지만 거리감 있는 "~입니다"가 아니라 친구가 또박또박 짚어주는 톤이다.
@@ -61,7 +61,6 @@ export function buildLibraryPrompt({
   metrics,
   calibratedScores,
   saju,
-  candidates,
   persona,
 }: {
   input: StudentInput;
@@ -69,7 +68,6 @@ export function buildLibraryPrompt({
   metrics: FaceMetrics;
   calibratedScores: CalibratedFaceScores;
   saju: SajuCalculation;
-  candidates: LibraryBook[];
   persona?: PersonaSignal;
 }) {
   const personaBlock = persona
@@ -100,14 +98,48 @@ export function buildLibraryPrompt({
     `사용자 이름: ${displayName}님`,
     `성별 선택값: ${input.gender}`,
     `생년월일: ${input.birthDate}`,
-    `선호 독서 카테고리: ${input.favoriteCategory}`,
     ...personaBlock,
     `허용 reading_type 코드: ${READING_TYPE_CODES.join(", ")}`,
     `reading_type 메타데이터: ${JSON.stringify(READING_TYPES)}`,
-    "─── 책 추천 ───",
-    `책 추천에서만 참고할 현재 독서 니즈: ${input.needFocus}`,
-    "이 독서 니즈는 책 3권의 선택 이유, fit_reason, reading_moment에만 반영한다.",
-    "얼굴 관찰, 관상 해석, 내면 성향, 궁합 문장, reading_type 선택을 이 독서 니즈에 맞춰 바꾸지 마라.",
+    "─── 출력 ───",
+    "JSON 한 덩어리만 반환한다. reading_type.code는 허용 코드 중 하나여야 하고, personaConfirmed는 8종 얼굴 페르소나 코드 중 하나여야 한다.",
+    "recommendations, reading_needs, book_curation, 도서명, 서가, 책 추천 내용은 절대 작성하지 않는다.",
+    "section_copy에는 face_reveal, face_signal, inner_style, chemi_match만 작성한다.",
+    "inner_style / chemi_match / physiognomy_summary / saju_summary 등 기존 필드는 그대로 작성한다.",
+    "내부 계산값 reference (재계산 X):",
+    `  saju JSON: ${JSON.stringify(saju)}`,
+    `  metrics JSON: ${JSON.stringify(metrics)}`,
+    `  calibratedScores JSON: ${JSON.stringify(calibratedScores)}`,
+  ].join("\n\n");
+}
+
+export function buildBookRecommendationPrompt({
+  input,
+  displayName,
+  analysis,
+  candidates,
+}: {
+  input: { favoriteCategory: string; needFocus: NeedFocus };
+  displayName: string;
+  analysis: LibraryAnalysisResult;
+  candidates: LibraryBook[];
+}) {
+  return [
+    "너는 대학 도서관 부스의 'AI 관상가 고양이'다.",
+    VOICE_GUIDE,
+    SAFETY_GUIDE,
+    `사용자 이름: ${displayName}님`,
+    "─── 이미 확정된 관상/내면 리포트 ───",
+    `reading_type: ${JSON.stringify(analysis.readingType)}`,
+    `physiognomy: ${JSON.stringify(analysis.physiognomy)}`,
+    `saju: ${JSON.stringify({ keywords: analysis.saju.keywords, elementBalance: analysis.saju.elementBalance, currentFlow: analysis.saju.currentFlow, strength: analysis.saju.strength, advice: analysis.saju.advice })}`,
+    `inner_style: ${JSON.stringify(analysis.innerStyleInsight)}`,
+    `chemi_match: ${JSON.stringify(analysis.chemiInsight)}`,
+    `scores: ${JSON.stringify(analysis.scores)}`,
+    "─── 책 추천 기준 ───",
+    `선호 독서 카테고리: ${input.favoriteCategory}`,
+    `현재 독서 니즈: ${input.needFocus}`,
+    "책 추천은 위 관상/내면 리포트를 1순위로 삼고, 선호 카테고리와 현재 독서 니즈는 마지막 보정값으로만 쓴다.",
     "아래 후보 책 안에서만 정확히 3권을 골라라. 후보에 없는 책 제목, 저자, ID를 만들면 안 된다.",
     "대표 추천(recommendations[0])은 사용자 해석과 가장 잘 맞는 책 1권. 인기도보다 개인 적합도 우선.",
     `후보 책 JSON: ${JSON.stringify(
@@ -125,12 +157,9 @@ export function buildLibraryPrompt({
       })),
     )}`,
     "─── 출력 ───",
-    "JSON 한 덩어리만 반환한다. reading_type.code는 허용 코드 중 하나여야 하고, personaConfirmed는 8종 얼굴 페르소나 코드 중 하나여야 한다.",
-    "각 recommendations 항목엔 reason, action_copy, fit_reason, reading_moment를 모두 작성한다.",
-    "section_copy / inner_style / chemi_match / physiognomy_summary / saju_summary 등 기존 필드는 그대로 작성한다.",
-    "내부 계산값 reference (재계산 X):",
-    `  saju JSON: ${JSON.stringify(saju)}`,
-    `  metrics JSON: ${JSON.stringify(metrics)}`,
-    `  calibratedScores JSON: ${JSON.stringify(calibratedScores)}`,
+    "JSON 한 덩어리만 반환한다.",
+    "reading_needs는 앞선 관상/내면 리포트와 현재 독서 니즈를 연결하는 3~6개의 짧은 독서 방향이다.",
+    "section_copy.book_curation은 1~2문장만 작성한다.",
+    "각 recommendations 항목엔 book_id, reason, action_copy, fit_reason, reading_moment를 모두 작성한다.",
   ].join("\n\n");
 }

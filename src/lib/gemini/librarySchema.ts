@@ -43,6 +43,14 @@ const chemiInsightSchema = z
   })
   .optional();
 
+const recommendationItemSchema = z.object({
+  book_id: z.string().min(1),
+  reason: z.string().min(1),
+  action_copy: z.string().min(1),
+  fit_reason: z.string().min(1).optional(),
+  reading_moment: z.string().min(1).optional(),
+});
+
 const rawSchema = z.object({
   personaConfirmed: z.string().min(1).optional(),
   reading_type: z.object({
@@ -99,18 +107,18 @@ const rawSchema = z.object({
   chemi_match: chemiInsightSchema,
   physiognomy_summary: z.string().min(1).optional(),
   saju_summary: z.string().min(1).optional(),
+  reading_needs: z.array(z.string().min(1)).min(3).max(6).optional(),
+  recommendations: z.array(recommendationItemSchema).length(3).optional(),
+});
+
+const recommendationOnlySchema = z.object({
+  section_copy: z
+    .object({
+      book_curation: z.array(z.string().min(1)).min(1).max(2).optional(),
+    })
+    .optional(),
   reading_needs: z.array(z.string().min(1)).min(3).max(6),
-  recommendations: z
-    .array(
-      z.object({
-        book_id: z.string().min(1),
-        reason: z.string().min(1),
-        action_copy: z.string().min(1),
-        fit_reason: z.string().min(1).optional(),
-        reading_moment: z.string().min(1).optional(),
-      }),
-    )
-    .length(3),
+  recommendations: z.array(recommendationItemSchema).length(3),
 });
 
 export function normalizeLibraryAnalysis(input: unknown) {
@@ -166,14 +174,8 @@ export function normalizeLibraryAnalysis(input: unknown) {
     },
     physiognomySummary: clean(physiognomySummary),
     sajuSummary: clean(sajuSummary),
-    readingNeeds: raw.reading_needs.map(clean),
-    recommendations: raw.recommendations.map((item) => ({
-      bookId: item.book_id,
-      reason: clean(item.reason),
-      actionCopy: clean(item.action_copy),
-      fitReason: item.fit_reason ? clean(item.fit_reason) : undefined,
-      readingMoment: item.reading_moment ? clean(item.reading_moment) : undefined,
-    })),
+    readingNeeds: raw.reading_needs?.map(clean) ?? [],
+    recommendations: toRecommendations(raw.recommendations ?? []),
     sectionCopy: {
       faceReveal: cleanArray(raw.section_copy?.face_reveal),
       faceSignal: cleanArray(raw.section_copy?.face_signal),
@@ -205,6 +207,28 @@ export function normalizeLibraryAnalysis(input: unknown) {
       : undefined,
     personaConfirmed: raw.personaConfirmed,
   };
+}
+
+export function normalizeLibraryRecommendations(input: unknown) {
+  const raw = recommendationOnlySchema.parse(input);
+
+  return {
+    readingNeeds: raw.reading_needs.map(clean),
+    recommendations: toRecommendations(raw.recommendations),
+    sectionCopy: {
+      bookCuration: cleanArray(raw.section_copy?.book_curation),
+    },
+  };
+}
+
+function toRecommendations(input: z.infer<typeof recommendationItemSchema>[]) {
+  return input.map((item) => ({
+    bookId: item.book_id,
+    reason: clean(item.reason),
+    actionCopy: clean(item.action_copy),
+    fitReason: item.fit_reason ? clean(item.fit_reason) : undefined,
+    readingMoment: item.reading_moment ? clean(item.reading_moment) : undefined,
+  }));
 }
 
 function toDetailComment(input: z.infer<typeof detailCommentSchema>) {

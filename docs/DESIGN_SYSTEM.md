@@ -19,6 +19,17 @@
 - 단, 문구는 공격적 얼평이 아니라 유머러스하고 MZ스럽지만 존댓말인 고양이 상담 톤으로 간다.
 - 재미는 비속어, 반말, 조롱, 거친 밈이 아니라 `정확해서 웃긴 관찰`, 생활감 있는 비유, 고양이 캐릭터의 정중한 코멘트에서 만든다.
 
+## 2026-05-13 Booth Decisions
+
+- 5/13 가천대학교 중앙도서관 PoC 부스에서는 `/`와 `/result`에 가천대학교 중앙도서관 공동 브랜딩을 노출한다. 제품명은 유지하되, 로고는 `Powered by` 성격의 신뢰 장치로 두고 화면의 주인공이 되게 하지 않는다.
+- 사용자 화면에서 분석 주체가 필요하면 `야옹이` 또는 `AI 관상가 고양이`라고 부른다. `Gemini`, 모델명, 벤더명은 UI에 절대 노출하지 않는다.
+- 사용자는 `/result` 5번째 `BOOK CURATION` 섹션에 도달하기 전까지 이 서비스가 책 추천 서비스라는 사실을 알지 못해야 한다.
+- 입력 화면의 4지선다 `지금 나에게 가장 필요한 것은?`와 관심 분야 입력은 책 큐레이션을 정교화하기 위한 신호다. 얼굴 해석, 내면 해석, 케미 해석을 좌우하는 핵심 근거로 쓰지 않는다.
+- 분석 직후 화면의 좌우 카드와 스트리밍 텍스트는 와우 포인트이므로 유지한다. 단, 그 내용은 `/result`의 상세 리포트와 동어반복되지 않는 티저/확정 신호 역할이어야 한다.
+- `/result`의 각 섹션 헤드라인 아래 소개 문구는 너무 비어 보이면 안 된다. 모델 응답이 짧아도 화면에서는 최소 2문장, 가능하면 2~3개의 짧은 문장으로 보강한다.
+- Impression score는 평균적으로 80점대 중반~90점대 초반이 자연스럽다. 정말 좋은 얼굴 신호는 90점대 후반이나 100점까지 나올 수 있어야 하지만, 100점은 매우 예외적인 신호로만 허용한다.
+- UX 속도는 `분석 결과 먼저, 책 큐레이션은 뒤에서 비동기`가 기본 방향이다. 얼굴/내면/케미 리포트는 첫 와우에 필요하므로 1차 결과에 포함하고, 책 큐레이션은 final section 전까지 준비되면 된다.
+
 ## Non-Negotiable Design Rules
 
 - PC-first is the current implementation priority. Optimize and inspect `1440x900` first for the booth/demo flow.
@@ -35,6 +46,7 @@
 - Do not expose direct fortune-telling taxonomy in user-facing UI: avoid `사주`, `오행`, `물`, `불`, `나무`, `흙`, `금`, `기운`, `우세 오행`, `일간`, `월주`, and similar words.
 - If deterministic birth-date calculations are used internally, translate them into non-occult product language such as `내면 리듬`, `성향 리듬`, `몰입 방식`, `관계 스타일`, `회복/추진/정리/탐색 성향`.
 - If relationship compatibility is shown, describe it as `관계 궁합`, `케미`, `잘 맞는 사람`, or `함께하기 좋은 흐름`.
+- Never mention `Gemini`, model names, provider names, or API internals in user-facing copy. The visible analyst is `야옹이`.
 - Use `더보기` rather than `근거 더 보기`.
 - Avoid skin evaluation. Do not score or comment on skin quality.
 - All Korean copy must use polite speech. No 반말.
@@ -120,8 +132,9 @@
   2. 학번(또는 사번)
   3. 성별
   4. 생년월일
-  5. 선호하는 책 카테고리
-  6. 개인정보처리방침 및 이용약관 동의
+  5. 평소 끌리는 관심 분야
+  6. 지금 나에게 가장 필요한 것은?
+  7. 개인정보처리방침 및 이용약관 동의
 - Keep one obvious primary CTA: `내 관상 분석하기`.
 - Remove unnecessary helper labels such as visible `년도/월/일` if the selects are self-explanatory.
 - Field labels and inputs need disciplined spacing; avoid cramped label-to-field gaps.
@@ -150,7 +163,7 @@
 - Completed analysis cards should be limited to roughly 8 cards plus final assessment. If content exceeds one screen, the left/right columns should auto-scroll instead of clipping text or overlapping the final card.
 - Analysis copy should be short by design, not hard-truncated with visible ellipsis.
 - Analysis completed copy may be witty, but must stay polite. No 욕설, 반말, or insulting roast phrasing.
-- Do not mention books, borrowing, or recommendations inside the analysis HUD. Book curation appears only in the final result section.
+- Do not mention books, borrowing, recommendations, shelf, call number, or library location inside the analysis HUD. Book curation appears only in the final result section.
 - Cards need face-point connector lines where relevant, similar to the original AI 얼평 service.
 - The final assessment card appears bottom-center after the staged card reveal.
 - In light mode, analysis HUD/status surfaces should remain token-based glass panels. Do not mix hardcoded black HUD cards into a light analysis stage unless the whole stage is intentionally dark.
@@ -167,6 +180,7 @@
   5. Book recommendations as the final payoff
 - The user should not be forced to read dense text walls.
 - Each section should have one clear message. Optional detail is allowed only when it does not create repeated copy or layout instability.
+- The short copy under each section heading must render as at least two readable sentences. If the model provides only one line, add deterministic fallback lines for visual density.
 - Avoid long `더보기` blocks in the result page. If a section reads well without expansion, show the useful content directly and remove the toggle.
 - `첫인상 키워드` and `야옹이 코멘트` are UI slots for future model-generated copy. Until the API schema is extended, use concise deterministic fallback copy derived from face scores and keywords.
 - Face image on result page should be clean. No white landmark dots or face markers.
@@ -191,7 +205,7 @@
 - Section navigation buttons must have visible breathing room from the main cards. They should feel like page controls, not card controls.
 - Card reveal motion should be slower than a micro-interaction: use a noticeable upward reveal distance and a soft easing curve so the staged report feels intentional.
 - `FACE REVEAL` owns broad 관상 총평. `FACE SIGNAL` owns measurable face signals only.
-- Visible symmetry scores should use calibrated app scores, not raw Gemini guesses. In normal live-camera conditions, symmetry should rarely exceed `90`.
+- Visible impression scores should use calibrated app scores, not raw model guesses. Strong signals should normally land in the mid-80s to low-90s; exceptional signals may reach the high-90s or 100, but 100 must remain rare and defensible.
 - `INNER STYLE` should not show percentages or gauges. Use two readable cards instead: strongest tendency and one support tendency.
 - `CHEMI MATCH` should show one best-matching person type only. Multiple plausible types reduce trust.
 

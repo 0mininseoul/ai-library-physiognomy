@@ -2,7 +2,6 @@
 
 import { useRef, useState } from "react";
 import { Share2 } from "lucide-react";
-import { toPng } from "html-to-image";
 import { honorific } from "@/lib/korean/name";
 
 export function ShareableTypeCard({ displayName, typeName, headline }: { displayName: string; typeName: string; headline: string }) {
@@ -14,6 +13,7 @@ export function ShareableTypeCard({ displayName, typeName, headline }: { display
     if (!ref.current) return;
     setBusy(true);
     try {
+      const { toPng } = await import("html-to-image");
       const dataUrl = await toPng(ref.current, { pixelRatio: 2, cacheBust: true });
       const blob = await (await fetch(dataUrl)).blob();
       const file = new File([blob], `result-${typeName}.png`, { type: "image/png" });
@@ -39,7 +39,7 @@ export function ShareableTypeCard({ displayName, typeName, headline }: { display
       <article ref={ref} className="rounded-3xl border border-accent-info/35 bg-gradient-to-br from-bg-card to-bg-card/70 p-6 shadow-glass">
         <p className="text-xs font-black uppercase tracking-[0.16em] text-accent-info">TYPE</p>
         <h1 className="mt-3 text-3xl font-bold leading-tight text-text-primary">{typeName}</h1>
-        <p className="mt-4 text-lg font-semibold leading-7 text-text-muted">{headline.replace("{nameHonorific}", name)}</p>
+        <p className="mt-4 text-lg font-semibold leading-7 text-text-muted">{headline.split("{nameHonorific}").join(name)}</p>
         <p className="mt-6 text-xs font-bold uppercase tracking-[0.16em] text-text-faint">AI 관상가 고양이 · 가천대 도서관</p>
       </article>
       <button

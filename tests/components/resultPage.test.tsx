@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { ResultContent, type ResultPayload } from "@/components/pages/ResultPage";
 import { calculateSaju } from "@/lib/saju/calculator";
@@ -103,6 +103,7 @@ const payload: ResultPayload = {
 describe("ResultContent", () => {
   afterEach(() => {
     vi.useRealTimers();
+    vi.unstubAllGlobals();
   });
 
   it("uses horizontal snap navigation by wheel and does not auto-advance", () => {
@@ -127,10 +128,19 @@ describe("ResultContent", () => {
   });
 
   it("renders the story sections with polite copy and no blocked words", () => {
+    vi.useFakeTimers();
     const forbiddenRelationshipWord = ["연", "애"].join("");
     const { container } = render(<ResultContent payload={payload} />);
 
+    act(() => {
+      vi.advanceTimersByTime(3_000);
+    });
+
+    expect(screen.getByAltText("가천대학교 중앙도서관")).toBeInTheDocument();
     expect(screen.getByText("야옹이가 본 영민님의 얼굴")).toBeInTheDocument();
+    expect(screen.getByText("집중 리셋형")).toBeInTheDocument();
+    expect(screen.getByText("영민님, 집중 버튼 다시 켤 타이밍이에요")).toBeInTheDocument();
+    expect(screen.queryByText("집중 리부트형")).not.toBeInTheDocument();
     expect(screen.getByText("지금 영민님에게 필요한 책이에요")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "영민님은 이런 사람과 흐름이 좋아요" })).toBeInTheDocument();
     expect(container).not.toHaveTextContent("피부");
@@ -138,11 +148,51 @@ describe("ResultContent", () => {
     expect(screen.getByText("얼굴 이미지는 24시간 이후 삭제되었어요.")).toBeInTheDocument();
   });
 
+  it("pads sparse section intro copy so the headline area never feels empty", () => {
+    vi.useFakeTimers();
+    render(
+      <ResultContent
+        payload={{
+          ...payload,
+          result: {
+            ...payload.result,
+            sectionCopy: {
+              faceReveal: ["한 문장만 도착했어요."],
+              faceSignal: ["신호 한 줄."],
+              innerStyle: ["성향 한 줄."],
+              chemiMatch: ["케미 한 줄."],
+              bookCuration: ["책 한 줄."],
+            },
+          },
+        }}
+      />,
+    );
+
+    act(() => {
+      vi.advanceTimersByTime(5_000);
+    });
+
+    expect(screen.getByText(/영민님, 집중 버튼 다시 켤 타이밍이에요/)).toBeInTheDocument();
+    expect(screen.getAllByText(/알림은 많은데 메인 화면이 살짝 흐트러진 상태일 수 있어요/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/하나만 먼저 잡으면 생각보다 빨리 몰입 모드로 들어가요/).length).toBeGreaterThan(0);
+  });
+
   it("keeps face images clean without landmark marker dots", () => {
     const { container } = render(<ResultContent payload={{ ...payload, faceImageUrl: "https://example.com/face.jpg" }} />);
 
     expect(screen.getByAltText("영민님 얼굴 분석 이미지")).toBeInTheDocument();
     expect(container.querySelectorAll('span[style*="left:"][style*="top:"]')).toHaveLength(0);
+  });
+
+  it("starts async book curation when the first result payload has no recommendations", async () => {
+    const fetchMock = vi.fn(() => new Promise<Response>(() => undefined));
+    vi.stubGlobal("fetch", fetchMock);
+
+    render(<ResultContent payload={{ ...payload, result: { ...payload.result, recommendations: [] } }} />);
+
+    await waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledWith("/api/result/session-1/recommendations", expect.objectContaining({ method: "POST" }));
+    });
   });
 
   it("keeps core interpretation compact without duplicate expandable detail", () => {
@@ -164,7 +214,7 @@ describe("ResultContent", () => {
     expect(screen.getByText("가장 또렷한 성향")).toBeInTheDocument();
     expect(screen.getByText("보완하면 좋은 성향")).toBeInTheDocument();
     expect(screen.getByText("탐색")).toBeInTheDocument();
-    expect(screen.getByText("몰입")).toBeInTheDocument();
+    expect(screen.getAllByText("몰입").length).toBeGreaterThan(0);
     expect(pageText).not.toMatch(/탐색\s*\d+%/);
     expect(pageText).not.toMatch(/몰입\s*\d+%/);
     expect(screen.getByText("에너지 실행형")).toBeInTheDocument();

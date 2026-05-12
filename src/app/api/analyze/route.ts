@@ -1,9 +1,6 @@
 import { createHash } from "node:crypto";
 import { Type } from "@google/genai";
 import { NextRequest } from "next/server";
-import { SupabaseBookProvider } from "@/lib/books/provider";
-import { selectBookCandidates } from "@/lib/books/recommender";
-import { isGachonLibraryBook } from "@/lib/books/types";
 import { buildLibraryPrompt } from "@/lib/gemini/libraryPrompt";
 import { normalizeLibraryAnalysis } from "@/lib/gemini/librarySchema";
 import { getGeminiClient } from "@/lib/gemini/client";
@@ -18,14 +15,15 @@ import type { StudentInput } from "@/types/session";
 export const runtime = "nodejs";
 export const maxDuration = 300;
 
-const PRIMARY_MODEL = process.env.GEMINI_LIBRARY_MODEL ?? "gemini-2.5-pro";
-const FALLBACK_MODELS = (process.env.GEMINI_LIBRARY_FALLBACK_MODELS ?? "gemini-2.5-flash,gemini-2.5-flash")
+const PRIMARY_MODEL = process.env.GEMINI_ANALYSIS_MODEL ?? process.env.GEMINI_LIBRARY_MODEL ?? "gemini-2.5-flash";
+const FALLBACK_MODELS = (process.env.GEMINI_ANALYSIS_FALLBACK_MODELS ?? "gemini-2.5-pro,gemini-2.5-flash")
   .split(",")
   .map((m) => m.trim())
   .filter(Boolean);
 const MODEL_CHAIN = [PRIMARY_MODEL, ...FALLBACK_MODELS];
 
 export async function POST(req: NextRequest) {
+  const startedAt = Date.now();
   const body = (await req.json()) as {
     input?: StudentInput;
     metrics?: FaceMetrics;
@@ -43,21 +41,6 @@ export async function POST(req: NextRequest) {
   const calibratedScores = calibrateFaceScores(body.metrics);
   const personaV2Enabled = process.env.PERSONA_V2_ENABLED === "true";
   const personaSignal = personaV2Enabled ? resolvePersonaSignal(body.metrics, saju) : null;
-  const provider = new SupabaseBookProvider(supabase);
-  const books = (await provider.listActiveBooks()).filter(isGachonLibraryBook);
-  const candidates = selectBookCandidates({
-    books,
-    favoriteCategory: body.input.favoriteCategory,
-    desiredTags: personaSignal ? Object.keys(personaSignal.bookTagWeights) : [body.input.favoriteCategory],
-    personaWeights: personaSignal?.bookTagWeights,
-    needFocus: body.input.needFocus,
-    saltSeed: `${sha256(body.input.studentId)}|${body.input.birthDate}|${body.input.favoriteCategory}|${body.input.needFocus}`,
-    limit: 12,
-  });
-
-  if (candidates.length < 3) {
-    return Response.json({ error: "not_enough_books" }, { status: 503 });
-  }
 
   const { data: session, error: insertError } = await supabase
     .from("library_sessions")
@@ -85,20 +68,27 @@ export async function POST(req: NextRequest) {
   try {
     const imageData = stripDataUrl(body.imageBase64);
     const imageBuffer = Buffer.from(imageData, "base64");
+    const uploadStartedAt = Date.now();
+    let uploadMs = 0;
     const uploadPromise = supabase.storage
       .from("face-images")
       .upload(facePath, imageBuffer, {
         contentType: "image/jpeg",
         upsert: true,
       })
-      .then(({ error }) => error ?? null);
+      .then(({ error }) => {
+        uploadMs = Date.now() - uploadStartedAt;
+        return error ?? null;
+      });
 
     const ai = getGeminiClient();
     const visionEnabled = process.env.GEMINI_VISION_ENABLED === "true";
-    const promptText = buildLibraryPrompt({ input: body.input, displayName, metrics: body.metrics, calibratedScores, saju, candidates, persona: personaSignal ?? undefined });
+    const promptText = buildLibraryPrompt({ input: body.input, displayName, metrics: body.metrics, calibratedScores, saju, persona: personaSignal ?? undefined });
     const inlineImage = visionEnabled ? [{ inlineData: { data: imageData, mimeType: "image/jpeg" } }] : [];
     const contents = [{ role: "user", parts: [{ text: promptText }, ...inlineImage] }];
     const genConfig = {
+      temperature: 0.72,
+      maxOutputTokens: 4_500,
       responseMimeType: "application/json",
       responseSchema: {
           type: Type.OBJECT,
@@ -188,9 +178,8 @@ export async function POST(req: NextRequest) {
                 face_signal: textArraySchema(2),
                 inner_style: textArraySchema(2),
                 chemi_match: textArraySchema(2),
-                book_curation: textArraySchema(2),
               },
-              required: ["face_reveal", "face_signal", "inner_style", "chemi_match", "book_curation"],
+              required: ["face_reveal", "face_signal", "inner_style", "chemi_match"],
             },
             inner_style: {
               type: Type.OBJECT,
@@ -218,31 +207,15 @@ export async function POST(req: NextRequest) {
               },
               required: ["type_label", "headline", "why", "friction", "good_scene"],
             },
-            reading_needs: { type: Type.ARRAY, items: { type: Type.STRING }, minItems: 3, maxItems: 6 },
-            recommendations: {
-              type: Type.ARRAY,
-              items: {
-                type: Type.OBJECT,
-                properties: {
-                  book_id: { type: Type.STRING },
-                  reason: { type: Type.STRING },
-                  action_copy: { type: Type.STRING },
-                  fit_reason: { type: Type.STRING },
-                  reading_moment: { type: Type.STRING },
-                },
-                required: ["book_id", "reason", "action_copy", "fit_reason", "reading_moment"],
-              },
-              minItems: 3,
-              maxItems: 3,
-            },
           },
-          required: ["reading_type", "main_copy", "geometry", "parts", "scores", "physiognomy", "saju", "romantic_match", "section_copy", "inner_style", "chemi_match", "reading_needs", "recommendations"],
+          required: ["reading_type", "main_copy", "geometry", "parts", "scores", "physiognomy", "saju", "romantic_match", "section_copy", "inner_style", "chemi_match"],
       },
     };
 
     let response: Awaited<ReturnType<typeof ai.models.generateContent>> | null = null;
     let lastError: unknown = null;
     let usedModel = MODEL_CHAIN[0]!;
+    const modelStartedAt = Date.now();
     for (const model of MODEL_CHAIN) {
       try {
         response = await ai.models.generateContent({
@@ -258,9 +231,10 @@ export async function POST(req: NextRequest) {
       }
     }
     if (!response) throw lastError ?? new Error("all_models_failed");
-    console.log(`[api/analyze] used model ${usedModel}`);
+    const modelMs = Date.now() - modelStartedAt;
     const uploadError = await uploadPromise;
     if (uploadError) throw uploadError;
+    console.log("[api/analyze] complete", { sessionId: session.id, model: usedModel, modelMs, uploadMs, totalMs: Date.now() - startedAt });
 
     const normalized = normalizeLibraryAnalysis(JSON.parse(response.text ?? "{}"));
     const resultScores = {
@@ -271,29 +245,6 @@ export async function POST(req: NextRequest) {
       balance: calibratedScores.balance,
       attractiveness: calibratedScores.attractiveness,
     };
-    const candidateById = new Map(candidates.map((book) => [book.sourceId, book]));
-    const recommendedDatabaseIds: string[] = [];
-    const finalRecommendations = normalized.recommendations.map((item) => {
-      const book = candidateById.get(item.bookId);
-      if (!book) throw new Error(`model returned unknown book_id: ${item.bookId}`);
-      if (book.id) recommendedDatabaseIds.push(book.id);
-      return {
-        bookId: book.sourceId,
-        title: book.title,
-        author: book.author,
-        category: book.category,
-        tags: book.tags,
-        coverUrl: book.coverUrl,
-        naverBookUrl: naverBookUrl(book.title, book.author),
-        callNumber: book.callNumber,
-        locationLabel: book.locationLabel,
-        reason: item.reason,
-        actionCopy: item.actionCopy,
-        fitReason: item.fitReason,
-        readingMoment: item.readingMoment,
-      };
-    });
-
     const resultJson = {
       ...normalized,
       scores: resultScores,
@@ -307,7 +258,8 @@ export async function POST(req: NextRequest) {
           }
         : undefined,
       saju: { ...normalized.saju, calculation: saju },
-      recommendations: finalRecommendations,
+      readingNeeds: [],
+      recommendations: [],
     };
     const { error: updateError } = await supabase
       .from("library_sessions")
@@ -316,7 +268,7 @@ export async function POST(req: NextRequest) {
         face_image_path: facePath,
         reading_type_code: normalized.readingType.code,
         result_json: resultJson,
-        recommended_book_ids: recommendedDatabaseIds,
+        recommended_book_ids: [],
       })
       .eq("id", session.id);
 
@@ -344,11 +296,6 @@ function detailCommentSchema() {
 
 function textArraySchema(maxItems: number) {
   return { type: Type.ARRAY, items: { type: Type.STRING }, minItems: 1, maxItems };
-}
-
-function naverBookUrl(title: string, author: string) {
-  const query = encodeURIComponent(`${title} ${author}`.trim());
-  return `https://search.shopping.naver.com/book/search?query=${query}`;
 }
 
 function stripDataUrl(input: string): string {
