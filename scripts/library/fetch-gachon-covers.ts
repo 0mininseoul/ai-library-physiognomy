@@ -11,6 +11,7 @@ import {
   type MetadataCandidate,
   type MetadataProvider,
 } from "./metadata-match";
+import { searchGachonLibrary } from "./gachon-library-provider";
 import type { GachonRawBook } from "./types";
 
 const IN_PATH = path.join(process.cwd(), "data/library/gachon-raw.json");
@@ -405,6 +406,9 @@ async function collectCandidates(book: GachonRawBook, overrides: Record<string, 
   if (data4LibraryKey) {
     candidates.push(...(await searchData4Library(data4LibraryKey, book)));
   }
+  if (hasConfidentCandidate(book, candidates)) return candidates;
+
+  candidates.push(...(await searchGachonLibrary(book)));
 
   return candidates;
 }

@@ -36,4 +36,8 @@ describe("deriveTags", () => {
   it("keeps AI baseline tag for bookcuration rows without description", () => {
     expect(deriveTags(book({ sourceLabel: "bookcuration", title: "AI 반도체 전쟁" }))).toContain("AI");
   });
+
+  it("falls back to inferred category when no curated tag pattern matches", () => {
+    expect(deriveTags(book({ title: "완전히 새로운 지정학 수업 : 지도에 가려진 진실" }))).toContain("인문/철학");
+  });
 });

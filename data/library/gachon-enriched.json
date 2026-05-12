@@ -5607,14 +5607,126 @@
     "status": "이용가능",
     "availability": null,
     "isbn13": "9791192488653",
-    "coverUrl": null,
-    "description": "",
-    "matchScore": 0.8,
-    "matched": false,
-    "metadataSource": "google_books",
-    "metadataStatus": "review_needed",
-    "metadataScore": 0.8,
+    "coverUrl": "https://shopping-phinf.pstatic.net/main_4687411/46874114619.20240407071020.jpg",
+    "description": "가천대학교 중앙도서관 주제어: 트렌드, 미래전망, 과학, 인공지능, AI / 일반주기: 별책부록: AI 도구 TOP 8(32 p.) / 형태사항: 279 p.:천연색삽화;22 cm+별책 부록 1책.",
+    "matchScore": 1,
+    "matched": true,
+    "metadataSource": "gachon_library",
+    "metadataStatus": "matched",
+    "metadataScore": 1,
     "metadataCandidates": [
+      {
+        "provider": "gachon_library",
+        "title": "AI x 인간지능의 시대 : AI 시대를 항해하는 사피엔스를 위한 안내서",
+        "authors": [
+          "김상균"
+        ],
+        "publisher": "베가북스",
+        "publishedYear": 2024,
+        "isbn13": "9791192488653",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_4687411/46874114619.20240407071020.jpg",
+        "description": "가천대학교 중앙도서관 주제어: 트렌드, 미래전망, 과학, 인공지능, AI / 일반주기: 별책부록: AI 도구 TOP 8(32 p.) / 형태사항: 279 p.:천연색삽화;22 cm+별책 부록 1책.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2024,
+          "candidateYear": 2024,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "AI x 인간지능의 시대 : AI 시대를 항해하는 사피엔스를 위한 안내서"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "AI x 인간지능의 시대 : AI 시대 를 항해하는 사피엔스를 위한 안내서",
+        "authors": [
+          "김상균"
+        ],
+        "publisher": "베가북스",
+        "publishedYear": 2024,
+        "isbn13": "9791192488653",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_4687411/46874114619.20240407071020.jpg",
+        "description": "가천대학교 중앙도서관 주제어: 트렌드, 미래전망, 과학, 인공지능, AI / 일반주기: 별책부록: AI 도구 TOP 8(32 p.) / 형태사항: 279 p.:천연색삽화;22 cm+별책 부록 1책.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2024,
+          "candidateYear": 2024,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "AI x 인간지능의 시대"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "AI x 인간지능의 시대 : AI 시대 를 항해하는 사피엔스를 위한 안내서",
+        "authors": [
+          "김상균"
+        ],
+        "publisher": "베가북스",
+        "publishedYear": 2024,
+        "isbn13": "9791192488653",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_4687411/46874114619.20240407071020.jpg",
+        "description": "가천대학교 중앙도서관 주제어: 트렌드, 미래전망, 과학, 인공지능, AI / 일반주기: 별책부록: AI 도구 TOP 8(32 p.) / 형태사항: 279 p.:천연색삽화;22 cm+별책 부록 1책.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2024,
+          "candidateYear": 2024,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "AI x 인간지능의 시대 김상균"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "AI x 인간지능의 시대 : AI 시대 를 항해하는 사피엔스를 위한 안내서",
+        "authors": [
+          "김상균"
+        ],
+        "publisher": "베가북스",
+        "publishedYear": 2024,
+        "isbn13": "9791192488653",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_4687411/46874114619.20240407071020.jpg",
+        "description": "가천대학교 중앙도서관 주제어: 트렌드, 미래전망, 과학, 인공지능, AI / 일반주기: 별책부록: AI 도구 TOP 8(32 p.) / 형태사항: 279 p.:천연색삽화;22 cm+별책 부록 1책.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2024,
+          "candidateYear": 2024,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "AI x 인간지능의 시대 베가북스"
+      },
       {
         "provider": "google_books",
         "title": "AI x 인간지능의 시대",
@@ -5642,118 +5754,6 @@
           "bibliographicOverride": false
         },
         "query": "intitle:AI x 인간지능의 시대 inauthor:김상균"
-      },
-      {
-        "provider": "google_books",
-        "title": "AI x 인간지능의 시대",
-        "authors": [
-          "김상균"
-        ],
-        "publisher": "",
-        "publishedYear": "2024",
-        "isbn13": "9791192488653",
-        "coverUrl": null,
-        "description": "",
-        "score": 0.8,
-        "decision": "review_needed",
-        "signals": {
-          "title": 1,
-          "author": 1,
-          "publisher": 0,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2024,
-          "candidateYear": 2024,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": false
-        },
-        "query": "intitle:AI x 인간지능의 시대 inpublisher:베가북스"
-      },
-      {
-        "provider": "naver",
-        "title": "AI × 인간지능의 시대 (AI 시대를 항해하는 사피엔스를 위한 안내서)",
-        "authors": [
-          "김상균"
-        ],
-        "publisher": "베가북스",
-        "publishedYear": "20240417",
-        "isbn13": "9791192488653",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_4687411/46874114619.20260331104959.jpg",
-        "description": "“인류는 AI로 지능을 업그레이드한다.” 대한민국의 대표 인지과학자 김상균 교수의 최신작, 『AI × 인간지능의 시대』 ★ AI 시대에서 인간이 어떻게 변화해야 하는지 대답해주는 책 ★ AI를 제대로 활용하는 방법을 배우기 위해 꼭 읽어야 하는 책 ★ AI에 대한 공포와 불안에서 벗어나게 해주는 책 본인을 ‘미래학자가 아니다’라고 말하지만, ‘미래’와 관련한 주제로 수많은 책을 출간한 사람이 있다. 바로 대한민국 대표 인지과학자 김상균 교수이다. 유튜브 채널에 출연한 영상의 조회 수를 합치면 무려 500만 회가 넘는다. 이처럼 대한민국은 오래전부터 김상균 교수의 안내에 발맞추어 미래로 나아가고 있다. 수년 전부터 ‘AI가 만들어 낼 미래’에 대해 예측하던 김상균 교수는 이번 책에서 ‘인간이 AI를 활용하여 만들어 낼 미래’에 대해 말한다. 삼성, 현대, LG, SK, 메르세데스 벤츠 등 몇몇 기업에만 전달하던 인사이트를 녹여내고, 1만 명에게 받은 질문에 답한다. 한 사람이라도 더 AI 시대에 발생할 대격변에 휩쓸리지 않고, 변화의 급류를 거슬러 올라갈 수 있기를 바랐기 때문이다. 그래서 ‘누가 읽어도 이해하기 쉽도록’ 내용을 풀어썼으며, ‘AI에 대한 전문적인 지식이 없어도 이해할 수 있도록’ AI와 관련한 전문 용어는 최대한 쓰지 않았다. 프롤로그에서 ‘AI 시대가 정확히 어떤 시대인지’ 개념을 잡고, Part 1에서 ‘AI가 변화시키는 중인 현재의 모습’을 그리고, Part 2에서 ‘앞으로 AI를 어떻게 활용해야 하는지‘를 설명해주며, Part 3~Part 5에서 ‘개인, 소상공인, 기업이 앞으로 AI를 활용할 수 있는 구체적인 방법을 설명해준다. 마지막으로 Part 6에서 ‘AI와 관련하여 1만 명에게 받은 질문에 대답’한다. 남녀노소를 가리지 않고 AI를 활용할 수 있는 방법을 구체적으로 소개하고 사례를 들어 설명하므로, 전 연령 맞춤형 ‘AI 시대를 살아가는 해설서’이다.",
-        "score": 0.69,
-        "decision": "review_needed",
-        "signals": {
-          "title": 0.32,
-          "author": 1,
-          "publisher": 1,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2024,
-          "candidateYear": 2024,
-          "yearContradiction": false,
-          "hardContradiction": true,
-          "bibliographicOverride": false
-        },
-        "query": "AI x 인간지능의 시대 sort=sim"
-      },
-      {
-        "provider": "naver",
-        "title": "AI × 인간지능의 시대 (AI 시대를 항해하는 사피엔스를 위한 안내서)",
-        "authors": [
-          "김상균"
-        ],
-        "publisher": "베가북스",
-        "publishedYear": "20240417",
-        "isbn13": "9791192488653",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_4687411/46874114619.20260331104959.jpg",
-        "description": "“인류는 AI로 지능을 업그레이드한다.” 대한민국의 대표 인지과학자 김상균 교수의 최신작, 『AI × 인간지능의 시대』 ★ AI 시대에서 인간이 어떻게 변화해야 하는지 대답해주는 책 ★ AI를 제대로 활용하는 방법을 배우기 위해 꼭 읽어야 하는 책 ★ AI에 대한 공포와 불안에서 벗어나게 해주는 책 본인을 ‘미래학자가 아니다’라고 말하지만, ‘미래’와 관련한 주제로 수많은 책을 출간한 사람이 있다. 바로 대한민국 대표 인지과학자 김상균 교수이다. 유튜브 채널에 출연한 영상의 조회 수를 합치면 무려 500만 회가 넘는다. 이처럼 대한민국은 오래전부터 김상균 교수의 안내에 발맞추어 미래로 나아가고 있다. 수년 전부터 ‘AI가 만들어 낼 미래’에 대해 예측하던 김상균 교수는 이번 책에서 ‘인간이 AI를 활용하여 만들어 낼 미래’에 대해 말한다. 삼성, 현대, LG, SK, 메르세데스 벤츠 등 몇몇 기업에만 전달하던 인사이트를 녹여내고, 1만 명에게 받은 질문에 답한다. 한 사람이라도 더 AI 시대에 발생할 대격변에 휩쓸리지 않고, 변화의 급류를 거슬러 올라갈 수 있기를 바랐기 때문이다. 그래서 ‘누가 읽어도 이해하기 쉽도록’ 내용을 풀어썼으며, ‘AI에 대한 전문적인 지식이 없어도 이해할 수 있도록’ AI와 관련한 전문 용어는 최대한 쓰지 않았다. 프롤로그에서 ‘AI 시대가 정확히 어떤 시대인지’ 개념을 잡고, Part 1에서 ‘AI가 변화시키는 중인 현재의 모습’을 그리고, Part 2에서 ‘앞으로 AI를 어떻게 활용해야 하는지‘를 설명해주며, Part 3~Part 5에서 ‘개인, 소상공인, 기업이 앞으로 AI를 활용할 수 있는 구체적인 방법을 설명해준다. 마지막으로 Part 6에서 ‘AI와 관련하여 1만 명에게 받은 질문에 대답’한다. 남녀노소를 가리지 않고 AI를 활용할 수 있는 방법을 구체적으로 소개하고 사례를 들어 설명하므로, 전 연령 맞춤형 ‘AI 시대를 살아가는 해설서’이다.",
-        "score": 0.69,
-        "decision": "review_needed",
-        "signals": {
-          "title": 0.32,
-          "author": 1,
-          "publisher": 1,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2024,
-          "candidateYear": 2024,
-          "yearContradiction": false,
-          "hardContradiction": true,
-          "bibliographicOverride": false
-        },
-        "query": "AI x 인간지능의 시대 sort=date"
-      },
-      {
-        "provider": "naver",
-        "title": "AI 시대, 인간 지능의 종말",
-        "authors": [
-          "현택수"
-        ],
-        "publisher": "빠리까페",
-        "publishedYear": "20260228",
-        "isbn13": "9791124398029",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_5892456/58924562200.20260401093005.jpg",
-        "description": "AI가 인간 지능을 빠르게 대체하는 시대, ‘똑똑함’만으로 살아남을 수 있는 사회는 끝났다. IQ와 점수, 학벌과 스펙이 인간의 가치를 결정하던 시대는 지나갔다. 그렇다면 인간은 무엇으로 평가받고, 어떻게 살아가야 하는가? 이 책은 한국 사회를 중심으로, 입시와 교육, 노동과 능력주의, 인간다움과 존엄의 문제를 탐구하며 AI 시대 인간의 미래를 고민한다. 지능 경쟁에서 벗어나, 잘 살아가는 인간이 되는 길을 모색하고, 부모와 교육자에게는 아이에게 무엇을 남겨야 할지, 사회 전체에는 어떤 기준으로 사람을 평가해야 할지 깊이 있는 시사점을 제공한다. 28개의 장과 에필로그를 통해, 독자들은 AI와 경쟁하지 않고도 의미 있는 삶을 설계할 수 있는 방법을 배우게 된다. 단순한 지능을 넘어, 인간다움, 공감, 윤리적 판단, 자기 주도성을 중심으로 재정의된 새로운 사회적 기준을 제시하는 책이다. 추천 포인트 AI 시대, 인간다움과 존재 가치를 고민하는 모든 사람에게 필독 한국 사회의 교육, 경쟁, 능력주의 구조를 날카롭게 분석 부모, 교육자, 직장인, 정책 입안자 모두에게 시사점 제공 미래 사회에서 인간이 살아남는 전략과 사고의 틀 제시",
-        "score": 0.45,
-        "decision": "reject",
-        "signals": {
-          "title": 0.82,
-          "author": 0,
-          "publisher": 0,
-          "year": 0.35,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2024,
-          "candidateYear": 2026,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": false
-        },
-        "query": "AI x 인간지능의 시대 sort=sim"
       }
     ],
     "metadataNotes": []
@@ -9660,87 +9660,31 @@
     "locationRoom": "북큐레이션코너(1층)",
     "status": "이용가능",
     "availability": null,
-    "isbn13": "9791169214247",
-    "coverUrl": "https://shopping-phinf.pstatic.net/main_5635612/56356122467.20260331114849.jpg",
-    "description": "글로벌 빅테크가 베팅한 양자에 주목하라! 양자 컴퓨터의 기초 개념과 구현 방식, 기술 트렌드와 산업 판도, 글로벌 기업의 전략과 투자 포인트를 한눈에! AI가 이미 우리의 일상과 산업을 바꿔놓은 지금, 전 세계가 다음 주자로 주목하는 기술은 바로 양자 컴퓨팅이다. 양자 컴퓨터는 이제 단순한 이론을 넘어 현실로 다가오고 있다. 글로벌 빅테크들이 본격적으로 양자 컴퓨터 개발에 뛰어들었고, 각국 정부는 양자 주권을 선언하며 기술 패권 경쟁에 나섰다. 양자 기술은 신약 개발, 기후 시뮬레이션, 금융 최적화, AI 고도화 등 복잡한 문제들을 해결할 완전히 새로운 계산 방식을 제시한다. 하지만 아직 양자는 여전히 낯설고 어렵다. 그래서 지금, 바로 이 책이 필요하다.『정지훈의 양자 컴퓨터 강의』는 양자를 쉽고, 넓게 배울 수 있는 최고의 입문서이다. 중첩, 얽힘, 큐비트 같은 양자 컴퓨팅의 핵심 개념을 어려운 수식 없이 비유와 그림으로 풀어내고, 초전도·이온 트랩·중성 원자·광자·위상학적 큐비트 등 5가지 구현 기술의 원리와 장단점을 정리해 양자 컴퓨터의 구조와 흐름을 입체적으로 이해할 수 있도록 구성했다. 또한 IBM, 구글, 마이크로소프트, 아마존, 리게티, 아이온큐 등 글로벌 기업들의 기술 전략과 양자 경쟁의 판도가 알기 쉽게 정리되어 있어 기술 트렌드를 따라잡고 싶은 독자에게 깊은 인사이트를 준다. 다시 말해, 이 책 한 권이면 기술 트렌드와 산업 흐름, 양자 컴퓨팅의 기초 개념과 구현 방식, 기업 전략은 물론 투자 관점에서 꼭 알아야 할 핵심 포인트까지 한눈에 정리할 수 있다. AI 다음 시대가 궁금하다면 이 책에서 그 답을 찾을 수 있다. 이제, 미래로 가는 첫걸음을 이 책과 함께 시작해보자.",
-    "matchScore": 0.74,
-    "matched": false,
-    "metadataSource": "naver",
-    "metadataStatus": "review_needed",
-    "metadataScore": 0.74,
+    "isbn13": "9791169213370",
+    "coverUrl": "http://t1.daumcdn.net/lbook/image/6819904",
+    "description": "가천대학교 중앙도서관 주제어: 양자, 컴퓨터, 컴퓨터공학, 과학개론, IT, 양자컴퓨터 / 일반주기: 원저자명: Wiliam Hurley, Floyd Smith / 형태사항: 388 p.:삽화;24 cm.",
+    "matchScore": 1,
+    "matched": true,
+    "metadataSource": "gachon_library",
+    "metadataStatus": "matched",
+    "metadataScore": 1,
     "metadataCandidates": [
       {
-        "provider": "naver",
-        "title": "정지훈의 양자 컴퓨터 강의 (AI 다음의 게임 체인저 양자 컴퓨터의 모든 것)",
+        "provider": "gachon_library",
+        "title": "( 모두를 위한 ) 양자 컴퓨터 : 누구나 쉽게 이해하는 양자 컴퓨터 원리부터 활용까지",
         "authors": [
-          "정지훈"
+          "Hurley, Wiliam"
         ],
         "publisher": "한빛미디어",
-        "publishedYear": "20250829",
-        "isbn13": "9791169214247",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_5635612/56356122467.20260331114849.jpg",
-        "description": "글로벌 빅테크가 베팅한 양자에 주목하라! 양자 컴퓨터의 기초 개념과 구현 방식, 기술 트렌드와 산업 판도, 글로벌 기업의 전략과 투자 포인트를 한눈에! AI가 이미 우리의 일상과 산업을 바꿔놓은 지금, 전 세계가 다음 주자로 주목하는 기술은 바로 양자 컴퓨팅이다. 양자 컴퓨터는 이제 단순한 이론을 넘어 현실로 다가오고 있다. 글로벌 빅테크들이 본격적으로 양자 컴퓨터 개발에 뛰어들었고, 각국 정부는 양자 주권을 선언하며 기술 패권 경쟁에 나섰다. 양자 기술은 신약 개발, 기후 시뮬레이션, 금융 최적화, AI 고도화 등 복잡한 문제들을 해결할 완전히 새로운 계산 방식을 제시한다. 하지만 아직 양자는 여전히 낯설고 어렵다. 그래서 지금, 바로 이 책이 필요하다.『정지훈의 양자 컴퓨터 강의』는 양자를 쉽고, 넓게 배울 수 있는 최고의 입문서이다. 중첩, 얽힘, 큐비트 같은 양자 컴퓨팅의 핵심 개념을 어려운 수식 없이 비유와 그림으로 풀어내고, 초전도·이온 트랩·중성 원자·광자·위상학적 큐비트 등 5가지 구현 기술의 원리와 장단점을 정리해 양자 컴퓨터의 구조와 흐름을 입체적으로 이해할 수 있도록 구성했다. 또한 IBM, 구글, 마이크로소프트, 아마존, 리게티, 아이온큐 등 글로벌 기업들의 기술 전략과 양자 경쟁의 판도가 알기 쉽게 정리되어 있어 기술 트렌드를 따라잡고 싶은 독자에게 깊은 인사이트를 준다. 다시 말해, 이 책 한 권이면 기술 트렌드와 산업 흐름, 양자 컴퓨팅의 기초 개념과 구현 방식, 기업 전략은 물론 투자 관점에서 꼭 알아야 할 핵심 포인트까지 한눈에 정리할 수 있다. AI 다음 시대가 궁금하다면 이 책에서 그 답을 찾을 수 있다. 이제, 미래로 가는 첫걸음을 이 책과 함께 시작해보자.",
-        "score": 0.74,
-        "decision": "review_needed",
-        "signals": {
-          "title": 0.86,
-          "author": 0,
-          "publisher": 1,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2025,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": false
-        },
-        "query": "양자 컴퓨터 한빛미디어 sort=sim"
-      },
-      {
-        "provider": "naver",
-        "title": "파인만의 컴퓨터 강의 (양자 컴퓨터를 고안한 천재가 들려주는 계산 이야기)",
-        "authors": [
-          "리처드 파인만"
-        ],
-        "publisher": "한빛미디어",
-        "publishedYear": "20250625",
-        "isbn13": "9791169213974",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_5536225/55362250878.20260331113445.jpg",
-        "description": "AI, 양자 컴퓨터, 로보틱스 컴퓨터의 미래를 내다본 물리학자의 강의를 다시 만나다 “컴퓨터 과학은 우리가 주변 세상에서 어떤 것을 알 수 있고 어떤 것을 알 수 없는지를 다시금 생각하게 만든다.” - 리처드 파인만 노벨물리학상 수상자 리처드 파인만이 마지막으로 강의한 과목은 다름 아닌 컴퓨터 과학이었다. 1983년부터 1986년까지 캘리포니아 공과대학에서 계산의 물리적 본질에서 시작해 컴퓨터 이론 전반을 탐색하며, 자신만의 독창적인 시각으로 ‘컴퓨터란 무엇인가’를 깊이 있게 성찰했다. 1판의 출간 20주년을 맞아 선보이는 2판은 현대의 컴퓨터 과학을 파인만의 시점으로 재조명한다. 파인만이 처음 제안한 ‘양자역학적 컴퓨터’ 개념이 오늘날 ‘양자 컴퓨터’에 미친 영향을 살펴보며, 파인만이 AI에 관해 언급했던 내용 등 현대 컴퓨터 과학의 주요 이슈까지 추가했다. 시간이 흐를수록 더욱 빛이 나는 거장의 마지막 강의를 지금 바로 만나보자. 대상 독자 ● 하드웨어 아키텍처·계산 이론의 기초를 탄탄히 다지고 싶은 학부·대학원생 ● 파인만 특유의 시각으로 컴퓨팅 한계를 물리학적 관점에서 탐구하고 싶은 개발자 ● 컴퓨터가 어떻게 동작하며 무엇을 할 수 있는지 ‘깊이 있게’ 이해하고 싶은 모든 사람",
-        "score": 0.74,
-        "decision": "review_needed",
-        "signals": {
-          "title": 0.86,
-          "author": 0,
-          "publisher": 1,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2025,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": false
-        },
-        "query": "양자 컴퓨터 한빛미디어 sort=sim"
-      },
-      {
-        "provider": "naver",
-        "title": "모두를 위한 양자 컴퓨터 (누구나 쉽게 이해하는 양자 컴퓨터 원리부터 활용까지)",
-        "authors": [
-          "윌리엄 헐리^플로이드 스미스"
-        ],
-        "publisher": "한빛미디어",
-        "publishedYear": "20250120",
+        "publishedYear": 2025,
         "isbn13": "9791169213370",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_5246622/52466229305.20260331102503.jpg",
-        "description": "2025년은 유엔이 지정한 ‘세계 양자 과학 기술의 해’ 양자 컴퓨팅의 세계로 뛰어들다 원자의 힘을 활용한 새로운 컴퓨터가 등장하며 컴퓨터 작동 방식에 혁명을 일으키고 있다. 이 책은 양자 역학의 법칙을 이용해 문제를 해결하는 혁신적인 시스템을 소개한다. 이 시스템은 세계에서 가장 강력한 슈퍼컴퓨터로도 수백만 년이 걸릴 계산을 단 몇 분 만에 처리할 수 있다. 금융, 제약, 운송, 에너지 등 다양한 산업에서 양자 컴퓨터가 어떻게 변화를 일으킬지, 그 작동 원리를 알아본다. 박사 학위 기반 지식이 없어도 이해할 수 있도록 쉽고 친절하게 설명되어 있어 누구나 양자 컴퓨팅의 세계로 첫걸음을 내디딜 수 있다. 미래의 기술을 지금 바로 만나보자.",
-        "score": 0.74,
+        "coverUrl": "http://t1.daumcdn.net/lbook/image/6819904",
+        "description": "가천대학교 중앙도서관 주제어: 양자, 컴퓨터, 컴퓨터공학, 과학개론, IT, 양자컴퓨터 / 일반주기: 원저자명: Wiliam Hurley, Floyd Smith / 형태사항: 388 p.:삽화;24 cm.",
+        "score": 1,
         "decision": "accept",
         "signals": {
-          "title": 0.86,
-          "author": 0,
+          "title": 1,
+          "author": 1,
           "publisher": 1,
           "year": 1,
           "isbn": 1,
@@ -9751,7 +9695,63 @@
           "hardContradiction": false,
           "bibliographicOverride": true
         },
-        "query": "양자 컴퓨터 한빛미디어 sort=sim"
+        "query": "(모두를 위한) 양자 컴퓨터 : 누구나 쉽게 이해하는 양자 컴퓨터 원리부터 활용까지"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "(모두를 위한) 양자 컴퓨터 : 누구나 쉽게 이해하는 양자 컴퓨터 원리부터 활용까지",
+        "authors": [
+          "Hurley, Wiliam"
+        ],
+        "publisher": "한빛미디어",
+        "publishedYear": 2025,
+        "isbn13": "9791169213370",
+        "coverUrl": "http://t1.daumcdn.net/lbook/image/6819904",
+        "description": "가천대학교 중앙도서관 주제어: 양자, 컴퓨터, 컴퓨터공학, 과학개론, IT, 양자컴퓨터 / 일반주기: 원저자명: Wiliam Hurley, Floyd Smith / 형태사항: 388 p.:삽화;24 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "양자 컴퓨터 Hurley, Wiliam"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "(모두를 위한) 양자 컴퓨터 : 누구나 쉽게 이해하는 양자 컴퓨터 원리부터 활용까지",
+        "authors": [
+          "Hurley, Wiliam"
+        ],
+        "publisher": "한빛미디어",
+        "publishedYear": 2025,
+        "isbn13": "9791169213370",
+        "coverUrl": "http://t1.daumcdn.net/lbook/image/6819904",
+        "description": "가천대학교 중앙도서관 주제어: 양자, 컴퓨터, 컴퓨터공학, 과학개론, IT, 양자컴퓨터 / 일반주기: 원저자명: Wiliam Hurley, Floyd Smith / 형태사항: 388 p.:삽화;24 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "양자 컴퓨터 한빛미디어"
       },
       {
         "provider": "naver",
@@ -9779,7 +9779,7 @@
           "hardContradiction": false,
           "bibliographicOverride": false
         },
-        "query": "양자 컴퓨터 한빛미디어 sort=date"
+        "query": "양자 컴퓨터 한빛미디어 sort=sim"
       },
       {
         "provider": "naver",
@@ -9807,7 +9807,7 @@
           "hardContradiction": false,
           "bibliographicOverride": false
         },
-        "query": "양자 컴퓨터 한빛미디어 sort=date"
+        "query": "양자 컴퓨터 한빛미디어 sort=sim"
       }
     ],
     "metadataNotes": []
@@ -11133,15 +11133,99 @@
     "locationRoom": "북큐레이션코너(1층)",
     "status": "이용가능",
     "availability": null,
-    "isbn13": null,
+    "isbn13": "9787523613269",
     "coverUrl": null,
-    "description": "",
-    "matchScore": 0,
-    "matched": false,
-    "metadataSource": null,
-    "metadataStatus": "unmatched",
-    "metadataScore": 0,
+    "description": "가천대학교 중앙도서관 주제어: 인공지능 / 형태사항: 318 p.:揷畫, 圖表;24 cm.",
+    "matchScore": 1,
+    "matched": true,
+    "metadataSource": "gachon_library",
+    "metadataStatus": "matched",
+    "metadataScore": 1,
     "metadataCandidates": [
+      {
+        "provider": "gachon_library",
+        "title": "企业AI之旅",
+        "authors": [
+          "Kreutzer, Ralf T"
+        ],
+        "publisher": "中国科学技术出版社",
+        "publishedYear": 2025,
+        "isbn13": "9787523613269",
+        "coverUrl": null,
+        "description": "가천대학교 중앙도서관 주제어: 인공지능 / 형태사항: 318 p.:揷畫, 圖表;24 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": false
+        },
+        "query": "企业AI之旅"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "企业AI之旅",
+        "authors": [
+          "Kreutzer, Ralf T"
+        ],
+        "publisher": "中国科学技术出版社",
+        "publishedYear": 2025,
+        "isbn13": "9787523613269",
+        "coverUrl": null,
+        "description": "가천대학교 중앙도서관 주제어: 인공지능 / 형태사항: 318 p.:揷畫, 圖表;24 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": false
+        },
+        "query": "企业AI之旅 Kreutzer, Ralf T"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "企业AI之旅",
+        "authors": [
+          "Kreutzer, Ralf T"
+        ],
+        "publisher": "中国科学技术出版社",
+        "publishedYear": 2025,
+        "isbn13": "9787523613269",
+        "coverUrl": null,
+        "description": "가천대학교 중앙도서관 주제어: 인공지능 / 형태사항: 318 p.:揷畫, 圖表;24 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": false
+        },
+        "query": "企业AI之旅 中国科学技术出版社"
+      },
       {
         "provider": "google_books",
         "title": "企业AI之旅",
@@ -13403,15 +13487,127 @@
     "locationRoom": "북큐레이션코너(1층)",
     "status": "이용가능",
     "availability": null,
-    "isbn13": null,
-    "coverUrl": null,
-    "description": "",
-    "matchScore": 0,
-    "matched": false,
-    "metadataSource": null,
-    "metadataStatus": "unmatched",
-    "metadataScore": 0,
+    "isbn13": "9791194383475",
+    "coverUrl": "http://t1.daumcdn.net/lbook/image/7032004",
+    "description": "가천대학교 중앙도서관 주제어: 어플리케이션, 인공지능 / 일반주기: 당근 팀: 천재윤, 권우석, 구경회, 김기혁, 김단, 김수지, 김지욱, 박성준, 이해린, 하상혁, 한소리 권말부록: 바이브 코딩 프롬프트 팁 ; AI 에이전트를 성공적으로 구축하고 운영하기 위해 반드시 고려해야 할 6가지 핵심 팁 AI는 \"Artificial Intelligence\"의 약어임 / 형태사항: 263 p.:삽화;21 cm.",
+    "matchScore": 1,
+    "matched": true,
+    "metadataSource": "gachon_library",
+    "metadataStatus": "matched",
+    "metadataScore": 1,
     "metadataCandidates": [
+      {
+        "provider": "gachon_library",
+        "title": "요즘 당근 AI 개발 : AI가 만든 파도 위에서 과감히 서핑하는 법 : AI 에이전트, 프롬프트 엔지니어링, VoC 자동 분석, 운영자동화, 바이브 코딩 AI 검색과 추천까지 당근의 AI 활용 이야기",
+        "authors": [
+          "천재윤"
+        ],
+        "publisher": "Golden Rabbit(골든래빗)",
+        "publishedYear": 2025,
+        "isbn13": "9791194383475",
+        "coverUrl": "http://t1.daumcdn.net/lbook/image/7032004",
+        "description": "가천대학교 중앙도서관 주제어: 어플리케이션, 인공지능 / 일반주기: 당근 팀: 천재윤, 권우석, 구경회, 김기혁, 김단, 김수지, 김지욱, 박성준, 이해린, 하상혁, 한소리 권말부록: 바이브 코딩 프롬프트 팁 ; AI 에이전트를 성공적으로 구축하고 운영하기 위해 반드시 고려해야 할 6가지 핵심 팁 AI는 \"Artificial Intelligence\"의 약어임 / 형태사항: 263 p.:삽화;21 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "요즘 당근 AI 개발 : AI가 만든 파도 위에서 과감히 서핑하는 법 : AI 에이전트, 프롬프트 엔지니어링, VoC 자동 분석, 운영자동화, 바이브 코딩 AI 검색과 추천까지 당근의 AI 활용 이야기"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "요즘 당근 AI 개발 : AI 가 만든 파도 위에서 과감히 서핑하는 법 : AI 에이전트, 프롬프트 엔지니어링, VoC 자동 분석, 운영자동화, 바이브 코딩 AI 검색과 추천까지 당근 의 AI 활용 이야기",
+        "authors": [
+          "천재윤"
+        ],
+        "publisher": "Golden Rabbit(골든래빗)",
+        "publishedYear": 2025,
+        "isbn13": "9791194383475",
+        "coverUrl": "http://t1.daumcdn.net/lbook/image/7032004",
+        "description": "가천대학교 중앙도서관 주제어: 어플리케이션, 인공지능 / 일반주기: 당근 팀: 천재윤, 권우석, 구경회, 김기혁, 김단, 김수지, 김지욱, 박성준, 이해린, 하상혁, 한소리 권말부록: 바이브 코딩 프롬프트 팁 ; AI 에이전트를 성공적으로 구축하고 운영하기 위해 반드시 고려해야 할 6가지 핵심 팁 AI는 \"Artificial Intelligence\"의 약어임 / 형태사항: 263 p.:삽화;21 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "요즘 당근 AI 개발"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "요즘 당근 AI 개발 : AI 가 만든 파도 위에서 과감히 서핑하는 법 : AI 에이전트, 프롬프트 엔지니어링, VoC 자동 분석, 운영자동화, 바이브 코딩 AI 검색과 추천까지 당근 의 AI 활용 이야기",
+        "authors": [
+          "천재윤"
+        ],
+        "publisher": "Golden Rabbit(골든래빗)",
+        "publishedYear": 2025,
+        "isbn13": "9791194383475",
+        "coverUrl": "http://t1.daumcdn.net/lbook/image/7032004",
+        "description": "가천대학교 중앙도서관 주제어: 어플리케이션, 인공지능 / 일반주기: 당근 팀: 천재윤, 권우석, 구경회, 김기혁, 김단, 김수지, 김지욱, 박성준, 이해린, 하상혁, 한소리 권말부록: 바이브 코딩 프롬프트 팁 ; AI 에이전트를 성공적으로 구축하고 운영하기 위해 반드시 고려해야 할 6가지 핵심 팁 AI는 \"Artificial Intelligence\"의 약어임 / 형태사항: 263 p.:삽화;21 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "요즘 당근 AI 개발 천재윤"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "요즘 당근 AI 개발 : AI 가 만든 파도 위에서 과감히 서핑하는 법 : AI 에이전트, 프롬프트 엔지니어링, VoC 자동 분석, 운영자동화, 바이브 코딩 AI 검색과 추천까지 당근 의 AI 활용 이야기",
+        "authors": [
+          "천재윤"
+        ],
+        "publisher": "Golden Rabbit ( 골든래빗 )",
+        "publishedYear": 2025,
+        "isbn13": "9791194383475",
+        "coverUrl": "http://t1.daumcdn.net/lbook/image/7032004",
+        "description": "가천대학교 중앙도서관 주제어: 어플리케이션, 인공지능 / 일반주기: 당근 팀: 천재윤, 권우석, 구경회, 김기혁, 김단, 김수지, 김지욱, 박성준, 이해린, 하상혁, 한소리 권말부록: 바이브 코딩 프롬프트 팁 ; AI 에이전트를 성공적으로 구축하고 운영하기 위해 반드시 고려해야 할 6가지 핵심 팁 AI는 \"Artificial Intelligence\"의 약어임 / 형태사항: 263 p.:삽화;21 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "요즘 당근 AI 개발 Golden Rabbit(골든래빗)"
+      },
       {
         "provider": "naver",
         "title": "요즘 당근 AI 개발 (AI가 만든 파도 위에서 과감히 서핑하는 법)",
@@ -13439,90 +13635,6 @@
           "bibliographicOverride": false
         },
         "query": "요즘 당근 AI 개발 천재윤 sort=sim"
-      },
-      {
-        "provider": "naver",
-        "title": "요즘 당근 AI 개발 (AI가 만든 파도 위에서 과감히 서핑하는 법)",
-        "authors": [
-          "당근 팀"
-        ],
-        "publisher": "골든래빗(주)",
-        "publishedYear": "20251010",
-        "isbn13": "9791194383475",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_5686548/56865483265.20260331122712.jpg",
-        "description": "★ ‘당근’의 진짜 AI 활용과 개발 이야기 ★ 사용자 문제를 AI로 해결하는 당근 팀의 여정을 만나 보세요. ‘AI로 과연 될까?’라는 질문은 ‘AI로 어떻게 하면 될까?’라는 고민으로 이어졌습니다. 엔지니어, 프로덕트 매니저, 운영 매니저, 누구든 문제의 중심에서 AI를 도구로 삼아 새로운 길을 만들어갔습니다. 이 책에는 커서로 바이브 코딩, MCP 개발, AI 에이전트 플랫폼 개발, 프롬프트 엔지니어링 기법 고도화를 통해 사용자의 경험을 극대화 하는 과정을 담았습니다. AI 물품 추천, AI 게시글 작성, AI 시세 조회, CS 챗봇처럼 외부 사용자를 위한 사례부터 리뷰 자동 리포트 발행, 온콜 업무 단축, 임베딩 시멘틱 캐싱, 운영업무 자동화 등 내부 구성원을 위한 사례까지 다양한 실험과 성장의 이야기가 있습니다. 이 책은 AI가 만든 파도 위에서 혁신하고자 하는 모든 분에게 도움이 될 것입니다.",
-        "score": 0.54,
-        "decision": "reject",
-        "signals": {
-          "title": 0.86,
-          "author": 0,
-          "publisher": 0,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2025,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": false
-        },
-        "query": "요즘 당근 AI 개발 천재윤 sort=date"
-      },
-      {
-        "provider": "naver",
-        "title": "요즘 당근 AI 개발 (AI가 만든 파도 위에서 과감히 서핑하는 법)",
-        "authors": [
-          "당근 팀"
-        ],
-        "publisher": "골든래빗(주)",
-        "publishedYear": "20251010",
-        "isbn13": "9791194383475",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_5686548/56865483265.20260331122712.jpg",
-        "description": "★ ‘당근’의 진짜 AI 활용과 개발 이야기 ★ 사용자 문제를 AI로 해결하는 당근 팀의 여정을 만나 보세요. ‘AI로 과연 될까?’라는 질문은 ‘AI로 어떻게 하면 될까?’라는 고민으로 이어졌습니다. 엔지니어, 프로덕트 매니저, 운영 매니저, 누구든 문제의 중심에서 AI를 도구로 삼아 새로운 길을 만들어갔습니다. 이 책에는 커서로 바이브 코딩, MCP 개발, AI 에이전트 플랫폼 개발, 프롬프트 엔지니어링 기법 고도화를 통해 사용자의 경험을 극대화 하는 과정을 담았습니다. AI 물품 추천, AI 게시글 작성, AI 시세 조회, CS 챗봇처럼 외부 사용자를 위한 사례부터 리뷰 자동 리포트 발행, 온콜 업무 단축, 임베딩 시멘틱 캐싱, 운영업무 자동화 등 내부 구성원을 위한 사례까지 다양한 실험과 성장의 이야기가 있습니다. 이 책은 AI가 만든 파도 위에서 혁신하고자 하는 모든 분에게 도움이 될 것입니다.",
-        "score": 0.54,
-        "decision": "reject",
-        "signals": {
-          "title": 0.86,
-          "author": 0,
-          "publisher": 0,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2025,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": false
-        },
-        "query": "요즘 당근 AI 개발 sort=sim"
-      },
-      {
-        "provider": "naver",
-        "title": "요즘 당근 AI 개발 (AI가 만든 파도 위에서 과감히 서핑하는 법)",
-        "authors": [
-          "당근 팀"
-        ],
-        "publisher": "골든래빗(주)",
-        "publishedYear": "20251010",
-        "isbn13": "9791194383475",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_5686548/56865483265.20260331122712.jpg",
-        "description": "★ ‘당근’의 진짜 AI 활용과 개발 이야기 ★ 사용자 문제를 AI로 해결하는 당근 팀의 여정을 만나 보세요. ‘AI로 과연 될까?’라는 질문은 ‘AI로 어떻게 하면 될까?’라는 고민으로 이어졌습니다. 엔지니어, 프로덕트 매니저, 운영 매니저, 누구든 문제의 중심에서 AI를 도구로 삼아 새로운 길을 만들어갔습니다. 이 책에는 커서로 바이브 코딩, MCP 개발, AI 에이전트 플랫폼 개발, 프롬프트 엔지니어링 기법 고도화를 통해 사용자의 경험을 극대화 하는 과정을 담았습니다. AI 물품 추천, AI 게시글 작성, AI 시세 조회, CS 챗봇처럼 외부 사용자를 위한 사례부터 리뷰 자동 리포트 발행, 온콜 업무 단축, 임베딩 시멘틱 캐싱, 운영업무 자동화 등 내부 구성원을 위한 사례까지 다양한 실험과 성장의 이야기가 있습니다. 이 책은 AI가 만든 파도 위에서 혁신하고자 하는 모든 분에게 도움이 될 것입니다.",
-        "score": 0.54,
-        "decision": "reject",
-        "signals": {
-          "title": 0.86,
-          "author": 0,
-          "publisher": 0,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2025,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": false
-        },
-        "query": "요즘 당근 AI 개발 sort=date"
       }
     ],
     "metadataNotes": []
@@ -15572,15 +15684,127 @@
     "shelf": "",
     "status": "이용가능",
     "availability": "checked_out",
-    "isbn13": null,
-    "coverUrl": null,
-    "description": "",
-    "matchScore": 0,
-    "matched": false,
-    "metadataSource": null,
-    "metadataStatus": "unmatched",
-    "metadataScore": 0,
+    "isbn13": "9791192372730",
+    "coverUrl": "https://shopping-phinf.pstatic.net/main_5321177/53211770996.20250226094407.jpg",
+    "description": "가천대학교 중앙도서관 주제어: 독일철학, 생의철학, 니체, 철학, 사상, 인생훈 / 일반주기: 원저자명: Friedrich Nietzsche 원앤원솔루션 기증 (UEM927038-UEM927039) / 형태사항: 259 p.;19 cm.",
+    "matchScore": 1,
+    "matched": true,
+    "metadataSource": "gachon_library",
+    "metadataStatus": "matched",
+    "metadataScore": 1,
     "metadataCandidates": [
+      {
+        "provider": "gachon_library",
+        "title": "위버멘쉬 : 누구의 시선도 아닌, 내 의지대로 살겠다는 선언",
+        "authors": [
+          "Nietzsche, Friedrich Wilhelm"
+        ],
+        "publisher": "떠오름코퍼레이션",
+        "publishedYear": 2025,
+        "isbn13": "9791192372730",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_5321177/53211770996.20250226094407.jpg",
+        "description": "가천대학교 중앙도서관 주제어: 독일철학, 생의철학, 니체, 철학, 사상, 인생훈 / 일반주기: 원저자명: Friedrich Nietzsche 원앤원솔루션 기증 (UEM927038-UEM927039) / 형태사항: 259 p.;19 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "위버멘쉬 : 누구의 시선도 아닌, 내 의지대로 살겠다는 선언"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "위버멘쉬 : 누구의 시선도 아닌, 내 의지대로 살겠다는 선언",
+        "authors": [
+          "Nietzsche, Friedrich Wilhelm"
+        ],
+        "publisher": "떠오름코퍼레이션",
+        "publishedYear": 2025,
+        "isbn13": "9791192372730",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_5321177/53211770996.20250226094407.jpg",
+        "description": "가천대학교 중앙도서관 주제어: 독일철학, 생의철학, 니체, 철학, 사상, 인생훈 / 일반주기: 원저자명: Friedrich Nietzsche 원앤원솔루션 기증 (UEM927038-UEM927039) / 형태사항: 259 p.;19 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "위버멘쉬"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "위버멘쉬 : 누구의 시선도 아닌, 내 의지대로 살겠다는 선언",
+        "authors": [
+          "Nietzsche, Friedrich Wilhelm"
+        ],
+        "publisher": "떠오름코퍼레이션",
+        "publishedYear": 2025,
+        "isbn13": "9791192372730",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_5321177/53211770996.20250226094407.jpg",
+        "description": "가천대학교 중앙도서관 주제어: 독일철학, 생의철학, 니체, 철학, 사상, 인생훈 / 일반주기: 원저자명: Friedrich Nietzsche 원앤원솔루션 기증 (UEM927038-UEM927039) / 형태사항: 259 p.;19 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "위버멘쉬 Nietzsche, Friedrich Wilhelm"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "위버멘쉬 : 누구의 시선도 아닌, 내 의지대로 살겠다는 선언",
+        "authors": [
+          "Nietzsche, Friedrich Wilhelm"
+        ],
+        "publisher": "떠오름코퍼레이션",
+        "publishedYear": 2025,
+        "isbn13": "9791192372730",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_5321177/53211770996.20250226094407.jpg",
+        "description": "가천대학교 중앙도서관 주제어: 독일철학, 생의철학, 니체, 철학, 사상, 인생훈 / 일반주기: 원저자명: Friedrich Nietzsche 원앤원솔루션 기증 (UEM927038-UEM927039) / 형태사항: 259 p.;19 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "위버멘쉬 떠오름코퍼레이션"
+      },
       {
         "provider": "google_books",
         "title": "위버멘쉬",
@@ -15608,118 +15832,6 @@
           "bibliographicOverride": false
         },
         "query": "intitle:위버멘쉬 inauthor:Nietzsche"
-      },
-      {
-        "provider": "naver",
-        "title": "위버멘쉬 (누구의 시선도 아닌, 내 의지대로 살겠다는 선언)",
-        "authors": [
-          "프리드리히 니체"
-        ],
-        "publisher": "떠오름(RISE)",
-        "publishedYear": "20250314",
-        "isbn13": "9791192372730",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_5321177/53211770996.20260331114430.jpg",
-        "description": "우리는 종종 타인의 기대에 맞춰 살아가며, 사회가 정해놓은 틀 속에서 자신의 가치를 잃곤 한다. 그러나 니체는 단호히 말한다. \"네 안에 숨겨진 힘을 발견하고, 삶을 스스로 창조하라.\" 『위버멘쉬』는 니체가 주장한 ‘초인(Übermensch)’의 철학을 현대적으로 풀어낸 책이다. 위버멘쉬란 기존의 도덕과 사회적 관습을 그대로 따르는 대신, 자신의 의지로 새로운 가치를 창조하며 스스로의 삶을 개척하는 존재를 의미한다. 그는 외부의 기준에 흔들리지 않고, 모든 고통과 시련을 넘어 더 높은 곳을 향해 나아간다. 이 책은 니체의 대표작인 『인간적인, 너무나 인간적인(Human, All Too Human)』을 기반으로, 현대를 살아가는 우리가 직면한 고민과 삶의 문제에 대한 통찰을 담았다. 단순한 철학적 개념이 아니라, 우리가 현실 속에서 어떻게 자기 자신을 극복하고 성장할 수 있는지를 조명한다.니체의 날카로운 사상을 현대적 언어로 재구성하여 누구나 직관적으로 이해하고 실천할 수 있도록 구성했다. 자기 극복, 인간관계, 감정 조절, 삶을 대하는 태도 등 현실적인 주제들을 깊이 있게 다루며, 독자들에게 스스로 질문하고 답을 찾아가는 과정의 중요성을 일깨운다.\"나를 죽이지 못하는 고통은 나를 더 강하게 만든다.\"이 문장을 가슴에 새기고, 세상이 아닌 나 자신을 위한 삶을 선택할 준비가 되었는가?『위버멘쉬』를 통해 자신을 뛰어넘는 길을 찾기를 희망한다.",
-        "score": 0.54,
-        "decision": "reject",
-        "signals": {
-          "title": 0.86,
-          "author": 0,
-          "publisher": 0,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2025,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": false
-        },
-        "query": "위버멘쉬 sort=sim"
-      },
-      {
-        "provider": "naver",
-        "title": "피안의 위버멘쉬 (피안을 향한 겨울 항해)",
-        "authors": [
-          "씨맨_Seedman"
-        ],
-        "publisher": "부크크(bookk)",
-        "publishedYear": "20251225",
-        "isbn13": "9791112107930",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_5834485/58344855760.20260115074719.jpg",
-        "description": "가끔 사람들은 비참해지고 싶을 때가 있다 지옥의 밑바닥을 구경하고 싶을 때가 있다 밑바닥을 치지 않으면 정상적인 삶이 불가능할 때가 있다 그런 사람들을 위해 그런 사람이 바닥을 치고 다시 솟아오를 수 있게 돕기 위해 저세상 다크 사이드의 노래가 준비되었다 이 시집은 단순히 악을 찬미하기 위해 쓴 것이 아니다 그 반대 방향으로 가기 위해 쓴 것이다 원시적이고 자연스러운 충동과 본능을 그대로 그려 냈다. 미지근하고 따분한 시구에 더 이상 흥미를 느끼지 못하는 사람은 이 시집을 펼치기 바란다. 신선한 충격과 공포, 그리고 깨달음을 안겨줄 것이다.",
-        "score": 0.54,
-        "decision": "reject",
-        "signals": {
-          "title": 0.86,
-          "author": 0,
-          "publisher": 0,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2025,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": false
-        },
-        "query": "위버멘쉬 sort=sim"
-      },
-      {
-        "provider": "naver",
-        "title": "피안의 위버멘쉬 (피안을 향한 겨울 항해)",
-        "authors": [
-          "씨맨_Seedman"
-        ],
-        "publisher": "부크크(bookk)",
-        "publishedYear": "20251225",
-        "isbn13": "9791112107930",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_5834485/58344855760.20260115074719.jpg",
-        "description": "가끔 사람들은 비참해지고 싶을 때가 있다 지옥의 밑바닥을 구경하고 싶을 때가 있다 밑바닥을 치지 않으면 정상적인 삶이 불가능할 때가 있다 그런 사람들을 위해 그런 사람이 바닥을 치고 다시 솟아오를 수 있게 돕기 위해 저세상 다크 사이드의 노래가 준비되었다 이 시집은 단순히 악을 찬미하기 위해 쓴 것이 아니다 그 반대 방향으로 가기 위해 쓴 것이다 원시적이고 자연스러운 충동과 본능을 그대로 그려 냈다. 미지근하고 따분한 시구에 더 이상 흥미를 느끼지 못하는 사람은 이 시집을 펼치기 바란다. 신선한 충격과 공포, 그리고 깨달음을 안겨줄 것이다.",
-        "score": 0.54,
-        "decision": "reject",
-        "signals": {
-          "title": 0.86,
-          "author": 0,
-          "publisher": 0,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2025,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": false
-        },
-        "query": "위버멘쉬 sort=date"
-      },
-      {
-        "provider": "naver",
-        "title": "차라투스트라의 말 (위버멘쉬 위의 위버멘쉬)",
-        "authors": [
-          "프리드리히 니체"
-        ],
-        "publisher": "팬덤북스",
-        "publishedYear": "20251129",
-        "isbn13": "9791161693774",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_5771644/57716449585.20260331102003.jpg",
-        "description": "힘든 인생에서 단 한 번만이라도‘차라투스트라’를 만나라! 위버멘쉬 위의 위버멘쉬, 차라투스트라가 전하는 위로와 깨달음의 말들! 이 책은 《차라투스트라는 이렇게 말했다》의 전체 내용을 변역하거나 해설한 책이 아니라, 과거의 차라투스트라가 지금의 우리에게 전하는 삶의 위로와 세상을 향한 깨달음의 말을 새로운 관점으로 편하게 정리한 철학 에세이에 가깝다. 니체가 《차라투스트라는 이렇게 말했다》에 ‘이 책은 모든 사람을 위한, 그리고 그 누구를 위한 것도 아닌 책이다.’라고 기록에 남겼듯, ‘이 책 역시 모든 사람을 위한 책은 아니지만, 한 번쯤 인생에서 차라투스트라를 만나서 위로와 깨달음을 얻고 싶은 사람을 위한 책이다.’",
-        "score": 0.54,
-        "decision": "reject",
-        "signals": {
-          "title": 0.86,
-          "author": 0,
-          "publisher": 0,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2025,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": false
-        },
-        "query": "위버멘쉬 sort=date"
       }
     ],
     "metadataNotes": []
@@ -18021,14 +18133,126 @@
     "status": "이용가능",
     "availability": "available",
     "isbn13": "9791198774798",
-    "coverUrl": null,
-    "description": "",
-    "matchScore": 0.8,
-    "matched": false,
-    "metadataSource": "google_books",
-    "metadataStatus": "review_needed",
-    "metadataScore": 0.8,
+    "coverUrl": "http://t1.daumcdn.net/lbook/image/6837196",
+    "description": "가천대학교 중앙도서관 주제어: 인문에세이, 심리학, 고립, 은둔, 외로움, 사회적고립, 은운형, 외톨이, 관계, 인간관계, 연결, 심리상담 / 일반주기: 기획: 청년재단, 저스피스 재단, 이진아콘텐츠컬렉션 / 형태사항: 311 p.;21 cm.",
+    "matchScore": 1,
+    "matched": true,
+    "metadataSource": "gachon_library",
+    "metadataStatus": "matched",
+    "metadataScore": 1,
     "metadataCandidates": [
+      {
+        "provider": "gachon_library",
+        "title": "리커넥트 : 누구나 한 번은 혼자가 된다 = Reconnect",
+        "authors": [
+          "장재열"
+        ],
+        "publisher": "Juspeace : 갤럭시코퍼레이션",
+        "publishedYear": 2025,
+        "isbn13": "9791198774798",
+        "coverUrl": "http://t1.daumcdn.net/lbook/image/6837196",
+        "description": "가천대학교 중앙도서관 주제어: 인문에세이, 심리학, 고립, 은둔, 외로움, 사회적고립, 은운형, 외톨이, 관계, 인간관계, 연결, 심리상담 / 일반주기: 기획: 청년재단, 저스피스 재단, 이진아콘텐츠컬렉션 / 형태사항: 311 p.;21 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "리커넥트 : 누구나 한 번은 혼자가 된다 = Reconnect"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "리커넥트 : 누구나 한 번은 혼자가 된다 = Reconnect",
+        "authors": [
+          "장재열"
+        ],
+        "publisher": "Juspeace : 갤럭시코퍼레이션",
+        "publishedYear": 2025,
+        "isbn13": "9791198774798",
+        "coverUrl": "http://t1.daumcdn.net/lbook/image/6837196",
+        "description": "가천대학교 중앙도서관 주제어: 인문에세이, 심리학, 고립, 은둔, 외로움, 사회적고립, 은운형, 외톨이, 관계, 인간관계, 연결, 심리상담 / 일반주기: 기획: 청년재단, 저스피스 재단, 이진아콘텐츠컬렉션 / 형태사항: 311 p.;21 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "리커넥트"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "리커넥트 : 누구나 한 번은 혼자가 된다 = Reconnect",
+        "authors": [
+          "장재열"
+        ],
+        "publisher": "Juspeace : 갤럭시코퍼레이션",
+        "publishedYear": 2025,
+        "isbn13": "9791198774798",
+        "coverUrl": "http://t1.daumcdn.net/lbook/image/6837196",
+        "description": "가천대학교 중앙도서관 주제어: 인문에세이, 심리학, 고립, 은둔, 외로움, 사회적고립, 은운형, 외톨이, 관계, 인간관계, 연결, 심리상담 / 일반주기: 기획: 청년재단, 저스피스 재단, 이진아콘텐츠컬렉션 / 형태사항: 311 p.;21 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "리커넥트 장재열"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "리커넥트 : 누구나 한 번은 혼자가 된다 = Reconnect",
+        "authors": [
+          "장재열"
+        ],
+        "publisher": "Juspeace : 갤럭시코퍼레이션",
+        "publishedYear": 2025,
+        "isbn13": "9791198774798",
+        "coverUrl": "http://t1.daumcdn.net/lbook/image/6837196",
+        "description": "가천대학교 중앙도서관 주제어: 인문에세이, 심리학, 고립, 은둔, 외로움, 사회적고립, 은운형, 외톨이, 관계, 인간관계, 연결, 심리상담 / 일반주기: 기획: 청년재단, 저스피스 재단, 이진아콘텐츠컬렉션 / 형태사항: 311 p.;21 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "리커넥트 Juspeace : 갤럭시코퍼레이션"
+      },
       {
         "provider": "google_books",
         "title": "리커넥트",
@@ -18056,118 +18280,6 @@
           "bibliographicOverride": false
         },
         "query": "intitle:리커넥트 inauthor:장재열"
-      },
-      {
-        "provider": "naver",
-        "title": "리커넥트 (누구나 한 번은 혼자가 된다)",
-        "authors": [
-          "장재열"
-        ],
-        "publisher": "저스피스",
-        "publishedYear": "20250217",
-        "isbn13": "9791198774798",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_5285697/52856971055.20260331100620.jpg",
-        "description": "“당신의 인생에도 동굴로 들어가고 싶었던 순간이 있었나요?” 장재열 상담가가 인생의 동굴에서 걸어 나온 100명에게서 발견한 생의 전환점을 만드는 연결의 힘에 대하여 ★ 베스트셀러 《마이크로 리추얼》 저자의 신작 ★ 뮤지션 지드래곤, 최재천 교수 강력 추천 흔히 ‘고립(Social isolation)’은 은둔 생활을 하는 히키코모리와 동의어쯤으로 치부된다. 혹은 대다수가 번아웃, 우울증, 외로움과 비슷한 상태 아니냐고들 착각한다. 하지만 고립은 이와 완전히 다르다. 은둔처럼 방 안에만 머물며 외부와 단절된 상태가 아니라 회사나 학교를 다니는 사람들에게도 찾아올 수 있는 상태, 즉 겉보기에는 정상적으로 사회생활 하는 것처럼 보이지만 누구와도 정서적으로 연결되지 않은 상태를 말한다. 전 국민 중 3분의 1이 고립을 경험한다는 연구 결과가 있음에도, 사회적으로 고립의 개념에 대한 논의조차 제대로 이루어지지 않는 게 현실이다. 11년간 상담가로 활동하며 4만 4천여 명을 만나온 저자는 이 책에서 그간 제대로 조명되지 않았던 고립 당사자들의 생생한 이야기를 담으며, 고립에 대한 오해와 현실의 격차부터 좁혀간다. 그는 고립은 누구나 인생에 한 번은 만나는 ‘마음이 외딴 상태’라고 짚어낸다. 이에 더해 저자는 100여 명의 고립 당사자와의 상담을 통해, 고립이라는 늪을 빠져나올 힌트는 ‘연결의 힘’에 있다는 것을 발견한다. 고립이 무엇인지, 사람들은 어떤 이유로 고립을 겪는지, 사랑하는 사람이 고립을 겪고 있을 때 도움을 주기 위한 방법까지 담은 이 책은 흔들리는 독자의 삶에 생생한 위로를 더할 것이다.",
-        "score": 0.74,
-        "decision": "accept",
-        "signals": {
-          "title": 0.86,
-          "author": 1,
-          "publisher": 0,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2025,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": true
-        },
-        "query": "리커넥트 장재열 sort=sim"
-      },
-      {
-        "provider": "naver",
-        "title": "리커넥트 (누구나 한 번은 혼자가 된다)",
-        "authors": [
-          "장재열"
-        ],
-        "publisher": "저스피스",
-        "publishedYear": "20250217",
-        "isbn13": "9791198774798",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_5285697/52856971055.20260331100620.jpg",
-        "description": "“당신의 인생에도 동굴로 들어가고 싶었던 순간이 있었나요?” 장재열 상담가가 인생의 동굴에서 걸어 나온 100명에게서 발견한 생의 전환점을 만드는 연결의 힘에 대하여 ★ 베스트셀러 《마이크로 리추얼》 저자의 신작 ★ 뮤지션 지드래곤, 최재천 교수 강력 추천 흔히 ‘고립(Social isolation)’은 은둔 생활을 하는 히키코모리와 동의어쯤으로 치부된다. 혹은 대다수가 번아웃, 우울증, 외로움과 비슷한 상태 아니냐고들 착각한다. 하지만 고립은 이와 완전히 다르다. 은둔처럼 방 안에만 머물며 외부와 단절된 상태가 아니라 회사나 학교를 다니는 사람들에게도 찾아올 수 있는 상태, 즉 겉보기에는 정상적으로 사회생활 하는 것처럼 보이지만 누구와도 정서적으로 연결되지 않은 상태를 말한다. 전 국민 중 3분의 1이 고립을 경험한다는 연구 결과가 있음에도, 사회적으로 고립의 개념에 대한 논의조차 제대로 이루어지지 않는 게 현실이다. 11년간 상담가로 활동하며 4만 4천여 명을 만나온 저자는 이 책에서 그간 제대로 조명되지 않았던 고립 당사자들의 생생한 이야기를 담으며, 고립에 대한 오해와 현실의 격차부터 좁혀간다. 그는 고립은 누구나 인생에 한 번은 만나는 ‘마음이 외딴 상태’라고 짚어낸다. 이에 더해 저자는 100여 명의 고립 당사자와의 상담을 통해, 고립이라는 늪을 빠져나올 힌트는 ‘연결의 힘’에 있다는 것을 발견한다. 고립이 무엇인지, 사람들은 어떤 이유로 고립을 겪는지, 사랑하는 사람이 고립을 겪고 있을 때 도움을 주기 위한 방법까지 담은 이 책은 흔들리는 독자의 삶에 생생한 위로를 더할 것이다.",
-        "score": 0.74,
-        "decision": "accept",
-        "signals": {
-          "title": 0.86,
-          "author": 1,
-          "publisher": 0,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2025,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": true
-        },
-        "query": "리커넥트 장재열 sort=date"
-      },
-      {
-        "provider": "naver",
-        "title": "리커넥트 (누구나 한 번은 혼자가 된다)",
-        "authors": [
-          "장재열"
-        ],
-        "publisher": "저스피스",
-        "publishedYear": "20250217",
-        "isbn13": "9791198774798",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_5285697/52856971055.20260331100620.jpg",
-        "description": "“당신의 인생에도 동굴로 들어가고 싶었던 순간이 있었나요?” 장재열 상담가가 인생의 동굴에서 걸어 나온 100명에게서 발견한 생의 전환점을 만드는 연결의 힘에 대하여 ★ 베스트셀러 《마이크로 리추얼》 저자의 신작 ★ 뮤지션 지드래곤, 최재천 교수 강력 추천 흔히 ‘고립(Social isolation)’은 은둔 생활을 하는 히키코모리와 동의어쯤으로 치부된다. 혹은 대다수가 번아웃, 우울증, 외로움과 비슷한 상태 아니냐고들 착각한다. 하지만 고립은 이와 완전히 다르다. 은둔처럼 방 안에만 머물며 외부와 단절된 상태가 아니라 회사나 학교를 다니는 사람들에게도 찾아올 수 있는 상태, 즉 겉보기에는 정상적으로 사회생활 하는 것처럼 보이지만 누구와도 정서적으로 연결되지 않은 상태를 말한다. 전 국민 중 3분의 1이 고립을 경험한다는 연구 결과가 있음에도, 사회적으로 고립의 개념에 대한 논의조차 제대로 이루어지지 않는 게 현실이다. 11년간 상담가로 활동하며 4만 4천여 명을 만나온 저자는 이 책에서 그간 제대로 조명되지 않았던 고립 당사자들의 생생한 이야기를 담으며, 고립에 대한 오해와 현실의 격차부터 좁혀간다. 그는 고립은 누구나 인생에 한 번은 만나는 ‘마음이 외딴 상태’라고 짚어낸다. 이에 더해 저자는 100여 명의 고립 당사자와의 상담을 통해, 고립이라는 늪을 빠져나올 힌트는 ‘연결의 힘’에 있다는 것을 발견한다. 고립이 무엇인지, 사람들은 어떤 이유로 고립을 겪는지, 사랑하는 사람이 고립을 겪고 있을 때 도움을 주기 위한 방법까지 담은 이 책은 흔들리는 독자의 삶에 생생한 위로를 더할 것이다.",
-        "score": 0.74,
-        "decision": "accept",
-        "signals": {
-          "title": 0.86,
-          "author": 1,
-          "publisher": 0,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2025,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": true
-        },
-        "query": "리커넥트 sort=sim"
-      },
-      {
-        "provider": "naver",
-        "title": "리커넥트 (누구나 한 번은 혼자가 된다)",
-        "authors": [
-          "장재열"
-        ],
-        "publisher": "저스피스",
-        "publishedYear": "20250217",
-        "isbn13": "9791198774798",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_5285697/52856971055.20260331100620.jpg",
-        "description": "“당신의 인생에도 동굴로 들어가고 싶었던 순간이 있었나요?” 장재열 상담가가 인생의 동굴에서 걸어 나온 100명에게서 발견한 생의 전환점을 만드는 연결의 힘에 대하여 ★ 베스트셀러 《마이크로 리추얼》 저자의 신작 ★ 뮤지션 지드래곤, 최재천 교수 강력 추천 흔히 ‘고립(Social isolation)’은 은둔 생활을 하는 히키코모리와 동의어쯤으로 치부된다. 혹은 대다수가 번아웃, 우울증, 외로움과 비슷한 상태 아니냐고들 착각한다. 하지만 고립은 이와 완전히 다르다. 은둔처럼 방 안에만 머물며 외부와 단절된 상태가 아니라 회사나 학교를 다니는 사람들에게도 찾아올 수 있는 상태, 즉 겉보기에는 정상적으로 사회생활 하는 것처럼 보이지만 누구와도 정서적으로 연결되지 않은 상태를 말한다. 전 국민 중 3분의 1이 고립을 경험한다는 연구 결과가 있음에도, 사회적으로 고립의 개념에 대한 논의조차 제대로 이루어지지 않는 게 현실이다. 11년간 상담가로 활동하며 4만 4천여 명을 만나온 저자는 이 책에서 그간 제대로 조명되지 않았던 고립 당사자들의 생생한 이야기를 담으며, 고립에 대한 오해와 현실의 격차부터 좁혀간다. 그는 고립은 누구나 인생에 한 번은 만나는 ‘마음이 외딴 상태’라고 짚어낸다. 이에 더해 저자는 100여 명의 고립 당사자와의 상담을 통해, 고립이라는 늪을 빠져나올 힌트는 ‘연결의 힘’에 있다는 것을 발견한다. 고립이 무엇인지, 사람들은 어떤 이유로 고립을 겪는지, 사랑하는 사람이 고립을 겪고 있을 때 도움을 주기 위한 방법까지 담은 이 책은 흔들리는 독자의 삶에 생생한 위로를 더할 것이다.",
-        "score": 0.74,
-        "decision": "accept",
-        "signals": {
-          "title": 0.86,
-          "author": 1,
-          "publisher": 0,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2025,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": true
-        },
-        "query": "리커넥트 sort=date"
       }
     ],
     "metadataNotes": []
@@ -19393,144 +19505,116 @@
     "shelf": "",
     "status": "파오손",
     "availability": "available",
-    "isbn13": null,
-    "coverUrl": null,
-    "description": "",
-    "matchScore": 0,
-    "matched": false,
-    "metadataSource": null,
-    "metadataStatus": "unmatched",
-    "metadataScore": 0,
+    "isbn13": "9791172790790",
+    "coverUrl": "https://shopping-phinf.pstatic.net/main_5380477/53804772403.20250327115935.jpg",
+    "description": "가천대학교 중앙도서관 주제어: 지식 / 일반주기: 원저자명: Micheal Polanyi / 형태사항: 148 p.;23 cm.",
+    "matchScore": 1,
+    "matched": true,
+    "metadataSource": "gachon_library",
+    "metadataStatus": "matched",
+    "metadataScore": 1,
     "metadataCandidates": [
       {
-        "provider": "naver",
-        "title": "암묵적 영역 (개정판)",
-        "authors": [
-          "마이클 폴라니"
-        ],
-        "publisher": "박영스토리",
-        "publishedYear": "20250331",
-        "isbn13": "9791172790790",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_5380477/53804772403.20250327115935.jpg",
-        "description": "1962년 미국 예일대학에서 행한 테리 강연Terry Lectures을 토대로 한 폴라니의 『암묵적 영역』이 뒤늦게나마 우리말로 번역되어 출간된 이후 많지 않지만 꾸준한 독자의 수요가 있다는 소식에 안주하다가, 초판 번역에 지나친 의역과 오기가 발견되어 이를 대대적으로 바로 잡아 개정 번역판을 내었다. 암묵지의 핵심어로 ‘계접항’으로 번역했던 ‘distal term’을 ‘원접항’으로 바꾸었다. 10년 전 나온 번역보다 독자에게 더욱 쉽게 접근할 계기가 되길 바라면서, 상당한 투자를 요하는 개정 번역에 손들어 준 안상준 대표님과 번다한 실무에 노고를 아끼지 않는 박세기 부장님과 이혜미 과장님에게 감사드린다.",
-        "score": 0.54,
-        "decision": "reject",
-        "signals": {
-          "title": 0.86,
-          "author": 0,
-          "publisher": 0,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2025,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": false
-        },
-        "query": "암묵적 영역 sort=sim"
-      },
-      {
-        "provider": "naver",
-        "title": "폴라니의 암묵적영역: 의미와적용 (의미와 적용)",
-        "authors": [
-          "김정래"
-        ],
-        "publisher": "박영스토리",
-        "publishedYear": "20251020",
-        "isbn13": "9791172791476",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_5734516/57345162863.20260331122502.jpg",
-        "description": "이 책은 폴라니의 암묵지가 우리 삶과 세계에 차지하는 비중과 여러 영역에 걸쳐 있는 정합성을 보여주는 데 초점이 맞추어져 있다. 폴라니의 암묵지는 인식론과 심리학에 국한된 것으로 보이지만 철학사, 과학철학, 형이상학, 역사학, 진화론, 사회학, 정치철학, 교육학 등에 두루 관련되어 있다. 이처럼 폴라니의 암묵지 이론 체계는 다양한 분야에서 정합적으로 들어맞는다. 암묵적 기제의 작동은 인류가 발전시켜 온 사고 체계, 과학적 탐구의 성격, 물질과 생명의 발생, 경계조건과 진화, 자유와 권위, 민주주의의 함정, 발견학습의 장단점 등을 모두 설명한다. 각 장은 주제별로 나누었지만, 폴라니의 ‘암묵지’를 매개로 하여 서로 관련을 맺고 있다. 각 장에 수록된 미주가 연결점을 마련해 주고, 뒤에 붙은 색인은 책 전체를 조망하는 데 도움을 줄 것이다.",
-        "score": 0.54,
-        "decision": "reject",
-        "signals": {
-          "title": 0.86,
-          "author": 0,
-          "publisher": 0,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2025,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": false
-        },
-        "query": "암묵적 영역 sort=sim"
-      },
-      {
-        "provider": "naver",
-        "title": "폴라니의 암묵적영역: 의미와적용 (의미와 적용)",
-        "authors": [
-          "김정래"
-        ],
-        "publisher": "박영스토리",
-        "publishedYear": "20251020",
-        "isbn13": "9791172791476",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_5734516/57345162863.20260331122502.jpg",
-        "description": "이 책은 폴라니의 암묵지가 우리 삶과 세계에 차지하는 비중과 여러 영역에 걸쳐 있는 정합성을 보여주는 데 초점이 맞추어져 있다. 폴라니의 암묵지는 인식론과 심리학에 국한된 것으로 보이지만 철학사, 과학철학, 형이상학, 역사학, 진화론, 사회학, 정치철학, 교육학 등에 두루 관련되어 있다. 이처럼 폴라니의 암묵지 이론 체계는 다양한 분야에서 정합적으로 들어맞는다. 암묵적 기제의 작동은 인류가 발전시켜 온 사고 체계, 과학적 탐구의 성격, 물질과 생명의 발생, 경계조건과 진화, 자유와 권위, 민주주의의 함정, 발견학습의 장단점 등을 모두 설명한다. 각 장은 주제별로 나누었지만, 폴라니의 ‘암묵지’를 매개로 하여 서로 관련을 맺고 있다. 각 장에 수록된 미주가 연결점을 마련해 주고, 뒤에 붙은 색인은 책 전체를 조망하는 데 도움을 줄 것이다.",
-        "score": 0.54,
-        "decision": "reject",
-        "signals": {
-          "title": 0.86,
-          "author": 0,
-          "publisher": 0,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2025,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": false
-        },
-        "query": "암묵적 영역 sort=date"
-      },
-      {
-        "provider": "naver",
-        "title": "암묵적 영역 (개정판)",
-        "authors": [
-          "마이클 폴라니"
-        ],
-        "publisher": "박영스토리",
-        "publishedYear": "20250331",
-        "isbn13": "9791172790790",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_5380477/53804772403.20250327115935.jpg",
-        "description": "1962년 미국 예일대학에서 행한 테리 강연Terry Lectures을 토대로 한 폴라니의 『암묵적 영역』이 뒤늦게나마 우리말로 번역되어 출간된 이후 많지 않지만 꾸준한 독자의 수요가 있다는 소식에 안주하다가, 초판 번역에 지나친 의역과 오기가 발견되어 이를 대대적으로 바로 잡아 개정 번역판을 내었다. 암묵지의 핵심어로 ‘계접항’으로 번역했던 ‘distal term’을 ‘원접항’으로 바꾸었다. 10년 전 나온 번역보다 독자에게 더욱 쉽게 접근할 계기가 되길 바라면서, 상당한 투자를 요하는 개정 번역에 손들어 준 안상준 대표님과 번다한 실무에 노고를 아끼지 않는 박세기 부장님과 이혜미 과장님에게 감사드린다.",
-        "score": 0.54,
-        "decision": "reject",
-        "signals": {
-          "title": 0.86,
-          "author": 0,
-          "publisher": 0,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2025,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": false
-        },
-        "query": "암묵적 영역 sort=date"
-      },
-      {
-        "provider": "naver",
+        "provider": "gachon_library",
         "title": "암묵적 영역",
         "authors": [
-          "마이클 폴라니"
+          "Polanyi, Micheal"
         ],
-        "publisher": "박영스토리",
-        "publishedYear": "20170110",
-        "isbn13": "9791187010678",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_3249662/32496626185.20220527052951.jpg",
-        "description": "마이클 폴라니의 방대한 저술 중에서 가장 양이 작으면서도 그의 사상의 핵심이 들어 있는 『암묵적 영역』. 현장 교사, 교육대학과 사범대학에 다니는 학생들이 읽어야 할 필독서이다.",
-        "score": 0.5,
-        "decision": "reject",
+        "publisher": "박영사",
+        "publishedYear": 2025,
+        "isbn13": "9791172790790",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_5380477/53804772403.20250327115935.jpg",
+        "description": "가천대학교 중앙도서관 주제어: 지식 / 일반주기: 원저자명: Micheal Polanyi / 형태사항: 148 p.;23 cm.",
+        "score": 1,
+        "decision": "accept",
         "signals": {
           "title": 1,
-          "author": 0,
-          "publisher": 0,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "암묵적 영역"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "암묵적 영역",
+        "authors": [
+          "Polanyi, Micheal"
+        ],
+        "publisher": "박영사",
+        "publishedYear": 2025,
+        "isbn13": "9791172790790",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_5380477/53804772403.20250327115935.jpg",
+        "description": "가천대학교 중앙도서관 주제어: 지식 / 일반주기: 원저자명: Micheal Polanyi / 형태사항: 148 p.;23 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "암묵적 영역 Polanyi, Micheal"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "암묵적 영역",
+        "authors": [
+          "Polanyi, Micheal"
+        ],
+        "publisher": "박영사",
+        "publishedYear": 2025,
+        "isbn13": "9791172790790",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_5380477/53804772403.20250327115935.jpg",
+        "description": "가천대학교 중앙도서관 주제어: 지식 / 일반주기: 원저자명: Micheal Polanyi / 형태사항: 148 p.;23 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "암묵적 영역 박영사"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "암묵적 영역",
+        "authors": [
+          "Polanyi, Micheal"
+        ],
+        "publisher": "박영사",
+        "publishedYear": 2017,
+        "isbn13": "9791187010678",
+        "coverUrl": "https://bookthumb-phinf.pstatic.net/cover/115/256/11525699.jpg?udate=20170222",
+        "description": "가천대학교 중앙도서관 주제어: 인식론 / 일반주기: 원저자명: Micheal Polanyi / 형태사항: 148 p.;21 cm.",
+        "score": 0.9,
+        "decision": "review_needed",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
           "year": 0,
           "isbn": 1,
           "isbnPresent": true,
@@ -19540,7 +19624,35 @@
           "hardContradiction": true,
           "bibliographicOverride": false
         },
-        "query": "암묵적 영역 sort=sim"
+        "query": "암묵적 영역"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "암묵적 영역",
+        "authors": [
+          "Polanyi, Micheal"
+        ],
+        "publisher": "박영사",
+        "publishedYear": 2017,
+        "isbn13": "9791187010678",
+        "coverUrl": "https://bookthumb-phinf.pstatic.net/cover/115/256/11525699.jpg?udate=20170222",
+        "description": "가천대학교 중앙도서관 주제어: 인식론 / 일반주기: 원저자명: Micheal Polanyi / 형태사항: 148 p.;21 cm.",
+        "score": 0.9,
+        "decision": "review_needed",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 0,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2017,
+          "yearContradiction": true,
+          "hardContradiction": true,
+          "bibliographicOverride": false
+        },
+        "query": "암묵적 영역 Polanyi, Micheal"
       }
     ],
     "metadataNotes": []
@@ -20209,32 +20321,32 @@
     "shelf": "",
     "status": "이용가능",
     "availability": "available",
-    "isbn13": null,
-    "coverUrl": null,
-    "description": "",
-    "matchScore": 0,
-    "matched": false,
-    "metadataSource": null,
-    "metadataStatus": "unmatched",
-    "metadataScore": 0,
+    "isbn13": "9791194530039",
+    "coverUrl": "https://shopping-phinf.pstatic.net/main_5257867/52578677110.20250123071220.jpg",
+    "description": "가천대학교 중앙도서관 주제어: 문장, 언어, 철학, 사상, 명언, 인문학, 인문교양 / 일반주기: 원저자명: Bruno Preisendorfer / 형태사항: 346 p.;22 cm.",
+    "matchScore": 1,
+    "matched": true,
+    "metadataSource": "gachon_library",
+    "metadataStatus": "matched",
+    "metadataScore": 1,
     "metadataCandidates": [
       {
-        "provider": "naver",
-        "title": "세상을 바꾼 문장들 (어떤 말은 시간 속에서 영원이 된다)",
+        "provider": "gachon_library",
+        "title": "세상을 바꾼 문장들 : 어떤 말은 시간 속에서 영원이 된다",
         "authors": [
-          "브루노 프라이젠되르퍼"
+          "Preisendorfer, Bruno"
         ],
-        "publisher": "포레스트북스",
-        "publishedYear": "20250127",
+        "publisher": "Forestbooks : 콘텐츠그룹 포레스트",
+        "publishedYear": 2025,
         "isbn13": "9791194530039",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_5257867/52578677110.20260331111111.jpg",
-        "description": "“찰나 속에서 영원의 단면을 꿰뚫은 철학자들의 언어에 대하여” 소크라테스의 ‘무지의 지’부터 니체의 ‘신의 죽음’까지, 수천 년을 이어온 말 속으로 떠나는 궁극의 지적 여정 “내가 아는 유일한 것은 ‘나는 아무것도 모른다’는 사실이다” “아는 것이 힘이다” “신은 죽었다”…… 살면서 한 번은 들어봤을 법한 이 문장들. 이 밖에도 익숙하고도 깊은 울림을 주는 말들 중 다수는 오래전 학자들의 사유에서 비롯된 것이다. 그렇다면 우리가 흔히 접하는 그 문장들은 어디에서 왔고, 어떻게 시작되었을까? ‘철학을 공부하려면 독일 철학을 읽어야 한다’는 말이 있다. 독일에서 태어나고 자라며 늘 철학책을 가까이 했던 저자 브루노 프라이젠되르퍼는 여러 잡지사의 편집장을 지냈으며, 다수의 저서를 통해 독일 아마존과 슈피겔 베스트셀러에 이름을 올렸고, NDR 올해의 논픽션 부문을 수상한 바 있다. 저자는 『세상을 바꾼 문장들』에서 소크라테스, 니체 등 철학자들이 남긴 ‘말’에 주목했다. 그러나 단순히 철학적 언어를 탐구하는 데 그치지 않는다. 각 문장이 탄생한 시대적 배경, 역사와 그들 삶의 궤적까지 따라간다. 또한 오랜 시간 동안 전해지며 사실과 다르게 알려진 부분들까지 짚어 주어 독자의 지식을 확장시킨다. 이를 통해 독자는 시대를 초월해 전 세계에 영향을 미친 문장들의 본질적 의미를 새롭게 탐구할 수 있다. 사유하지 않는 인간은 없다. 우리는 매일 삶의 방향과 존재의 이유를 고민하고 성찰한다. 지금 살아가는 방식이 옳은지, 앞으로 어떻게 살아야 할지, 더 나은 삶은 무엇인지, 이 질문들은 오래전부터 인류가 던져온 공통된 의문이다. 세상을 움직여온 철학자들 역시 같은 고민 속에서 질문하고 토론한 끝에 마침내 시대를 초월해 살아남는 문장을 남긴 것이다. 그래서 철학은 절대 낡지 않는다. 어느 시대에도 가장 필요하고 본질적인 학문이자 사상이기 때문이다. 이제 독일의 언론과 독자들이 극찬한 이 책과 함께 복잡하지만 때로는 단순한, 직접적이면서도 함축적인, 이 세상에서 오래도록 살아 숨 쉬는 의미 있는 것들을 발견할 수 있는 아주 특별한 지적 여정을 시작해보자.",
-        "score": 0.54,
-        "decision": "reject",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_5257867/52578677110.20250123071220.jpg",
+        "description": "가천대학교 중앙도서관 주제어: 문장, 언어, 철학, 사상, 명언, 인문학, 인문교양 / 일반주기: 원저자명: Bruno Preisendorfer / 형태사항: 346 p.;22 cm.",
+        "score": 1,
+        "decision": "accept",
         "signals": {
-          "title": 0.86,
-          "author": 0,
-          "publisher": 0,
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
           "year": 1,
           "isbn": 1,
           "isbnPresent": true,
@@ -20242,9 +20354,93 @@
           "candidateYear": 2025,
           "yearContradiction": false,
           "hardContradiction": false,
-          "bibliographicOverride": false
+          "bibliographicOverride": true
         },
-        "query": "세상을 바꾼 문장들 sort=sim"
+        "query": "세상을 바꾼 문장들 : 어떤 말은 시간 속에서 영원이 된다"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "세상을 바꾼 문장들 : 어떤 말은 시간 속에서 영원이 된다",
+        "authors": [
+          "Preisendorfer, Bruno"
+        ],
+        "publisher": "Forestbooks : 콘텐츠그룹 포레스트",
+        "publishedYear": 2025,
+        "isbn13": "9791194530039",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_5257867/52578677110.20250123071220.jpg",
+        "description": "가천대학교 중앙도서관 주제어: 문장, 언어, 철학, 사상, 명언, 인문학, 인문교양 / 일반주기: 원저자명: Bruno Preisendorfer / 형태사항: 346 p.;22 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "세상을 바꾼 문장들"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "세상을 바꾼 문장들 : 어떤 말은 시간 속에서 영원이 된다",
+        "authors": [
+          "Preisendorfer, Bruno"
+        ],
+        "publisher": "Forestbooks : 콘텐츠그룹 포레스트",
+        "publishedYear": 2025,
+        "isbn13": "9791194530039",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_5257867/52578677110.20250123071220.jpg",
+        "description": "가천대학교 중앙도서관 주제어: 문장, 언어, 철학, 사상, 명언, 인문학, 인문교양 / 일반주기: 원저자명: Bruno Preisendorfer / 형태사항: 346 p.;22 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "세상을 바꾼 문장들 Preisendorfer, Bruno"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "세상을 바꾼 문장들 : 어떤 말은 시간 속에서 영원이 된다",
+        "authors": [
+          "Preisendorfer, Bruno"
+        ],
+        "publisher": "Forestbooks : 콘텐츠그룹 포레스트",
+        "publishedYear": 2025,
+        "isbn13": "9791194530039",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_5257867/52578677110.20250123071220.jpg",
+        "description": "가천대학교 중앙도서관 주제어: 문장, 언어, 철학, 사상, 명언, 인문학, 인문교양 / 일반주기: 원저자명: Bruno Preisendorfer / 형태사항: 346 p.;22 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "세상을 바꾼 문장들 Forestbooks : 콘텐츠그룹 포레스트"
       },
       {
         "provider": "naver",
@@ -20272,7 +20468,7 @@
           "hardContradiction": false,
           "bibliographicOverride": false
         },
-        "query": "세상을 바꾼 문장들 sort=date"
+        "query": "세상을 바꾼 문장들 sort=sim"
       }
     ],
     "metadataNotes": []
@@ -24680,15 +24876,71 @@
     "shelf": "",
     "status": "이용가능",
     "availability": "available",
-    "isbn13": null,
-    "coverUrl": null,
-    "description": "",
-    "matchScore": 0,
-    "matched": false,
-    "metadataSource": null,
-    "metadataStatus": "unmatched",
-    "metadataScore": 0,
+    "isbn13": "9788955868425",
+    "coverUrl": "https://shopping-phinf.pstatic.net/main_5407175/54071756983.20250624090426.jpg",
+    "description": "가천대학교 중앙도서관 주제어: 실존주의, 철학, 사상 / 형태사항: 237 p.:삽화;19 cm.",
+    "matchScore": 1,
+    "matched": true,
+    "metadataSource": "gachon_library",
+    "metadataStatus": "matched",
+    "metadataScore": 1,
     "metadataCandidates": [
+      {
+        "provider": "gachon_library",
+        "title": "실존과 죽음",
+        "authors": [
+          "Heidegger, Martin"
+        ],
+        "publisher": "세창미디어",
+        "publishedYear": 2025,
+        "isbn13": "9788955868425",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_5407175/54071756983.20250624090426.jpg",
+        "description": "가천대학교 중앙도서관 주제어: 실존주의, 철학, 사상 / 형태사항: 237 p.:삽화;19 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "실존과 죽음 Heidegger, Martin"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "실존과 죽음",
+        "authors": [
+          "Heidegger, Martin"
+        ],
+        "publisher": "세창미디어",
+        "publishedYear": 2025,
+        "isbn13": "9788955868425",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_5407175/54071756983.20250624090426.jpg",
+        "description": "가천대학교 중앙도서관 주제어: 실존주의, 철학, 사상 / 형태사항: 237 p.:삽화;19 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "실존과 죽음 세창미디어"
+      },
       {
         "provider": "naver",
         "title": "실존과 죽음",
@@ -24744,6 +24996,34 @@
           "bibliographicOverride": false
         },
         "query": "실존과 죽음 sort=date"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "철학, 죽음 을 말하다",
+        "authors": [
+          "정동호"
+        ],
+        "publisher": "산해",
+        "publishedYear": 2004,
+        "isbn13": null,
+        "coverUrl": null,
+        "description": "형태사항: 343 p.;23 cm.",
+        "score": 0.11,
+        "decision": "reject",
+        "signals": {
+          "title": 0.25,
+          "author": 0,
+          "publisher": 0,
+          "year": 0,
+          "isbn": 0,
+          "isbnPresent": false,
+          "bookYear": 2025,
+          "candidateYear": 2004,
+          "yearContradiction": true,
+          "hardContradiction": true,
+          "bibliographicOverride": false
+        },
+        "query": "실존과 죽음"
       }
     ],
     "metadataNotes": []
@@ -26036,16 +26316,128 @@
     "shelf": "",
     "status": "이용가능",
     "availability": "available",
-    "isbn13": null,
-    "coverUrl": null,
-    "description": "",
-    "matchScore": 0,
-    "matched": false,
-    "metadataSource": null,
-    "metadataStatus": "unmatched",
-    "metadataScore": 0,
+    "isbn13": "9791192738529",
+    "coverUrl": "http://t1.daumcdn.net/lbook/image/6938858",
+    "description": "가천대학교 중앙도서관 주제어: 일본현대소설, 미스터리소설, 추리소설, 스릴러소설, 두뇌배틀 / 일반주기: 원저자명: 靑崎有吾 / 형태사항: 442 p.:삽화;20 cm.",
+    "matchScore": 1,
+    "matched": true,
+    "metadataSource": "gachon_library",
+    "metadataStatus": "matched",
+    "metadataScore": 1,
     "metadataCandidates": [
       {
+        "provider": "gachon_library",
+        "title": "지뢰 글리코 : 아오사키 유고 장편소설 = Glico with landmines",
+        "authors": [
+          "청기유오"
+        ],
+        "publisher": "READbie : 디앤씨미디어",
+        "publishedYear": 2025,
+        "isbn13": "9791192738529",
+        "coverUrl": "http://t1.daumcdn.net/lbook/image/6938858",
+        "description": "가천대학교 중앙도서관 주제어: 일본현대소설, 미스터리소설, 추리소설, 스릴러소설, 두뇌배틀 / 일반주기: 원저자명: 靑崎有吾 / 형태사항: 442 p.:삽화;20 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "지뢰 글리코 : 아오사키 유고 장편소설 = Glico with landmines"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "지뢰 글리코 : 아오사키 유고 장편소설 = Glico with landmines",
+        "authors": [
+          "청기유오"
+        ],
+        "publisher": "READbie : 디앤씨미디어",
+        "publishedYear": 2025,
+        "isbn13": "9791192738529",
+        "coverUrl": "http://t1.daumcdn.net/lbook/image/6938858",
+        "description": "가천대학교 중앙도서관 주제어: 일본현대소설, 미스터리소설, 추리소설, 스릴러소설, 두뇌배틀 / 일반주기: 원저자명: 靑崎有吾 / 형태사항: 442 p.:삽화;20 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "지뢰 글리코"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "지뢰 글리코 : 아오사키 유고 장편소설 = Glico with landmines",
+        "authors": [
+          "청기유오"
+        ],
+        "publisher": "READbie : 디앤씨미디어",
+        "publishedYear": 2025,
+        "isbn13": "9791192738529",
+        "coverUrl": "http://t1.daumcdn.net/lbook/image/6938858",
+        "description": "가천대학교 중앙도서관 주제어: 일본현대소설, 미스터리소설, 추리소설, 스릴러소설, 두뇌배틀 / 일반주기: 원저자명: 靑崎有吾 / 형태사항: 442 p.:삽화;20 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "지뢰 글리코 청기유오"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "지뢰 글리코 : 아오사키 유고 장편소설 = Glico with landmines",
+        "authors": [
+          "청기유오"
+        ],
+        "publisher": "READbie : 디앤씨미디어",
+        "publishedYear": 2025,
+        "isbn13": "9791192738529",
+        "coverUrl": "http://t1.daumcdn.net/lbook/image/6938858",
+        "description": "가천대학교 중앙도서관 주제어: 일본현대소설, 미스터리소설, 추리소설, 스릴러소설, 두뇌배틀 / 일반주기: 원저자명: 靑崎有吾 / 형태사항: 442 p.:삽화;20 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "지뢰 글리코 READbie : 디앤씨미디어"
+      },
+      {
         "provider": "naver",
         "title": "지뢰 글리코",
         "authors": [
@@ -26072,90 +26464,6 @@
           "bibliographicOverride": false
         },
         "query": "지뢰 글리코 sort=sim"
-      },
-      {
-        "provider": "naver",
-        "title": "지뢰 글리코",
-        "authors": [
-          "아오사키 유고"
-        ],
-        "publisher": "리드비",
-        "publishedYear": "20250619",
-        "isbn13": "9791192738529",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_5526706/55267061466.20260331101356.jpg",
-        "description": "이제껏 경험한 적 없는, 신감각 두뇌 배틀 소설! 제171회 나오키상 후보, 제37회 야마모토 슈고로상 수상! 일본 미스터리 4대 랭킹 완전 제패! 일주일 만에 3개 문학상 수상, 4대 미스터리 랭킹 완전 제패. 대중소설이 받을 수 있는 거의 모든 상을 수상하며, 나오키상 후보까지 포함해 총 11개의 상에 이름을 올린 기념비적인 작품 《지뢰 글리코》가 리드비에서 출간된다. 도립 호지로 고등학교 1학년, 유난히 승부에 강한 이모리야 마토는 본의 아니게 여러 게임에 휘말린다. 게임 종목은 가위바위보로 계단을 먼저 오르고, 카드를 뒤집어 짝을 맞추고, ‘무궁화 꽃이 피었습니다’로 겨루는 것처럼 익숙한 놀이들이지만, 모두 변형된 규칙이 적용돼 있다. 교묘한 속임수와 치밀한 논리, 그야말로 궁극의 심리전이 흥미진진하게 펼쳐지지만, 《지뢰 글리코》는 탁월한 엔터테인먼트이자 빼어난 청춘 소설이기도 하다. 작가 아오사키 유고는 어린 시절 즐겼던 익숙한 놀이를 소재로 삼고, 직접 그린 다양한 일러스트를 삽입하는 등, ‘철저한 재미’를 추구했다. “재미있는 경기를 관전하는 마음으로 읽어 주셨으면 좋겠다.”는 작가의 바람처럼, 수많은 심사평과 독자평은 모두 단 하나의 의견으로 일치한다. ‘일단 재미있다!’ 줄거리 ‘이모리야 마토’는 역시, 승부에 강하다 평온한 날을 꿈꾸는 여고생 ‘이모리야 마토’는 친근한 놀이에 규칙을 추가한 ‘변형 규칙’ 게임에 휘말린다 몰래 설치된 함정을 ​예측하며 가위바위보로 계단을 오르고, (지뢰 글리코) 백 장의 카드를 번갈아 뒤집으며 상대보다 먼저 짝을 맞춰야 한다. (스님 쇠약) 각자 규칙을 추가해 다섯 가지 손 모양으로 가위바위보를 겨루고, (자유 규칙 가위바위보) ‘암살자’와 ‘표적’으로 나뉘어 ‘무궁화 꽃이 피었습니다’에 도전한다. (달마 인형이 셈했습니다) 차례차례 강자를 쓰러트린 ‘이모리야 마토’가 도달한 최후의 게임은? 그리고, 이 치열한 승부의 진짜 목적은?",
-        "score": 0.6,
-        "decision": "reject",
-        "signals": {
-          "title": 1,
-          "author": 0,
-          "publisher": 0,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2025,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": false
-        },
-        "query": "지뢰 글리코 sort=date"
-      },
-      {
-        "provider": "naver",
-        "title": "만화 지뢰 글리코 1 (만화)",
-        "authors": [
-          "아카츠키 아키라"
-        ],
-        "publisher": "리드비",
-        "publishedYear": "20251219",
-        "isbn13": "9791192738697",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_5811821/58118218313.20260116073356.jpg",
-        "description": "4대 미스터리 랭킹 완전 제패 아무도 죽지 않는 궁극의 두뇌전, 개막 초 화제작 코미컬라이즈! 무턱대고 승부에 강하지만 평온한 일상을 바라는 여고생 이모리야 마토는 친구 고다에게 부탁받아 학교 축제에서 옥상 사용권을 둘러싼 쟁탈전, 통칭 ‘구엔 시합’에 도전하게 된다. 도착한 결승 상대는 학생회 대표로 ‘구엔 시합’ 연승 중인 구누기 선배. 그리하여 심판이 제시한 게임은 누구나 경험해 본 적이 있는 ‘그 게임’에 변형 규칙을 적용한 것이었는데...?",
-        "score": 0.54,
-        "decision": "reject",
-        "signals": {
-          "title": 0.86,
-          "author": 0,
-          "publisher": 0,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2025,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": false
-        },
-        "query": "지뢰 글리코 sort=sim"
-      },
-      {
-        "provider": "naver",
-        "title": "만화 지뢰 글리코 1 (만화)",
-        "authors": [
-          "아카츠키 아키라"
-        ],
-        "publisher": "리드비",
-        "publishedYear": "20251219",
-        "isbn13": "9791192738697",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_5811821/58118218313.20260116073356.jpg",
-        "description": "4대 미스터리 랭킹 완전 제패 아무도 죽지 않는 궁극의 두뇌전, 개막 초 화제작 코미컬라이즈! 무턱대고 승부에 강하지만 평온한 일상을 바라는 여고생 이모리야 마토는 친구 고다에게 부탁받아 학교 축제에서 옥상 사용권을 둘러싼 쟁탈전, 통칭 ‘구엔 시합’에 도전하게 된다. 도착한 결승 상대는 학생회 대표로 ‘구엔 시합’ 연승 중인 구누기 선배. 그리하여 심판이 제시한 게임은 누구나 경험해 본 적이 있는 ‘그 게임’에 변형 규칙을 적용한 것이었는데...?",
-        "score": 0.54,
-        "decision": "reject",
-        "signals": {
-          "title": 0.86,
-          "author": 0,
-          "publisher": 0,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2025,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": false
-        },
-        "query": "지뢰 글리코 sort=date"
       }
     ],
     "metadataNotes": []
@@ -27989,14 +28297,126 @@
     "status": "이용가능",
     "availability": "checked_out",
     "isbn13": "9788954616515",
-    "coverUrl": "http://books.google.com/books/content?id=td6FAAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
-    "description": "이것은 한 남자와 한 여자의 이야기입니다. 말語을 잃어가는 한 여자의 침묵과 눈眼을 잃어가는 한 남자의 빛이 만나는 찰나의 이야기 이 소설을 읽는 일은, 어쩌면 한 장의 사진을 오래토록 들여다보는 것과 같은 일일지도 모르겠다. 드디어 오랜 기다림 끝에 찾아낸 것일까. 전소해버린 줄 알았던 언어의 검부러기 밑에서 올라오는 참된 음절들을. 작가는 언어가 몸을 갖추기 이전에 존재하던 것들―흔적, 이미지, 감촉, 정념으로 이루어진 세계로 우리를 데려간다. 신생의 언어와 사멸해가는 언어가 서로 만나 몸을 비벼대는 찰나, 우리는 아득한 기원의 세계로 돌아가 그곳에 동결해둔 인간의 아픔과 희열을 발견한다. 그리고 문득 깨닫게 된다. 자신의 몸이 기억하는 참된 욕망과 조우하기 위해서는 0도 근처에서 차갑게 끓어오르는 글쓰기의 언저리까지 기어이 내려가야 한다는 사실을. 그곳에서 우리는 죽음과 탄생이 새로운 몸을 얻어 환생하는, 세속의 기적을 목격하게 된다. 이렇게 아름답게, 온전하게 몰락하는 방법을 가르쳐준 소설이 우리에게 있었던가._이소연(문학평론가)",
-    "matchScore": 0.9,
-    "matched": false,
-    "metadataSource": "google_books",
-    "metadataStatus": "review_needed",
-    "metadataScore": 0.9,
+    "coverUrl": "https://bookthumb-phinf.pstatic.net/cover/067/707/06770742.jpg?udate=20190330",
+    "description": "가천대학교 중앙도서관 주제어: 한국 현대 소설, 희랍어 / 형태사항: 193 p.;21 cm.",
+    "matchScore": 1,
+    "matched": true,
+    "metadataSource": "gachon_library",
+    "metadataStatus": "matched",
+    "metadataScore": 1,
     "metadataCandidates": [
+      {
+        "provider": "gachon_library",
+        "title": "희랍어 시간 : 한강 장편소설",
+        "authors": [
+          "한강"
+        ],
+        "publisher": "문학동네",
+        "publishedYear": 2019,
+        "isbn13": "9788954616515",
+        "coverUrl": "https://bookthumb-phinf.pstatic.net/cover/067/707/06770742.jpg?udate=20190330",
+        "description": "가천대학교 중앙도서관 주제어: 한국 현대 소설, 희랍어 / 형태사항: 193 p.;21 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2019,
+          "candidateYear": 2019,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "희랍어 시간 : 한강 장편소설"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "희랍어 시간 : 한강 장편소설",
+        "authors": [
+          "한강"
+        ],
+        "publisher": "문학동네",
+        "publishedYear": 2019,
+        "isbn13": "9788954616515",
+        "coverUrl": "https://bookthumb-phinf.pstatic.net/cover/067/707/06770742.jpg?udate=20190330",
+        "description": "가천대학교 중앙도서관 주제어: 한국 현대 소설, 희랍어 / 형태사항: 193 p.;21 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2019,
+          "candidateYear": 2019,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "희랍어 시간"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "희랍어 시간 : 한강 장편소설",
+        "authors": [
+          "한강"
+        ],
+        "publisher": "문학동네",
+        "publishedYear": 2019,
+        "isbn13": "9788954616515",
+        "coverUrl": "https://bookthumb-phinf.pstatic.net/cover/067/707/06770742.jpg?udate=20190330",
+        "description": "가천대학교 중앙도서관 주제어: 한국 현대 소설, 희랍어 / 형태사항: 193 p.;21 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2019,
+          "candidateYear": 2019,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "희랍어 시간 한강"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "희랍어 시간 : 한강 장편소설",
+        "authors": [
+          "한강"
+        ],
+        "publisher": "문학동네",
+        "publishedYear": 2019,
+        "isbn13": "9788954616515",
+        "coverUrl": "https://bookthumb-phinf.pstatic.net/cover/067/707/06770742.jpg?udate=20190330",
+        "description": "가천대학교 중앙도서관 주제어: 한국 현대 소설, 희랍어 / 형태사항: 193 p.;21 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2019,
+          "candidateYear": 2019,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "희랍어 시간 문학동네"
+      },
       {
         "provider": "google_books",
         "title": "희랍어 시간",
@@ -28024,118 +28444,6 @@
           "bibliographicOverride": false
         },
         "query": "intitle:희랍어 시간 inauthor:한강"
-      },
-      {
-        "provider": "google_books",
-        "title": "희랍어 시간",
-        "authors": [
-          "한강"
-        ],
-        "publisher": "문학동네",
-        "publishedYear": "2011-11-10",
-        "isbn13": "9788954616515",
-        "coverUrl": "http://books.google.com/books/content?id=td6FAAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
-        "description": "이것은 한 남자와 한 여자의 이야기입니다. 말語을 잃어가는 한 여자의 침묵과 눈眼을 잃어가는 한 남자의 빛이 만나는 찰나의 이야기 이 소설을 읽는 일은, 어쩌면 한 장의 사진을 오래토록 들여다보는 것과 같은 일일지도 모르겠다. 드디어 오랜 기다림 끝에 찾아낸 것일까. 전소해버린 줄 알았던 언어의 검부러기 밑에서 올라오는 참된 음절들을. 작가는 언어가 몸을 갖추기 이전에 존재하던 것들―흔적, 이미지, 감촉, 정념으로 이루어진 세계로 우리를 데려간다. 신생의 언어와 사멸해가는 언어가 서로 만나 몸을 비벼대는 찰나, 우리는 아득한 기원의 세계로 돌아가 그곳에 동결해둔 인간의 아픔과 희열을 발견한다. 그리고 문득 깨닫게 된다. 자신의 몸이 기억하는 참된 욕망과 조우하기 위해서는 0도 근처에서 차갑게 끓어오르는 글쓰기의 언저리까지 기어이 내려가야 한다는 사실을. 그곳에서 우리는 죽음과 탄생이 새로운 몸을 얻어 환생하는, 세속의 기적을 목격하게 된다. 이렇게 아름답게, 온전하게 몰락하는 방법을 가르쳐준 소설이 우리에게 있었던가._이소연(문학평론가)",
-        "score": 0.9,
-        "decision": "review_needed",
-        "signals": {
-          "title": 1,
-          "author": 1,
-          "publisher": 1,
-          "year": 0,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2019,
-          "candidateYear": 2011,
-          "yearContradiction": true,
-          "hardContradiction": true,
-          "bibliographicOverride": false
-        },
-        "query": "intitle:희랍어 시간 inpublisher:문학동네"
-      },
-      {
-        "provider": "naver",
-        "title": "희랍어 시간 (한강 소설ㅣ2024년 노벨문학상 수상작가)",
-        "authors": [
-          "한강"
-        ],
-        "publisher": "문학동네",
-        "publishedYear": "20111110",
-        "isbn13": "9788954616515",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_3247609/32476098329.20260331114710.jpg",
-        "description": "그 여자의 침묵과 그 남자의 빛! 한국인 최초 맨부커상 수상 작가 한강의 장편소설 『희랍어 시간』. 말을 잃어가는 한 여자의 침묵과 눈을 잃어가는 한 남자의 빛이 만나는 순간을 그리고 있다. 열일곱 살 겨울, 여자는 어떤 원인이나 전조 없이 말을 잃는다. 말을 잃고 살던 그녀의 입을 다시 움직이게 한 건 낯선 외국어였던 한 개의 불어 단어였다. 시간이 흘러, 이혼을 하고 아이의 양육권을 빼앗기고 다시 말을 잃어버린 여자는 죽은 언어가 된 희랍어를 선택한다. 그곳에서 만난 희랍어 강사와 여자는 침묵을 사이에 놓고 더듬더듬 대화한다. 한편, 가족을 모두 독일에 두고 혼자 한국으로 돌아와 희랍어를 가르치는 남자는 점점 빛을 잃어가고 있다. 그는 아카데미의 수강생 중 말을 하지도, 웃지도 않는 여자를 주의 깊게 지켜보지만 그녀의 단단한 침묵에 두려움을 느끼는데….",
-        "score": 0.84,
-        "decision": "review_needed",
-        "signals": {
-          "title": 0.86,
-          "author": 1,
-          "publisher": 1,
-          "year": 0,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2019,
-          "candidateYear": 2011,
-          "yearContradiction": true,
-          "hardContradiction": true,
-          "bibliographicOverride": false
-        },
-        "query": "희랍어 시간 한강 sort=sim"
-      },
-      {
-        "provider": "naver",
-        "title": "희랍어 시간 (한강 소설ㅣ2024년 노벨문학상 수상작가)",
-        "authors": [
-          "한강"
-        ],
-        "publisher": "문학동네",
-        "publishedYear": "20111110",
-        "isbn13": "9788954616515",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_3247609/32476098329.20260331114710.jpg",
-        "description": "그 여자의 침묵과 그 남자의 빛! 한국인 최초 맨부커상 수상 작가 한강의 장편소설 『희랍어 시간』. 말을 잃어가는 한 여자의 침묵과 눈을 잃어가는 한 남자의 빛이 만나는 순간을 그리고 있다. 열일곱 살 겨울, 여자는 어떤 원인이나 전조 없이 말을 잃는다. 말을 잃고 살던 그녀의 입을 다시 움직이게 한 건 낯선 외국어였던 한 개의 불어 단어였다. 시간이 흘러, 이혼을 하고 아이의 양육권을 빼앗기고 다시 말을 잃어버린 여자는 죽은 언어가 된 희랍어를 선택한다. 그곳에서 만난 희랍어 강사와 여자는 침묵을 사이에 놓고 더듬더듬 대화한다. 한편, 가족을 모두 독일에 두고 혼자 한국으로 돌아와 희랍어를 가르치는 남자는 점점 빛을 잃어가고 있다. 그는 아카데미의 수강생 중 말을 하지도, 웃지도 않는 여자를 주의 깊게 지켜보지만 그녀의 단단한 침묵에 두려움을 느끼는데….",
-        "score": 0.84,
-        "decision": "review_needed",
-        "signals": {
-          "title": 0.86,
-          "author": 1,
-          "publisher": 1,
-          "year": 0,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2019,
-          "candidateYear": 2011,
-          "yearContradiction": true,
-          "hardContradiction": true,
-          "bibliographicOverride": false
-        },
-        "query": "희랍어 시간 문학동네 sort=sim"
-      },
-      {
-        "provider": "naver",
-        "title": "희랍어 시간 (한강 소설ㅣ2024년 노벨문학상 수상작가)",
-        "authors": [
-          "한강"
-        ],
-        "publisher": "문학동네",
-        "publishedYear": "20111110",
-        "isbn13": "9788954616515",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_3247609/32476098329.20260331114710.jpg",
-        "description": "그 여자의 침묵과 그 남자의 빛! 한국인 최초 맨부커상 수상 작가 한강의 장편소설 『희랍어 시간』. 말을 잃어가는 한 여자의 침묵과 눈을 잃어가는 한 남자의 빛이 만나는 순간을 그리고 있다. 열일곱 살 겨울, 여자는 어떤 원인이나 전조 없이 말을 잃는다. 말을 잃고 살던 그녀의 입을 다시 움직이게 한 건 낯선 외국어였던 한 개의 불어 단어였다. 시간이 흘러, 이혼을 하고 아이의 양육권을 빼앗기고 다시 말을 잃어버린 여자는 죽은 언어가 된 희랍어를 선택한다. 그곳에서 만난 희랍어 강사와 여자는 침묵을 사이에 놓고 더듬더듬 대화한다. 한편, 가족을 모두 독일에 두고 혼자 한국으로 돌아와 희랍어를 가르치는 남자는 점점 빛을 잃어가고 있다. 그는 아카데미의 수강생 중 말을 하지도, 웃지도 않는 여자를 주의 깊게 지켜보지만 그녀의 단단한 침묵에 두려움을 느끼는데….",
-        "score": 0.84,
-        "decision": "review_needed",
-        "signals": {
-          "title": 0.86,
-          "author": 1,
-          "publisher": 1,
-          "year": 0,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2019,
-          "candidateYear": 2011,
-          "yearContradiction": true,
-          "hardContradiction": true,
-          "bibliographicOverride": false
-        },
-        "query": "희랍어 시간 sort=sim"
       }
     ],
     "metadataNotes": []
@@ -29245,32 +29553,32 @@
     "shelf": "",
     "status": "이용가능",
     "availability": "checked_out",
-    "isbn13": null,
-    "coverUrl": null,
-    "description": "",
-    "matchScore": 0,
-    "matched": false,
-    "metadataSource": null,
-    "metadataStatus": "unmatched",
-    "metadataScore": 0,
+    "isbn13": "9791194084082",
+    "coverUrl": "https://shopping-phinf.pstatic.net/main_5250787/52507872223.20250117071218.jpg",
+    "description": "가천대학교 중앙도서관 주제어: 철학자, 사상, 철학, 위로 / 일반주기: 원저자명: Laurence Devillairs / 형태사항: 293 p.;19 cm.",
+    "matchScore": 1,
+    "matched": true,
+    "metadataSource": "gachon_library",
+    "metadataStatus": "matched",
+    "metadataScore": 1,
     "metadataCandidates": [
       {
-        "provider": "naver",
-        "title": "로랑스 드빌레르의 스무 살에 알았더라면 좋았을 철학의 위로 (일상 언어에 숨어 있는 ‘왜’를 찾아 위대한 철학자들과 나누는 내밀한 위로)",
+        "provider": "gachon_library",
+        "title": "( 로랑스 드빌레르의 ) 스무 살에 알았더라면 좋았을 철학의 위로 : 일상에서 툭툭 내뱉는 말에도 다 이유가 있다 !",
         "authors": [
-          "로랑스 드빌레르"
+          "Devillairs, Laurence"
         ],
-        "publisher": "리코멘드",
-        "publishedYear": "20250125",
+        "publisher": "Re:commend(리코멘드)",
+        "publishedYear": 2025,
         "isbn13": "9791194084082",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_5250787/52507872223.20260331122222.jpg",
-        "description": "★ 생활 밀착형 철학 ★ 바로 지금, 인생에서 꼭 알아 둬야 할 조언 ★ 삶에서 철학이 필요한 순간 일상과 철학은 언제나 맞닿아 있다. 로랑스 드빌레르는 아리스토텔레스, 에피쿠로스, 페늘롱 같은 위대한 철학자들이 지닌 내밀한 생각과 늘 쓰는 일상의 문장을 연결해 삶에 숨겨진 철학의 지혜를 발견해 위로를 전한다. 철학자이자 작가인 로랑스 드빌레르는 말의 맛을 아는 작가다. 사람들이 흔히 사용하는 익숙한 문장이나 행동에서 철학의 조각을 발견하고, 이를 삶과 연결한다. 이런 통찰력 깊은 작가이기에 『모든 삶은 흐른다』, 『한없는 행복』, 『철학의 쓸모』로 한국에서도 사랑받았다. 이 책은 삶에서 철학이 필요한 순간, 어려운 단어가 아니라 일상에서 사용하는 언어로 위대한 철학자들의 철학적 사고를 탐구해 삶에 적용한다. 살다 보면 누구나 생각과 감정을 표현할 적당한 말을 찾지 못하는 경험을 한다. 특히 성인이 된 지 얼마 안 된 사람이라면 더욱 그렇다. 타인에게 휩쓸리지 않고 굳건하게 살아가기 위해서는, 지금 살아 내고 있는 삶을 지탱할 철학적 지혜가 한 꼬집 필요하다. 로랑스 드빌레르는 삶에 필요한 철학의 지혜를 통해 독자의 통찰력을 끌어 내며, 때때로 상처받은 이들을 위로하기도 한다. 남들 생각에 휩쓸리거나, 실패가 반복될 때, 어떻게 살아야 하는지 깊은 고민에 빠질 때 등 살아가면서 누구나 한 번쯤 경험하게 되는 상황을 에피소드로 풀어 내어 철학과 버무린다. 로랑스 드빌레르가 섬세한 시선으로 발견한 삶의 버팀목이 되어 줄 철학자의 견해가 펼쳐진다.",
-        "score": 0.54,
-        "decision": "reject",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_5250787/52507872223.20250117071218.jpg",
+        "description": "가천대학교 중앙도서관 주제어: 철학자, 사상, 철학, 위로 / 일반주기: 원저자명: Laurence Devillairs / 형태사항: 293 p.;19 cm.",
+        "score": 1,
+        "decision": "accept",
         "signals": {
-          "title": 0.86,
-          "author": 0,
-          "publisher": 0,
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
           "year": 1,
           "isbn": 1,
           "isbnPresent": true,
@@ -29278,9 +29586,93 @@
           "candidateYear": 2025,
           "yearContradiction": false,
           "hardContradiction": false,
-          "bibliographicOverride": false
+          "bibliographicOverride": true
         },
-        "query": "스무 살에 알았더라면 좋았을 철학의 위로 sort=sim"
+        "query": "(로랑스 드빌레르의) 스무 살에 알았더라면 좋았을 철학의 위로 : 일상에서 툭툭 내뱉는 말에도 다 이유가 있다!"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "(로랑스 드빌레르의) 스무 살에 알았더라면 좋았을 철학의 위로 : 일상에서 툭툭 내뱉는 말에도 다 이유가 있다!",
+        "authors": [
+          "Devillairs, Laurence"
+        ],
+        "publisher": "Re:commend(리코멘드)",
+        "publishedYear": 2025,
+        "isbn13": "9791194084082",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_5250787/52507872223.20250117071218.jpg",
+        "description": "가천대학교 중앙도서관 주제어: 철학자, 사상, 철학, 위로 / 일반주기: 원저자명: Laurence Devillairs / 형태사항: 293 p.;19 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "스무 살에 알았더라면 좋았을 철학의 위로"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "(로랑스 드빌레르의) 스무 살에 알았더라면 좋았을 철학의 위로 : 일상에서 툭툭 내뱉는 말에도 다 이유가 있다!",
+        "authors": [
+          "Devillairs, Laurence"
+        ],
+        "publisher": "Re:commend(리코멘드)",
+        "publishedYear": 2025,
+        "isbn13": "9791194084082",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_5250787/52507872223.20250117071218.jpg",
+        "description": "가천대학교 중앙도서관 주제어: 철학자, 사상, 철학, 위로 / 일반주기: 원저자명: Laurence Devillairs / 형태사항: 293 p.;19 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "스무 살에 알았더라면 좋았을 철학의 위로 Devillairs, Laurence"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "(로랑스 드빌레르의) 스무 살에 알았더라면 좋았을 철학의 위로 : 일상에서 툭툭 내뱉는 말에도 다 이유가 있다!",
+        "authors": [
+          "Devillairs, Laurence"
+        ],
+        "publisher": "Re : commend ( 리코멘드 )",
+        "publishedYear": 2025,
+        "isbn13": "9791194084082",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_5250787/52507872223.20250117071218.jpg",
+        "description": "가천대학교 중앙도서관 주제어: 철학자, 사상, 철학, 위로 / 일반주기: 원저자명: Laurence Devillairs / 형태사항: 293 p.;19 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "스무 살에 알았더라면 좋았을 철학의 위로 Re:commend(리코멘드)"
       },
       {
         "provider": "naver",
@@ -29308,7 +29700,7 @@
           "hardContradiction": false,
           "bibliographicOverride": false
         },
-        "query": "스무 살에 알았더라면 좋았을 철학의 위로 sort=date"
+        "query": "스무 살에 알았더라면 좋았을 철학의 위로 sort=sim"
       }
     ],
     "metadataNotes": []
@@ -32136,15 +32528,99 @@
     "shelf": "",
     "status": "이용가능",
     "availability": "checked_out",
-    "isbn13": null,
-    "coverUrl": null,
-    "description": "",
-    "matchScore": 0,
-    "matched": false,
-    "metadataSource": null,
-    "metadataStatus": "unmatched",
-    "metadataScore": 0,
+    "isbn13": "9791192107646",
+    "coverUrl": "https://shopping-phinf.pstatic.net/main_3373233/33732338622.20220802101527.jpg",
+    "description": "가천대학교 중앙도서관 주제어: 한국에세이, 음식에세이 / 형태사항: 177 p.;18 cm.",
+    "matchScore": 1,
+    "matched": true,
+    "metadataSource": "gachon_library",
+    "metadataStatus": "matched",
+    "metadataScore": 1,
     "metadataCandidates": [
+      {
+        "provider": "gachon_library",
+        "title": "좋았던 것들이 하나씩 시시해져도",
+        "authors": [
+          "하현"
+        ],
+        "publisher": "세미콜론",
+        "publishedYear": 2022,
+        "isbn13": "9791192107646",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_3373233/33732338622.20220802101527.jpg",
+        "description": "가천대학교 중앙도서관 주제어: 한국에세이, 음식에세이 / 형태사항: 177 p.;18 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2022,
+          "candidateYear": 2022,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "좋았던 것들이 하나씩 시시해져도"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "좋았던 것들이 하나씩 시시해져도",
+        "authors": [
+          "하현"
+        ],
+        "publisher": "세미콜론",
+        "publishedYear": 2022,
+        "isbn13": "9791192107646",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_3373233/33732338622.20220802101527.jpg",
+        "description": "가천대학교 중앙도서관 주제어: 한국에세이, 음식에세이 / 형태사항: 177 p.;18 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2022,
+          "candidateYear": 2022,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "좋았던 것들이 하나씩 시시해져도 하현"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "좋았던 것들이 하나씩 시시해져도",
+        "authors": [
+          "하현"
+        ],
+        "publisher": "세미콜론",
+        "publishedYear": 2022,
+        "isbn13": "9791192107646",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_3373233/33732338622.20220802101527.jpg",
+        "description": "가천대학교 중앙도서관 주제어: 한국에세이, 음식에세이 / 형태사항: 177 p.;18 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2022,
+          "candidateYear": 2022,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "좋았던 것들이 하나씩 시시해져도 세미콜론"
+      },
       {
         "provider": "naver",
         "title": "아이스크림: 좋았던 것들이 하나씩 시시해져도 (띵 시리즈 18)",
@@ -32200,90 +32676,6 @@
           "bibliographicOverride": false
         },
         "query": "좋았던 것들이 하나씩 시시해져도 세미콜론 sort=sim"
-      },
-      {
-        "provider": "naver",
-        "title": "아이스크림: 좋았던 것들이 하나씩 시시해져도 (띵 시리즈 18)",
-        "authors": [
-          "하현"
-        ],
-        "publisher": "세미콜론",
-        "publishedYear": "20220728",
-        "isbn13": "9791192107646",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_3373233/33732338622.20260331112545.jpg",
-        "description": "오랜 시간 동안 꾸준한 사랑을 받고 있는 베스트셀러 『달의 조각』 이후 따스하고도 섬세한 글로 왕성한 집필 활동을 이어온 하현 작가의 신작 『좋았던 것들이 하나씩 시시해져도』가 출간되었다. 늘 세상에 대한 다정한 관심으로 주변에서 일어나는 일을 섬세하게 관찰하면서 자신의 내면에서 들려오는 목소리에도 귀 기울일 줄 아는 작가. 에세이 작가로서의 천부적인 능력을 가진 그의 이번 화두는 띵 시리즈의 스무 번째 주제 ‘아이스크림’이다. 땀이 비 오듯 쏟아지는 여름이면 자연스럽게 입에 물고만 싶은, 달고 시원한 아이스크림. 사실 따지고 보면 여름에만 찾게 되는 것도 아니다. 전 세계인의 사계절 디저트이자 만인에게 사랑받는 간식이기도 한 것이 바로 아이스크림. 누구나 익숙하고 간편하게, 원할 땐 언제든 손쉽게 접할 수 있다. 그 형태나 종류도 다양하고, 세상의 모든 맛이 그 재료가 된다고 해도 과언이 아닐 것이다. 그만큼이나 다채로운 이야기 가득한 이 책은, 그야말로 골라 읽는 재미가 있다.",
-        "score": 0.58,
-        "decision": "reject",
-        "signals": {
-          "title": 0.07,
-          "author": 1,
-          "publisher": 1,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2022,
-          "candidateYear": 2022,
-          "yearContradiction": false,
-          "hardContradiction": true,
-          "bibliographicOverride": false
-        },
-        "query": "좋았던 것들이 하나씩 시시해져도 sort=sim"
-      },
-      {
-        "provider": "google_books",
-        "title": "아이스크림 : 좋았던 것들이 하나씩 시시해져도",
-        "authors": [
-          "하현"
-        ],
-        "publisher": "세미콜론",
-        "publishedYear": "2022-09-23",
-        "isbn13": "9791192107691",
-        "coverUrl": "http://books.google.com/books/content?id=4GaKEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
-        "description": "슬픈 일도 화나는 일도 남김없이 녹고 나면, 깨끗한 마음으로 이렇게 말할 수 있다! “좋아, 다시 시작하는 거야.” 오랜 시간 동안 꾸준한 사랑을 받고 있는 베스트셀러 『달의 조각』 이후 따스하고도 섬세한 글로 왕성한 집필 활동을 이어온 하현 작가의 신작 『좋았던 것들이 하나씩 시시해져도』가 출간되었다. 늘 세상에 대한 다정한 관심으로 주변에서 일어나는 일을 섬세하게 관찰하면서 자신의 내면에서 들려오는 목소리에도 귀 기울일 줄 아는 작가. 에세이 작가로서의 천부적인 능력을 가진 그의 이번 화두는 띵 시리즈의 스무 번째 주제 ‘아이스크림’이다. [목차] 프롤로그 한없이 쿨하고 하찮은 사랑 어쩌면 이건 어른의 맛 작은 쉼표를 찍어주고 싶다면 잠자는 난쟁이의 콧털을 건드린 날에는 언제나 우리 곁에 심심한 이야기의 쓸모 끝나고 같이 아이스크림 먹으러 가요 나만 알고 싶었는데! 우울한 밤에는 마트 전단지를 펼치고 아직 아무것도 끝나지 않았어 보이지 않는 반쪽 추억 필터 없이도 아름다운 만만한 행복의 나라 그럼에도 사치가 필요한 날에는 혹시, 설마, 어쩌면, 만약에 더 나은 내가 될 수 있다는 믿음 우리의 최선을 기억해 하늘색 슬픔을 가지고 팔다리가 굵고 췌장이 건강한 할머니 에필로그 넘어진 날에는 차가운 위로를",
-        "score": 0.58,
-        "decision": "reject",
-        "signals": {
-          "title": 0.07,
-          "author": 1,
-          "publisher": 1,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2022,
-          "candidateYear": 2022,
-          "yearContradiction": false,
-          "hardContradiction": true,
-          "bibliographicOverride": false
-        },
-        "query": "intitle:좋았던 것들이 하나씩 시시해져도 inauthor:하현"
-      },
-      {
-        "provider": "google_books",
-        "title": "아이스크림 : 좋았던 것들이 하나씩 시시해져도",
-        "authors": [
-          "하현"
-        ],
-        "publisher": "세미콜론",
-        "publishedYear": "2022-09-23",
-        "isbn13": "9791192107691",
-        "coverUrl": "http://books.google.com/books/content?id=4GaKEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
-        "description": "슬픈 일도 화나는 일도 남김없이 녹고 나면, 깨끗한 마음으로 이렇게 말할 수 있다! “좋아, 다시 시작하는 거야.” 오랜 시간 동안 꾸준한 사랑을 받고 있는 베스트셀러 『달의 조각』 이후 따스하고도 섬세한 글로 왕성한 집필 활동을 이어온 하현 작가의 신작 『좋았던 것들이 하나씩 시시해져도』가 출간되었다. 늘 세상에 대한 다정한 관심으로 주변에서 일어나는 일을 섬세하게 관찰하면서 자신의 내면에서 들려오는 목소리에도 귀 기울일 줄 아는 작가. 에세이 작가로서의 천부적인 능력을 가진 그의 이번 화두는 띵 시리즈의 스무 번째 주제 ‘아이스크림’이다. [목차] 프롤로그 한없이 쿨하고 하찮은 사랑 어쩌면 이건 어른의 맛 작은 쉼표를 찍어주고 싶다면 잠자는 난쟁이의 콧털을 건드린 날에는 언제나 우리 곁에 심심한 이야기의 쓸모 끝나고 같이 아이스크림 먹으러 가요 나만 알고 싶었는데! 우울한 밤에는 마트 전단지를 펼치고 아직 아무것도 끝나지 않았어 보이지 않는 반쪽 추억 필터 없이도 아름다운 만만한 행복의 나라 그럼에도 사치가 필요한 날에는 혹시, 설마, 어쩌면, 만약에 더 나은 내가 될 수 있다는 믿음 우리의 최선을 기억해 하늘색 슬픔을 가지고 팔다리가 굵고 췌장이 건강한 할머니 에필로그 넘어진 날에는 차가운 위로를",
-        "score": 0.58,
-        "decision": "reject",
-        "signals": {
-          "title": 0.07,
-          "author": 1,
-          "publisher": 1,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2022,
-          "candidateYear": 2022,
-          "yearContradiction": false,
-          "hardContradiction": true,
-          "bibliographicOverride": false
-        },
-        "query": "intitle:좋았던 것들이 하나씩 시시해져도 inauthor:하현"
       }
     ],
     "metadataNotes": []
@@ -32327,15 +32719,127 @@
     "shelf": "",
     "status": "이용가능",
     "availability": "available",
-    "isbn13": null,
-    "coverUrl": null,
-    "description": "",
-    "matchScore": 0,
-    "matched": false,
-    "metadataSource": null,
-    "metadataStatus": "unmatched",
-    "metadataScore": 0,
+    "isbn13": "9791173576324",
+    "coverUrl": "http://t1.daumcdn.net/lbook/image/7084798",
+    "description": "가천대학교 중앙도서관 주제어: 일본현대소설, 판타지소설, 책, 서점, 얼룩고양이, 모험 / 일반주기: 원저자명: 夏川草介 / 형태사항: 259 p.;19 cm.",
+    "matchScore": 1,
+    "matched": true,
+    "metadataSource": "gachon_library",
+    "metadataStatus": "matched",
+    "metadataScore": 1,
     "metadataCandidates": [
+      {
+        "provider": "gachon_library",
+        "title": "너를 지키려는 고양이 : 나쓰카와 소스케 장편소설",
+        "authors": [
+          "하천초개"
+        ],
+        "publisher": "Arte(북이십일 아르테)",
+        "publishedYear": 2025,
+        "isbn13": "9791173576324",
+        "coverUrl": "http://t1.daumcdn.net/lbook/image/7084798",
+        "description": "가천대학교 중앙도서관 주제어: 일본현대소설, 판타지소설, 책, 서점, 얼룩고양이, 모험 / 일반주기: 원저자명: 夏川草介 / 형태사항: 259 p.;19 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "너를 지키려는 고양이 : 나쓰카와 소스케 장편소설"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "너를 지키려는 고양이 : 나쓰카와 소스케 장편소설",
+        "authors": [
+          "하천초개"
+        ],
+        "publisher": "Arte(북이십일 아르테)",
+        "publishedYear": 2025,
+        "isbn13": "9791173576324",
+        "coverUrl": "http://t1.daumcdn.net/lbook/image/7084798",
+        "description": "가천대학교 중앙도서관 주제어: 일본현대소설, 판타지소설, 책, 서점, 얼룩고양이, 모험 / 일반주기: 원저자명: 夏川草介 / 형태사항: 259 p.;19 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "너를 지키려는 고양이"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "너를 지키려는 고양이 : 나쓰카와 소스케 장편소설",
+        "authors": [
+          "하천초개"
+        ],
+        "publisher": "Arte(북이십일 아르테)",
+        "publishedYear": 2025,
+        "isbn13": "9791173576324",
+        "coverUrl": "http://t1.daumcdn.net/lbook/image/7084798",
+        "description": "가천대학교 중앙도서관 주제어: 일본현대소설, 판타지소설, 책, 서점, 얼룩고양이, 모험 / 일반주기: 원저자명: 夏川草介 / 형태사항: 259 p.;19 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "너를 지키려는 고양이 하천초개"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "너를 지키려는 고양이 : 나쓰카와 소스케 장편소설",
+        "authors": [
+          "하천초개"
+        ],
+        "publisher": "Arte ( 북이십일 아르테 )",
+        "publishedYear": 2025,
+        "isbn13": "9791173576324",
+        "coverUrl": "http://t1.daumcdn.net/lbook/image/7084798",
+        "description": "가천대학교 중앙도서관 주제어: 일본현대소설, 판타지소설, 책, 서점, 얼룩고양이, 모험 / 일반주기: 원저자명: 夏川草介 / 형태사항: 259 p.;19 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "너를 지키려는 고양이 Arte(북이십일 아르테)"
+      },
       {
         "provider": "naver",
         "title": "너를 지키려는 고양이 (나쓰카와 소스케 장편소설)",
@@ -32363,90 +32867,6 @@
           "bibliographicOverride": false
         },
         "query": "너를 지키려는 고양이 sort=sim"
-      },
-      {
-        "provider": "naver",
-        "title": "너를 지키려는 고양이 (나쓰카와 소스케 장편소설)",
-        "authors": [
-          "나쓰카와 소스케"
-        ],
-        "publisher": "아르테(arte)",
-        "publishedYear": "20251126",
-        "isbn13": "9791173576324",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_5790590/57905903341.20260331104823.jpg",
-        "description": "그들은 왜 책을 불태우는 거야?” 이 세상에 책이 단 한 권도 남지 않는다면? 340만 부 판매 신화 작가의 기적의 스테디셀러 「책을 지키려는 고양이」 시리즈 최신작! 괴도 뤼팽, 명탐정 셜록 홈스, 용감한 삼총사, 빨강 머리 앤… 사라질 위기에 처한 주인공들을 구하기 위해 다시 한번, 얼룩고양이가 당신을 찾아간다 고풍스러운 서점을 배경으로 펼쳐진늦소년과 얼룩고양이의 모험으로 국내 독자들의 뜨거운 사랑을 받았던 감성 판타지 『책을 지키려는 고양이』. 그 7년 만의 후속작 『너를 지키려는 고양이』가 아르테에서 출간되었다. 이번에는 책을 누구보다 소중히 여기는 외톨이 소녀 나나미가 새로운 주인공이다. 전작이 책이라는 매개체를 통해 인간의 마음을 동화적이면서도 미스터리하게 그려냈다면, 이번 작품에서는 불태워지는 책을 구하기 위해 더욱 긴박하고 스릴 넘치는 미궁 속 모험이 펼쳐진다. 세계관은 한층 더 깊어지고 역동적으로 확장되었고, 감동은 배가 되었다. 우연한 사건을 계기로 린타로의 뒤를 이어 책을 구하는 일에 뛰어든 나나미. 그녀 앞에는 세월이 흐르는 동안 더욱 거세지고 위협적으로 변한 적들이 기다리고 있다. 천식으로 마음껏 뛰지 못하는 약한 몸을 가졌지만, 나나미에게는 어떤 설득에도 흔들리지 않는 믿음과 그 믿음을 행동으로 옮길 용기가 있다. 얼룩고양이가 그녀를 선택한 것은 결코 우연이 아니다. 진정한 힘은 육체가 아니라 마음에서 나온다는 것을 증명하듯, 나나미는 책을 지키는 여정 속에서 한 걸음씩 성장해 간다. 『너를 지키려는 고양이』는 매혹적인 도서관의 비밀과 말하는 고양이와의 위험천만한 모험을 통해 책의 가치를 상징적으로 드러내는 판타지 수작이다. 전작을 읽지 않은 독자들도 단숨에 빠져들 수 있다. 그리고 우리에게 책이 왜 필요한지를 되물으며 잔잔하지만 깊은 울림을 선사한다. “넌 정말로 책에 힘이 있다고 생각하는구나. 너라면 분명 책을 되찾을 수 있을 거야.” 힘들 때 손을 내밀어준 그 책들, 만약 사라진다면? 이 이야기는 단순히 한 소녀와 고양이의 모험담이 아니다. 책을 읽는다는 행위가 지닌 의미, 그리고 그 속에 담긴 인간의 기억과 시간을 깊이 성찰하게 만드는 작품이다. 어른들에게는 살아오며 잊고 지냈던 소중한 마음들을 하나하나 떠올리게 한다. 그리고 힘들어하는 친구에게 손을 내밀 줄 아는 온기, 물질보다 중요한 우정과 배려, 그리고 함께 살아가는 삶의 가치를 일깨워준다. 아이들에게는 책 읽는 즐거움과 상상력의 세계를 열어주며, 한 권의 이야기 속에서 새로운 삶과 꿈, 그리고 가슴 뛰는 모험을 만나게 한다. 책은 단순한 종이가 아니다. 시간과 기억을 잇는 통로다. 수백 년 전 누군가 남긴 문장을 오늘 우리가 읽는다는 것은, 그들의 시간과 우리의 현재가 연결되어 있다는 뜻이다. 책 속에는 개인의 감정과 경험뿐 아니라 시대와 사회가 남긴 거대한 기억이 담겨 있다. 따라서 책을 읽는다는 것은 단순히 정보를 얻는 차원을 넘어 인간의 마음과 문화, 정신을 이어받는 행위다. 그리고 책을 지킨다는 것은 곧 인간의 기억과 정신을 지키는 일이다. 『너를 지키려는 고양이』는 이러한 메시지를 긴박한 모험 속에 촘촘히 담아냈다. 책과 이야기가 사람과 사회에 어떤 영향을 미치는지, 왜 우리는 여전히 책을 읽어야 하는지를 다시 한번 생각하게 한다. 잊혀가는 것들을 향한 경고이자, 오래도록 사랑받아온 것들의 가치와 아름다움을 다시금 일깨우는 판타지 명작이다. “무서운 건 마음을 잃어버리는 게 아니야. 잃어버렸을 때 아무도 그걸 가르쳐주지 않는 것. 즉, 외톨이가 되는 거야.” 340만 부 판매 신화를 기록한 나쓰카와 소스케 최신작 의사이자 일본에서 340만 부 이상 판매된 베스트셀러 작가인 나쓰카와 소스케는 일명 ‘책고양이 시리즈’ 3부작을 구상했다. 그 첫 번째 작품 『책을 지키려는 고양이』에 이어, 7년 만에 두 번째 이야기 『너를 지키려는 고양이』를 내놓았다. 작가가 이 시리즈를 통해 던지는 질문은 하나다. “왜 우리는 여전히 책을 읽어야 하는가?” 활자에서 멀어지고 얕은 콘텐츠 소비가 만연한 시대에 책이 인간에게 어떤 의미를 갖는지, 그 본질을 다시 묻기 위해 이 작품을 집필했다고 작가는 전한다. “지금은 다양한 생각이 있고 모든 사람의 생각이 존중받는 사회이지만, 의견이 많을수록 사람은 충돌할 수밖에 없지요. 그때 필요한 건 상대의 마음을 상상하는 힘, 다른 사람을 배려하는 마음인데, 소설을 읽으면 상상력을 키울 수 있습니다. 젊은 사람들이 책을 읽고 다정함이 무엇인지, 산다는 것이 무엇인지 생각하면 좋겠어요.” _나쓰카와 소스케(작가) 이 시리즈에서 고양이는 따뜻한 감성과 인간다움을 상징하는 존재로 등장한다. 오랜 세월 인간의 마음과 역사가 축적되어 온 매체인 ‘책’을 지키는 고양이는 사람의 마음과 기억을 지키는 존재이자 우리에게 남아 있는 가장 인간적인 가치를 일깨우는 존재로 그려진다. 역자는 “힘들 때 손을 내밀어준 책, 슬픔을 공감해준 책, 기쁨을 더 크게 만들어준 책…. 만약 그런 책들이 없다면 우리는 어디에서 위로를 얻을 수 있을까”라고 묻는다. 그리고 말한다. “이 책을 넘기는 순간 분명 당신도 그 기억을 떠올리게 될 것”이라고.",
-        "score": 0.54,
-        "decision": "reject",
-        "signals": {
-          "title": 0.86,
-          "author": 0,
-          "publisher": 0,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2025,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": false
-        },
-        "query": "너를 지키려는 고양이 sort=date"
-      },
-      {
-        "provider": "google_books",
-        "title": "책을 지키려는 고양이",
-        "authors": [
-          "나쓰카와소스케"
-        ],
-        "publisher": "",
-        "publishedYear": "2021-07-06",
-        "isbn13": "9788950995928",
-        "coverUrl": null,
-        "description": "",
-        "score": 0.4,
-        "decision": "reject",
-        "signals": {
-          "title": 0.78,
-          "author": 0,
-          "publisher": 0,
-          "year": 0,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2021,
-          "yearContradiction": true,
-          "hardContradiction": true,
-          "bibliographicOverride": false
-        },
-        "query": "intitle:너를 지키려는 고양이 inpublisher:Arte(북이십일 아르테)"
-      },
-      {
-        "provider": "google_books",
-        "title": "책을 지키려는 고양이(반양장)",
-        "authors": [
-          "나쓰카와소스케"
-        ],
-        "publisher": "",
-        "publishedYear": "2018-01-12",
-        "isbn13": "9788950973025",
-        "coverUrl": null,
-        "description": "",
-        "score": 0.31,
-        "decision": "reject",
-        "signals": {
-          "title": 0.58,
-          "author": 0,
-          "publisher": 0,
-          "year": 0,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2018,
-          "yearContradiction": true,
-          "hardContradiction": true,
-          "bibliographicOverride": false
-        },
-        "query": "intitle:너를 지키려는 고양이 inpublisher:Arte(북이십일 아르테)"
       }
     ],
     "metadataNotes": []
@@ -33718,32 +34138,144 @@
     "shelf": "",
     "status": "이용가능",
     "availability": "available",
-    "isbn13": "9791194330905",
+    "isbn13": "9791173323553",
     "coverUrl": null,
-    "description": "",
-    "matchScore": 0.77,
-    "matched": false,
-    "metadataSource": "google_books",
-    "metadataStatus": "review_needed",
-    "metadataScore": 0.77,
+    "description": "가천대학교 중앙도서관 주제어: 한국현대소설, 장편소설, 긴소설, 판타지소설, 과학소설 / 형태사항: 4책;21 cm.",
+    "matchScore": 1,
+    "matched": true,
+    "metadataSource": "gachon_library",
+    "metadataStatus": "matched",
+    "metadataScore": 1,
     "metadataCandidates": [
       {
-        "provider": "google_books",
-        "title": "어두운 바다 의 등불 이 되어",
+        "provider": "gachon_library",
+        "title": "어두운 바다의 등불이 되어 : 연산호 장편소설 . 5 - 8 = Be a light in the dark sea",
         "authors": [
           "연산호"
         ],
-        "publisher": "",
-        "publishedYear": "2024",
-        "isbn13": "9791194330905",
+        "publisher": "김영사",
+        "publishedYear": 2025,
+        "isbn13": "9791173323553",
         "coverUrl": null,
-        "description": "",
-        "score": 0.77,
-        "decision": "review_needed",
+        "description": "가천대학교 중앙도서관 주제어: 한국현대소설, 장편소설, 긴소설, 판타지소설, 과학소설 / 형태사항: 4책;21 cm.",
+        "score": 1,
+        "decision": "accept",
         "signals": {
           "title": 1,
           "author": 1,
-          "publisher": 0,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": false
+        },
+        "query": "어두운 바다의 등불이 되어 : 연산호 장편소설. 5-8 = Be a light in the dark sea"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "어두운 바다의 등불이 되어 : 연산호 장편소설. 5-8 = Be a light in the dark sea",
+        "authors": [
+          "연산호"
+        ],
+        "publisher": "김영사",
+        "publishedYear": 2025,
+        "isbn13": "9791173323553",
+        "coverUrl": null,
+        "description": "가천대학교 중앙도서관 주제어: 한국현대소설, 장편소설, 긴소설, 판타지소설, 과학소설 / 형태사항: 4책;21 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": false
+        },
+        "query": "어두운 바다의 등불이 되어"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "어두운 바다의 등불이 되어 : 연산호 장편소설. 5-8 = Be a light in the dark sea",
+        "authors": [
+          "연산호"
+        ],
+        "publisher": "김영사",
+        "publishedYear": 2025,
+        "isbn13": "9791173323553",
+        "coverUrl": null,
+        "description": "가천대학교 중앙도서관 주제어: 한국현대소설, 장편소설, 긴소설, 판타지소설, 과학소설 / 형태사항: 4책;21 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": false
+        },
+        "query": "어두운 바다의 등불이 되어 연산호"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "어두운 바다의 등불이 되어 : 연산호 장편소설. 5-8 = Be a light in the dark sea",
+        "authors": [
+          "연산호"
+        ],
+        "publisher": "김영사",
+        "publishedYear": 2025,
+        "isbn13": "9791173323553",
+        "coverUrl": null,
+        "description": "가천대학교 중앙도서관 주제어: 한국현대소설, 장편소설, 긴소설, 판타지소설, 과학소설 / 형태사항: 4책;21 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": false
+        },
+        "query": "어두운 바다의 등불이 되어 김영사"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "어두운 바다의 등불이 되어 : 연산호 장편소설 = Be a light in the dark sea",
+        "authors": [
+          "연산호"
+        ],
+        "publisher": "김영사",
+        "publishedYear": 2024,
+        "isbn13": "9791194330912",
+        "coverUrl": null,
+        "description": "가천대학교 중앙도서관 주제어: 한국현대소설, 장편소설, 긴소설, 판타지소설, 과학소설 / 형태사항: 4책;21 cm.",
+        "score": 0.97,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
           "year": 0.65,
           "isbn": 1,
           "isbnPresent": true,
@@ -33753,119 +34285,7 @@
           "hardContradiction": false,
           "bibliographicOverride": false
         },
-        "query": "intitle:어두운 바다의 등불이 되어 inauthor:연산호"
-      },
-      {
-        "provider": "google_books",
-        "title": "어두운 바다의 등불이 되어",
-        "authors": [
-          "연산호"
-        ],
-        "publisher": "",
-        "publishedYear": "2024",
-        "isbn13": "9791194330929",
-        "coverUrl": null,
-        "description": "",
-        "score": 0.77,
-        "decision": "review_needed",
-        "signals": {
-          "title": 1,
-          "author": 1,
-          "publisher": 0,
-          "year": 0.65,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2024,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": false
-        },
-        "query": "intitle:어두운 바다의 등불이 되어 inauthor:연산호"
-      },
-      {
-        "provider": "naver",
-        "title": "어두운 바다의 등불이 되어 5~8 세트",
-        "authors": [
-          "연산호"
-        ],
-        "publisher": "비채",
-        "publishedYear": "20251223",
-        "isbn13": "9791173323591",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_5816458/58164585493.20260217071607.jpg",
-        "description": "‘SF 어워드’ 웹소설 부문 대상, ‘리디 어워즈’ 판타지 e북 대상을 석권한 《어두운 바다의 등불이 되어》 공식 양장본 완결. 192화부터 결말까지의 본편과 웹에서 공개된 외전 5편이 4권에 나누어 수록되며, 8권 말미 완간을 기념해 연산호 작가가 새로 집필한 특별 외전 「관찰 필요」를 붙였다. 작품 속 ‘박무현치과의원’에서 배포한 콘셉트의 2076년 달력부터 주요 등장인물인 박무현과 신해량의 신규 일러스트, 이야기의 서사를 파도의 흐름으로 구현해 파노라마처럼 펼쳐놓은 표지 디자인, 세트(1-4) 북케이스와 짝을 이루는 신규 북케이스까지, 그랜드 피날레에 걸맞은 알찬 구성으로 독자들을 찾는다.",
-        "score": 0.74,
-        "decision": "accept",
-        "signals": {
-          "title": 0.86,
-          "author": 1,
-          "publisher": 0,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2025,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": true
-        },
-        "query": "어두운 바다의 등불이 되어 연산호 sort=sim"
-      },
-      {
-        "provider": "naver",
-        "title": "어두운 바다의 등불이 되어 8",
-        "authors": [
-          "연산호"
-        ],
-        "publisher": "비채",
-        "publishedYear": "20251223",
-        "isbn13": "9791173323584",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_5913945/59139458013.20260304092909.jpg",
-        "description": "‘SF 어워드’ 웹소설 부문 대상, ‘리디 어워즈’ 판타지 e북 대상을 석권한 《어두운 바다의 등불이 되어》 공식 양장본 완결. 192화부터 결말까지의 본편과 웹에서 공개된 외전 5편이 4권에 나누어 수록되며, 8권 말미 완간을 기념해 연산호 작가가 새로 집필한 특별 외전 〈관찰 필요〉를 붙였다. 작품 속 ‘박무현치과의원’에서 배포한 콘셉트의 2076년 달력부터 주요 등장인물인 박무현과 신해량의 신규 일러스트, 이야기의 서사를 파도의 흐름으로 구현해 파노라마처럼 펼쳐놓은 표지 디자인, 세트(1-4) 북케이스와 짝을 이루는 신규 북케이스까지, 그랜드 피날레에 걸맞은 알찬 구성으로 독자들을 찾는다.",
-        "score": 0.74,
-        "decision": "accept",
-        "signals": {
-          "title": 0.86,
-          "author": 1,
-          "publisher": 0,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2025,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": true
-        },
-        "query": "어두운 바다의 등불이 되어 연산호 sort=sim"
-      },
-      {
-        "provider": "naver",
-        "title": "어두운 바다의 등불이 되어 6",
-        "authors": [
-          "연산호"
-        ],
-        "publisher": "비채",
-        "publishedYear": "20251223",
-        "isbn13": "9791173323560",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_5913787/59137878401.20260304071450.jpg",
-        "description": "‘SF 어워드’ 웹소설 부문 대상, ‘리디 어워즈’ 판타지 e북 대상을 석권한 《어두운 바다의 등불이 되어》 공식 양장본 완결. 192화부터 결말까지의 본편과 웹에서 공개된 외전 5편이 4권에 나누어 수록되며, 8권 말미 완간을 기념해 연산호 작가가 새로 집필한 특별 외전 〈관찰 필요〉를 붙였다. 작품 속 ‘박무현치과의원’에서 배포한 콘셉트의 2076년 달력부터 주요 등장인물인 박무현과 신해량의 신규 일러스트, 이야기의 서사를 파도의 흐름으로 구현해 파노라마처럼 펼쳐놓은 표지 디자인, 세트(1-4) 북케이스와 짝을 이루는 신규 북케이스까지, 그랜드 피날레에 걸맞은 알찬 구성으로 독자들을 찾는다.",
-        "score": 0.74,
-        "decision": "accept",
-        "signals": {
-          "title": 0.86,
-          "author": 1,
-          "publisher": 0,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2025,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": true
-        },
-        "query": "어두운 바다의 등불이 되어 연산호 sort=sim"
+        "query": "어두운 바다의 등불이 되어"
       }
     ],
     "metadataNotes": []
@@ -35313,14 +35733,126 @@
     "status": "이용가능",
     "availability": "checked_out",
     "isbn13": "9788954616515",
-    "coverUrl": "http://books.google.com/books/content?id=td6FAAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
-    "description": "이것은 한 남자와 한 여자의 이야기입니다. 말語을 잃어가는 한 여자의 침묵과 눈眼을 잃어가는 한 남자의 빛이 만나는 찰나의 이야기 이 소설을 읽는 일은, 어쩌면 한 장의 사진을 오래토록 들여다보는 것과 같은 일일지도 모르겠다. 드디어 오랜 기다림 끝에 찾아낸 것일까. 전소해버린 줄 알았던 언어의 검부러기 밑에서 올라오는 참된 음절들을. 작가는 언어가 몸을 갖추기 이전에 존재하던 것들―흔적, 이미지, 감촉, 정념으로 이루어진 세계로 우리를 데려간다. 신생의 언어와 사멸해가는 언어가 서로 만나 몸을 비벼대는 찰나, 우리는 아득한 기원의 세계로 돌아가 그곳에 동결해둔 인간의 아픔과 희열을 발견한다. 그리고 문득 깨닫게 된다. 자신의 몸이 기억하는 참된 욕망과 조우하기 위해서는 0도 근처에서 차갑게 끓어오르는 글쓰기의 언저리까지 기어이 내려가야 한다는 사실을. 그곳에서 우리는 죽음과 탄생이 새로운 몸을 얻어 환생하는, 세속의 기적을 목격하게 된다. 이렇게 아름답게, 온전하게 몰락하는 방법을 가르쳐준 소설이 우리에게 있었던가._이소연(문학평론가)",
-    "matchScore": 0.9,
-    "matched": false,
-    "metadataSource": "google_books",
-    "metadataStatus": "review_needed",
-    "metadataScore": 0.9,
+    "coverUrl": "https://bookthumb-phinf.pstatic.net/cover/067/707/06770742.jpg?udate=20190330",
+    "description": "가천대학교 중앙도서관 주제어: 한국 현대 소설, 희랍어 / 형태사항: 193 p.;21 cm.",
+    "matchScore": 1,
+    "matched": true,
+    "metadataSource": "gachon_library",
+    "metadataStatus": "matched",
+    "metadataScore": 1,
     "metadataCandidates": [
+      {
+        "provider": "gachon_library",
+        "title": "희랍어 시간 : 한강 장편소설",
+        "authors": [
+          "한강"
+        ],
+        "publisher": "문학동네",
+        "publishedYear": 2019,
+        "isbn13": "9788954616515",
+        "coverUrl": "https://bookthumb-phinf.pstatic.net/cover/067/707/06770742.jpg?udate=20190330",
+        "description": "가천대학교 중앙도서관 주제어: 한국 현대 소설, 희랍어 / 형태사항: 193 p.;21 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2019,
+          "candidateYear": 2019,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "희랍어 시간 : 한강 장편소설"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "희랍어 시간 : 한강 장편소설",
+        "authors": [
+          "한강"
+        ],
+        "publisher": "문학동네",
+        "publishedYear": 2019,
+        "isbn13": "9788954616515",
+        "coverUrl": "https://bookthumb-phinf.pstatic.net/cover/067/707/06770742.jpg?udate=20190330",
+        "description": "가천대학교 중앙도서관 주제어: 한국 현대 소설, 희랍어 / 형태사항: 193 p.;21 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2019,
+          "candidateYear": 2019,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "희랍어 시간"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "희랍어 시간 : 한강 장편소설",
+        "authors": [
+          "한강"
+        ],
+        "publisher": "문학동네",
+        "publishedYear": 2019,
+        "isbn13": "9788954616515",
+        "coverUrl": "https://bookthumb-phinf.pstatic.net/cover/067/707/06770742.jpg?udate=20190330",
+        "description": "가천대학교 중앙도서관 주제어: 한국 현대 소설, 희랍어 / 형태사항: 193 p.;21 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2019,
+          "candidateYear": 2019,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "희랍어 시간 한강"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "희랍어 시간 : 한강 장편소설",
+        "authors": [
+          "한강"
+        ],
+        "publisher": "문학동네",
+        "publishedYear": 2019,
+        "isbn13": "9788954616515",
+        "coverUrl": "https://bookthumb-phinf.pstatic.net/cover/067/707/06770742.jpg?udate=20190330",
+        "description": "가천대학교 중앙도서관 주제어: 한국 현대 소설, 희랍어 / 형태사항: 193 p.;21 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2019,
+          "candidateYear": 2019,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "희랍어 시간 문학동네"
+      },
       {
         "provider": "google_books",
         "title": "희랍어 시간",
@@ -35348,118 +35880,6 @@
           "bibliographicOverride": false
         },
         "query": "intitle:희랍어 시간 inauthor:한강"
-      },
-      {
-        "provider": "google_books",
-        "title": "희랍어 시간",
-        "authors": [
-          "한강"
-        ],
-        "publisher": "문학동네",
-        "publishedYear": "2011-11-10",
-        "isbn13": "9788954616515",
-        "coverUrl": "http://books.google.com/books/content?id=td6FAAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
-        "description": "이것은 한 남자와 한 여자의 이야기입니다. 말語을 잃어가는 한 여자의 침묵과 눈眼을 잃어가는 한 남자의 빛이 만나는 찰나의 이야기 이 소설을 읽는 일은, 어쩌면 한 장의 사진을 오래토록 들여다보는 것과 같은 일일지도 모르겠다. 드디어 오랜 기다림 끝에 찾아낸 것일까. 전소해버린 줄 알았던 언어의 검부러기 밑에서 올라오는 참된 음절들을. 작가는 언어가 몸을 갖추기 이전에 존재하던 것들―흔적, 이미지, 감촉, 정념으로 이루어진 세계로 우리를 데려간다. 신생의 언어와 사멸해가는 언어가 서로 만나 몸을 비벼대는 찰나, 우리는 아득한 기원의 세계로 돌아가 그곳에 동결해둔 인간의 아픔과 희열을 발견한다. 그리고 문득 깨닫게 된다. 자신의 몸이 기억하는 참된 욕망과 조우하기 위해서는 0도 근처에서 차갑게 끓어오르는 글쓰기의 언저리까지 기어이 내려가야 한다는 사실을. 그곳에서 우리는 죽음과 탄생이 새로운 몸을 얻어 환생하는, 세속의 기적을 목격하게 된다. 이렇게 아름답게, 온전하게 몰락하는 방법을 가르쳐준 소설이 우리에게 있었던가._이소연(문학평론가)",
-        "score": 0.9,
-        "decision": "review_needed",
-        "signals": {
-          "title": 1,
-          "author": 1,
-          "publisher": 1,
-          "year": 0,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2019,
-          "candidateYear": 2011,
-          "yearContradiction": true,
-          "hardContradiction": true,
-          "bibliographicOverride": false
-        },
-        "query": "intitle:희랍어 시간 inpublisher:문학동네"
-      },
-      {
-        "provider": "naver",
-        "title": "희랍어 시간 (한강 소설ㅣ2024년 노벨문학상 수상작가)",
-        "authors": [
-          "한강"
-        ],
-        "publisher": "문학동네",
-        "publishedYear": "20111110",
-        "isbn13": "9788954616515",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_3247609/32476098329.20260331114710.jpg",
-        "description": "그 여자의 침묵과 그 남자의 빛! 한국인 최초 맨부커상 수상 작가 한강의 장편소설 『희랍어 시간』. 말을 잃어가는 한 여자의 침묵과 눈을 잃어가는 한 남자의 빛이 만나는 순간을 그리고 있다. 열일곱 살 겨울, 여자는 어떤 원인이나 전조 없이 말을 잃는다. 말을 잃고 살던 그녀의 입을 다시 움직이게 한 건 낯선 외국어였던 한 개의 불어 단어였다. 시간이 흘러, 이혼을 하고 아이의 양육권을 빼앗기고 다시 말을 잃어버린 여자는 죽은 언어가 된 희랍어를 선택한다. 그곳에서 만난 희랍어 강사와 여자는 침묵을 사이에 놓고 더듬더듬 대화한다. 한편, 가족을 모두 독일에 두고 혼자 한국으로 돌아와 희랍어를 가르치는 남자는 점점 빛을 잃어가고 있다. 그는 아카데미의 수강생 중 말을 하지도, 웃지도 않는 여자를 주의 깊게 지켜보지만 그녀의 단단한 침묵에 두려움을 느끼는데….",
-        "score": 0.84,
-        "decision": "review_needed",
-        "signals": {
-          "title": 0.86,
-          "author": 1,
-          "publisher": 1,
-          "year": 0,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2019,
-          "candidateYear": 2011,
-          "yearContradiction": true,
-          "hardContradiction": true,
-          "bibliographicOverride": false
-        },
-        "query": "희랍어 시간 한강 sort=sim"
-      },
-      {
-        "provider": "naver",
-        "title": "희랍어 시간 (한강 소설ㅣ2024년 노벨문학상 수상작가)",
-        "authors": [
-          "한강"
-        ],
-        "publisher": "문학동네",
-        "publishedYear": "20111110",
-        "isbn13": "9788954616515",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_3247609/32476098329.20260331114710.jpg",
-        "description": "그 여자의 침묵과 그 남자의 빛! 한국인 최초 맨부커상 수상 작가 한강의 장편소설 『희랍어 시간』. 말을 잃어가는 한 여자의 침묵과 눈을 잃어가는 한 남자의 빛이 만나는 순간을 그리고 있다. 열일곱 살 겨울, 여자는 어떤 원인이나 전조 없이 말을 잃는다. 말을 잃고 살던 그녀의 입을 다시 움직이게 한 건 낯선 외국어였던 한 개의 불어 단어였다. 시간이 흘러, 이혼을 하고 아이의 양육권을 빼앗기고 다시 말을 잃어버린 여자는 죽은 언어가 된 희랍어를 선택한다. 그곳에서 만난 희랍어 강사와 여자는 침묵을 사이에 놓고 더듬더듬 대화한다. 한편, 가족을 모두 독일에 두고 혼자 한국으로 돌아와 희랍어를 가르치는 남자는 점점 빛을 잃어가고 있다. 그는 아카데미의 수강생 중 말을 하지도, 웃지도 않는 여자를 주의 깊게 지켜보지만 그녀의 단단한 침묵에 두려움을 느끼는데….",
-        "score": 0.84,
-        "decision": "review_needed",
-        "signals": {
-          "title": 0.86,
-          "author": 1,
-          "publisher": 1,
-          "year": 0,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2019,
-          "candidateYear": 2011,
-          "yearContradiction": true,
-          "hardContradiction": true,
-          "bibliographicOverride": false
-        },
-        "query": "희랍어 시간 문학동네 sort=sim"
-      },
-      {
-        "provider": "naver",
-        "title": "희랍어 시간 (한강 소설ㅣ2024년 노벨문학상 수상작가)",
-        "authors": [
-          "한강"
-        ],
-        "publisher": "문학동네",
-        "publishedYear": "20111110",
-        "isbn13": "9788954616515",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_3247609/32476098329.20260331114710.jpg",
-        "description": "그 여자의 침묵과 그 남자의 빛! 한국인 최초 맨부커상 수상 작가 한강의 장편소설 『희랍어 시간』. 말을 잃어가는 한 여자의 침묵과 눈을 잃어가는 한 남자의 빛이 만나는 순간을 그리고 있다. 열일곱 살 겨울, 여자는 어떤 원인이나 전조 없이 말을 잃는다. 말을 잃고 살던 그녀의 입을 다시 움직이게 한 건 낯선 외국어였던 한 개의 불어 단어였다. 시간이 흘러, 이혼을 하고 아이의 양육권을 빼앗기고 다시 말을 잃어버린 여자는 죽은 언어가 된 희랍어를 선택한다. 그곳에서 만난 희랍어 강사와 여자는 침묵을 사이에 놓고 더듬더듬 대화한다. 한편, 가족을 모두 독일에 두고 혼자 한국으로 돌아와 희랍어를 가르치는 남자는 점점 빛을 잃어가고 있다. 그는 아카데미의 수강생 중 말을 하지도, 웃지도 않는 여자를 주의 깊게 지켜보지만 그녀의 단단한 침묵에 두려움을 느끼는데….",
-        "score": 0.84,
-        "decision": "review_needed",
-        "signals": {
-          "title": 0.86,
-          "author": 1,
-          "publisher": 1,
-          "year": 0,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2019,
-          "candidateYear": 2011,
-          "yearContradiction": true,
-          "hardContradiction": true,
-          "bibliographicOverride": false
-        },
-        "query": "희랍어 시간 sort=sim"
       }
     ],
     "metadataNotes": []
@@ -36329,15 +36749,127 @@
     "shelf": "",
     "status": "이용가능",
     "availability": "checked_out",
-    "isbn13": null,
-    "coverUrl": null,
-    "description": "",
-    "matchScore": 0,
-    "matched": false,
-    "metadataSource": null,
-    "metadataStatus": "unmatched",
-    "metadataScore": 0,
+    "isbn13": "9791192372730",
+    "coverUrl": "https://shopping-phinf.pstatic.net/main_5321177/53211770996.20250226094407.jpg",
+    "description": "가천대학교 중앙도서관 주제어: 독일철학, 생의철학, 니체, 철학, 사상, 인생훈 / 일반주기: 원저자명: Friedrich Nietzsche 원앤원솔루션 기증 (UEM927038-UEM927039) / 형태사항: 259 p.;19 cm.",
+    "matchScore": 1,
+    "matched": true,
+    "metadataSource": "gachon_library",
+    "metadataStatus": "matched",
+    "metadataScore": 1,
     "metadataCandidates": [
+      {
+        "provider": "gachon_library",
+        "title": "위버멘쉬 : 누구의 시선도 아닌, 내 의지대로 살겠다는 선언",
+        "authors": [
+          "Nietzsche, Friedrich Wilhelm"
+        ],
+        "publisher": "떠오름코퍼레이션",
+        "publishedYear": 2025,
+        "isbn13": "9791192372730",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_5321177/53211770996.20250226094407.jpg",
+        "description": "가천대학교 중앙도서관 주제어: 독일철학, 생의철학, 니체, 철학, 사상, 인생훈 / 일반주기: 원저자명: Friedrich Nietzsche 원앤원솔루션 기증 (UEM927038-UEM927039) / 형태사항: 259 p.;19 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "위버멘쉬 : 누구의 시선도 아닌, 내 의지대로 살겠다는 선언"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "위버멘쉬 : 누구의 시선도 아닌, 내 의지대로 살겠다는 선언",
+        "authors": [
+          "Nietzsche, Friedrich Wilhelm"
+        ],
+        "publisher": "떠오름코퍼레이션",
+        "publishedYear": 2025,
+        "isbn13": "9791192372730",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_5321177/53211770996.20250226094407.jpg",
+        "description": "가천대학교 중앙도서관 주제어: 독일철학, 생의철학, 니체, 철학, 사상, 인생훈 / 일반주기: 원저자명: Friedrich Nietzsche 원앤원솔루션 기증 (UEM927038-UEM927039) / 형태사항: 259 p.;19 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "위버멘쉬"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "위버멘쉬 : 누구의 시선도 아닌, 내 의지대로 살겠다는 선언",
+        "authors": [
+          "Nietzsche, Friedrich Wilhelm"
+        ],
+        "publisher": "떠오름코퍼레이션",
+        "publishedYear": 2025,
+        "isbn13": "9791192372730",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_5321177/53211770996.20250226094407.jpg",
+        "description": "가천대학교 중앙도서관 주제어: 독일철학, 생의철학, 니체, 철학, 사상, 인생훈 / 일반주기: 원저자명: Friedrich Nietzsche 원앤원솔루션 기증 (UEM927038-UEM927039) / 형태사항: 259 p.;19 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "위버멘쉬 Nietzsche, Friedrich Wilhelm"
+      },
+      {
+        "provider": "gachon_library",
+        "title": "위버멘쉬 : 누구의 시선도 아닌, 내 의지대로 살겠다는 선언",
+        "authors": [
+          "Nietzsche, Friedrich Wilhelm"
+        ],
+        "publisher": "떠오름코퍼레이션",
+        "publishedYear": 2025,
+        "isbn13": "9791192372730",
+        "coverUrl": "https://shopping-phinf.pstatic.net/main_5321177/53211770996.20250226094407.jpg",
+        "description": "가천대학교 중앙도서관 주제어: 독일철학, 생의철학, 니체, 철학, 사상, 인생훈 / 일반주기: 원저자명: Friedrich Nietzsche 원앤원솔루션 기증 (UEM927038-UEM927039) / 형태사항: 259 p.;19 cm.",
+        "score": 1,
+        "decision": "accept",
+        "signals": {
+          "title": 1,
+          "author": 1,
+          "publisher": 1,
+          "year": 1,
+          "isbn": 1,
+          "isbnPresent": true,
+          "bookYear": 2025,
+          "candidateYear": 2025,
+          "yearContradiction": false,
+          "hardContradiction": false,
+          "bibliographicOverride": true
+        },
+        "query": "위버멘쉬 떠오름코퍼레이션"
+      },
       {
         "provider": "google_books",
         "title": "위버멘쉬",
@@ -36365,118 +36897,6 @@
           "bibliographicOverride": false
         },
         "query": "intitle:위버멘쉬 inauthor:Nietzsche"
-      },
-      {
-        "provider": "naver",
-        "title": "위버멘쉬 (누구의 시선도 아닌, 내 의지대로 살겠다는 선언)",
-        "authors": [
-          "프리드리히 니체"
-        ],
-        "publisher": "떠오름(RISE)",
-        "publishedYear": "20250314",
-        "isbn13": "9791192372730",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_5321177/53211770996.20260331114430.jpg",
-        "description": "우리는 종종 타인의 기대에 맞춰 살아가며, 사회가 정해놓은 틀 속에서 자신의 가치를 잃곤 한다. 그러나 니체는 단호히 말한다. \"네 안에 숨겨진 힘을 발견하고, 삶을 스스로 창조하라.\" 『위버멘쉬』는 니체가 주장한 ‘초인(Übermensch)’의 철학을 현대적으로 풀어낸 책이다. 위버멘쉬란 기존의 도덕과 사회적 관습을 그대로 따르는 대신, 자신의 의지로 새로운 가치를 창조하며 스스로의 삶을 개척하는 존재를 의미한다. 그는 외부의 기준에 흔들리지 않고, 모든 고통과 시련을 넘어 더 높은 곳을 향해 나아간다. 이 책은 니체의 대표작인 『인간적인, 너무나 인간적인(Human, All Too Human)』을 기반으로, 현대를 살아가는 우리가 직면한 고민과 삶의 문제에 대한 통찰을 담았다. 단순한 철학적 개념이 아니라, 우리가 현실 속에서 어떻게 자기 자신을 극복하고 성장할 수 있는지를 조명한다.니체의 날카로운 사상을 현대적 언어로 재구성하여 누구나 직관적으로 이해하고 실천할 수 있도록 구성했다. 자기 극복, 인간관계, 감정 조절, 삶을 대하는 태도 등 현실적인 주제들을 깊이 있게 다루며, 독자들에게 스스로 질문하고 답을 찾아가는 과정의 중요성을 일깨운다.\"나를 죽이지 못하는 고통은 나를 더 강하게 만든다.\"이 문장을 가슴에 새기고, 세상이 아닌 나 자신을 위한 삶을 선택할 준비가 되었는가?『위버멘쉬』를 통해 자신을 뛰어넘는 길을 찾기를 희망한다.",
-        "score": 0.54,
-        "decision": "reject",
-        "signals": {
-          "title": 0.86,
-          "author": 0,
-          "publisher": 0,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2025,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": false
-        },
-        "query": "위버멘쉬 sort=sim"
-      },
-      {
-        "provider": "naver",
-        "title": "피안의 위버멘쉬 (피안을 향한 겨울 항해)",
-        "authors": [
-          "씨맨_Seedman"
-        ],
-        "publisher": "부크크(bookk)",
-        "publishedYear": "20251225",
-        "isbn13": "9791112107930",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_5834485/58344855760.20260115074719.jpg",
-        "description": "가끔 사람들은 비참해지고 싶을 때가 있다 지옥의 밑바닥을 구경하고 싶을 때가 있다 밑바닥을 치지 않으면 정상적인 삶이 불가능할 때가 있다 그런 사람들을 위해 그런 사람이 바닥을 치고 다시 솟아오를 수 있게 돕기 위해 저세상 다크 사이드의 노래가 준비되었다 이 시집은 단순히 악을 찬미하기 위해 쓴 것이 아니다 그 반대 방향으로 가기 위해 쓴 것이다 원시적이고 자연스러운 충동과 본능을 그대로 그려 냈다. 미지근하고 따분한 시구에 더 이상 흥미를 느끼지 못하는 사람은 이 시집을 펼치기 바란다. 신선한 충격과 공포, 그리고 깨달음을 안겨줄 것이다.",
-        "score": 0.54,
-        "decision": "reject",
-        "signals": {
-          "title": 0.86,
-          "author": 0,
-          "publisher": 0,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2025,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": false
-        },
-        "query": "위버멘쉬 sort=sim"
-      },
-      {
-        "provider": "naver",
-        "title": "피안의 위버멘쉬 (피안을 향한 겨울 항해)",
-        "authors": [
-          "씨맨_Seedman"
-        ],
-        "publisher": "부크크(bookk)",
-        "publishedYear": "20251225",
-        "isbn13": "9791112107930",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_5834485/58344855760.20260115074719.jpg",
-        "description": "가끔 사람들은 비참해지고 싶을 때가 있다 지옥의 밑바닥을 구경하고 싶을 때가 있다 밑바닥을 치지 않으면 정상적인 삶이 불가능할 때가 있다 그런 사람들을 위해 그런 사람이 바닥을 치고 다시 솟아오를 수 있게 돕기 위해 저세상 다크 사이드의 노래가 준비되었다 이 시집은 단순히 악을 찬미하기 위해 쓴 것이 아니다 그 반대 방향으로 가기 위해 쓴 것이다 원시적이고 자연스러운 충동과 본능을 그대로 그려 냈다. 미지근하고 따분한 시구에 더 이상 흥미를 느끼지 못하는 사람은 이 시집을 펼치기 바란다. 신선한 충격과 공포, 그리고 깨달음을 안겨줄 것이다.",
-        "score": 0.54,
-        "decision": "reject",
-        "signals": {
-          "title": 0.86,
-          "author": 0,
-          "publisher": 0,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2025,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": false
-        },
-        "query": "위버멘쉬 sort=date"
-      },
-      {
-        "provider": "naver",
-        "title": "차라투스트라의 말 (위버멘쉬 위의 위버멘쉬)",
-        "authors": [
-          "프리드리히 니체"
-        ],
-        "publisher": "팬덤북스",
-        "publishedYear": "20251129",
-        "isbn13": "9791161693774",
-        "coverUrl": "https://shopping-phinf.pstatic.net/main_5771644/57716449585.20260331102003.jpg",
-        "description": "힘든 인생에서 단 한 번만이라도‘차라투스트라’를 만나라! 위버멘쉬 위의 위버멘쉬, 차라투스트라가 전하는 위로와 깨달음의 말들! 이 책은 《차라투스트라는 이렇게 말했다》의 전체 내용을 변역하거나 해설한 책이 아니라, 과거의 차라투스트라가 지금의 우리에게 전하는 삶의 위로와 세상을 향한 깨달음의 말을 새로운 관점으로 편하게 정리한 철학 에세이에 가깝다. 니체가 《차라투스트라는 이렇게 말했다》에 ‘이 책은 모든 사람을 위한, 그리고 그 누구를 위한 것도 아닌 책이다.’라고 기록에 남겼듯, ‘이 책 역시 모든 사람을 위한 책은 아니지만, 한 번쯤 인생에서 차라투스트라를 만나서 위로와 깨달음을 얻고 싶은 사람을 위한 책이다.’",
-        "score": 0.54,
-        "decision": "reject",
-        "signals": {
-          "title": 0.86,
-          "author": 0,
-          "publisher": 0,
-          "year": 1,
-          "isbn": 1,
-          "isbnPresent": true,
-          "bookYear": 2025,
-          "candidateYear": 2025,
-          "yearContradiction": false,
-          "hardContradiction": false,
-          "bibliographicOverride": false
-        },
-        "query": "위버멘쉬 sort=date"
       }
     ],
     "metadataNotes": []

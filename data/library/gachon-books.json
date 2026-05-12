@@ -1612,8 +1612,8 @@
     "publisher": "베가북스",
     "publishedYear": 2024,
     "category": "과학/기술",
-    "description": "",
-    "coverUrl": null,
+    "description": "가천대학교 중앙도서관 주제어: 트렌드, 미래전망, 과학, 인공지능, AI / 일반주기: 별책부록: AI 도구 TOP 8(32 p.) / 형태사항: 279 p.:천연색삽화;22 cm+별책 부록 1책.",
+    "coverUrl": "https://shopping-phinf.pstatic.net/main_4687411/46874114619.20240407071020.jpg",
     "callNumber": "303.483 ㄱ673a",
     "locationLabel": "중앙도서관",
     "locationRoom": "북큐레이션코너(1층)",
@@ -3210,23 +3210,21 @@
     "source": "gachon_curation",
     "sourceLabel": "bookcuration",
     "sourceId": "UEM924150",
-    "isbn13": "9791169214247",
+    "isbn13": "9791169213370",
     "title": "(모두를 위한) 양자 컴퓨터 : 누구나 쉽게 이해하는 양자 컴퓨터 원리부터 활용까지",
     "author": "Hurley, Wiliam",
     "publisher": "한빛미디어",
     "publishedYear": 2025,
-    "category": "경제/경영",
-    "description": "글로벌 빅테크가 베팅한 양자에 주목하라! 양자 컴퓨터의 기초 개념과 구현 방식, 기술 트렌드와 산업 판도, 글로벌 기업의 전략과 투자 포인트를 한눈에! AI가 이미 우리의 일상과 산업을 바꿔놓은 지금, 전 세계가 다음 주자로 주목하는 기술은 바로 양자 컴퓨팅이다. 양자 컴퓨터는 이제 단순한 이론을 넘어 현실로 다가오고 있다. 글로벌 빅테크들이 본격적으로 양자 컴퓨터 개발에 뛰어들었고, 각국 정부는 양자 주권을 선언하며 기술 패권 경쟁에 나섰다. 양자 기술은 신약 개발, 기후 시뮬레이션, 금융 최적화, AI 고도화 등 복잡한 문제들을 해결할 완전히 새로운 계산 방식을 제시한다. 하지만 아직 양자는 여전히 낯설고 어렵다. 그래서 지금, 바로 이 책이 필요하다.『정지훈의 양자 컴퓨터 강의』는 양자를 쉽고, 넓게 배울 수 있는 최고의 입문서이다. 중첩, 얽힘, 큐비트 같은 양자 컴퓨팅의 핵심 개념을 어려운 수식 없이 비유와 그림으로 풀어내고, 초전도·이온 트랩·중성 원자·광자·위상학적 큐비트 등 5가지 구현 기술의 원리와 장단점을 정리해 양자 컴퓨터의 구조와 흐름을 입체적으로 이해할 수 있도록 구성했다. 또한 IBM, 구글, 마이크로소프트, 아마존, 리게티, 아이온큐 등 글로벌 기업들의 기술 전략과 양자 경쟁의 판도가 알기 쉽게 정리되어 있어 기술 트렌드를 따라잡고 싶은 독자에게 깊은 인사이트를 준다. 다시 말해, 이 책 한 권이면 기술 트렌드와 산업 흐름, 양자 컴퓨팅의 기초 개념과 구현 방식, 기업 전략은 물론 투자 관점에서 꼭 알아야 할 핵심 포인트까지 한눈에 정리할 수 있다. AI 다음 시대가 궁금하다면 이 책에서 그 답을 찾을 수 있다. 이제, 미래로 가는 첫걸음을 이 책과 함께 시작해보자.",
-    "coverUrl": "https://shopping-phinf.pstatic.net/main_5635612/56356122467.20260331114849.jpg",
+    "category": "과학/기술",
+    "description": "가천대학교 중앙도서관 주제어: 양자, 컴퓨터, 컴퓨터공학, 과학개론, IT, 양자컴퓨터 / 일반주기: 원저자명: Wiliam Hurley, Floyd Smith / 형태사항: 388 p.:삽화;24 cm.",
+    "coverUrl": "http://t1.daumcdn.net/lbook/image/6819904",
     "callNumber": "006.3843 H965qKㄹ",
     "locationLabel": "중앙도서관",
     "locationRoom": "북큐레이션코너(1층)",
     "availability": null,
     "tags": [
       "AI",
-      "입문서",
-      "비즈니스",
-      "기술"
+      "입문서"
     ]
   },
   {
@@ -3848,13 +3846,13 @@
     "source": "gachon_curation",
     "sourceLabel": "bookcuration",
     "sourceId": "UEM926903",
-    "isbn13": null,
+    "isbn13": "9787523613269",
     "title": "企业AI之旅",
     "author": "Kreutzer, Ralf T",
     "publisher": "中国科学技术出版社",
     "publishedYear": 2025,
     "category": "과학/기술",
-    "description": "",
+    "description": "가천대학교 중앙도서관 주제어: 인공지능 / 형태사항: 318 p.:揷畫, 圖表;24 cm.",
     "coverUrl": null,
     "callNumber": "006.3 K92uCㅌ2",
     "locationLabel": "중앙도서관",
@@ -4767,20 +4765,21 @@
     "source": "gachon_curation",
     "sourceLabel": "bookcuration",
     "sourceId": "UEM928913",
-    "isbn13": null,
+    "isbn13": "9791194383475",
     "title": "요즘 당근 AI 개발 : AI가 만든 파도 위에서 과감히 서핑하는 법 : AI 에이전트, 프롬프트 엔지니어링, VoC 자동 분석, 운영자동화, 바이브 코딩 AI 검색과 추천까지 당근의 AI 활용 이야기",
     "author": "천재윤",
     "publisher": "Golden Rabbit(골든래빗)",
     "publishedYear": 2025,
     "category": "과학/기술",
-    "description": "",
-    "coverUrl": null,
+    "description": "가천대학교 중앙도서관 주제어: 어플리케이션, 인공지능 / 일반주기: 당근 팀: 천재윤, 권우석, 구경회, 김기혁, 김단, 김수지, 김지욱, 박성준, 이해린, 하상혁, 한소리 권말부록: 바이브 코딩 프롬프트 팁 ; AI 에이전트를 성공적으로 구축하고 운영하기 위해 반드시 고려해야 할 6가지 핵심 팁 AI는 \"Artificial Intelligence\"의 약어임 / 형태사항: 263 p.:삽화;21 cm.",
+    "coverUrl": "http://t1.daumcdn.net/lbook/image/7032004",
     "callNumber": "006.3 ㅇ366",
     "locationLabel": "중앙도서관",
     "locationRoom": "북큐레이션코너(1층)",
     "availability": null,
     "tags": [
       "AI",
+      "입문서",
       "기술"
     ]
   },
@@ -5456,19 +5455,21 @@
     "source": "gachon_open",
     "sourceLabel": "openlibrary",
     "sourceId": "UEM922104",
-    "isbn13": null,
+    "isbn13": "9791192372730",
     "title": "위버멘쉬 : 누구의 시선도 아닌, 내 의지대로 살겠다는 선언",
     "author": "Nietzsche, Friedrich Wilhelm",
     "publisher": "떠오름코퍼레이션",
     "publishedYear": 2025,
     "category": "인문/철학",
-    "description": "",
-    "coverUrl": null,
+    "description": "가천대학교 중앙도서관 주제어: 독일철학, 생의철학, 니체, 철학, 사상, 인생훈 / 일반주기: 원저자명: Friedrich Nietzsche 원앤원솔루션 기증 (UEM927038-UEM927039) / 형태사항: 259 p.;19 cm.",
+    "coverUrl": "https://shopping-phinf.pstatic.net/main_5321177/53211770996.20250226094407.jpg",
     "callNumber": "193 N677meKㅇ",
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
     "availability": "checked_out",
-    "tags": []
+    "tags": [
+      "철학 입문"
+    ]
   },
   {
     "source": "gachon_open",
@@ -6353,7 +6354,9 @@
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
     "availability": "available",
-    "tags": []
+    "tags": [
+      "인문/철학"
+    ]
   },
   {
     "source": "gachon_open",
@@ -6474,14 +6477,17 @@
     "author": "장재열",
     "publisher": "Juspeace : 갤럭시코퍼레이션",
     "publishedYear": 2025,
-    "category": "인문/철학",
-    "description": "",
-    "coverUrl": null,
+    "category": "시/에세이",
+    "description": "가천대학교 중앙도서관 주제어: 인문에세이, 심리학, 고립, 은둔, 외로움, 사회적고립, 은운형, 외톨이, 관계, 인간관계, 연결, 심리상담 / 일반주기: 기획: 청년재단, 저스피스 재단, 이진아콘텐츠컬렉션 / 형태사항: 311 p.;21 cm.",
+    "coverUrl": "http://t1.daumcdn.net/lbook/image/6837196",
     "callNumber": "158.1 ㅈ128ㄹ",
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
     "availability": "available",
-    "tags": []
+    "tags": [
+      "에세이",
+      "관계"
+    ]
   },
   {
     "source": "gachon_open",
@@ -6935,7 +6941,9 @@
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
     "availability": "available",
-    "tags": []
+    "tags": [
+      "사회/정치"
+    ]
   },
   {
     "source": "gachon_open",
@@ -6983,19 +6991,21 @@
     "source": "gachon_open",
     "sourceLabel": "openlibrary",
     "sourceId": "UEM916749",
-    "isbn13": null,
+    "isbn13": "9791172790790",
     "title": "암묵적 영역",
     "author": "Polanyi, Micheal",
     "publisher": "박영사",
     "publishedYear": 2025,
     "category": "인문/철학",
-    "description": "",
-    "coverUrl": null,
+    "description": "가천대학교 중앙도서관 주제어: 지식 / 일반주기: 원저자명: Micheal Polanyi / 형태사항: 148 p.;23 cm.",
+    "coverUrl": "https://shopping-phinf.pstatic.net/main_5380477/53804772403.20250327115935.jpg",
     "callNumber": "121 P762tKㄱ2",
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
     "availability": "available",
-    "tags": []
+    "tags": [
+      "인문/철학"
+    ]
   },
   {
     "source": "gachon_open",
@@ -7218,19 +7228,22 @@
     "source": "gachon_open",
     "sourceLabel": "openlibrary",
     "sourceId": "UEM926664",
-    "isbn13": null,
+    "isbn13": "9791194530039",
     "title": "세상을 바꾼 문장들 : 어떤 말은 시간 속에서 영원이 된다",
     "author": "Preisendorfer, Bruno",
     "publisher": "Forestbooks : 콘텐츠그룹 포레스트",
     "publishedYear": 2025,
-    "category": "인문/철학",
-    "description": "",
-    "coverUrl": null,
+    "category": "소설",
+    "description": "가천대학교 중앙도서관 주제어: 문장, 언어, 철학, 사상, 명언, 인문학, 인문교양 / 일반주기: 원저자명: Bruno Preisendorfer / 형태사항: 346 p.;22 cm.",
+    "coverUrl": "https://shopping-phinf.pstatic.net/main_5257867/52578677110.20250123071220.jpg",
     "callNumber": "100 P924sKㅇ",
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
     "availability": "available",
-    "tags": []
+    "tags": [
+      "철학 입문",
+      "문학"
+    ]
   },
   {
     "source": "gachon_open",
@@ -7248,7 +7261,9 @@
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
     "availability": "available",
-    "tags": []
+    "tags": [
+      "인문/철학"
+    ]
   },
   {
     "source": "gachon_open",
@@ -7739,7 +7754,9 @@
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
     "availability": "available",
-    "tags": []
+    "tags": [
+      "자기계발"
+    ]
   },
   {
     "source": "gachon_open",
@@ -7885,7 +7902,9 @@
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
     "availability": "available",
-    "tags": []
+    "tags": [
+      "인문/철학"
+    ]
   },
   {
     "source": "gachon_open",
@@ -7944,7 +7963,9 @@
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
     "availability": "available",
-    "tags": []
+    "tags": [
+      "예술/취미"
+    ]
   },
   {
     "source": "gachon_open",
@@ -7962,7 +7983,9 @@
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
     "availability": "available",
-    "tags": []
+    "tags": [
+      "사회/정치"
+    ]
   },
   {
     "source": "gachon_open",
@@ -8043,7 +8066,9 @@
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
     "availability": "available",
-    "tags": []
+    "tags": [
+      "진로/학습"
+    ]
   },
   {
     "source": "gachon_open",
@@ -8532,7 +8557,9 @@
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
     "availability": "available",
-    "tags": []
+    "tags": [
+      "인문/철학"
+    ]
   },
   {
     "source": "gachon_open",
@@ -8571,7 +8598,9 @@
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
     "availability": "available",
-    "tags": []
+    "tags": [
+      "인문/철학"
+    ]
   },
   {
     "source": "gachon_open",
@@ -9502,19 +9531,21 @@
     "source": "gachon_open",
     "sourceLabel": "openlibrary",
     "sourceId": "UEM919765",
-    "isbn13": null,
+    "isbn13": "9788955868425",
     "title": "실존과 죽음",
     "author": "Heidegger, Martin",
     "publisher": "세창미디어",
     "publishedYear": 2025,
     "category": "인문/철학",
-    "description": "",
-    "coverUrl": null,
+    "description": "가천대학교 중앙도서관 주제어: 실존주의, 철학, 사상 / 형태사항: 237 p.:삽화;19 cm.",
+    "coverUrl": "https://shopping-phinf.pstatic.net/main_5407175/54071756983.20250624090426.jpg",
     "callNumber": "128.5 ㅅ588ㅅ",
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
     "availability": "available",
-    "tags": []
+    "tags": [
+      "철학 입문"
+    ]
   },
   {
     "source": "gachon_open",
@@ -10212,14 +10243,14 @@
     "source": "gachon_open",
     "sourceLabel": "openlibrary",
     "sourceId": "UEM922482",
-    "isbn13": null,
+    "isbn13": "9791192738529",
     "title": "지뢰 글리코 : 아오사키 유고 장편소설 = Glico with landmines",
     "author": "청기유오",
     "publisher": "READbie : 디앤씨미디어",
     "publishedYear": 2025,
     "category": "소설",
-    "description": "",
-    "coverUrl": null,
+    "description": "가천대학교 중앙도서관 주제어: 일본현대소설, 미스터리소설, 추리소설, 스릴러소설, 두뇌배틀 / 일반주기: 원저자명: 靑崎有吾 / 형태사항: 442 p.:삽화;20 cm.",
+    "coverUrl": "http://t1.daumcdn.net/lbook/image/6938858",
     "callNumber": "813.3 ㅊ134ㅈKㄱ",
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
@@ -10585,7 +10616,9 @@
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
     "availability": "available",
-    "tags": []
+    "tags": [
+      "인문/철학"
+    ]
   },
   {
     "source": "gachon_open",
@@ -10968,7 +11001,9 @@
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
     "availability": "available",
-    "tags": []
+    "tags": [
+      "인문/철학"
+    ]
   },
   {
     "source": "gachon_open",
@@ -11109,8 +11144,8 @@
     "publisher": "문학동네",
     "publishedYear": 2019,
     "category": "소설",
-    "description": "이것은 한 남자와 한 여자의 이야기입니다. 말語을 잃어가는 한 여자의 침묵과 눈眼을 잃어가는 한 남자의 빛이 만나는 찰나의 이야기 이 소설을 읽는 일은, 어쩌면 한 장의 사진을 오래토록 들여다보는 것과 같은 일일지도 모르겠다. 드디어 오랜 기다림 끝에 찾아낸 것일까. 전소해버린 줄 알았던 언어의 검부러기 밑에서 올라오는 참된 음절들을. 작가는 언어가 몸을 갖추기 이전에 존재하던 것들―흔적, 이미지, 감촉, 정념으로 이루어진 세계로 우리를 데려간다. 신생의 언어와 사멸해가는 언어가 서로 만나 몸을 비벼대는 찰나, 우리는 아득한 기원의 세계로 돌아가 그곳에 동결해둔 인간의 아픔과 희열을 발견한다. 그리고 문득 깨닫게 된다. 자신의 몸이 기억하는 참된 욕망과 조우하기 위해서는 0도 근처에서 차갑게 끓어오르는 글쓰기의 언저리까지 기어이 내려가야 한다는 사실을. 그곳에서 우리는 죽음과 탄생이 새로운 몸을 얻어 환생하는, 세속의 기적을 목격하게 된다. 이렇게 아름답게, 온전하게 몰락하는 방법을 가르쳐준 소설이 우리에게 있었던가._이소연(문학평론가)",
-    "coverUrl": "http://books.google.com/books/content?id=td6FAAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+    "description": "가천대학교 중앙도서관 주제어: 한국 현대 소설, 희랍어 / 형태사항: 193 p.;21 cm.",
+    "coverUrl": "https://bookthumb-phinf.pstatic.net/cover/067/707/06770742.jpg?udate=20190330",
     "callNumber": "811.32 ㅎ152ㅎ",
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
@@ -11260,7 +11295,9 @@
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
     "availability": "available",
-    "tags": []
+    "tags": [
+      "사회/정치"
+    ]
   },
   {
     "source": "gachon_open",
@@ -11629,14 +11666,14 @@
     "source": "gachon_open",
     "sourceLabel": "openlibrary",
     "sourceId": "UEM916427",
-    "isbn13": null,
+    "isbn13": "9791194084082",
     "title": "(로랑스 드빌레르의) 스무 살에 알았더라면 좋았을 철학의 위로 : 일상에서 툭툭 내뱉는 말에도 다 이유가 있다!",
     "author": "Devillairs, Laurence",
     "publisher": "Re:commend(리코멘드)",
     "publishedYear": 2025,
     "category": "시/에세이",
-    "description": "",
-    "coverUrl": null,
+    "description": "가천대학교 중앙도서관 주제어: 철학자, 사상, 철학, 위로 / 일반주기: 원저자명: Laurence Devillairs / 형태사항: 293 p.;19 cm.",
+    "coverUrl": "https://shopping-phinf.pstatic.net/main_5250787/52507872223.20250117071218.jpg",
     "callNumber": "102 D494bKㅇ",
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
@@ -12165,7 +12202,9 @@
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
     "availability": "available",
-    "tags": []
+    "tags": [
+      "경제/경영"
+    ]
   },
   {
     "source": "gachon_open",
@@ -12815,19 +12854,21 @@
     "source": "gachon_open",
     "sourceLabel": "openlibrary",
     "sourceId": "UEM874361",
-    "isbn13": null,
+    "isbn13": "9791192107646",
     "title": "좋았던 것들이 하나씩 시시해져도",
     "author": "하현",
     "publisher": "세미콜론",
     "publishedYear": 2022,
-    "category": "인문/철학",
-    "description": "",
-    "coverUrl": null,
+    "category": "시/에세이",
+    "description": "가천대학교 중앙도서관 주제어: 한국에세이, 음식에세이 / 형태사항: 177 p.;18 cm.",
+    "coverUrl": "https://shopping-phinf.pstatic.net/main_3373233/33732338622.20220802101527.jpg",
     "callNumber": "811.8 ㅎ379좋",
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
     "availability": "checked_out",
-    "tags": []
+    "tags": [
+      "에세이"
+    ]
   },
   {
     "source": "gachon_open",
@@ -12854,14 +12895,14 @@
     "source": "gachon_open",
     "sourceLabel": "openlibrary",
     "sourceId": "UEM929042",
-    "isbn13": null,
+    "isbn13": "9791173576324",
     "title": "너를 지키려는 고양이 : 나쓰카와 소스케 장편소설",
     "author": "하천초개",
     "publisher": "Arte(북이십일 아르테)",
     "publishedYear": 2025,
     "category": "소설",
-    "description": "",
-    "coverUrl": null,
+    "description": "가천대학교 중앙도서관 주제어: 일본현대소설, 판타지소설, 책, 서점, 얼룩고양이, 모험 / 일반주기: 원저자명: 夏川草介 / 형태사항: 259 p.;19 cm.",
+    "coverUrl": "http://t1.daumcdn.net/lbook/image/7084798",
     "callNumber": "813.3 ㅎ151ㄱKㅇ",
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
@@ -13374,7 +13415,9 @@
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
     "availability": "available",
-    "tags": []
+    "tags": [
+      "예술/취미"
+    ]
   },
   {
     "source": "gachon_open",
@@ -13465,20 +13508,21 @@
     "source": "gachon_open",
     "sourceLabel": "openlibrary",
     "sourceId": "UEM929301",
-    "isbn13": "9791194330905",
+    "isbn13": "9791173323553",
     "title": "어두운 바다의 등불이 되어 : 연산호 장편소설. 5-8 = Be a light in the dark sea",
     "author": "연산호",
     "publisher": "김영사",
     "publishedYear": 2025,
-    "category": "소설",
-    "description": "",
+    "category": "과학/기술",
+    "description": "가천대학교 중앙도서관 주제어: 한국현대소설, 장편소설, 긴소설, 판타지소설, 과학소설 / 형태사항: 4책;21 cm.",
     "coverUrl": null,
     "callNumber": "811.32 ㅇ255어",
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
     "availability": "available",
     "tags": [
-      "문학"
+      "문학",
+      "과학"
     ]
   },
   {
@@ -13666,7 +13710,9 @@
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
     "availability": "available",
-    "tags": []
+    "tags": [
+      "사회/정치"
+    ]
   },
   {
     "source": "gachon_open",
@@ -14005,7 +14051,9 @@
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
     "availability": "available",
-    "tags": []
+    "tags": [
+      "진로/학습"
+    ]
   },
   {
     "source": "gachon_open",
@@ -14044,7 +14092,9 @@
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
     "availability": "available",
-    "tags": []
+    "tags": [
+      "인문/철학"
+    ]
   },
   {
     "source": "gachon_open",
@@ -14234,7 +14284,9 @@
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
     "availability": "available",
-    "tags": []
+    "tags": [
+      "진로/학습"
+    ]
   },
   {
     "source": "gachon_open",
@@ -14293,7 +14345,9 @@
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
     "availability": "available",
-    "tags": []
+    "tags": [
+      "소설"
+    ]
   },
   {
     "source": "gachon_open",
@@ -14327,8 +14381,8 @@
     "publisher": "문학동네",
     "publishedYear": 2019,
     "category": "소설",
-    "description": "이것은 한 남자와 한 여자의 이야기입니다. 말語을 잃어가는 한 여자의 침묵과 눈眼을 잃어가는 한 남자의 빛이 만나는 찰나의 이야기 이 소설을 읽는 일은, 어쩌면 한 장의 사진을 오래토록 들여다보는 것과 같은 일일지도 모르겠다. 드디어 오랜 기다림 끝에 찾아낸 것일까. 전소해버린 줄 알았던 언어의 검부러기 밑에서 올라오는 참된 음절들을. 작가는 언어가 몸을 갖추기 이전에 존재하던 것들―흔적, 이미지, 감촉, 정념으로 이루어진 세계로 우리를 데려간다. 신생의 언어와 사멸해가는 언어가 서로 만나 몸을 비벼대는 찰나, 우리는 아득한 기원의 세계로 돌아가 그곳에 동결해둔 인간의 아픔과 희열을 발견한다. 그리고 문득 깨닫게 된다. 자신의 몸이 기억하는 참된 욕망과 조우하기 위해서는 0도 근처에서 차갑게 끓어오르는 글쓰기의 언저리까지 기어이 내려가야 한다는 사실을. 그곳에서 우리는 죽음과 탄생이 새로운 몸을 얻어 환생하는, 세속의 기적을 목격하게 된다. 이렇게 아름답게, 온전하게 몰락하는 방법을 가르쳐준 소설이 우리에게 있었던가._이소연(문학평론가)",
-    "coverUrl": "http://books.google.com/books/content?id=td6FAAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+    "description": "가천대학교 중앙도서관 주제어: 한국 현대 소설, 희랍어 / 형태사항: 193 p.;21 cm.",
+    "coverUrl": "https://bookthumb-phinf.pstatic.net/cover/067/707/06770742.jpg?udate=20190330",
     "callNumber": "811.32 ㅎ152ㅎ",
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
@@ -14374,7 +14428,9 @@
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
     "availability": "available",
-    "tags": []
+    "tags": [
+      "경제/경영"
+    ]
   },
   {
     "source": "gachon_open",
@@ -14457,7 +14513,9 @@
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
     "availability": "checked_out",
-    "tags": []
+    "tags": [
+      "인문/철학"
+    ]
   },
   {
     "source": "gachon_open",
@@ -14475,7 +14533,9 @@
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
     "availability": "available",
-    "tags": []
+    "tags": [
+      "인문/철학"
+    ]
   },
   {
     "source": "gachon_open",
@@ -14553,7 +14613,9 @@
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
     "availability": "available",
-    "tags": []
+    "tags": [
+      "인문/철학"
+    ]
   },
   {
     "source": "gachon_open",
@@ -14645,19 +14707,21 @@
     "source": "gachon_open",
     "sourceLabel": "openlibrary",
     "sourceId": "UEM922104",
-    "isbn13": null,
+    "isbn13": "9791192372730",
     "title": "위버멘쉬 : 누구의 시선도 아닌, 내 의지대로 살겠다는 선언",
     "author": "Nietzsche, Friedrich Wilhelm",
     "publisher": "떠오름코퍼레이션",
     "publishedYear": 2025,
     "category": "인문/철학",
-    "description": "",
-    "coverUrl": null,
+    "description": "가천대학교 중앙도서관 주제어: 독일철학, 생의철학, 니체, 철학, 사상, 인생훈 / 일반주기: 원저자명: Friedrich Nietzsche 원앤원솔루션 기증 (UEM927038-UEM927039) / 형태사항: 259 p.;19 cm.",
+    "coverUrl": "https://shopping-phinf.pstatic.net/main_5321177/53211770996.20250226094407.jpg",
     "callNumber": "193 N677meKㅇ",
     "locationLabel": "오픈라이브러리",
     "locationRoom": "프리덤광장",
     "availability": "checked_out",
-    "tags": []
+    "tags": [
+      "철학 입문"
+    ]
   },
   {
     "source": "gachon_open",

@@ -6,6 +6,7 @@ export type MetadataProvider =
   | "kakao"
   | "google_books"
   | "data4library"
+  | "gachon_library"
   | "nlk_isbn"
   | "aladin"
   | "manual";
@@ -120,9 +121,15 @@ export function pickBestCandidate(book: GachonRawBook, candidates: MetadataCandi
       ...scoreMetadataCandidate(book, candidate),
     }))
     .filter((result) => result.decision !== "reject")
-    .sort((left, right) => right.score - left.score);
+    .sort((left, right) => decisionPriority(right.decision) - decisionPriority(left.decision) || right.score - left.score);
 
   return scored[0] ?? null;
+}
+
+function decisionPriority(decision: MatchDecision): number {
+  if (decision === "accept") return 2;
+  if (decision === "review_needed") return 1;
+  return 0;
 }
 
 function cleanText(input: string): string {

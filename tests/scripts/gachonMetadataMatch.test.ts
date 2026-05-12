@@ -266,7 +266,44 @@ describe("Gachon metadata matching", () => {
     expect(result.score).toBeGreaterThanOrEqual(0.65);
   });
 
-  it("picks the highest scoring non-rejected candidate", () => {
+  it("picks the best accepted candidate before a higher scoring review candidate", () => {
+    const best = pickBestCandidate(
+      rawBook({
+        title: "리커넥트 : 누구나 한 번은 혼자가 된다 = Reconnect",
+        author: "장재열",
+        publisher: "Juspeace : 갤럭시코퍼레이션",
+        publishedYear: 2025,
+      }),
+      [
+        candidate({
+          provider: "google_books",
+          title: "리커넥트",
+          authors: ["장재열"],
+          publisher: "갤럭시코퍼레이션",
+          publishedYear: 2025,
+          isbn13: "9791198774798",
+          coverUrl: null,
+          description: "",
+        }),
+        candidate({
+          provider: "naver",
+          title: "리커넥트 (누구나 한 번은 혼자가 된다)",
+          authors: ["장재열"],
+          publisher: "Juspeace",
+          publishedYear: 2025,
+          isbn13: "9791198774798",
+          coverUrl: "https://example.com/reconnect.jpg",
+          description: "외로움과 관계 회복을 다루는 책",
+        }),
+      ],
+    );
+
+    expect(best).not.toBeNull();
+    expect(best?.candidate.provider).toBe("naver");
+    expect(best?.decision).toBe("accept");
+  });
+
+  it("picks the highest scoring candidate within the same decision tier", () => {
     const best = pickBestCandidate(rawBook(), [
       candidate({
         title: "완전히 다른 책",

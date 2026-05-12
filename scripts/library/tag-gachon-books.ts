@@ -30,6 +30,7 @@ export function deriveTags(book: GachonEnrichedBook): string[] {
     if (/경제|투자|주식|부의|리스크|경영/.test(text)) tags.add("비즈니스");
     if (/과학|물리학|블랙홀|뇌 과학|기술|AI|디지털/.test(text)) tags.add("과학");
   }
+  if (tags.size === 0) tags.add(inferBookCategory({ title: book.title, description: book.description }));
   return Array.from(tags);
 }
 

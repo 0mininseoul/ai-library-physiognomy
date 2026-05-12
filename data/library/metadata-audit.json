@@ -1,42 +1,42 @@
 {
-  "generatedAt": "2026-05-12T16:56:33.419Z",
+  "generatedAt": "2026-05-12T17:14:08.228Z",
   "summary": {
     "local": {
       "total": 695,
-      "missingIsbn13": 11,
-      "missingDescription": 14,
-      "missingCover": 14,
-      "missingTags": 31,
+      "missingIsbn13": 0,
+      "missingDescription": 0,
+      "missingCover": 2,
+      "missingTags": 0,
       "bySource": {
         "gachon_curation": {
           "total": 243,
-          "missingIsbn13": 2,
-          "missingDescription": 3,
-          "missingCover": 3,
+          "missingIsbn13": 0,
+          "missingDescription": 0,
+          "missingCover": 1,
           "missingTags": 0
         },
         "gachon_open": {
           "total": 452,
-          "missingIsbn13": 9,
-          "missingDescription": 11,
-          "missingCover": 11,
-          "missingTags": 31
+          "missingIsbn13": 0,
+          "missingDescription": 0,
+          "missingCover": 1,
+          "missingTags": 0
         }
       },
       "bySourceLabel": {
         "bookcuration": {
           "total": 243,
-          "missingIsbn13": 2,
-          "missingDescription": 3,
-          "missingCover": 3,
+          "missingIsbn13": 0,
+          "missingDescription": 0,
+          "missingCover": 1,
           "missingTags": 0
         },
         "openlibrary": {
           "total": 452,
-          "missingIsbn13": 9,
-          "missingDescription": 11,
-          "missingCover": 11,
-          "missingTags": 31
+          "missingIsbn13": 0,
+          "missingDescription": 0,
+          "missingCover": 1,
+          "missingTags": 0
         }
       }
     },
@@ -46,79 +46,79 @@
       "inactiveTotal": 0,
       "all": {
         "total": 676,
-        "missingIsbn13": 15,
-        "missingDescription": 15,
-        "missingCover": 15,
-        "missingTags": 30,
+        "missingIsbn13": 0,
+        "missingDescription": 0,
+        "missingCover": 2,
+        "missingTags": 0,
         "bySource": {
           "gachon_curation": {
             "total": 243,
-            "missingIsbn13": 4,
-            "missingDescription": 4,
-            "missingCover": 4,
+            "missingIsbn13": 0,
+            "missingDescription": 0,
+            "missingCover": 1,
             "missingTags": 0
           },
           "gachon_open": {
             "total": 433,
-            "missingIsbn13": 11,
-            "missingDescription": 11,
-            "missingCover": 11,
-            "missingTags": 30
+            "missingIsbn13": 0,
+            "missingDescription": 0,
+            "missingCover": 1,
+            "missingTags": 0
           }
         },
         "bySourceLabel": {
           "bookcuration": {
             "total": 243,
-            "missingIsbn13": 4,
-            "missingDescription": 4,
-            "missingCover": 4,
+            "missingIsbn13": 0,
+            "missingDescription": 0,
+            "missingCover": 1,
             "missingTags": 0
           },
           "openlibrary": {
             "total": 433,
-            "missingIsbn13": 11,
-            "missingDescription": 11,
-            "missingCover": 11,
-            "missingTags": 30
+            "missingIsbn13": 0,
+            "missingDescription": 0,
+            "missingCover": 1,
+            "missingTags": 0
           }
         }
       },
       "active": {
         "total": 676,
-        "missingIsbn13": 15,
-        "missingDescription": 15,
-        "missingCover": 15,
-        "missingTags": 30,
+        "missingIsbn13": 0,
+        "missingDescription": 0,
+        "missingCover": 2,
+        "missingTags": 0,
         "bySource": {
           "gachon_curation": {
             "total": 243,
-            "missingIsbn13": 4,
-            "missingDescription": 4,
-            "missingCover": 4,
+            "missingIsbn13": 0,
+            "missingDescription": 0,
+            "missingCover": 1,
             "missingTags": 0
           },
           "gachon_open": {
             "total": 433,
-            "missingIsbn13": 11,
-            "missingDescription": 11,
-            "missingCover": 11,
-            "missingTags": 30
+            "missingIsbn13": 0,
+            "missingDescription": 0,
+            "missingCover": 1,
+            "missingTags": 0
           }
         },
         "bySourceLabel": {
           "bookcuration": {
             "total": 243,
-            "missingIsbn13": 4,
-            "missingDescription": 4,
-            "missingCover": 4,
+            "missingIsbn13": 0,
+            "missingDescription": 0,
+            "missingCover": 1,
             "missingTags": 0
           },
           "openlibrary": {
             "total": 433,
-            "missingIsbn13": 11,
-            "missingDescription": 11,
-            "missingCover": 11,
-            "missingTags": 30
+            "missingIsbn13": 0,
+            "missingDescription": 0,
+            "missingCover": 1,
+            "missingTags": 0
           }
         }
       },
