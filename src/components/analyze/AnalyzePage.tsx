@@ -5,6 +5,7 @@ import type { FormEvent, InputHTMLAttributes } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Camera, CheckCircle2, Loader2, RefreshCcw, ScanFace } from "lucide-react";
 import { BrandLogo } from "@/components/brand/BrandLogo";
+import { LibraryPartnerBadge } from "@/components/brand/LibraryPartnerLogo";
 import { BOOK_CATEGORIES } from "@/lib/books/categories";
 import { FaceMeshOverlay } from "@/components/analyze/FaceMeshOverlay";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
@@ -25,10 +26,10 @@ type AnalyzeResponse = {
   result: LibraryAnalysisResult;
 };
 
-const TARGET_SAMPLE_COUNT = 12;
+const TARGET_SAMPLE_COUNT = 10;
 const CAPTURE_SETTLE_MS = 650;
-const MIN_ANALYSIS_DURATION_MS = 12_000;
-const CARD_REVEAL_INTERVAL_MS = 1_350;
+const MIN_ANALYSIS_DURATION_MS = 4_800;
+const CARD_REVEAL_INTERVAL_MS = 760;
 const COMPLETED_CARD_STREAM_INTERVAL_MS = 20;
 const COMPLETED_CARD_STREAM_CHARS_PER_TICK = 2;
 const COMPLETED_CARD_NEXT_DELAY_MS = 420;
@@ -47,14 +48,13 @@ const ANALYSIS_CARDS = [
   { title: "§4 JAW BALANCE", body: "턱선, 하관 안정감, 얼굴형 밸런스를 정리 중." },
   { title: "§5 IMPRESSION SCORE", body: "호감도, 신뢰감, 균형감 지표를 스코어로 환산 중." },
   { title: "§6 INNER STYLE", body: "관상 신호와 내면 성향 패턴을 조용히 대조 중." },
-  { title: "§7 CHEMI MATCH", body: "함께 있을 때 편한 흐름을 하나로 좁히는 중." },
-  { title: "§8 FLOW READY", body: "결과 페이지에서 보여줄 핵심 문장만 고르는 중." },
+  { title: "§7 CHEMI MATCH", body: "함께 있을 때 편한 흐름을 하나로 좁히는 중.", side: "right" },
 ] as const;
 
 const SUBMITTING_WAIT_MESSAGES = [
-  "야옹이가 얼굴 신호와 책 후보를 한 번 더 맞춰보고 있어요",
-  "추천 책 3권이 겹치지 않게 마지막 순서를 정리 중이에요",
-  "관상 문장, 궁합 문장, 청구기호를 결과 카드에 묶고 있어요",
+  "야옹이가 얼굴 신호와 내면 흐름을 한 번 더 맞춰보고 있어요",
+  "겹치는 해석은 덜어내고 가장 또렷한 신호만 남기는 중이에요",
+  "관상 문장과 흐름 문장을 결과 카드에 묶고 있어요",
   "거의 다 왔어요. 결과 화면으로 넘기기 전에 문장만 다듬는 중이에요",
 ] as const;
 
@@ -172,7 +172,7 @@ export function AnalyzePage() {
 
     const update = () => {
       const elapsed = Date.now() - (scanStartedAtRef.current ?? Date.now());
-      const timedProgress = Math.min(96, Math.max(8, Math.round((elapsed / MIN_ANALYSIS_DURATION_MS) * 96)));
+      const timedProgress = progressForElapsed(elapsed);
       setDisplayProgress(timedProgress);
       setRevealCount(Math.min(ANALYSIS_CARDS.length, Math.max(1, Math.floor(elapsed / CARD_REVEAL_INTERVAL_MS) + 1)));
     };
@@ -275,19 +275,23 @@ export function AnalyzePage() {
 
       {flow === "entry" ? (
         <>
-          <header className="entry-brand-header fixed left-7 top-6 z-30 flex h-14 items-center gap-4 rounded-xl px-4 text-[0.94rem] font-black uppercase tracking-[0.03em] max-md:left-4">
+          <header className="entry-brand-header fixed left-7 top-6 z-30 flex h-14 max-w-[calc(100vw-2rem)] items-center gap-4 rounded-xl px-4 text-[0.94rem] font-black uppercase tracking-[0.03em] max-md:left-4">
             <span className="entry-brand-mark grid h-10 w-10 shrink-0 place-items-center rounded-lg">
               <BrandLogo className="h-10 w-10 object-contain" />
             </span>
             <span className="whitespace-nowrap">AI 관상가 고양이 / Live Face Scan</span>
+            <span className="hidden h-7 w-px shrink-0 bg-black/10 lg:block" aria-hidden="true" />
+            <LibraryPartnerBadge className="hidden lg:inline-flex" />
           </header>
         </>
       ) : (
-        <header className="analysis-brand-header fixed left-7 top-6 z-30 flex h-12 items-center gap-3 rounded-lg px-3 text-xs font-bold uppercase tracking-[0.14em] text-text-muted">
+        <header className="analysis-brand-header fixed left-7 top-6 z-30 flex h-12 max-w-[calc(100vw-2rem)] items-center gap-3 rounded-lg px-3 text-xs font-bold uppercase tracking-[0.14em] text-text-muted">
           <span className="analysis-brand-mark grid h-8 w-8 place-items-center rounded-md">
             <BrandLogo className="h-8 w-8 object-contain" />
           </span>
           <span>AI 관상가 고양이 / Live Face Scan</span>
+          <span className="hidden h-6 w-px shrink-0 bg-border/70 2xl:block" aria-hidden="true" />
+          <LibraryPartnerBadge className="hidden scale-[0.92] 2xl:inline-flex" />
         </header>
       )}
 
@@ -484,7 +488,7 @@ function EntryModal({
           />
 
           <label className="grid min-w-0 gap-2 text-sm font-black text-text-primary" htmlFor="favoriteCategory">
-            <span>선호하는 책 카테고리</span>
+            <span>평소 끌리는 관심 분야</span>
             <select
               id="favoriteCategory"
               name="favoriteCategory"
@@ -857,7 +861,7 @@ function AnalysisHud({ flow, displayName, progress, statusLabel }: { flow: Flow;
         <div className="h-2 overflow-hidden rounded-full bg-bg-raised/65">
           <div className="h-full rounded-full bg-accent-info transition-[width] duration-500 ease-out" style={{ width: `${Math.max(8, progress)}%` }} />
         </div>
-        <p className="mt-3 text-xs font-medium leading-5 text-text-faint">{isWaitingForResult ? "서버가 결과 문장과 도서 3권을 조립하는 중이에요. 화면은 살아 있어요." : "관상 좌표가 안정화되면 결과 화면으로 바로 넘어갑니다."}</p>
+        <p className="mt-3 text-xs font-medium leading-5 text-text-faint">{isWaitingForResult ? "야옹이가 결과 문장을 조립하는 중이에요. 화면은 살아 있어요." : "관상 좌표가 안정화되면 결과 화면으로 바로 넘어갑니다."}</p>
       </section>
     </>
   );
@@ -871,9 +875,12 @@ function TopStatus({ label }: { label: string }) {
   );
 }
 
+type AnalysisCardSide = "left" | "right";
+
 type CompletedAnalysisCard = {
   title: string;
   body: string;
+  side?: AnalysisCardSide;
   scores?: Array<{ label: string; value: number; comment?: string }>;
 };
 
@@ -902,8 +909,8 @@ function FloatingCards({
     index,
     progress: isCompletedView ? 100 : stepProgress(progress, index),
   }));
-  const leftCards = visibleCards.filter((card) => card.index % 2 === 0);
-  const rightCards = visibleCards.filter((card) => card.index % 2 === 1);
+  const leftCards = visibleCards.filter((card) => cardSide(card) === "left");
+  const rightCards = visibleCards.filter((card) => cardSide(card) === "right");
   const leftRailRef = useRef<HTMLDivElement>(null);
   const rightRailRef = useRef<HTMLDivElement>(null);
   const railBaseClassName = "analysis-card-column fixed z-20 grid w-[min(470px,31vw)] content-start gap-3 overflow-y-auto pr-1";
@@ -963,6 +970,10 @@ function FloatingCards({
   );
 }
 
+function cardSide(card: { index: number; side?: AnalysisCardSide }) {
+  return card.side ?? (card.index % 2 === 0 ? "left" : "right");
+}
+
 const ANALYSIS_CONNECTORS = [
   { fromX: 27, fromY: 24, toX: 50, toY: 32 },
   { fromX: 73, fromY: 24, toX: 50, toY: 44 },
@@ -970,10 +981,7 @@ const ANALYSIS_CONNECTORS = [
   { fromX: 73, fromY: 36, toX: 50, toY: 53 },
   { fromX: 27, fromY: 48, toX: 50, toY: 64 },
   { fromX: 73, fromY: 48, toX: 50, toY: 73 },
-  { fromX: 27, fromY: 60, toX: 54, toY: 48 },
   { fromX: 73, fromY: 60, toX: 50, toY: 58 },
-  { fromX: 27, fromY: 72, toX: 46, toY: 35 },
-  { fromX: 73, fromY: 72, toX: 50, toY: 68 },
 ] as const;
 
 function AnalysisCardConnectors({ visibleIndexes }: { visibleIndexes: number[] }) {
@@ -1107,16 +1115,16 @@ function FinalRevealCard({ displayName, result, onOpenResult }: { displayName: s
   const { text: streamedBody, isComplete } = useStreamingText(body, true, COMPLETED_CARD_STREAM_INTERVAL_MS);
 
   return (
-    <section className="fixed bottom-5 left-1/2 z-30 w-[min(880px,calc(100vw-39rem))] min-w-[34rem] -translate-x-1/2">
+    <section className="fixed bottom-5 left-1/2 z-30 w-[min(780px,calc(100vw-40rem))] min-w-[31rem] -translate-x-1/2">
       <article className="glass-panel rounded-2xl border-accent-info/[0.35] p-5 shadow-glass">
         <p className="text-xs font-black uppercase tracking-[0.16em] text-accent-info">FINAL ASSESSMENT</p>
         <h2 className="mt-2 text-2xl font-black text-text-primary">{`${name}은 ${dominantLabel} 타입이에요`}</h2>
-        <p className="mt-3 whitespace-pre-line text-sm font-semibold leading-6 text-text-primary">{streamedBody}</p>
+        <p className="mt-3 max-w-[66ch] whitespace-pre-line break-keep text-sm font-semibold leading-6 text-text-primary [text-wrap:pretty]">{streamedBody}</p>
         {isComplete ? (
           <button
             type="button"
             onClick={onOpenResult}
-            className="mt-5 inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-accent-info/45 bg-accent-info/20 px-5 text-sm font-black text-text-primary transition hover:bg-accent-info/30"
+            className="mt-5 inline-flex h-12 w-full max-w-[66ch] items-center justify-center gap-2 rounded-lg border border-accent-info/45 bg-accent-info/20 px-5 text-sm font-black text-text-primary transition hover:bg-accent-info/30"
           >
             <ArrowRight className="h-4 w-4" aria-hidden="true" />
             결과 페이지로 이동
@@ -1147,8 +1155,7 @@ function buildCompletedAnalysisCards(result: LibraryAnalysisResult): CompletedAn
       ],
     },
     { title: "§6 INNER STYLE", body: cleanAnalysisCopy(`${innerLabel} 성향이 가장 또렷하고, ${growthLabel} 쪽은 보완하면 좋아요. ${result.innerStyleInsight?.dominantDetail ?? result.saju.strength}`, 156) },
-    { title: "§7 CHEMI MATCH", body: cleanAnalysisCopy(`${matchTypes} 타입과 흐름이 잘 맞아요. ${result.chemiInsight?.why ?? result.romanticMatch.why}`, 156) },
-    { title: "§8 FLOW READY", body: cleanAnalysisCopy("야옹이가 결과 화면에서 보여줄 핵심 문장만 골랐어요. 이제 긴 설명보다 바로 읽히는 리포트로 넘어갈 차례예요.", 140) },
+    { title: "§7 CHEMI MATCH", body: cleanAnalysisCopy(`${matchTypes} 타입과 흐름이 잘 맞아요. ${result.chemiInsight?.why ?? result.romanticMatch.why}`, 156), side: "right" },
   ];
 }
 
@@ -1217,8 +1224,17 @@ function cleanAnalysisCopy(input: string, maxLength: number) {
 }
 
 function stepProgress(overallProgress: number, index: number) {
-  const staggeredStart = index * 7;
-  return clampInt(Math.round((overallProgress - staggeredStart) * 1.65), 0, 100);
+  const staggeredStart = index * 5;
+  return clampInt(Math.round((overallProgress - staggeredStart) * 1.55), 0, 100);
+}
+
+function progressForElapsed(elapsedMs: number) {
+  if (elapsedMs <= MIN_ANALYSIS_DURATION_MS) {
+    return Math.min(92, Math.max(8, Math.round((elapsedMs / MIN_ANALYSIS_DURATION_MS) * 92)));
+  }
+
+  const tail = 1 - Math.exp(-(elapsedMs - MIN_ANALYSIS_DURATION_MS) / 3_800);
+  return Math.min(99, 92 + Math.floor(tail * 7));
 }
 
 function getFacePositionHint(landmarks: Landmark[] | null) {

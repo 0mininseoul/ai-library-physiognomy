@@ -13,6 +13,39 @@
 
 ---
 
+## 2026-05-13 Codex Continuation Checkpoint
+
+이 계획은 Claude Code 세션에서 시작된 5/13 부스 대응 작업을 이어받는 기준 문서다. 현재 레포 기준으로 아래 맥락을 우선한다.
+
+### 이미 확정/구현된 큰 방향
+
+- `/result`는 5섹션 가로 리포트 구조를 유지한다.
+- 모바일 결과 페이지, QR 카드, 공유용 타입 카드, Naver 책 링크, 청구기호/자료실 표시가 추가되었다.
+- Persona v2, Gemini Vision, 모바일 결과 분기는 환경변수 토글로 제어한다.
+- 결과 화면의 얼굴/내면/케미 직접 노출 문구는 `사주`, `오행`, `물`, `불`, `나무`, `흙`, `금`, `기운` 같은 용어를 사용자 언어로 번역해야 한다.
+- Impression score는 평균적으로 80점대 중반~90점대 초반이 자연스럽고, 정말 예외적으로 좋은 신호는 100점까지 가능해야 한다.
+- 서비스 UI에서 `Gemini`나 모델명은 노출하지 않는다. 사용자 화면의 분석 주체는 `야옹이`다.
+
+### 5/13 추가 결정
+
+- 분석 결과와 책 큐레이션을 한 호출에서 모두 기다리지 않는다. `/api/analyze`는 얼굴/내면/케미 리포트를 먼저 반환하고, `/result`에서 책 추천을 비동기로 생성한다.
+- 단, 얼굴 분석/내면 해석/케미까지 쪼개는 추가 호출 분리는 하지 않는다. 이 세 가지는 분석 직후 와우 포인트와 `/result` 앞 4개 섹션의 품질에 직접 필요하다.
+- 책 추천 비동기화는 사용자에게 5번째 섹션 전까지 노출되지 않는다는 제품 구조를 전제로 한다. 분석 HUD, 완료 카드, 최종 평가 카드에는 책/도서/서가/청구기호 표현을 쓰지 않는다.
+- 4지선다 `지금 나에게 가장 필요한 것은?`은 책 큐레이션 니즈 신호로만 강하게 사용한다. 얼굴/내면/케미 해석이 이 응답에 끌려가면 안 된다.
+- 추천 도서는 가천대 도서관 데이터에서 import된 DB 후보만 대상으로 한다. 런타임은 Supabase active books를 읽고 `isGachonLibraryBook` 필터를 통과한 후보만 사용한다.
+- DB 상태값은 새 `analysis_ready`를 만들지 않는다. 기존 migration check constraint가 `queued/analyzing/complete/failed`만 허용하므로, 1차 분석 완료 row도 `complete`로 저장하고 `recommendations: []`로 둔다.
+- `/result`의 섹션 헤드라인 아래 문구는 최소 2문장 이상 보이게 한다. 모델이 한 문장만 주면 deterministic fallback을 붙인다.
+- `/`와 `/result`에는 가천대학교 중앙도서관 공동 브랜딩을 넣는다. 학교 도서관 권위를 빌리되, 제품명과 기존 고양이 분석실 디자인을 압도하지 않게 `Powered by` 성격으로 처리한다.
+
+### 현재 구현 시 주의
+
+- `src/app/api/result/[id]/recommendations/route.ts`는 추천 실패 시 기존 분석 결과를 깨뜨리면 안 된다. 실패 상태는 book 섹션의 로딩/지연 안내로만 보인다.
+- `src/app/api/result/[id]/route.ts`와 `face-image` route는 기존 `complete` row를 그대로 읽으면 된다. `analysis_ready` 의존 코드를 만들지 않는다.
+- 기존 dirty docs 변경은 사용자가 만든 맥락으로 간주하고 되돌리지 않는다.
+- 검증은 최소 `pnpm vitest run tests/geminiLibrarySchema.test.ts tests/components/resultPage.test.tsx`, 이후 `pnpm lint`, `pnpm build`, Playwright 화면 확인 순서로 진행한다.
+
+---
+
 ## File Structure
 
 신규:

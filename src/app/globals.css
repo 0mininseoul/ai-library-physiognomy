@@ -262,6 +262,19 @@ select {
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.28);
 }
 
+.library-partner-badge {
+  border: 1px solid rgb(222 217 205 / 0.92);
+  background: rgb(255 255 255 / 0.88);
+  color: #3f3b2f;
+  box-shadow:
+    0 10px 24px rgb(61 57 41 / 0.11),
+    inset 0 1px 0 rgb(255 255 255 / 0.96);
+}
+
+.library-partner-caption {
+  color: rgb(var(--text-faint-rgb) / 0.92);
+}
+
 .analysis-status-pill {
   border: 1px solid rgb(var(--border-rgb) / 0.68);
   background: rgb(var(--bg-card-rgb) / 0.94);
@@ -304,6 +317,22 @@ select {
   box-shadow:
     inset 0 1px 0 rgb(250 249 245 / 0.14),
     inset 0 -1px 0 rgb(0 0 0 / 0.20);
+}
+
+[data-theme="dark"] .library-partner-badge,
+.theme-dark .library-partner-badge,
+.dark .library-partner-badge {
+  border-color: rgb(250 249 245 / 0.18);
+  background: rgb(255 255 255 / 0.92);
+  box-shadow:
+    0 14px 30px rgb(0 0 0 / 0.24),
+    inset 0 1px 0 rgb(255 255 255 / 0.96);
+}
+
+[data-theme="dark"] .library-partner-caption,
+.theme-dark .library-partner-caption,
+.dark .library-partner-caption {
+  color: rgb(65 60 49 / 0.78);
 }
 
 [data-theme="dark"] .analysis-status-pill,
@@ -452,7 +481,6 @@ select {
 
 .analysis-card-column {
   scrollbar-width: none;
-  mask-image: linear-gradient(to bottom, transparent, black 1.4rem, black calc(100% - 1.4rem), transparent);
 }
 
 .analysis-card-column::-webkit-scrollbar {

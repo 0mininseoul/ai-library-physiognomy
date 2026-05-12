@@ -5,11 +5,13 @@ import type { ReactNode, WheelEvent } from "react";
 import Link from "next/link";
 import { CameraOff, ChevronLeft, ChevronRight, Gauge, HeartHandshake, Loader2, RefreshCw, RotateCcw, ShieldCheck } from "lucide-react";
 import { BrandLogo } from "@/components/brand/BrandLogo";
+import { LibraryPartnerBadge } from "@/components/brand/LibraryPartnerLogo";
 import { BookRecommendationCard } from "@/components/result/BookRecommendationCard";
 import { MobileResultPage } from "@/components/result/MobileResultPage";
 import { QrCard } from "@/components/result/QrCard";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { honorific, softenFormalPolite } from "@/lib/korean/name";
+import { getResultFirstSectionCopy } from "@/lib/reading-types/resultFirstSectionCopy";
 import type { SajuCalculation, SajuElement } from "@/lib/saju/calculator";
 import { stripHanja } from "@/lib/saju/display";
 import type { LibraryAnalysisResult } from "@/types/session";
@@ -98,8 +100,9 @@ export function ResultPage({ sessionId }: { sessionId: string }) {
 }
 
 export function ResultContent({ payload }: { payload: ResultPayload }) {
-  const { displayName, faceImageUrl } = payload;
-  const result = useMemo(() => withResultFallback(payload.result), [payload.result]);
+  const [livePayload, setLivePayload] = useState(payload);
+  const { displayName, faceImageUrl } = livePayload;
+  const result = useMemo(() => withResultFallback(livePayload.result), [livePayload.result]);
   const name = honorific(displayName);
   const calculation = result.saju.calculation;
   const rhythmItems = rhythmSignalItems(calculation);
@@ -107,8 +110,44 @@ export function ResultContent({ payload }: { payload: ResultPayload }) {
   const matchProfile = buildMatchProfile(result, innerStyle.strong);
   const topScore = topScoreItem(result.scores);
   const topScores = topScoreItems(result.scores, 4);
+  const firstSectionCopy = getResultFirstSectionCopy(result.readingType.code);
+  const firstSectionHeadline = formatReadingTypeHeadline(firstSectionCopy.headlineTemplate, name);
   const [activeSection, setActiveSection] = useState(0);
+  const [recommendationStatus, setRecommendationStatus] = useState<"idle" | "loading" | "ready" | "error">(result.recommendations.length >= 3 ? "ready" : "idle");
   const faceSignals = useMemo(() => buildFaceSignals(result), [result]);
+
+  useEffect(() => {
+    setLivePayload(payload);
+  }, [payload]);
+
+  useEffect(() => {
+    if (result.recommendations.length >= 3) {
+      setRecommendationStatus("ready");
+      return;
+    }
+
+    let cancelled = false;
+    setRecommendationStatus("loading");
+    fetch(`/api/result/${livePayload.id}/recommendations`, { method: "POST" })
+      .then(async (res) => {
+        const next = await res.json();
+        if (!res.ok) throw new Error(next?.error ?? "recommendation_failed");
+        return next as { result: LibraryAnalysisResult };
+      })
+      .then((next) => {
+        if (cancelled) return;
+        setLivePayload((current) => ({ ...current, result: next.result }));
+        setRecommendationStatus("ready");
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setRecommendationStatus("error");
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [livePayload.id, result.recommendations.length]);
 
   const goToSection = (index: number) => {
     setActiveSection(clampInt(index, 0, RESULT_SECTION_COUNT - 1));
@@ -130,11 +169,15 @@ export function ResultContent({ payload }: { payload: ResultPayload }) {
     <main data-testid="result-horizontal-shell" className="result-shell relative h-screen overflow-hidden bg-bg-primary text-text-primary" onWheel={handleWheel}>
       <header className="fixed left-0 right-0 top-0 z-40 border-b border-border bg-bg-card/78 px-8 py-4 shadow-glass backdrop-blur-2xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
-          <div className="flex min-w-0 items-center gap-3 text-sm font-black tracking-[0.04em] text-text-muted md:text-base">
-            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-border bg-bg-card/70 shadow-glass">
-              <BrandLogo className="h-8 w-8 object-contain" />
-            </span>
-            <span className="truncate uppercase">AI 관상가 고양이 / Live Result</span>
+          <div className="flex min-w-0 items-center gap-4">
+            <div className="flex min-w-0 items-center gap-3 text-sm font-black tracking-[0.04em] text-text-muted md:text-base">
+              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-border bg-bg-card/70 shadow-glass">
+                <BrandLogo className="h-8 w-8 object-contain" />
+              </span>
+              <span className="truncate uppercase">AI 관상가 고양이 / Live Result</span>
+            </div>
+            <span className="hidden h-8 w-px shrink-0 bg-border/70 lg:block" aria-hidden="true" />
+            <LibraryPartnerBadge className="hidden lg:inline-flex" />
           </div>
           <div className="flex items-center gap-2">
             <ThemeToggle />
@@ -151,7 +194,7 @@ export function ResultContent({ payload }: { payload: ResultPayload }) {
         className="flex h-screen transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
         style={{ transform: `translateX(-${activeSection * 100}vw)` }}
       >
-        <StorySection active={activeSection === 0} index={0} eyebrow="FACE REVEAL" title={`야옹이가 본 ${name}의 얼굴`} lines={sectionLines(result, "faceReveal", buildOpeningSummaryLines(result))}>
+        <StorySection active={activeSection === 0} index={0} eyebrow="FACE REVEAL" title={`야옹이가 본 ${name}의 얼굴`} lines={buildFirstSectionLines(result, firstSectionHeadline, firstSectionCopy.description)}>
           <div className="grid min-h-0 grid-cols-[28rem_minmax(0,1fr)] items-stretch gap-7">
             <RevealItem active={activeSection === 0} delay={120} className="min-h-0">
               <ResultFacePanel displayName={displayName} faceImageUrl={faceImageUrl} />
@@ -159,7 +202,7 @@ export function ResultContent({ payload }: { payload: ResultPayload }) {
 
             <div className="grid min-h-0 gap-4">
               <RevealItem active={activeSection === 0} delay={220} className="min-h-0">
-                <SummaryCard title="TYPE" value={cleanCopy(result.readingType.displayName)} description={cleanCopy(result.readingType.description)} chips={result.physiognomy.keywords.slice(0, 4)}>
+                <SummaryCard title="TYPE" value={cleanCopy(firstSectionCopy.displayName)} description={cleanCopy(firstSectionCopy.description)} chips={firstSectionCopy.chips}>
                   <TypeSupportBlocks name={name} topScore={topScore} />
                 </SummaryCard>
               </RevealItem>
@@ -202,7 +245,7 @@ export function ResultContent({ payload }: { payload: ResultPayload }) {
         <StorySection active={activeSection === 4} index={4} eyebrow="BOOK CURATION" title={`지금 ${name}에게 필요한 책이에요`} lines={sectionLines(result, "bookCuration", buildBookSectionLines(result))} id="books">
           <div className="grid min-h-0 gap-5 lg:grid-cols-[minmax(0,1fr)_auto]">
             <RevealItem active={activeSection === 4} delay={140}>
-              <BookCurationSection result={result} />
+              <BookCurationSection result={result} status={recommendationStatus} />
             </RevealItem>
             <RevealItem active={activeSection === 4} delay={260}>
               <QrCard sessionId={payload.id} />
@@ -496,7 +539,7 @@ function MatchFocusCard({ match }: { match: MatchProfile }) {
   );
 }
 
-function BookCurationSection({ result }: { result: LibraryAnalysisResult }) {
+function BookCurationSection({ result, status }: { result: LibraryAnalysisResult; status: "idle" | "loading" | "ready" | "error" }) {
   const books = result.recommendations.slice(0, 3).map((book) => ({
     ...book,
     reason: publicResultCopy(book.reason),
@@ -507,7 +550,11 @@ function BookCurationSection({ result }: { result: LibraryAnalysisResult }) {
   if (!featured) {
     return (
       <div className="glass-card grid min-h-[18rem] place-items-center rounded-3xl p-8 text-center">
-        <p className="text-lg font-black text-text-primary">추천할 책을 고르는 중이에요.</p>
+        <Loader2 className="mx-auto h-8 w-8 animate-spin text-accent-info" aria-hidden="true" />
+        <p className="mt-4 text-lg font-black text-text-primary">{status === "error" ? "마지막 서가 연결이 잠시 지연되고 있어요." : "야옹이가 마지막 서가를 고르는 중이에요."}</p>
+        <p className="mt-3 max-w-md text-sm font-bold leading-6 text-text-muted">
+          {status === "error" ? "잠시 뒤 새로고침하면 이어서 확인할 수 있어요." : "앞에서 읽은 얼굴 신호와 내면 흐름을 바탕으로 딱 맞는 책장을 좁히고 있어요."}
+        </p>
       </div>
     );
   }
@@ -658,13 +705,37 @@ function buildOpeningSummaryLines(result: LibraryAnalysisResult) {
   return [summary, compactCopy(strengths, 112)].filter(Boolean);
 }
 
+function formatReadingTypeHeadline(template: string, nameHonorific: string) {
+  return template.split("{nameHonorific}").join(nameHonorific);
+}
+
+function buildFirstSectionLines(result: LibraryAnalysisResult, headline: string, description: string) {
+  const candidates = [
+    headline,
+    description,
+    ...buildOpeningSummaryLines(result),
+    ...(result.sectionCopy?.faceReveal ?? []),
+    ...SECTION_INTRO_FILLERS.faceReveal,
+  ].map(publicResultCopy);
+
+  return dedupeLines(candidates.flatMap(splitReadableSentences)).slice(0, 3);
+}
+
 type SectionCopyKey = keyof NonNullable<LibraryAnalysisResult["sectionCopy"]>;
 
 function sectionLines(result: LibraryAnalysisResult, key: SectionCopyKey, fallback: string[]) {
   const custom = result.sectionCopy?.[key]?.map(publicResultCopy).filter(Boolean) ?? [];
-  const unique = dedupeLines(custom.length > 0 ? custom : fallback.map(publicResultCopy));
-  return unique.slice(0, 2);
+  const candidates = [...custom, ...fallback.map(publicResultCopy), ...SECTION_INTRO_FILLERS[key].map(publicResultCopy)];
+  return dedupeLines(candidates.flatMap(splitReadableSentences)).slice(0, 3);
 }
+
+const SECTION_INTRO_FILLERS: Record<SectionCopyKey, string[]> = {
+  faceReveal: ["얼굴에서 먼저 보이는 안정감과 리듬을 중심으로 읽었어요.", "자세한 해석은 아래 카드에서 바로 이어져요."],
+  faceSignal: ["좋고 나쁨보다 어떤 인상으로 읽히는지 중심으로 정리했어요.", "점수는 단일 평가가 아니라 여러 신호의 조합이에요."],
+  innerStyle: ["강하게 드러나는 쪽과 보완하면 편해지는 쪽을 나눠 봤어요.", "지금 체감하기 쉬운 행동 리듬 위주로 옮겼어요."],
+  chemiMatch: ["잘 맞는 사람은 여러 명보다 한 유형으로 좁혀야 더 믿을 만해요.", "편하게 흐르는 장면과 어긋나는 순간을 같이 봤어요."],
+  bookCuration: ["대표 책 1권과 함께 읽기 좋은 책 2권만 간단히 추렸어요.", "앞에서 읽은 신호가 마지막 선택 기준이에요."],
+};
 
 function dedupeLines(lines: string[]) {
   const seen = new Set<string>();
@@ -791,7 +862,7 @@ function topScoreItems(scores: LibraryAnalysisResult["scores"], count = 3) {
   const items = [
     { label: "호감도", value: scores.likability },
     { label: "신뢰감", value: scores.trust },
-    { label: "대칭성", value: Math.min(scores.symmetry, 90) },
+    { label: "대칭성", value: scores.symmetry },
     { label: "균형감", value: scores.balance },
     { label: "인상 매력도", value: scores.attractiveness },
   ];
@@ -911,7 +982,7 @@ function withResultFallback(result: LibraryAnalysisResult): LibraryAnalysisResul
     romanticMatch: oldResult.romanticMatch ?? {
       bestTypes: ["에너지 실행형", "차분한 조율형"],
       why: "깊게 생각하는 리듬을 상대가 가볍게 환기해줄 때 케미가 좋아요.",
-      dateStyle: "조용한 전시, 책방, 산책처럼 대화가 천천히 열리는 코스가 잘 맞아요.",
+      dateStyle: "조용한 전시, 산책처럼 대화가 천천히 열리는 코스가 잘 맞아요.",
       caution: "답장이 늦다고 바로 의미 부여하면 고양이 귀 접혀요. 천천히 확인하는 쪽이 좋아요.",
     },
     physiognomySummary,
@@ -934,6 +1005,7 @@ function withResultFallback(result: LibraryAnalysisResult): LibraryAnalysisResul
 function cleanCopy(input: string) {
   const cleaned = stripHanja(input)
     .replace(/피부/g, "전체 인상")
+    .replace(/책방/g, "조용한 전시 공간")
     .replace(/처방전?/g, "추천")
     .replace(/학생/g, "님")
     .replace(/근거 더 보기/g, "더보기")

@@ -2,13 +2,12 @@
 
 import { BookRecommendationCard } from "@/components/result/BookRecommendationCard";
 import { ShareableTypeCard } from "@/components/result/ShareableTypeCard";
-import { READING_TYPES } from "@/lib/reading-types/types";
+import { getResultFirstSectionCopy } from "@/lib/reading-types/resultFirstSectionCopy";
 import type { ResultPayload } from "@/components/pages/ResultPage";
 
 export function MobileResultPage({ payload }: { payload: ResultPayload }) {
   const { displayName, result } = payload;
-  const typeMeta = READING_TYPES[result.readingType.code];
-  const headline = typeMeta?.headlineTemplate ?? result.mainCopy;
+  const typeMeta = getResultFirstSectionCopy(result.readingType.code);
 
   return (
     <main className="min-h-screen bg-bg-primary text-text-primary">
@@ -17,7 +16,7 @@ export function MobileResultPage({ payload }: { payload: ResultPayload }) {
       </header>
 
       <section className="px-5">
-        <ShareableTypeCard displayName={displayName} typeName={typeMeta?.displayName ?? result.readingType.displayName} headline={headline} />
+        <ShareableTypeCard displayName={displayName} typeName={typeMeta.displayName} headline={typeMeta.headlineTemplate} />
       </section>
 
       <section className="mt-8 px-5">

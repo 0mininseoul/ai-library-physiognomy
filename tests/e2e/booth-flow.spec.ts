@@ -11,6 +11,6 @@ test("entry page shows AI 관상가 고양이 flow", async ({ page }) => {
   await expect(page.getByLabel("년도")).toBeVisible();
   await expect(page.getByLabel("월")).toBeVisible();
   await expect(page.getByLabel("일")).toBeVisible();
-  await expect(page.getByLabel("선호하는 책 카테고리")).toBeVisible();
+  await expect(page.getByLabel("평소 끌리는 관심 분야")).toBeVisible();
   await expect(page.getByRole("button", { name: /내 관상 분석하기/ })).toBeVisible();
 });
