@@ -44,6 +44,7 @@ const chemiInsightSchema = z
   .optional();
 
 const rawSchema = z.object({
+  personaConfirmed: z.string().min(1).optional(),
   reading_type: z.object({
     code: z.string().refine(isReadingTypeCode),
     display_name: z.string().min(1),
@@ -202,6 +203,7 @@ export function normalizeLibraryAnalysis(input: unknown) {
           goodScene: clean(raw.chemi_match.good_scene),
         }
       : undefined,
+    personaConfirmed: raw.personaConfirmed,
   };
 }
 
@@ -217,9 +219,6 @@ function clean(input: string) {
     .replace(/피부/g, "전체 인상")
     .replace(/처방전?/g, "추천")
     .replace(/학생/g, "님")
-    .replace(/연애/g, "관계 궁합")
-    .replace(/연인/g, "상대")
-    .replace(/데이트/g, "함께하는 시간")
     .replace(/생년월일(?:에서|로|을|를|의| 기반| 신호| 리듬)?/g, "내면")
     .replace(/[갑을병정무기경신임계]?\s*나무\s*일간답게/g, "차분한 탐색 성향답게")
     .replace(/불꽃/g, "에너지")

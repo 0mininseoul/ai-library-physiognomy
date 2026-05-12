@@ -109,7 +109,7 @@ describe("normalizeLibraryAnalysis", () => {
     ).toThrow();
   });
 
-  it("removes banned user-facing terms while normalizing Gemini output", () => {
+  it("removes banned user-facing terms while allowing relationship wording", () => {
     const result = normalizeLibraryAnalysis({
       reading_type: {
         code: "focus_reboot",
@@ -169,9 +169,10 @@ describe("normalizeLibraryAnalysis", () => {
     });
 
     const serialized = JSON.stringify(result);
-    expect(serialized).not.toMatch(/피부|처방|학생|연애|데이트|근거/);
+    expect(serialized).not.toMatch(/피부|처방|학생|근거/);
     expect(result.parts.forehead.metricsText).toContain("전체 인상");
-    expect(result.romanticMatch.why).toContain("관계 궁합");
+    expect(result.romanticMatch.why).toContain("연애");
+    expect(result.romanticMatch.dateStyle).toContain("데이트");
     expect(result.recommendations[2].actionCopy).toBe("좋아요");
   });
 });

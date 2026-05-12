@@ -22,8 +22,23 @@ function metrics(overrides: Partial<FaceMetrics> = {}): FaceMetrics {
 }
 
 describe("calibrateFaceScores", () => {
-  it("keeps very good symmetry below the old inflated 95-point range", () => {
-    expect(calibrateFaceScores(metrics()).symmetry).toBeLessThanOrEqual(90);
+  it("keeps very good symmetry in the 90-point range", () => {
+    const score = calibrateFaceScores(metrics());
+    expect(score.symmetry).toBeGreaterThanOrEqual(90);
+    expect(score.symmetry).toBeLessThanOrEqual(96);
+  });
+
+  it("lets truly excellent signals reach 100", () => {
+    const score = calibrateFaceScores(
+      metrics({
+        asymmetryIndex: 0.0005,
+        phiRatioCompliance: 98,
+        eyes: { leftToRightDeltaMm: 0.05, outerCantalAngleDeg: -1 },
+        mouth: { upperLowerLipRatio: 1, philtrumRatioPct: 12, cornerAngleDeg: -0.2 },
+      }),
+    );
+
+    expect(Math.max(score.likability, score.trust, score.symmetry, score.balance, score.attractiveness)).toBe(100);
   });
 
   it("penalizes normalized asymmetry, eye delta, and mouth tilt", () => {
@@ -40,7 +55,7 @@ describe("calibrateFaceScores", () => {
     expect(unstable.balance).toBeLessThanOrEqual(stable.balance);
   });
 
-  it("keeps normal visible scores at 70 or higher", () => {
+  it("keeps normal visible scores in the 80s or higher", () => {
     const score = calibrateFaceScores(
       metrics({
         asymmetryIndex: 0.01,
@@ -49,10 +64,10 @@ describe("calibrateFaceScores", () => {
       }),
     );
 
-    expect(Math.min(score.likability, score.trust, score.symmetry, score.balance, score.attractiveness)).toBeGreaterThanOrEqual(70);
+    expect(Math.min(score.likability, score.trust, score.symmetry, score.balance, score.attractiveness)).toBeGreaterThanOrEqual(82);
   });
 
-  it("allows clearly severe signals to fall below 70", () => {
+  it("allows clearly severe signals to fall below the normal 80s band", () => {
     const score = calibrateFaceScores(
       metrics({
         asymmetryIndex: 0.03,
@@ -61,6 +76,6 @@ describe("calibrateFaceScores", () => {
       }),
     );
 
-    expect(score.symmetry).toBeLessThan(70);
+    expect(score.symmetry).toBeLessThan(82);
   });
 });

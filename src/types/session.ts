@@ -4,12 +4,15 @@ import type { SajuCalculation } from "@/lib/saju/calculator";
 
 export type Gender = "male" | "female";
 
+export type NeedFocus = "stimulation" | "comfort" | "utility" | "depth";
+
 export type StudentInput = {
   name: string;
   studentId: string;
   gender: Gender;
   birthDate: string;
   favoriteCategory: string;
+  needFocus: NeedFocus;
   consentAccepted: boolean;
 };
 
@@ -90,6 +93,12 @@ export type LibraryAnalysisResult = {
   readingNeeds: string[];
   recommendations: BookRecommendation[];
   calibratedScores?: CalibratedFaceScores;
+  persona?: {
+    candidates: { primary: string; alternates: string[] };
+    confirmed: string;
+    sajuKey: string;
+    axisScores: { balance: number; expressive: number; focus: number; vitality: number };
+  };
   sectionCopy?: {
     faceReveal: string[];
     faceSignal: string[];

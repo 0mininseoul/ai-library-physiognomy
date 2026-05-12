@@ -6,6 +6,8 @@ import Link from "next/link";
 import { CameraOff, ChevronLeft, ChevronRight, Gauge, HeartHandshake, Loader2, RefreshCw, RotateCcw, ShieldCheck } from "lucide-react";
 import { BrandLogo } from "@/components/brand/BrandLogo";
 import { BookRecommendationCard } from "@/components/result/BookRecommendationCard";
+import { MobileResultPage } from "@/components/result/MobileResultPage";
+import { QrCard } from "@/components/result/QrCard";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { honorific, softenFormalPolite } from "@/lib/korean/name";
 import type { SajuCalculation, SajuElement } from "@/lib/saju/calculator";
@@ -81,6 +83,15 @@ export function ResultPage({ sessionId }: { sessionId: string }) {
         </section>
       </main>
     );
+  }
+
+  const mobileEnabled = process.env.NEXT_PUBLIC_RESULT_MOBILE_VIEW_ENABLED === "true";
+  const search = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+  const wantsMobile = search?.get("m") === "1";
+  const isSmall = typeof window !== "undefined" && window.innerWidth < 768;
+
+  if (mobileEnabled && (wantsMobile || isSmall)) {
+    return <MobileResultPage payload={payload} />;
   }
 
   return <ResultContent payload={payload} />;
@@ -189,9 +200,14 @@ export function ResultContent({ payload }: { payload: ResultPayload }) {
         </StorySection>
 
         <StorySection active={activeSection === 4} index={4} eyebrow="BOOK CURATION" title={`지금 ${name}에게 필요한 책이에요`} lines={sectionLines(result, "bookCuration", buildBookSectionLines(result))} id="books">
-          <RevealItem active={activeSection === 4} delay={140}>
-            <BookCurationSection result={result} />
-          </RevealItem>
+          <div className="grid min-h-0 gap-5 lg:grid-cols-[minmax(0,1fr)_auto]">
+            <RevealItem active={activeSection === 4} delay={140}>
+              <BookCurationSection result={result} />
+            </RevealItem>
+            <RevealItem active={activeSection === 4} delay={260}>
+              <QrCard sessionId={payload.id} />
+            </RevealItem>
+          </div>
         </StorySection>
       </div>
 
@@ -922,12 +938,6 @@ function cleanCopy(input: string) {
     .replace(/학생/g, "님")
     .replace(/근거 더 보기/g, "더보기")
     .replace(/근거/g, "설명")
-    .replace(new RegExp(["연", "애"].join(""), "g"), "관계 궁합")
-    .replace(/연인/g, "상대")
-    .replace(/상대과/g, "상대와")
-    .replace(/데이트/g, "함께하는 시간")
-    .replace(/함께하는 시간를/g, "함께하는 시간을")
-    .replace(/함께하는 시간가/g, "함께하는 시간이")
     .replace(/해줘/g, "해 주세요")
     .replace(/했어/g, "했어요")
     .replace(/이건/g, "이 책은");

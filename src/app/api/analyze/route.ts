@@ -3,11 +3,13 @@ import { Type } from "@google/genai";
 import { NextRequest } from "next/server";
 import { SupabaseBookProvider } from "@/lib/books/provider";
 import { selectBookCandidates } from "@/lib/books/recommender";
+import { isGachonLibraryBook } from "@/lib/books/types";
 import { buildLibraryPrompt } from "@/lib/gemini/libraryPrompt";
 import { normalizeLibraryAnalysis } from "@/lib/gemini/librarySchema";
 import { getGeminiClient } from "@/lib/gemini/client";
 import { calibrateFaceScores } from "@/lib/facemesh/scoreCalibration";
 import { displayGivenName } from "@/lib/korean/name";
+import { resolvePersonaSignal } from "@/lib/persona/personaResolver";
 import { calculateSaju } from "@/lib/saju/calculator";
 import { getServerSupabase } from "@/lib/supabase/server";
 import type { FaceMetrics, Landmark } from "@/types/face";
@@ -16,7 +18,12 @@ import type { StudentInput } from "@/types/session";
 export const runtime = "nodejs";
 export const maxDuration = 300;
 
-const LIBRARY_ANALYSIS_MODEL = process.env.GEMINI_LIBRARY_MODEL ?? process.env.GEMINI_LIVE_MODEL ?? "gemini-2.5-flash";
+const PRIMARY_MODEL = process.env.GEMINI_LIBRARY_MODEL ?? "gemini-2.5-pro";
+const FALLBACK_MODELS = (process.env.GEMINI_LIBRARY_FALLBACK_MODELS ?? "gemini-2.5-flash,gemini-2.5-flash")
+  .split(",")
+  .map((m) => m.trim())
+  .filter(Boolean);
+const MODEL_CHAIN = [PRIMARY_MODEL, ...FALLBACK_MODELS];
 
 export async function POST(req: NextRequest) {
   const body = (await req.json()) as {
@@ -34,13 +41,18 @@ export async function POST(req: NextRequest) {
   const displayName = displayGivenName(body.input.name);
   const saju = calculateSaju(body.input.birthDate);
   const calibratedScores = calibrateFaceScores(body.metrics);
+  const personaV2Enabled = process.env.PERSONA_V2_ENABLED === "true";
+  const personaSignal = personaV2Enabled ? resolvePersonaSignal(body.metrics, saju) : null;
   const provider = new SupabaseBookProvider(supabase);
-  const books = await provider.listActiveBooks();
+  const books = (await provider.listActiveBooks()).filter(isGachonLibraryBook);
   const candidates = selectBookCandidates({
     books,
     favoriteCategory: body.input.favoriteCategory,
-    desiredTags: [body.input.favoriteCategory],
-    limit: 20,
+    desiredTags: personaSignal ? Object.keys(personaSignal.bookTagWeights) : [body.input.favoriteCategory],
+    personaWeights: personaSignal?.bookTagWeights,
+    needFocus: body.input.needFocus,
+    saltSeed: `${sha256(body.input.studentId)}|${body.input.birthDate}|${body.input.favoriteCategory}|${body.input.needFocus}`,
+    limit: 12,
   });
 
   if (candidates.length < 3) {
@@ -57,6 +69,7 @@ export async function POST(req: NextRequest) {
       gender: body.input.gender,
       birth_date: body.input.birthDate,
       favorite_category: body.input.favoriteCategory,
+      need_focus: body.input.needFocus,
       metrics_json: body.metrics,
       landmarks_json: body.landmarks ?? null,
       status: "analyzing",
@@ -70,22 +83,27 @@ export async function POST(req: NextRequest) {
 
   const facePath = `${session.id}/capture.jpg`;
   try {
-    const imageBuffer = Buffer.from(stripDataUrl(body.imageBase64), "base64");
-    const { error: uploadError } = await supabase.storage.from("face-images").upload(facePath, imageBuffer, {
-      contentType: "image/jpeg",
-      upsert: true,
-    });
-    if (uploadError) throw uploadError;
+    const imageData = stripDataUrl(body.imageBase64);
+    const imageBuffer = Buffer.from(imageData, "base64");
+    const uploadPromise = supabase.storage
+      .from("face-images")
+      .upload(facePath, imageBuffer, {
+        contentType: "image/jpeg",
+        upsert: true,
+      })
+      .then(({ error }) => error ?? null);
 
     const ai = getGeminiClient();
-    const response = await ai.models.generateContent({
-      model: LIBRARY_ANALYSIS_MODEL,
-      contents: buildLibraryPrompt({ input: body.input, displayName, metrics: body.metrics, calibratedScores, saju, candidates }),
-      config: {
-        responseMimeType: "application/json",
-        responseSchema: {
+    const visionEnabled = process.env.GEMINI_VISION_ENABLED === "true";
+    const promptText = buildLibraryPrompt({ input: body.input, displayName, metrics: body.metrics, calibratedScores, saju, candidates, persona: personaSignal ?? undefined });
+    const inlineImage = visionEnabled ? [{ inlineData: { data: imageData, mimeType: "image/jpeg" } }] : [];
+    const contents = [{ role: "user", parts: [{ text: promptText }, ...inlineImage] }];
+    const genConfig = {
+      responseMimeType: "application/json",
+      responseSchema: {
           type: Type.OBJECT,
           properties: {
+            personaConfirmed: { type: Type.STRING },
             reading_type: {
               type: Type.OBJECT,
               properties: {
@@ -219,9 +237,30 @@ export async function POST(req: NextRequest) {
             },
           },
           required: ["reading_type", "main_copy", "geometry", "parts", "scores", "physiognomy", "saju", "romantic_match", "section_copy", "inner_style", "chemi_match", "reading_needs", "recommendations"],
-        },
       },
-    });
+    };
+
+    let response: Awaited<ReturnType<typeof ai.models.generateContent>> | null = null;
+    let lastError: unknown = null;
+    let usedModel = MODEL_CHAIN[0]!;
+    for (const model of MODEL_CHAIN) {
+      try {
+        response = await ai.models.generateContent({
+          model,
+          contents,
+          config: genConfig,
+        });
+        usedModel = model;
+        break;
+      } catch (error) {
+        lastError = error;
+        console.warn(`[api/analyze] model ${model} failed`, error);
+      }
+    }
+    if (!response) throw lastError ?? new Error("all_models_failed");
+    console.log(`[api/analyze] used model ${usedModel}`);
+    const uploadError = await uploadPromise;
+    if (uploadError) throw uploadError;
 
     const normalized = normalizeLibraryAnalysis(JSON.parse(response.text ?? "{}"));
     const resultScores = {
@@ -236,7 +275,7 @@ export async function POST(req: NextRequest) {
     const recommendedDatabaseIds: string[] = [];
     const finalRecommendations = normalized.recommendations.map((item) => {
       const book = candidateById.get(item.bookId);
-      if (!book) throw new Error(`Gemini returned unknown book_id: ${item.bookId}`);
+      if (!book) throw new Error(`model returned unknown book_id: ${item.bookId}`);
       if (book.id) recommendedDatabaseIds.push(book.id);
       return {
         bookId: book.sourceId,
@@ -255,7 +294,21 @@ export async function POST(req: NextRequest) {
       };
     });
 
-    const resultJson = { ...normalized, scores: resultScores, calibratedScores, saju: { ...normalized.saju, calculation: saju }, recommendations: finalRecommendations };
+    const resultJson = {
+      ...normalized,
+      scores: resultScores,
+      calibratedScores,
+      persona: personaSignal
+        ? {
+            candidates: personaSignal.candidates,
+            confirmed: normalized.personaConfirmed ?? personaSignal.candidates.primary,
+            sajuKey: personaSignal.sajuKey,
+            axisScores: personaSignal.axisScores,
+          }
+        : undefined,
+      saju: { ...normalized.saju, calculation: saju },
+      recommendations: finalRecommendations,
+    };
     const { error: updateError } = await supabase
       .from("library_sessions")
       .update({

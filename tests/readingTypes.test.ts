@@ -14,7 +14,7 @@ describe("reading types", () => {
 
   it("returns display metadata", () => {
     expect(getReadingType("career_compass")).toMatchObject({
-      displayName: "진로 나침반형",
+      displayName: "진로 GPS 재설정 중",
       tags: expect.arrayContaining(["진로", "커리어", "자기이해"]),
     });
   });

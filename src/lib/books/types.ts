@@ -1,6 +1,9 @@
+export type BookSource = "data4library" | "naver" | "gachon_curation" | "gachon_open";
+
 export type LibraryBook = {
   id?: string;
-  source: "data4library" | "naver";
+  source: BookSource;
+  sourceLabel?: "bookcuration" | "openlibrary"; // 가천대 두 DB 구분
   sourceId: string;
   isbn13: string | null;
   title: string;
@@ -12,8 +15,14 @@ export type LibraryBook = {
   coverUrl: string | null;
   callNumber: string;
   locationLabel: string;
+  locationRoom?: string; // 자료실 (예: "북큐레이션코너(1층)")
+  availability?: "available" | "checked_out" | null;
   tags: string[];
 };
+
+export function isGachonLibraryBook(book: LibraryBook) {
+  return book.sourceLabel === "bookcuration" || book.sourceLabel === "openlibrary";
+}
 
 export type RawData4LibraryBook = {
   no?: string;

@@ -4,11 +4,45 @@ import type { BookRecommendation } from "@/types/session";
 type BookRecommendationCardProps = {
   book: BookRecommendation;
   index: number;
-  variant?: "featured" | "compact";
+  variant?: "featured" | "compact" | "mobile";
 };
 
 export function BookRecommendationCard({ book, index, variant = "compact" }: BookRecommendationCardProps) {
   const href = book.naverBookUrl ?? naverBookUrl(book.title, book.author);
+
+  if (variant === "mobile") {
+    return (
+      <article className="grid grid-cols-[5.5rem_minmax(0,1fr)] gap-3 rounded-2xl border border-border/60 bg-bg-card/60 p-4">
+        <div className="h-32 w-full overflow-hidden rounded-lg border border-border/60 bg-bg-raised">
+          {book.coverUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={book.coverUrl} alt="" className="h-full w-full object-cover" />
+          ) : null}
+        </div>
+        <div className="min-w-0">
+          <p className="text-xs font-black uppercase tracking-[0.14em] text-accent-info">#{index + 1}</p>
+          <h3 className="mt-1 line-clamp-2 text-base font-bold leading-tight text-text-primary">{book.title}</h3>
+          <p className="mt-1 truncate text-xs font-semibold text-text-muted">{book.author}</p>
+          <div className="mt-3 grid gap-1.5 text-xs font-bold text-text-primary">
+            <p className="inline-flex min-w-0 items-center gap-1.5">
+              <Tag className="h-3.5 w-3.5 shrink-0 text-accent-info" aria-hidden="true" />
+              <span className="truncate">
+                청구기호: <span className="tabular-nums">{book.callNumber}</span>
+              </span>
+            </p>
+            <p className="inline-flex min-w-0 items-center gap-1.5">
+              <MapPin className="h-3.5 w-3.5 shrink-0 text-accent-info" aria-hidden="true" />
+              <span className="truncate">자료실: {book.locationLabel}</span>
+            </p>
+          </div>
+          <a href={href} target="_blank" rel="noopener" className="mt-3 inline-flex h-9 items-center rounded-lg border border-accent-info/45 bg-accent-info/[0.16] px-3 text-xs font-black text-text-primary">
+            책 자세히 보기
+          </a>
+        </div>
+      </article>
+    );
+  }
+
   const featured = variant === "featured";
   const reason = compactBookReason(book.reason, featured ? 118 : 72);
   const fitReason = compactBookReason(book.fitReason ?? book.reason, featured ? 118 : 70);

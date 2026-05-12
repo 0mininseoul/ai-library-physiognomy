@@ -46,6 +46,19 @@ describe("selectBookCandidates", () => {
     expect(selected[0].title).toBe("무명의 회복 노트");
   });
 
+  it("uses needFocus for book ranking when supplied", () => {
+    const selected = selectBookCandidates({
+      books: [book("C", "위로 에세이", "시/에세이", ["위로", "에세이"]), book("U", "생산성 마스터", "자기계발", ["실행력", "생산성"])],
+      favoriteCategory: "시/에세이",
+      desiredTags: [],
+      needFocus: "comfort",
+      saltSeed: "stable",
+      limit: 1,
+    });
+
+    expect(selected[0].title).toBe("위로 에세이");
+  });
+
   it("detects likely bestseller candidates for prompt cautioning", () => {
     expect(bestsellerPenalty(book("1", "아몬드", "소설", ["소설"]))).toBeGreaterThan(0);
     expect(bestsellerPenalty(book("150", "캠퍼스 고양이의 독서법", "소설", ["소설"]))).toBe(0);
@@ -69,3 +82,80 @@ function book(sourceId: string, title: string, category: string, tags: string[],
     tags,
   };
 }
+
+import { enforceSourceMix, scoreBookWithPersona } from "@/lib/books/recommender";
+
+function gachonBook(sourceLabel: "bookcuration" | "openlibrary", sourceId: string, title: string, category: string, tags: string[]): LibraryBook {
+  return {
+    source: sourceLabel === "bookcuration" ? "gachon_curation" : "gachon_open",
+    sourceLabel,
+    sourceId,
+    isbn13: null,
+    title,
+    author: "저자",
+    publisher: "출판사",
+    publishedYear: 2024,
+    category,
+    description: "긴 설명이 들어가는 자리",
+    coverUrl: null,
+    callNumber: "000.0 ㄱ000",
+    locationLabel: "중앙도서관",
+    locationRoom: sourceLabel === "bookcuration" ? "북큐레이션코너(1층)" : "프리덤광장",
+    availability: "available",
+    tags,
+  };
+}
+
+describe("scoreBookWithPersona", () => {
+  it("applies persona tag weights on top of category match", () => {
+    const book = gachonBook("bookcuration", "X", "AI 입문", "과학/기술", ["AI", "입문서"]);
+    const score = scoreBookWithPersona(book, {
+      favoriteCategory: "과학/기술",
+      personaWeights: { AI: 4, "입문서": 3 },
+      needFocus: "stimulation",
+      saltSeed: "seed-1",
+    });
+    expect(score).toBeGreaterThan(15);
+  });
+
+  it("returns higher score when persona tags match more", () => {
+    const matching = gachonBook("openlibrary", "M", "스토아 철학", "인문/철학", ["철학 입문", "에세이"]);
+    const nonMatching = gachonBook("openlibrary", "N", "공룡 도감", "과학/기술", ["과학"]);
+    const personaWeights = { "철학 입문": 4, "에세이": 3 };
+    const base = { favoriteCategory: "인문/철학", personaWeights, needFocus: "depth" as const, saltSeed: "s" };
+    expect(scoreBookWithPersona(matching, base)).toBeGreaterThan(scoreBookWithPersona(nonMatching, base));
+  });
+
+  it("rewards books matching the needFocus axis", () => {
+    const comfortBook = gachonBook("openlibrary", "C", "위로 에세이", "시/에세이", ["위로", "에세이"]);
+    const utilityBook = gachonBook("openlibrary", "U", "생산성 마스터", "자기계발", ["실행력", "생산성"]);
+    const personaWeights = {};
+    const comfortScore = scoreBookWithPersona(comfortBook, { favoriteCategory: "시/에세이", personaWeights, needFocus: "comfort", saltSeed: "s" });
+    const utilityScore = scoreBookWithPersona(utilityBook, { favoriteCategory: "시/에세이", personaWeights, needFocus: "comfort", saltSeed: "s" });
+    expect(comfortScore).toBeGreaterThan(utilityScore);
+  });
+});
+
+describe("enforceSourceMix", () => {
+  const candidates = [
+    gachonBook("bookcuration", "A1", "AI 1", "과학/기술", ["AI"]),
+    gachonBook("bookcuration", "A2", "AI 2", "과학/기술", ["AI"]),
+    gachonBook("bookcuration", "A3", "AI 3", "과학/기술", ["AI"]),
+    gachonBook("bookcuration", "A4", "AI 4", "과학/기술", ["AI"]),
+    gachonBook("openlibrary", "B1", "철학 1", "인문/철학", ["철학 입문"]),
+    gachonBook("openlibrary", "B2", "철학 2", "인문/철학", ["철학 입문"]),
+  ];
+
+  it("swaps last pick when all 3 picks are same source", () => {
+    const picks = candidates.slice(0, 3);
+    const mixed = enforceSourceMix(picks, candidates, { curationRatio: 2, openRatio: 1 });
+    const labels = mixed.map((book) => book.sourceLabel);
+    expect(labels.filter((l) => l === "openlibrary")).toHaveLength(1);
+  });
+
+  it("keeps picks unchanged when ratio already met", () => {
+    const picks = [candidates[0]!, candidates[1]!, candidates[4]!];
+    const mixed = enforceSourceMix(picks, candidates, { curationRatio: 2, openRatio: 1 });
+    expect(mixed.map((book) => book.sourceId)).toEqual(["A1", "A2", "B1"]);
+  });
+});
