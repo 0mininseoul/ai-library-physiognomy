@@ -8,8 +8,10 @@ import { isGachonLibraryBook } from "../src/lib/books/types";
 import { resolvePersonaSignal } from "../src/lib/persona/personaResolver";
 import { calculateSaju } from "../src/lib/saju/calculator";
 import type { FaceMetrics } from "../src/types/face";
+import type { NeedFocus } from "../src/types/session";
 
 const SAMPLE_COUNT = 200;
+const NEED_FOCUS_OPTIONS: NeedFocus[] = ["stimulation", "comfort", "utility", "depth"];
 
 function randomMetrics(seed: number): FaceMetrics {
   const r = (n: number) => ((Math.sin(seed * 9301 + n * 49297) * 0.5 + 0.5) % 1);
@@ -59,10 +61,14 @@ async function main() {
     personaCounts.set(persona.combinedCode, (personaCounts.get(persona.combinedCode) ?? 0) + 1);
 
     const category = BOOK_CATEGORIES[i % BOOK_CATEGORIES.length]!;
+    const needFocus = NEED_FOCUS_OPTIONS[i % NEED_FOCUS_OPTIONS.length]!;
     const candidates = selectBookCandidates({
       books,
       favoriteCategory: category,
       desiredTags: Object.keys(persona.bookTagWeights),
+      personaWeights: persona.bookTagWeights,
+      needFocus,
+      saltSeed: `simulation-${i}-${category}-${needFocus}`,
       limit: 3,
     });
     if (candidates[0]) {

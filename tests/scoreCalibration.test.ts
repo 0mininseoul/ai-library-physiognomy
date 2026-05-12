@@ -22,10 +22,23 @@ function metrics(overrides: Partial<FaceMetrics> = {}): FaceMetrics {
 }
 
 describe("calibrateFaceScores", () => {
-  it("keeps very good symmetry in the low-90s instead of the old inflated 95-point range", () => {
+  it("keeps very good symmetry in the 90-point range", () => {
     const score = calibrateFaceScores(metrics());
     expect(score.symmetry).toBeGreaterThanOrEqual(90);
-    expect(score.symmetry).toBeLessThanOrEqual(94);
+    expect(score.symmetry).toBeLessThanOrEqual(96);
+  });
+
+  it("lets truly excellent signals reach the high-90s", () => {
+    const score = calibrateFaceScores(
+      metrics({
+        asymmetryIndex: 0.0005,
+        phiRatioCompliance: 98,
+        eyes: { leftToRightDeltaMm: 0.05, outerCantalAngleDeg: -1 },
+        mouth: { upperLowerLipRatio: 1, philtrumRatioPct: 12, cornerAngleDeg: -0.2 },
+      }),
+    );
+
+    expect(Math.max(score.likability, score.trust, score.symmetry, score.balance, score.attractiveness)).toBeGreaterThanOrEqual(97);
   });
 
   it("penalizes normalized asymmetry, eye delta, and mouth tilt", () => {

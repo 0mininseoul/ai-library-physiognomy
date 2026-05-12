@@ -23,13 +23,21 @@ export function calibrateFaceScores(metrics: FaceMetrics): CalibratedFaceScores 
   const mouthPenalty = clamp(Math.abs(metrics.mouth.cornerAngleDeg) * 0.8, 0, 8);
   const severeSignal = normalizedAsymmetryPct >= 5.5 || metrics.eyes.leftToRightDeltaMm >= 4.2 || Math.abs(metrics.mouth.cornerAngleDeg) >= 8.5;
   const scoreFloor = severeSignal ? 76 : 82;
+  const excellenceBonus = clamp(
+    (1 - normalizedAsymmetryPct / 0.8) * 2 +
+      (1 - metrics.eyes.leftToRightDeltaMm / 0.6) +
+      (1 - Math.abs(metrics.mouth.cornerAngleDeg) / 1.2) * 0.5 +
+      ((metrics.phiRatioCompliance - 90) / 10) * 1.5,
+    0,
+    4,
+  );
 
-  const symmetry = clamp(Math.round(92 - normalizedAsymmetryPct * 2.2 - eyePenalty * 0.7 - mouthPenalty * 0.6), scoreFloor, 94);
+  const symmetry = clamp(Math.round(94 - normalizedAsymmetryPct * 2.2 - eyePenalty * 0.7 - mouthPenalty * 0.6 + excellenceBonus), scoreFloor, 98);
   const phi = clamp(metrics.phiRatioCompliance / 100, 0, 1);
-  const balance = clamp(Math.round(84 + phi * 9 - normalizedAsymmetryPct * 1.1), scoreFloor, 94);
-  const trust = clamp(Math.round((symmetry + balance) / 2 + 1), scoreFloor, 94);
-  const likability = clamp(Math.round(trust + Math.min(3, metrics.faceAspectRatio * 1.4)), scoreFloor, 94);
-  const attractiveness = clamp(Math.round((symmetry + balance + likability) / 3 + 1), scoreFloor, 93);
+  const balance = clamp(Math.round(84 + phi * 9 - normalizedAsymmetryPct * 1.1 + excellenceBonus * 0.8), scoreFloor, 98);
+  const trust = clamp(Math.round((symmetry + balance) / 2 + 1), scoreFloor, 98);
+  const likability = clamp(Math.round(trust + Math.min(3, metrics.faceAspectRatio * 1.4)), scoreFloor, 98);
+  const attractiveness = clamp(Math.round((symmetry + balance + likability) / 3 + 1), scoreFloor, 98);
 
   return {
     symmetry,

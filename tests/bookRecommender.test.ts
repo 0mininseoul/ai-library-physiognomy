@@ -46,6 +46,19 @@ describe("selectBookCandidates", () => {
     expect(selected[0].title).toBe("무명의 회복 노트");
   });
 
+  it("uses needFocus for book ranking when supplied", () => {
+    const selected = selectBookCandidates({
+      books: [book("C", "위로 에세이", "시/에세이", ["위로", "에세이"]), book("U", "생산성 마스터", "자기계발", ["실행력", "생산성"])],
+      favoriteCategory: "시/에세이",
+      desiredTags: [],
+      needFocus: "comfort",
+      saltSeed: "stable",
+      limit: 1,
+    });
+
+    expect(selected[0].title).toBe("위로 에세이");
+  });
+
   it("detects likely bestseller candidates for prompt cautioning", () => {
     expect(bestsellerPenalty(book("1", "아몬드", "소설", ["소설"]))).toBeGreaterThan(0);
     expect(bestsellerPenalty(book("150", "캠퍼스 고양이의 독서법", "소설", ["소설"]))).toBe(0);

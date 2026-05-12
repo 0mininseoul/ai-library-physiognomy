@@ -49,7 +49,10 @@ export async function POST(req: NextRequest) {
     books,
     favoriteCategory: body.input.favoriteCategory,
     desiredTags: personaSignal ? Object.keys(personaSignal.bookTagWeights) : [body.input.favoriteCategory],
-    limit: 20,
+    personaWeights: personaSignal?.bookTagWeights,
+    needFocus: body.input.needFocus,
+    saltSeed: `${sha256(body.input.studentId)}|${body.input.birthDate}|${body.input.favoriteCategory}|${body.input.needFocus}`,
+    limit: 12,
   });
 
   if (candidates.length < 3) {
@@ -80,19 +83,20 @@ export async function POST(req: NextRequest) {
 
   const facePath = `${session.id}/capture.jpg`;
   try {
-    const imageBuffer = Buffer.from(stripDataUrl(body.imageBase64), "base64");
-    const { error: uploadError } = await supabase.storage.from("face-images").upload(facePath, imageBuffer, {
-      contentType: "image/jpeg",
-      upsert: true,
-    });
-    if (uploadError) throw uploadError;
+    const imageData = stripDataUrl(body.imageBase64);
+    const imageBuffer = Buffer.from(imageData, "base64");
+    const uploadPromise = supabase.storage
+      .from("face-images")
+      .upload(facePath, imageBuffer, {
+        contentType: "image/jpeg",
+        upsert: true,
+      })
+      .then(({ error }) => error ?? null);
 
     const ai = getGeminiClient();
     const visionEnabled = process.env.GEMINI_VISION_ENABLED === "true";
     const promptText = buildLibraryPrompt({ input: body.input, displayName, metrics: body.metrics, calibratedScores, saju, candidates, persona: personaSignal ?? undefined });
-    const inlineImage = visionEnabled
-      ? [{ inlineData: { data: stripDataUrl(body.imageBase64), mimeType: "image/jpeg" } }]
-      : [];
+    const inlineImage = visionEnabled ? [{ inlineData: { data: imageData, mimeType: "image/jpeg" } }] : [];
     const contents = [{ role: "user", parts: [{ text: promptText }, ...inlineImage] }];
     const genConfig = {
       responseMimeType: "application/json",
@@ -255,6 +259,8 @@ export async function POST(req: NextRequest) {
     }
     if (!response) throw lastError ?? new Error("all_models_failed");
     console.log(`[api/analyze] used model ${usedModel}`);
+    const uploadError = await uploadPromise;
+    if (uploadError) throw uploadError;
 
     const normalized = normalizeLibraryAnalysis(JSON.parse(response.text ?? "{}"));
     const resultScores = {
@@ -269,7 +275,7 @@ export async function POST(req: NextRequest) {
     const recommendedDatabaseIds: string[] = [];
     const finalRecommendations = normalized.recommendations.map((item) => {
       const book = candidateById.get(item.bookId);
-      if (!book) throw new Error(`Gemini returned unknown book_id: ${item.bookId}`);
+      if (!book) throw new Error(`model returned unknown book_id: ${item.bookId}`);
       if (book.id) recommendedDatabaseIds.push(book.id);
       return {
         bookId: book.sourceId,

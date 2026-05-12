@@ -6,15 +6,31 @@ export function selectBookCandidates({
   books,
   favoriteCategory,
   desiredTags,
+  personaWeights,
+  needFocus,
+  saltSeed,
   limit = 20,
 }: {
   books: LibraryBook[];
   favoriteCategory: string;
   desiredTags: string[];
+  personaWeights?: Record<string, number>;
+  needFocus?: NeedFocus;
+  saltSeed?: string;
   limit?: number;
 }): LibraryBook[] {
   return [...books]
-    .map((book) => ({ book, score: scoreBook(book, favoriteCategory, desiredTags) }))
+    .map((book) => ({
+      book,
+      score: needFocus
+        ? scoreBookWithPersona(book, {
+            favoriteCategory,
+            personaWeights: personaWeights ?? desiredTagsToWeights(desiredTags),
+            needFocus,
+            saltSeed: saltSeed ?? favoriteCategory,
+          })
+        : scoreBook(book, favoriteCategory, desiredTags),
+    }))
     .sort((a, b) => b.score - a.score || a.book.title.localeCompare(b.book.title, "ko"))
     .slice(0, limit)
     .map((item) => item.book);
@@ -87,6 +103,10 @@ function diversitySalt(book: LibraryBook, seed: string): number {
   const hash = createHash("sha256").update(`${seed}|${book.source}|${book.sourceId}`).digest();
   const value = hash.readUInt8(0);
   return ((value % 5) - 2) * 0.4;
+}
+
+function desiredTagsToWeights(tags: string[]): Record<string, number> {
+  return Object.fromEntries(tags.map((tag) => [tag, 3]));
 }
 
 export type SourceMixRatio = { curationRatio: number; openRatio: number };
