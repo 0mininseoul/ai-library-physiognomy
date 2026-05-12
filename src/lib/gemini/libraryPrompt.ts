@@ -70,11 +70,28 @@ export function buildLibraryPrompt({
   calibratedScores: CalibratedFaceScores;
   saju: SajuCalculation;
   candidates: LibraryBook[];
-  persona: PersonaSignal;
+  persona?: PersonaSignal;
 }) {
-  const observationLines = persona.observationCards
-    .map((card, idx) => `  ${idx + 1}. [${card.axis}] ${card.rawMetric} → ${card.observation}`)
-    .join("\n");
+  const personaBlock = persona
+    ? [
+        "─── 이미 확정된 사실 (Gemini가 재계산하지 마라) ───",
+        `얼굴 4축 점수: Balance ${persona.axisScores.balance}, Expressive ${persona.axisScores.expressive}, Focus ${persona.axisScores.focus}, Vitality ${persona.axisScores.vitality}`,
+        `얼굴 페르소나 후보 (primary 우선): ${persona.candidates.primary}, alternates: [${persona.candidates.alternates.join(", ") || "없음"}]`,
+        `내면 페르소나(사주 기반): ${persona.sajuKey} — 사용자 문장에 명리 용어 절대 쓰지 마라`,
+        "결정론적 관찰 카드:",
+        persona.observationCards.map((card, idx) => `  ${idx + 1}. [${card.axis}] ${card.rawMetric} → ${card.observation}`).join("\n"),
+        "─── Gemini가 해야 할 일 ───",
+        "1. 첨부된 이미지를 직접 보고, 위 얼굴 페르소나 후보 중 1개를 personaConfirmed에 채워라.",
+        "   primary가 이미지와 잘 맞으면 그대로, alternates 중 더 잘 맞는 게 있으면 그것을, 셋 다 안 맞을 때만 8종 중 다른 것을 골라라.",
+        "2. 16개 reading_type 중 페르소나에 가장 잘 맞는 1개를 reading_type.code에 채워라.",
+        "3. 모든 카피 필드를 VOICE_GUIDE에 맞춰 작성하라.",
+      ]
+    : [
+        "─── Gemini가 해야 할 일 ───",
+        "1. 첨부된 이미지와 입력값을 참고해 16개 reading_type 중 가장 잘 맞는 1개를 reading_type.code에 채워라.",
+        "2. personaConfirmed는 비워도 된다. 작성한다면 얼굴 페르소나 코드 형식의 짧은 문자열만 쓴다.",
+        "3. 모든 카피 필드를 VOICE_GUIDE에 맞춰 작성하라.",
+      ];
 
   return [
     "너는 대학 도서관 부스의 'AI 관상가 고양이'다.",
@@ -85,17 +102,7 @@ export function buildLibraryPrompt({
     `생년월일: ${input.birthDate}`,
     `선호 독서 카테고리: ${input.favoriteCategory}`,
     `지금 가장 필요한 것(자기성찰 답): ${input.needFocus}`,
-    "─── 이미 확정된 사실 (Gemini가 재계산하지 마라) ───",
-    `얼굴 4축 점수: Balance ${persona.axisScores.balance}, Expressive ${persona.axisScores.expressive}, Focus ${persona.axisScores.focus}, Vitality ${persona.axisScores.vitality}`,
-    `얼굴 페르소나 후보 (primary 우선): ${persona.candidates.primary}, alternates: [${persona.candidates.alternates.join(", ") || "없음"}]`,
-    `내면 페르소나(사주 기반): ${persona.sajuKey} — 사용자 문장에 명리 용어 절대 쓰지 마라`,
-    "결정론적 관찰 카드:",
-    observationLines,
-    "─── Gemini가 해야 할 일 ───",
-    "1. 첨부된 이미지를 직접 보고, 위 얼굴 페르소나 후보 중 1개를 personaConfirmed에 채워라.",
-    "   primary가 이미지와 잘 맞으면 그대로, alternates 중 더 잘 맞는 게 있으면 그것을, 셋 다 안 맞을 때만 8종 중 다른 것을 골라라.",
-    "2. 16개 reading_type 중 페르소나에 가장 잘 맞는 1개를 reading_type.code에 채워라.",
-    "3. 모든 카피 필드를 VOICE_GUIDE에 맞춰 작성하라.",
+    ...personaBlock,
     `허용 reading_type 코드: ${READING_TYPE_CODES.join(", ")}`,
     `reading_type 메타데이터: ${JSON.stringify(READING_TYPES)}`,
     "─── 책 추천 ───",

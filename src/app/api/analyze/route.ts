@@ -40,13 +40,14 @@ export async function POST(req: NextRequest) {
   const displayName = displayGivenName(body.input.name);
   const saju = calculateSaju(body.input.birthDate);
   const calibratedScores = calibrateFaceScores(body.metrics);
-  const personaSignal = resolvePersonaSignal(body.metrics, saju);
+  const personaV2Enabled = process.env.PERSONA_V2_ENABLED === "true";
+  const personaSignal = personaV2Enabled ? resolvePersonaSignal(body.metrics, saju) : null;
   const provider = new SupabaseBookProvider(supabase);
   const books = await provider.listActiveBooks();
   const candidates = selectBookCandidates({
     books,
     favoriteCategory: body.input.favoriteCategory,
-    desiredTags: [body.input.favoriteCategory],
+    desiredTags: personaSignal ? Object.keys(personaSignal.bookTagWeights) : [body.input.favoriteCategory],
     limit: 20,
   });
 
@@ -87,7 +88,7 @@ export async function POST(req: NextRequest) {
 
     const ai = getGeminiClient();
     const visionEnabled = process.env.GEMINI_VISION_ENABLED === "true";
-    const promptText = buildLibraryPrompt({ input: body.input, displayName, metrics: body.metrics, calibratedScores, saju, candidates, persona: personaSignal });
+    const promptText = buildLibraryPrompt({ input: body.input, displayName, metrics: body.metrics, calibratedScores, saju, candidates, persona: personaSignal ?? undefined });
     const inlineImage = visionEnabled
       ? [{ inlineData: { data: stripDataUrl(body.imageBase64), mimeType: "image/jpeg" } }]
       : [];
@@ -290,12 +291,14 @@ export async function POST(req: NextRequest) {
       ...normalized,
       scores: resultScores,
       calibratedScores,
-      persona: {
-        candidates: personaSignal.candidates,
-        confirmed: normalized.personaConfirmed ?? personaSignal.candidates.primary,
-        sajuKey: personaSignal.sajuKey,
-        axisScores: personaSignal.axisScores,
-      },
+      persona: personaSignal
+        ? {
+            candidates: personaSignal.candidates,
+            confirmed: normalized.personaConfirmed ?? personaSignal.candidates.primary,
+            sajuKey: personaSignal.sajuKey,
+            axisScores: personaSignal.axisScores,
+          }
+        : undefined,
       saju: { ...normalized.saju, calculation: saju },
       recommendations: finalRecommendations,
     };

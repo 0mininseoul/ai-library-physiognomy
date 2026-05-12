@@ -18,7 +18,8 @@
     "library:parse": "tsx scripts/library/parse-gachon-excel.ts",
     "library:fetch:cover": "tsx scripts/library/fetch-gachon-covers.ts",
     "library:tag": "tsx scripts/library/tag-gachon-books.ts",
-    "library:import": "tsx scripts/library/import-gachon-library.ts"
+    "library:import": "tsx scripts/library/import-gachon-library.ts",
+    "library:simulate": "tsx scripts/simulate-personas.ts"
   },
   "dependencies": {
     "@google/genai": "^1.50.1",
