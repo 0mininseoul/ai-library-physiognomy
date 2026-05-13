@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { parseLooseJson } from "@/lib/gemini/jsonResilience";
 import { softenFormalPolite } from "@/lib/korean/name";
 import { isReadingTypeCode } from "@/lib/reading-types/types";
 import { stripHanja } from "@/lib/saju/display";
@@ -219,6 +220,10 @@ export function normalizeLibraryRecommendations(input: unknown) {
       bookCuration: cleanArray(raw.section_copy?.book_curation),
     },
   };
+}
+
+export function parseLibraryRecommendationsResponse(rawText: string) {
+  return normalizeLibraryRecommendations(parseLooseJson(rawText));
 }
 
 function toRecommendations(input: z.infer<typeof recommendationItemSchema>[]) {

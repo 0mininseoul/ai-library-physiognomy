@@ -2,6 +2,15 @@ import { createHash } from "node:crypto";
 import { Type } from "@google/genai";
 import { NextRequest } from "next/server";
 import { buildLibraryPrompt } from "@/lib/gemini/libraryPrompt";
+import {
+  DEFAULT_ANALYSIS_MAX_OUTPUT_TOKENS,
+  DEFAULT_FLASH_THINKING_BUDGET,
+  DEFAULT_PRO_THINKING_BUDGET,
+  readNonNegativeInteger,
+  readPositiveInteger,
+  thinkingConfigForGemini25,
+  uniqueModelChain,
+} from "@/lib/gemini/generationConfig";
 import { parseLooseJson } from "@/lib/gemini/jsonResilience";
 import { normalizeLibraryAnalysis } from "@/lib/gemini/librarySchema";
 import { getGeminiClient } from "@/lib/gemini/client";
@@ -21,7 +30,12 @@ const FALLBACK_MODELS = (process.env.GEMINI_ANALYSIS_FALLBACK_MODELS ?? "gemini-
   .split(",")
   .map((m) => m.trim())
   .filter(Boolean);
-const MODEL_CHAIN = [PRIMARY_MODEL, ...FALLBACK_MODELS];
+const MODEL_CHAIN = uniqueModelChain(PRIMARY_MODEL, FALLBACK_MODELS);
+const ANALYSIS_MAX_OUTPUT_TOKENS = readPositiveInteger(process.env.GEMINI_ANALYSIS_MAX_OUTPUT_TOKENS, DEFAULT_ANALYSIS_MAX_OUTPUT_TOKENS);
+const THINKING_BUDGETS = {
+  flashThinkingBudget: readNonNegativeInteger(process.env.GEMINI_ANALYSIS_FLASH_THINKING_BUDGET, DEFAULT_FLASH_THINKING_BUDGET),
+  proThinkingBudget: readPositiveInteger(process.env.GEMINI_ANALYSIS_PRO_THINKING_BUDGET, DEFAULT_PRO_THINKING_BUDGET),
+};
 
 export async function POST(req: NextRequest) {
   const startedAt = Date.now();
@@ -87,9 +101,9 @@ export async function POST(req: NextRequest) {
     const promptText = buildLibraryPrompt({ input: body.input, displayName, metrics: body.metrics, calibratedScores, saju, persona: personaSignal ?? undefined });
     const inlineImage = visionEnabled ? [{ inlineData: { data: imageData, mimeType: "image/jpeg" } }] : [];
     const contents = [{ role: "user", parts: [{ text: promptText }, ...inlineImage] }];
-    const genConfig = {
+    const baseGenConfig = {
       temperature: 0.72,
-      maxOutputTokens: 4_500,
+      maxOutputTokens: ANALYSIS_MAX_OUTPUT_TOKENS,
       responseMimeType: "application/json",
       responseSchema: {
           type: Type.OBJECT,
@@ -219,17 +233,23 @@ export async function POST(req: NextRequest) {
     const modelStartedAt = Date.now();
     for (const model of MODEL_CHAIN) {
       try {
+        const thinkingConfig = thinkingConfigForGemini25(model, THINKING_BUDGETS);
         const candidate = await ai.models.generateContent({
           model,
           contents,
-          config: genConfig,
+          config: thinkingConfig ? { ...baseGenConfig, thinkingConfig } : baseGenConfig,
         });
         const finishReason = candidate.candidates?.[0]?.finishReason;
         const rawText = candidate.text ?? "";
         if (finishReason && finishReason !== "STOP") {
-          console.warn(`[api/analyze] model ${model} finish reason ${finishReason}`, { length: rawText.length });
+          console.warn(`[api/analyze] model ${model} finish reason ${finishReason}`, {
+            length: rawText.length,
+            maxOutputTokens: ANALYSIS_MAX_OUTPUT_TOKENS,
+            thinkingBudget: thinkingConfig?.thinkingBudget,
+            usage: summarizeGeminiUsage(candidate.usageMetadata),
+          });
           lastError = new Error(`model_finish_${finishReason}`);
-          continue;
+          if (finishReason !== "MAX_TOKENS") continue;
         }
         try {
           normalized = normalizeLibraryAnalysis(parseLooseJson(rawText));
@@ -237,11 +257,19 @@ export async function POST(req: NextRequest) {
           console.warn(`[api/analyze] model ${model} returned invalid JSON`, {
             message: parseError instanceof Error ? parseError.message : String(parseError),
             length: rawText.length,
+            finishReason,
             head: rawText.slice(0, 600),
             tail: rawText.slice(-200),
+            usage: summarizeGeminiUsage(candidate.usageMetadata),
           });
-          lastError = parseError;
+          lastError = finishReason === "MAX_TOKENS" ? lastError : parseError;
           continue;
+        }
+        if (finishReason === "MAX_TOKENS") {
+          console.warn(`[api/analyze] model ${model} returned valid JSON despite MAX_TOKENS`, {
+            length: rawText.length,
+            usage: summarizeGeminiUsage(candidate.usageMetadata),
+          });
         }
         usedModel = model;
         break;
@@ -323,6 +351,21 @@ function stripDataUrl(input: string): string {
 
 function sha256(input: string): string {
   return createHash("sha256").update(input.trim()).digest("hex");
+}
+
+function summarizeGeminiUsage(usage?: {
+  promptTokenCount?: number;
+  candidatesTokenCount?: number;
+  thoughtsTokenCount?: number;
+  totalTokenCount?: number;
+}) {
+  if (!usage) return undefined;
+  return {
+    promptTokenCount: usage.promptTokenCount,
+    candidatesTokenCount: usage.candidatesTokenCount,
+    thoughtsTokenCount: usage.thoughtsTokenCount,
+    totalTokenCount: usage.totalTokenCount,
+  };
 }
 
 function errorToMessage(error: unknown) {

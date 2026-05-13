@@ -11,9 +11,20 @@ export type AdminSessionRow = {
   student_id: string | null;
 };
 
+export type AdminEventRow = {
+  created_at: string;
+  event_name: string;
+  payload: {
+    isMobile?: boolean;
+    deviceType?: string;
+  } | null;
+};
+
 export type AdminMetrics = {
   todayParticipants: number;
   todayRecommendedBookCount: number;
+  todayBookQrOpens: number;
+  todayBookQrMobileOpens: number;
   hourlyParticipants: Array<{ hour: number; count: number }>;
   categoryDistribution: Record<string, number>;
   recommendedBooks: Array<BookRecommendation & { category?: string | null; tags?: string[] | null }>;
@@ -28,12 +39,15 @@ export type AdminMetrics = {
   }>;
 };
 
-export function buildAdminMetrics(rows: AdminSessionRow[]): AdminMetrics {
+export function buildAdminMetrics(rows: AdminSessionRow[], events: AdminEventRow[] = []): AdminMetrics {
   const recommendedBooks = rows.flatMap((row) => row.result_json?.recommendations ?? []);
+  const bookQrEvents = events.filter((event) => event.event_name === "book_qr_result_open");
 
   return {
     todayParticipants: rows.length,
     todayRecommendedBookCount: recommendedBooks.length,
+    todayBookQrOpens: bookQrEvents.length,
+    todayBookQrMobileOpens: bookQrEvents.filter(isMobileQrEvent).length,
     hourlyParticipants: buildHourlyParticipants(rows.map((row) => row.created_at)),
     categoryDistribution: countBy(rows.map((row) => row.favorite_category).filter(isPresent)),
     recommendedBooks,
@@ -72,4 +86,8 @@ export function maskStudentId(value: string) {
 
 function isPresent(value: string | null | undefined): value is string {
   return Boolean(value);
+}
+
+function isMobileQrEvent(event: AdminEventRow) {
+  return event.payload?.isMobile === true || event.payload?.deviceType === "mobile";
 }

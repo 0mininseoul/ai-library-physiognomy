@@ -23,6 +23,7 @@ export type BookRow = {
   category: string;
   description: string;
   cover_url: string | null;
+  detail_url: string | null;
   call_number: string;
   location_label: string;
   location_room: string | null;
@@ -73,6 +74,7 @@ function toRow(book: LibraryBook): BookRow {
     category: book.category,
     description: book.description,
     cover_url: book.coverUrl,
+    detail_url: book.detailUrl ?? null,
     call_number: book.callNumber,
     location_label: book.locationLabel,
     location_room: book.locationRoom ?? null,
@@ -202,6 +204,7 @@ function metadataOnlyRow(row: BookRow) {
     isbn13: row.isbn13,
     description: row.description,
     cover_url: row.cover_url,
+    detail_url: row.detail_url,
     tags: row.tags,
     category: row.category,
     updated_at: new Date().toISOString(),

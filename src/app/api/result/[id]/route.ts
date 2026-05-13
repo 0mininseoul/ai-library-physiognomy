@@ -1,10 +1,12 @@
+import { createHash } from "node:crypto";
 import { NextRequest } from "next/server";
 import { getServerSupabase } from "@/lib/supabase/server";
 import { isFaceImageVisible } from "@/lib/privacy/retention";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
-export async function GET(_req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   const supabase = getServerSupabase();
   const { data, error } = await supabase
     .from("library_sessions")
@@ -23,6 +25,10 @@ export async function GET(_req: NextRequest, { params }: { params: { id: string 
     faceImageUrl = `/api/result/${data.id}/face-image`;
   }
 
+  await trackBookQrOpen(req, supabase, data.id).catch((error) => {
+    console.warn("[api/result] QR tracking failed", error);
+  });
+
   return Response.json(
     {
       id: data.id,
@@ -37,4 +43,33 @@ export async function GET(_req: NextRequest, { params }: { params: { id: string 
       },
     },
   );
+}
+
+async function trackBookQrOpen(req: NextRequest, supabase: ReturnType<typeof getServerSupabase>, sessionId: string) {
+  const source = req.nextUrl.searchParams.get("src");
+  if (source !== "book_qr") return;
+
+  const userAgent = req.headers.get("user-agent") ?? "";
+  const isMobile = isMobileUserAgent(userAgent);
+  const { error } = await supabase.from("service_events").insert({
+    session_id: sessionId,
+    event_name: "book_qr_result_open",
+    payload: {
+      source,
+      view: req.nextUrl.searchParams.get("m") === "1" ? "mobile_result" : "result",
+      isMobile,
+      deviceType: isMobile ? "mobile" : "desktop",
+      userAgentHash: sha256(userAgent),
+    },
+  });
+
+  if (error) throw error;
+}
+
+function isMobileUserAgent(userAgent: string) {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(userAgent);
+}
+
+function sha256(input: string) {
+  return createHash("sha256").update(input).digest("hex");
 }

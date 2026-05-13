@@ -13,6 +13,7 @@ export type LibraryBook = {
   category: string;
   description: string;
   coverUrl: string | null;
+  detailUrl?: string | null;
   callNumber: string;
   locationLabel: string;
   locationRoom?: string; // 자료실 (예: "북큐레이션코너(1층)")

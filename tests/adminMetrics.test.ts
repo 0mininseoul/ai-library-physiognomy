@@ -36,10 +36,28 @@ describe("admin metrics helpers", () => {
       },
     ];
 
-    const metrics = buildAdminMetrics(rows);
+    const metrics = buildAdminMetrics(rows, [
+      {
+        created_at: "2026-05-09T02:10:00",
+        event_name: "book_qr_result_open",
+        payload: { isMobile: true, deviceType: "mobile" },
+      },
+      {
+        created_at: "2026-05-09T02:25:00",
+        event_name: "book_qr_result_open",
+        payload: { isMobile: false, deviceType: "desktop" },
+      },
+      {
+        created_at: "2026-05-09T02:40:00",
+        event_name: "other_event",
+        payload: { isMobile: true, deviceType: "mobile" },
+      },
+    ]);
 
     expect(metrics.todayParticipants).toBe(2);
     expect(metrics.todayRecommendedBookCount).toBe(1);
+    expect(metrics.todayBookQrOpens).toBe(2);
+    expect(metrics.todayBookQrMobileOpens).toBe(1);
     expect(metrics.hourlyParticipants[1]?.count).toBe(2);
     expect(metrics.categoryDistribution).toEqual({ 소설: 2 });
     expect(metrics.recommendationCategoryDistribution).toEqual({ 자기계발: 1 });

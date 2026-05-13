@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ReactNode, WheelEvent } from "react";
 import Link from "next/link";
-import { CameraOff, ChevronLeft, ChevronRight, Gauge, HeartHandshake, Loader2, RefreshCw, RotateCcw, ShieldCheck } from "lucide-react";
+import { CameraOff, ChevronLeft, ChevronRight, Gauge, HeartHandshake, Loader2, RefreshCw, RotateCcw } from "lucide-react";
 import { BrandLogo } from "@/components/brand/BrandLogo";
 import { LibraryPartnerBadge } from "@/components/brand/LibraryPartnerLogo";
 import { BookRecommendationCard } from "@/components/result/BookRecommendationCard";
@@ -35,7 +35,7 @@ export function ResultPage({ sessionId }: { sessionId: string }) {
     let cancelled = false;
     setStatus("loading");
 
-    fetch(`/api/result/${sessionId}`)
+    fetch(resultApiPath(sessionId))
       .then(async (res) => {
         if (!res.ok) throw new Error("not_found");
         return (await res.json()) as ResultPayload;
@@ -97,6 +97,20 @@ export function ResultPage({ sessionId }: { sessionId: string }) {
   }
 
   return <ResultContent payload={payload} />;
+}
+
+function resultApiPath(sessionId: string): string {
+  const pathname = `/api/result/${sessionId}`;
+  if (typeof window === "undefined") return pathname;
+
+  const pageSearch = new URLSearchParams(window.location.search);
+  if (pageSearch.get("src") !== "book_qr") return pathname;
+
+  const apiSearch = new URLSearchParams();
+  const mobileView = pageSearch.get("m");
+  if (mobileView === "1") apiSearch.set("m", "1");
+  apiSearch.set("src", "book_qr");
+  return `${pathname}?${apiSearch.toString()}`;
 }
 
 export function ResultContent({ payload }: { payload: ResultPayload }) {
@@ -242,13 +256,25 @@ export function ResultContent({ payload }: { payload: ResultPayload }) {
           </RevealItem>
         </StorySection>
 
-        <StorySection active={activeSection === 4} index={4} eyebrow="BOOK CURATION" title={`지금 ${name}에게 필요한 책이에요`} lines={sectionLines(result, "bookCuration", buildBookSectionLines(result))} id="books">
-          <div className="grid min-h-0 gap-5 lg:grid-cols-[minmax(0,1fr)_auto]">
+        <StorySection
+          active={activeSection === 4}
+          index={4}
+          eyebrow="BOOK CURATION"
+          title={`지금 ${name}에게 필요한 책이에요`}
+          lines={sectionLines(result, "bookCuration", buildBookSectionLines(result))}
+          id="books"
+          testId="books-story-section"
+          headingAside={
+            <RevealItem active={activeSection === 4} delay={220}>
+              <div data-testid="book-section-heading-qr">
+                <QrCard sessionId={payload.id} variant="headline" />
+              </div>
+            </RevealItem>
+          }
+        >
+          <div className="grid min-h-0 gap-5">
             <RevealItem active={activeSection === 4} delay={140}>
               <BookCurationSection result={result} status={recommendationStatus} />
-            </RevealItem>
-            <RevealItem active={activeSection === 4} delay={260}>
-              <QrCard sessionId={payload.id} />
             </RevealItem>
           </div>
         </StorySection>
@@ -285,14 +311,6 @@ export function ResultContent({ payload }: { payload: ResultPayload }) {
           />
         ))}
       </nav>
-
-      {activeSection === RESULT_SECTION_COUNT - 1 ? (
-        <footer className="fixed right-8 top-24 z-40 max-w-md rounded-xl border border-border bg-bg-card/75 px-4 py-3 text-xs font-bold leading-5 text-text-faint shadow-glass backdrop-blur-2xl">
-          <span className="inline-flex items-center gap-2">
-            <ShieldCheck className="h-4 w-4 text-accent-info" aria-hidden="true" />본 분석은 흥미용 해석이며, 의학적 소견이나 절대 평가가 아니에요.
-          </span>
-        </footer>
-      ) : null}
     </main>
   );
 }
@@ -345,28 +363,55 @@ function ResultFacePanel({ displayName, faceImageUrl }: { displayName: string; f
   );
 }
 
-function StorySection({ active, index, eyebrow, title, lines, id, children }: { active: boolean; index: number; eyebrow: string; title: string; lines: string[]; id?: string; children: ReactNode }) {
+function StorySection({
+  active,
+  index,
+  eyebrow,
+  title,
+  lines,
+  id,
+  testId,
+  headingAside,
+  children,
+}: {
+  active: boolean;
+  index: number;
+  eyebrow: string;
+  title: string;
+  lines: string[];
+  id?: string;
+  testId?: string;
+  headingAside?: ReactNode;
+  children: ReactNode;
+}) {
   const streamedLines = useTypewriterLines(lines, index, active);
   const readableLines = useMemo(() => streamedLines.flatMap(splitReadableSentences), [streamedLines]);
 
   return (
-    <section id={id} className="scanline relative h-screen w-screen shrink-0 overflow-hidden px-28 pb-20 pt-28">
+    <section id={id} data-testid={testId} className="scanline relative h-screen w-screen shrink-0 overflow-hidden px-28 pb-20 pt-28">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_16%,rgb(var(--accent-info-rgb)_/_0.12),transparent_28rem),radial-gradient(circle_at_10%_90%,rgb(255_255_255_/_0.055),transparent_26rem),linear-gradient(180deg,rgb(255_255_255_/_0.035),transparent_18rem)]" />
       <div className="relative z-10 mx-auto grid h-full w-full max-w-[92rem] grid-rows-[auto_minmax(0,1fr)] content-start gap-5">
-        <div className="w-full">
-          <p className="text-xs font-black uppercase tracking-[0.18em] text-accent-info">{eyebrow}</p>
-          {index === 0 ? (
-            <h1 className="mt-3 max-w-none whitespace-nowrap text-5xl font-bold leading-[1.08] text-text-primary lg:text-[3.75rem] xl:text-[4rem]">{title}</h1>
-          ) : (
-            <h2 className="mt-3 max-w-none whitespace-nowrap text-[2.8rem] font-bold leading-[1.08] text-text-primary lg:text-[3.05rem] xl:text-[3.35rem]">{title}</h2>
-          )}
-          {readableLines.length > 0 ? (
-            <div className="mt-6 min-h-[5.7rem] max-w-5xl overflow-hidden border-l-2 border-accent-info/55 bg-gradient-to-r from-bg-card/62 via-bg-card/38 to-transparent py-2 pl-5 pr-5" aria-live="polite">
-              {readableLines.map((line, lineIndex) => (
-                <p key={`${index}-${lineIndex}`} className="text-sm font-semibold leading-7 text-text-muted md:text-[0.98rem]">
-                  {line}
-                </p>
-              ))}
+        <div className="grid w-full gap-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start">
+          <div className="min-w-0">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-accent-info">{eyebrow}</p>
+            {index === 0 ? (
+              <h1 className="mt-3 max-w-none whitespace-nowrap text-5xl font-bold leading-[1.08] text-text-primary lg:text-[3.75rem] xl:text-[4rem]">{title}</h1>
+            ) : (
+              <h2 className="mt-3 max-w-none whitespace-nowrap text-[2.8rem] font-bold leading-[1.08] text-text-primary lg:text-[3.05rem] xl:text-[3.35rem]">{title}</h2>
+            )}
+            {readableLines.length > 0 ? (
+              <div className="mt-6 min-h-[5.7rem] max-w-5xl overflow-hidden border-l-2 border-accent-info/55 bg-gradient-to-r from-bg-card/62 via-bg-card/38 to-transparent py-2 pl-5 pr-5" aria-live="polite">
+                {readableLines.map((line, lineIndex) => (
+                  <p key={`${index}-${lineIndex}`} className="text-sm font-semibold leading-7 text-text-muted md:text-[0.98rem]">
+                    {line}
+                  </p>
+                ))}
+              </div>
+            ) : null}
+          </div>
+          {headingAside ? (
+            <div data-testid={id === "books" ? "book-section-heading-aside" : undefined} className={["hidden lg:block", id === "books" ? "pt-[3.4rem]" : "pt-8"].join(" ")}>
+              {headingAside}
             </div>
           ) : null}
         </div>

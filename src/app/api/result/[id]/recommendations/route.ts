@@ -1,10 +1,20 @@
 import { Type } from "@google/genai";
 import { NextRequest } from "next/server";
+import { bookLibraryHref } from "@/lib/books/gachonLinks";
 import { SupabaseBookProvider } from "@/lib/books/provider";
 import { selectBookCandidates } from "@/lib/books/recommender";
-import { isGachonLibraryBook } from "@/lib/books/types";
+import { isGachonLibraryBook, type LibraryBook } from "@/lib/books/types";
+import {
+  DEFAULT_FLASH_THINKING_BUDGET,
+  DEFAULT_PRO_THINKING_BUDGET,
+  DEFAULT_RECOMMENDATION_MAX_OUTPUT_TOKENS,
+  readNonNegativeInteger,
+  readPositiveInteger,
+  thinkingConfigForGemini25,
+  uniqueModelChain,
+} from "@/lib/gemini/generationConfig";
 import { buildBookRecommendationPrompt } from "@/lib/gemini/libraryPrompt";
-import { normalizeLibraryRecommendations } from "@/lib/gemini/librarySchema";
+import { parseLibraryRecommendationsResponse } from "@/lib/gemini/librarySchema";
 import { getGeminiClient } from "@/lib/gemini/client";
 import { resolvePersonaSignal } from "@/lib/persona/personaResolver";
 import { calculateSaju } from "@/lib/saju/calculator";
@@ -14,13 +24,19 @@ import type { LibraryAnalysisResult, NeedFocus } from "@/types/session";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
+export const dynamic = "force-dynamic";
 
 const PRIMARY_MODEL = process.env.GEMINI_RECOMMENDATION_MODEL ?? process.env.GEMINI_LIVE_MODEL ?? process.env.GEMINI_LIBRARY_MODEL ?? "gemini-2.5-flash";
 const FALLBACK_MODELS = (process.env.GEMINI_RECOMMENDATION_FALLBACK_MODELS ?? process.env.GEMINI_LIBRARY_FALLBACK_MODELS ?? "gemini-2.5-flash,gemini-2.5-flash")
   .split(",")
   .map((m) => m.trim())
   .filter(Boolean);
-const MODEL_CHAIN = [PRIMARY_MODEL, ...FALLBACK_MODELS];
+const MODEL_CHAIN = uniqueModelChain(PRIMARY_MODEL, FALLBACK_MODELS);
+const RECOMMENDATION_MAX_OUTPUT_TOKENS = readPositiveInteger(process.env.GEMINI_RECOMMENDATION_MAX_OUTPUT_TOKENS, DEFAULT_RECOMMENDATION_MAX_OUTPUT_TOKENS);
+const THINKING_BUDGETS = {
+  flashThinkingBudget: readNonNegativeInteger(process.env.GEMINI_RECOMMENDATION_FLASH_THINKING_BUDGET, DEFAULT_FLASH_THINKING_BUDGET),
+  proThinkingBudget: readPositiveInteger(process.env.GEMINI_RECOMMENDATION_PRO_THINKING_BUDGET, DEFAULT_PRO_THINKING_BUDGET),
+};
 
 type SessionRow = {
   id: string;
@@ -76,9 +92,9 @@ export async function POST(_req: NextRequest, { params }: { params: { id: string
       analysis: baseResult,
       candidates,
     });
-    const config = {
+    const baseConfig = {
       temperature: 0.72,
-      maxOutputTokens: 1_900,
+      maxOutputTokens: RECOMMENDATION_MAX_OUTPUT_TOKENS,
       responseMimeType: "application/json",
       responseSchema: {
         type: Type.OBJECT,
@@ -112,16 +128,18 @@ export async function POST(_req: NextRequest, { params }: { params: { id: string
       },
     };
 
-    let response: Awaited<ReturnType<typeof ai.models.generateContent>> | null = null;
+    let normalized: ReturnType<typeof parseLibraryRecommendationsResponse> | null = null;
     let lastError: unknown = null;
-    let usedModel = MODEL_CHAIN[0]!;
+    let usedModel: string | null = null;
     for (const model of MODEL_CHAIN) {
       try {
-        response = await ai.models.generateContent({
+        const thinkingConfig = thinkingConfigForGemini25(model, THINKING_BUDGETS);
+        const response = await ai.models.generateContent({
           model,
           contents: [{ role: "user", parts: [{ text: promptText }] }],
-          config,
+          config: thinkingConfig ? { ...baseConfig, thinkingConfig } : baseConfig,
         });
+        normalized = parseLibraryRecommendationsResponse(response.text ?? "{}");
         usedModel = model;
         break;
       } catch (caught) {
@@ -129,10 +147,20 @@ export async function POST(_req: NextRequest, { params }: { params: { id: string
         console.warn(`[api/result/recommendations] model ${model} failed`, caught);
       }
     }
-    if (!response) throw lastError ?? new Error("all_models_failed");
-    console.log(`[api/result/recommendations] used model ${usedModel}`);
-
-    const normalized = normalizeLibraryRecommendations(JSON.parse(response.text ?? "{}"));
+    if (normalized) {
+      console.log(`[api/result/recommendations] used model ${usedModel}`);
+    } else {
+      console.warn("[api/result/recommendations] using deterministic fallback", {
+        sessionId: session.id,
+        message: lastError instanceof Error ? lastError.message : String(lastError ?? "all_models_failed"),
+      });
+      normalized = buildFallbackRecommendationPayload({
+        baseResult,
+        candidates,
+        favoriteCategory: session.favorite_category,
+        needFocus: session.need_focus,
+      });
+    }
     const candidateById = new Map(candidates.map((book) => [book.sourceId, book]));
     const recommendedDatabaseIds: string[] = [];
     const recommendations = normalized.recommendations.map((item) => {
@@ -145,8 +173,9 @@ export async function POST(_req: NextRequest, { params }: { params: { id: string
         author: book.author,
         category: book.category,
         tags: book.tags,
+        isbn13: book.isbn13,
         coverUrl: book.coverUrl,
-        naverBookUrl: naverBookUrl(book.title, book.author),
+        libraryDetailUrl: bookLibraryHref(book),
         callNumber: book.callNumber,
         locationLabel: book.locationLabel,
         reason: item.reason,
@@ -182,6 +211,7 @@ export async function POST(_req: NextRequest, { params }: { params: { id: string
         status: "complete",
         result_json: resultJson,
         recommended_book_ids: recommendedDatabaseIds,
+        last_error: null,
       })
       .eq("id", session.id);
 
@@ -200,7 +230,59 @@ function textArraySchema(maxItems: number) {
   return { type: Type.ARRAY, items: { type: Type.STRING }, minItems: 1, maxItems };
 }
 
-function naverBookUrl(title: string, author: string) {
-  const query = encodeURIComponent(`${title} ${author}`.trim());
-  return `https://search.shopping.naver.com/book/search?query=${query}`;
+function buildFallbackRecommendationPayload({
+  baseResult,
+  candidates,
+  favoriteCategory,
+  needFocus,
+}: {
+  baseResult: LibraryAnalysisResult;
+  candidates: LibraryBook[];
+  favoriteCategory: string;
+  needFocus: NeedFocus;
+}): ReturnType<typeof parseLibraryRecommendationsResponse> {
+  const readingNeeds = uniqueNonEmpty([...baseResult.readingNeeds, baseResult.readingType.displayName, favoriteCategory, needFocusLabel(needFocus)]).slice(0, 6);
+  while (readingNeeds.length < 3) readingNeeds.push("지금 바로 읽기 좋은 방향");
+
+  const bookCuration =
+    baseResult.sectionCopy?.bookCuration?.length ? baseResult.sectionCopy.bookCuration.slice(0, 2) : ["지금 필요한 독서 방향에 맞춰 바로 집어 들기 좋은 책을 골랐어요.", "대표 책 1권과 함께 읽기 좋은 책 2권만 간단히 추렸어요."];
+
+  return {
+    readingNeeds,
+    sectionCopy: { bookCuration },
+    recommendations: candidates.slice(0, 3).map((book, index) => {
+      const need = readingNeeds[index % readingNeeds.length] ?? favoriteCategory;
+      return {
+        bookId: book.sourceId,
+        reason: `${baseResult.readingType.displayName} 흐름과 ${book.category} 주제가 맞아 지금 읽기 좋은 책이에요.`,
+        actionCopy: index === 0 ? "가장 먼저 집어 들기 좋은 한 권이에요." : "함께 읽으면 방향이 더 선명해져요.",
+        fitReason: `${need}에 맞춰 ${book.tags.slice(0, 2).join(", ") || book.category} 키워드를 우선으로 골랐어요.`,
+        readingMoment: needFocusMoment(needFocus),
+      };
+    }),
+  };
+}
+
+function uniqueNonEmpty(values: string[]) {
+  return Array.from(new Set(values.map((value) => value.trim()).filter(Boolean)));
+}
+
+function needFocusLabel(needFocus: NeedFocus) {
+  const labels: Record<NeedFocus, string> = {
+    stimulation: "새로운 자극",
+    comfort: "차분한 회복",
+    utility: "실용적 힌트",
+    depth: "깊은 몰입",
+  };
+  return labels[needFocus];
+}
+
+function needFocusMoment(needFocus: NeedFocus) {
+  const moments: Record<NeedFocus, string> = {
+    stimulation: "새로운 자극이 필요할 때",
+    comfort: "생각을 차분히 정리하고 싶을 때",
+    utility: "바로 써먹을 힌트가 필요할 때",
+    depth: "한 주제를 깊게 붙잡고 싶을 때",
+  };
+  return moments[needFocus];
 }

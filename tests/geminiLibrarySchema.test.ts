@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { normalizeLibraryAnalysis, normalizeLibraryRecommendations } from "@/lib/gemini/librarySchema";
+import { normalizeLibraryAnalysis, normalizeLibraryRecommendations, parseLibraryRecommendationsResponse } from "@/lib/gemini/librarySchema";
 
 describe("normalizeLibraryAnalysis", () => {
   it("accepts allowed reading type codes and three recommendations", () => {
@@ -209,6 +209,26 @@ describe("normalizeLibraryAnalysis", () => {
     expect(result.recommendations).toHaveLength(3);
     expect(result.recommendations[0].reason).toContain("전체 인상");
     expect(result.sectionCopy.bookCuration[0]).toContain("집중");
+  });
+
+  it("parses recommendation-only Gemini text with raw newlines in string values", () => {
+    const result = parseLibraryRecommendationsResponse(`{
+      "section_copy": {
+        "book_curation": ["지금은 집중을
+좁혀주는 책이 잘 맞아요."]
+      },
+      "reading_needs": ["집중력 회복", "실행력", "사고 확장"],
+      "recommendations": [
+        {"book_id": "1", "reason": "첫 줄
+둘째 줄", "action_copy": "첫 장부터", "fit_reason": "탐색 성향을 좁혀줘요.", "reading_moment": "오전 15분"},
+        {"book_id": "2", "reason": "실행력을 보강합니다.", "action_copy": "오늘 바로", "fit_reason": "작게 시작하게 도와줘요.", "reading_moment": "점심 전"},
+        {"book_id": "3", "reason": "사고를 정리합니다.", "action_copy": "메모하며 읽기", "fit_reason": "생각을 문장으로 정리하게 해줘요.", "reading_moment": "잠들기 전"}
+      ]
+    }`);
+
+    expect(result.recommendations).toHaveLength(3);
+    expect(result.recommendations[0].reason).toContain("둘째 줄");
+    expect(result.sectionCopy.bookCuration[0]).toContain("좁혀주는 책");
   });
 
   it("removes banned user-facing terms while allowing relationship wording", () => {
