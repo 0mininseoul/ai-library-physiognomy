@@ -100,6 +100,10 @@ export type LibraryAnalysisResult = {
     confirmed: string;
     sajuKey: string;
     axisScores: { balance: number; expressive: number; focus: number; vitality: number };
+    readingTypeCandidates?: ReadingTypeCode[];
+    readingTypeModelCode?: ReadingTypeCode;
+    readingTypeCorrected?: boolean;
+    readingTypeReason?: "model_candidate" | "unsupported_by_persona" | "invalid_model_code";
   };
   sectionCopy?: {
     faceReveal: string[];

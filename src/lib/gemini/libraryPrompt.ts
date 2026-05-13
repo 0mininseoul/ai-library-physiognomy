@@ -3,6 +3,7 @@ import { bestsellerPenalty } from "@/lib/books/recommender";
 import type { LibraryBook } from "@/lib/books/types";
 import type { CalibratedFaceScores } from "@/lib/facemesh/scoreCalibration";
 import type { PersonaSignal } from "@/lib/persona/types";
+import { recommendedReadingTypeCandidates } from "@/lib/reading-types/personaMapping";
 import type { SajuCalculation } from "@/lib/saju/calculator";
 import type { FaceMetrics } from "@/types/face";
 import type { LibraryAnalysisResult, NeedFocus, StudentInput } from "@/types/session";
@@ -29,7 +30,7 @@ chemi_match 성별 분기:
 - 톤은 추정형을 유지한다: "~이런 분과 흐름이 잘 맞으실 것 같아요".
 
 좋은 예시:
-- "{name}님 머릿속 탭 47개 열어두고 메인 작업창 못 찾으실 것 같아요"
+- "{name}님 새 취향 발견하면 일단 저장해두실 것 같아요"
 - "{name}님 답장 늦으면 의미부여 시작하실 것 같은 분이세요"
 - "{name}님 결정은 빠른데 그 결정의 7번째 백업 플랜까지 짜놓는 타입일 수도 있어요"
 - "{name}님 새벽 2시에 갑자기 책 꺼내들 것 같은 사람"
@@ -70,18 +71,23 @@ export function buildLibraryPrompt({
   saju: SajuCalculation;
   persona?: PersonaSignal;
 }) {
+  const readingTypeCandidates = persona ? recommendedReadingTypeCandidates(persona) : null;
+  const readingTypeMetadata = readingTypeCandidates
+    ? Object.fromEntries(readingTypeCandidates.map((code) => [code, READING_TYPES[code]]))
+    : READING_TYPES;
   const personaBlock = persona
     ? [
         "─── 이미 확정된 사실 (재계산하지 마라) ───",
         `얼굴 4축 점수: Balance ${persona.axisScores.balance}, Expressive ${persona.axisScores.expressive}, Focus ${persona.axisScores.focus}, Vitality ${persona.axisScores.vitality}`,
         `얼굴 페르소나 후보 (primary 우선): ${persona.candidates.primary}, alternates: [${persona.candidates.alternates.join(", ") || "없음"}]`,
         `내면 페르소나(사주 기반): ${persona.sajuKey} — 사용자 문장에 명리 용어 절대 쓰지 마라`,
+        `권장 reading_type 후보: ${readingTypeCandidates!.join(", ")}`,
         "결정론적 관찰 카드:",
         persona.observationCards.map((card, idx) => `  ${idx + 1}. [${card.axis}] ${card.rawMetric} → ${card.observation}`).join("\n"),
         "─── 작성 규칙 ───",
         "1. 첨부된 이미지를 직접 보고, 위 얼굴 페르소나 후보 중 1개를 personaConfirmed에 채워라.",
         "   primary가 이미지와 잘 맞으면 그대로, alternates 중 더 잘 맞는 게 있으면 그것을, 셋 다 안 맞을 때만 8종 중 다른 것을 골라라.",
-        "2. 16개 reading_type 중 페르소나에 가장 잘 맞는 1개를 reading_type.code에 채워라.",
+        "2. reading_type.code는 권장 후보 3개 중 하나만 골라라. 후보 밖 코드는 선택하지 마라.",
         "3. 모든 카피 필드를 VOICE_GUIDE에 맞춰 작성하라.",
       ]
     : [
@@ -100,7 +106,7 @@ export function buildLibraryPrompt({
     `생년월일: ${input.birthDate}`,
     ...personaBlock,
     `허용 reading_type 코드: ${READING_TYPE_CODES.join(", ")}`,
-    `reading_type 메타데이터: ${JSON.stringify(READING_TYPES)}`,
+    `reading_type 메타데이터: ${JSON.stringify(readingTypeMetadata)}`,
     "─── 출력 ───",
     "JSON 한 덩어리만 반환한다. reading_type.code는 허용 코드 중 하나여야 하고, personaConfirmed는 8종 얼굴 페르소나 코드 중 하나여야 한다.",
     "토큰 초과 방지를 위해 main_copy는 2문장 이하, 그 외 모든 문자열과 배열 항목은 1문장으로 짧게 쓴다.",

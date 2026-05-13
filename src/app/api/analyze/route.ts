@@ -15,8 +15,10 @@ import { parseLooseJson } from "@/lib/gemini/jsonResilience";
 import { normalizeLibraryAnalysis } from "@/lib/gemini/librarySchema";
 import { getGeminiClient } from "@/lib/gemini/client";
 import { calibrateFaceScores } from "@/lib/facemesh/scoreCalibration";
-import { displayGivenName } from "@/lib/korean/name";
+import { displayGivenName, honorific } from "@/lib/korean/name";
 import { resolvePersonaSignal } from "@/lib/persona/personaResolver";
+import { chooseReadingTypeForPersona } from "@/lib/reading-types/personaMapping";
+import { getResultFirstSectionCopy } from "@/lib/reading-types/resultFirstSectionCopy";
 import { calculateSaju } from "@/lib/saju/calculator";
 import { getServerSupabase } from "@/lib/supabase/server";
 import type { FaceMetrics, Landmark } from "@/types/face";
@@ -55,7 +57,8 @@ export async function POST(req: NextRequest) {
   const saju = calculateSaju(body.input.birthDate);
   const calibratedScores = calibrateFaceScores(body.metrics);
   const personaV2Enabled = process.env.PERSONA_V2_ENABLED === "true";
-  const personaSignal = personaV2Enabled ? resolvePersonaSignal(body.metrics, saju) : null;
+  const readingTypeGuardEnabled = process.env.READING_TYPE_PERSONA_GUARD_ENABLED !== "false";
+  const personaSignal = personaV2Enabled || readingTypeGuardEnabled ? resolvePersonaSignal(body.metrics, saju) : null;
 
   const { data: session, error: insertError } = await supabase
     .from("library_sessions")
@@ -98,7 +101,7 @@ export async function POST(req: NextRequest) {
 
     const ai = getGeminiClient();
     const visionEnabled = process.env.GEMINI_VISION_ENABLED === "true";
-    const promptText = buildLibraryPrompt({ input: body.input, displayName, metrics: body.metrics, calibratedScores, saju, persona: personaSignal ?? undefined });
+    const promptText = buildLibraryPrompt({ input: body.input, displayName, metrics: body.metrics, calibratedScores, saju, persona: personaV2Enabled ? personaSignal ?? undefined : undefined });
     const inlineImage = visionEnabled ? [{ inlineData: { data: imageData, mimeType: "image/jpeg" } }] : [];
     const contents = [{ role: "user", parts: [{ text: promptText }, ...inlineImage] }];
     const baseGenConfig = {
@@ -279,6 +282,34 @@ export async function POST(req: NextRequest) {
       }
     }
     if (!normalized) throw lastError ?? new Error("all_models_failed");
+    const readingTypeDecision = readingTypeGuardEnabled && personaSignal
+      ? chooseReadingTypeForPersona({
+          modelCode: normalized.readingType.code,
+          persona: personaSignal,
+          confirmedFaceKey: normalized.personaConfirmed,
+        })
+      : null;
+    if (readingTypeDecision) {
+      if (readingTypeDecision.corrected) {
+        console.warn("[api/analyze] corrected reading_type from unsupported persona candidate", {
+          sessionId: session.id,
+          modelCode: readingTypeDecision.modelCode,
+          correctedCode: readingTypeDecision.code,
+          candidates: readingTypeDecision.candidates,
+          reason: readingTypeDecision.reason,
+        });
+      }
+      const copy = getResultFirstSectionCopy(readingTypeDecision.code);
+      normalized = {
+        ...normalized,
+        readingType: {
+          code: readingTypeDecision.code,
+          displayName: copy.displayName,
+          headline: copy.headlineTemplate.split("{nameHonorific}").join(honorific(displayName)),
+          description: copy.description,
+        },
+      };
+    }
     const modelMs = Date.now() - modelStartedAt;
     const uploadError = await uploadPromise;
     if (uploadError) throw uploadError;
@@ -302,6 +333,10 @@ export async function POST(req: NextRequest) {
             confirmed: normalized.personaConfirmed ?? personaSignal.candidates.primary,
             sajuKey: personaSignal.sajuKey,
             axisScores: personaSignal.axisScores,
+            readingTypeCandidates: readingTypeDecision?.candidates ?? [],
+            readingTypeModelCode: readingTypeDecision?.modelCode ?? normalized.readingType.code,
+            readingTypeCorrected: readingTypeDecision?.corrected ?? false,
+            readingTypeReason: readingTypeDecision?.reason ?? "model_candidate",
           }
         : undefined,
       saju: { ...normalized.saju, calculation: saju },
