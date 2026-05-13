@@ -15,7 +15,7 @@ describe("reading types", () => {
 
   it("returns display metadata", () => {
     expect(getReadingType("career_compass")).toMatchObject({
-      displayName: "방향 탐색형",
+      displayName: RESULT_FIRST_SECTION_COPY.career_compass.displayName,
       definition: expect.stringContaining("방향"),
       headlineTemplate: expect.stringContaining("{nameHonorific}"),
       tags: expect.arrayContaining(["진로", "커리어", "자기이해"]),
@@ -23,15 +23,16 @@ describe("reading types", () => {
   });
 
   it("keeps first section copy editable and hidden from book context", () => {
-    const forbiddenBeforeBookSection = /책|도서|독서|추천도서|서가|청구기호/;
+    const forbiddenBeforeBookSection = /책|도서|독서|추천도서|서가|청구기호|캠퍼스|과제|교수님|조별|전공|연애|데이트|로맨스|로맨틱|Gemini|gemini/;
 
     for (const code of READING_TYPE_CODES) {
       const copy = RESULT_FIRST_SECTION_COPY[code];
 
+      expect(copy.definition).toMatch(/^관찰 성향: .+ 필요한 방향: .+/);
       expect(copy.headlineTemplate.match(/{nameHonorific}/g)).toHaveLength(1);
       expect(copy.description.split(/(?<=[.!?])\s+/)).toHaveLength(2);
       expect(copy.chips).toHaveLength(4);
-      expect([copy.displayName, copy.headlineTemplate, copy.description, ...copy.chips].join(" ")).not.toMatch(forbiddenBeforeBookSection);
+      expect([copy.definition, copy.displayName, copy.headlineTemplate, copy.description, ...copy.chips].join(" ")).not.toMatch(forbiddenBeforeBookSection);
     }
   });
 });
