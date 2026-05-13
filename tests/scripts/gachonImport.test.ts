@@ -20,6 +20,7 @@ function row(overrides: Partial<BookRow> = {}): BookRow {
     category: "general",
     description: "설명",
     cover_url: "https://example.com/cover.jpg",
+    detail_url: "https://lib.gachon.ac.kr/search/detail/CATTOT000000000001",
     call_number: "001 홍18ㅌ",
     location_label: "중앙도서관",
     location_room: "자료실",

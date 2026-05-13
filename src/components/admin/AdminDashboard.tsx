@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import type { InputHTMLAttributes, ReactNode } from "react";
-import { BarChart3, BookOpen, Clock3, Loader2, LockKeyhole, RefreshCw, ShieldAlert, Users } from "lucide-react";
+import { BarChart3, BookOpen, Clock3, Loader2, LockKeyhole, QrCode, RefreshCw, ShieldAlert, Smartphone, Users } from "lucide-react";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import type { AdminMetrics } from "@/lib/admin/metrics";
 
@@ -161,6 +161,7 @@ export function AdminDashboardContent({ metrics, onRefresh }: { metrics: AdminMe
   const recommendedBookRows = useMemo(() => aggregateBooks(metrics.recommendedBooks), [metrics.recommendedBooks]);
   const peakHour = useMemo(() => findPeakHour(metrics.hourlyParticipants), [metrics.hourlyParticipants]);
   const averageRecommendations = metrics.todayParticipants > 0 ? metrics.todayRecommendedBookCount / metrics.todayParticipants : 0;
+  const qrMobileRate = metrics.todayBookQrOpens > 0 ? (metrics.todayBookQrMobileOpens / metrics.todayBookQrOpens) * 100 : 0;
   const maxBookCount = Math.max(1, ...recommendedBookRows.map((book) => book.count));
 
   return (
@@ -185,11 +186,13 @@ export function AdminDashboardContent({ metrics, onRefresh }: { metrics: AdminMe
           </div>
         </header>
 
-        <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-6">
           <MetricCard label="오늘 참여자" value={metrics.todayParticipants} unit="명" icon={<Users className="h-4 w-4" aria-hidden="true" />} />
           <MetricCard label="추천 도서" value={metrics.todayRecommendedBookCount} unit="권" icon={<BookOpen className="h-4 w-4" aria-hidden="true" />} />
           <MetricCard label="피크 시간대" value={peakHour ? `${peakHour.hour}시` : "-"} helper={peakHour ? `${peakHour.count}명 참여` : "데이터 없음"} icon={<Clock3 className="h-4 w-4" aria-hidden="true" />} />
           <MetricCard label="세션당 추천" value={formatDecimal(averageRecommendations)} unit="권" icon={<BarChart3 className="h-4 w-4" aria-hidden="true" />} />
+          <MetricCard label="QR 접속" value={metrics.todayBookQrOpens} unit="회" icon={<QrCode className="h-4 w-4" aria-hidden="true" />} />
+          <MetricCard label="모바일 QR" value={metrics.todayBookQrMobileOpens} unit="회" helper={metrics.todayBookQrOpens ? `${formatDecimal(qrMobileRate)}%` : "데이터 없음"} icon={<Smartphone className="h-4 w-4" aria-hidden="true" />} />
         </section>
 
         <Panel className="p-5 md:p-6">

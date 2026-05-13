@@ -1,8 +1,20 @@
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
-import { ResultContent, type ResultPayload } from "@/components/pages/ResultPage";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { ResultContent, ResultPage, type ResultPayload } from "@/components/pages/ResultPage";
+import { MobileResultPage } from "@/components/result/MobileResultPage";
+import { QrCard } from "@/components/result/QrCard";
 import { RESULT_FIRST_SECTION_COPY } from "@/lib/reading-types/resultFirstSectionCopy";
 import { calculateSaju } from "@/lib/saju/calculator";
+
+const qrCodeMock = vi.hoisted(() => ({
+  toDataURL: vi.fn(),
+}));
+
+vi.mock("qrcode", () => ({
+  default: {
+    toDataURL: qrCodeMock.toDataURL,
+  },
+}));
 
 const payload: ResultPayload = {
   id: "session-1",
@@ -102,9 +114,57 @@ const payload: ResultPayload = {
 };
 
 describe("ResultContent", () => {
+  beforeEach(() => {
+    qrCodeMock.toDataURL.mockResolvedValue("data:image/png;base64,qr");
+  });
+
   afterEach(() => {
     vi.useRealTimers();
     vi.unstubAllGlobals();
+    qrCodeMock.toDataURL.mockReset();
+    window.history.pushState({}, "", "/");
+  });
+
+  it("encodes QR links with the book QR source marker", async () => {
+    render(<QrCard sessionId="session-1" />);
+
+    await waitFor(() => {
+      expect(qrCodeMock.toDataURL).toHaveBeenCalled();
+    });
+
+    const target = new URL(String(qrCodeMock.toDataURL.mock.calls[0]?.[0]));
+    expect(target.pathname).toBe("/result/session-1");
+    expect(target.searchParams.get("m")).toBe("1");
+    expect(target.searchParams.get("src")).toBe("book_qr");
+  });
+
+  it("forwards QR mobile source params to the result API", async () => {
+    window.history.pushState({}, "", "/result/session-1?m=1&src=book_qr");
+    const fetchMock = vi.fn().mockResolvedValue(new Response(JSON.stringify(payload), { status: 200 }));
+    vi.stubGlobal("fetch", fetchMock);
+
+    render(<ResultPage sessionId="session-1" />);
+
+    await waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledWith("/api/result/session-1?m=1&src=book_qr");
+    });
+  });
+
+  it("keeps the mobile result page without the share action", () => {
+    render(<MobileResultPage payload={payload} />);
+
+    expect(screen.getByText("지금 읽기 좋은 책 3권")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "관상 분석" })).toBeInTheDocument();
+    expect(screen.getByText("이마와 눈매 밸런스에서 목표 재정렬 신호가 보입니다.")).toBeInTheDocument();
+    expect(screen.getByText("핵심을 좁히는 힘")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "사주 분석" })).toBeInTheDocument();
+    expect(screen.getByText("루틴과 실행력을 끌어올릴 타이밍입니다.")).toBeInTheDocument();
+    expect(screen.getByText("작게 시작하면 흐름이 붙습니다.")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "결과 공유하기" })).not.toBeInTheDocument();
+    for (const link of screen.getAllByRole("link", { name: "책 자세히 보기" })) {
+      expect(link).toHaveAttribute("href", expect.stringContaining("lib.gachon.ac.kr"));
+      expect(link).not.toHaveAttribute("href", expect.stringContaining("search.shopping.naver.com"));
+    }
   });
 
   it("uses horizontal snap navigation by wheel and does not auto-advance", () => {
@@ -209,7 +269,7 @@ describe("ResultContent", () => {
     expect(screen.queryByText("더보기")).not.toBeInTheDocument();
   });
 
-  it("renders internal style as strong/support signals and keeps Naver book links with cover thumbnails", () => {
+  it("renders internal style as strong/support signals and keeps Gachon library book links with cover thumbnails", () => {
     const { container } = render(<ResultContent payload={payload} />);
     const pageText = container.textContent ?? "";
 
@@ -236,6 +296,24 @@ describe("ResultContent", () => {
     expect(screen.getByText("생각 정리의 힘")).toBeInTheDocument();
     expect(screen.getByText("루틴 회복 수업")).toBeInTheDocument();
     expect(screen.getByAltText("몰입의 기술 표지")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /몰입의 기술/ })).toHaveAttribute("href", expect.stringContaining("search.shopping.naver.com"));
+    expect(screen.getByRole("link", { name: /몰입의 기술/ })).toHaveAttribute("href", expect.stringContaining("lib.gachon.ac.kr"));
+    expect(screen.getByRole("link", { name: /몰입의 기술/ })).not.toHaveAttribute("href", expect.stringContaining("search.shopping.naver.com"));
+  });
+
+  it("places the book QR in the book section headline aside", () => {
+    render(<ResultContent payload={payload} />);
+
+    const booksSection = screen.getByTestId("books-story-section");
+    expect(booksSection).toContainElement(screen.getByTestId("book-section-heading-qr"));
+    expect(screen.getByTestId("book-section-heading-aside")).toContainElement(screen.getByTestId("book-section-heading-qr"));
+  });
+
+  it("does not show the result disclaimer badge in the book section", () => {
+    render(<ResultContent payload={payload} />);
+
+    fireEvent.click(screen.getByRole("button", { name: "5번째 섹션 보기" }));
+
+    expect(screen.queryByText(/본 분석은 흥미용 해석/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/의학적 소견이나 절대 평가/)).not.toBeInTheDocument();
   });
 });

@@ -77,6 +77,7 @@ type ManualOverride = {
 export type GachonEnrichedBook = GachonRawBook & {
   isbn13: string | null;
   coverUrl: string | null;
+  detailUrl?: string | null;
   description: string;
   matchScore: number;
   matched: boolean;
@@ -91,6 +92,7 @@ export type GachonEnrichedBook = GachonRawBook & {
     publishedYear: number | string | null;
     isbn13: string | null;
     coverUrl: string | null;
+    detailUrl: string | null;
     description: string;
     score: number;
     decision: string;
@@ -370,6 +372,7 @@ function serializableCandidates(scored: CandidateWithScore[]): GachonEnrichedBoo
     publishedYear: candidate.publishedYear,
     isbn13: candidate.isbn13,
     coverUrl: candidate.coverUrl,
+    detailUrl: candidate.detailUrl,
     description: candidate.description,
     score,
     decision,
@@ -453,6 +456,7 @@ async function enrichBook(book: GachonRawBook, overrides: Record<string, ManualO
     ...book,
     isbn13: candidate?.isbn13 ?? null,
     coverUrl: candidate?.coverUrl ?? null,
+    detailUrl: candidate?.detailUrl ?? null,
     description: candidate?.description ?? "",
     matchScore: score,
     matched: status === "matched",

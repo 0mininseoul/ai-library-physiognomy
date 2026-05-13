@@ -49,6 +49,7 @@ function toLibraryBook(book: GachonEnrichedBook): LibraryBook {
     category,
     description: book.description,
     coverUrl: book.coverUrl,
+    detailUrl: book.detailUrl ?? null,
     callNumber: book.callNumber,
     locationLabel: book.locationLabel,
     locationRoom: book.locationRoom,

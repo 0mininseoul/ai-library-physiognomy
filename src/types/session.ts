@@ -22,7 +22,9 @@ export type BookRecommendation = {
   author: string;
   callNumber: string;
   locationLabel: string;
+  isbn13?: string | null;
   coverUrl?: string | null;
+  libraryDetailUrl?: string | null;
   naverBookUrl?: string;
   category?: string;
   tags?: string[];

@@ -1,4 +1,5 @@
 import { BookOpen, ExternalLink, MapPin, Tag } from "lucide-react";
+import { bookLibraryHref } from "@/lib/books/gachonLinks";
 import type { BookRecommendation } from "@/types/session";
 
 type BookRecommendationCardProps = {
@@ -8,7 +9,7 @@ type BookRecommendationCardProps = {
 };
 
 export function BookRecommendationCard({ book, index, variant = "compact" }: BookRecommendationCardProps) {
-  const href = book.naverBookUrl ?? naverBookUrl(book.title, book.author);
+  const href = bookLibraryHref(book);
 
   if (variant === "mobile") {
     return (
@@ -149,10 +150,6 @@ function BookLocation({ book, className }: { book: BookRecommendation; className
       </p>
     </div>
   );
-}
-
-function naverBookUrl(title: string, author: string) {
-  return `https://search.shopping.naver.com/book/search?query=${encodeURIComponent(`${title} ${author}`.trim())}`;
 }
 
 function compactBookReason(input: string, maxLength: number) {

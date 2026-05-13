@@ -14,6 +14,7 @@ type BookRow = {
   category: string;
   description: string;
   cover_url: string | null;
+  detail_url: string | null;
   call_number: string;
   location_label: string;
   location_room: string | null;
@@ -32,7 +33,7 @@ export class SupabaseBookProvider implements BookProvider {
     const { data, error } = await this.supabase
       .from("books")
       .select(
-        "id, source, source_label, source_id, isbn13, title, author, publisher, published_year, category, description, cover_url, call_number, location_label, location_room, availability, tags",
+        "id, source, source_label, source_id, isbn13, title, author, publisher, published_year, category, description, cover_url, detail_url, call_number, location_label, location_room, availability, tags",
       )
       .eq("active", true);
 
@@ -56,6 +57,7 @@ function toLibraryBook(row: BookRow): LibraryBook {
     category: row.category,
     description: row.description,
     coverUrl: row.cover_url,
+    detailUrl: row.detail_url,
     callNumber: row.call_number,
     locationLabel: row.location_label,
     locationRoom: row.location_room ?? undefined,
