@@ -151,7 +151,7 @@ describe("ResultContent", () => {
 
   it("pads sparse section intro copy so the headline area never feels empty", () => {
     vi.useFakeTimers();
-    render(
+    const { container } = render(
       <ResultContent
         payload={{
           ...payload,
@@ -175,7 +175,7 @@ describe("ResultContent", () => {
 
     expect(screen.getByText(RESULT_FIRST_SECTION_COPY.focus_reboot.headlineTemplate.replace("{nameHonorific}", "영민님"))).toBeInTheDocument();
     for (const sentence of RESULT_FIRST_SECTION_COPY.focus_reboot.description.split(/(?<=[.!?])\s+/)) {
-      expect(screen.getAllByText(sentence).length).toBeGreaterThan(0);
+      expect(container).toHaveTextContent(sentence);
     }
   });
 
