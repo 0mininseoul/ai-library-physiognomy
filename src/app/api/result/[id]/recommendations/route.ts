@@ -4,6 +4,15 @@ import { bookLibraryHref } from "@/lib/books/gachonLinks";
 import { SupabaseBookProvider } from "@/lib/books/provider";
 import { selectBookCandidates } from "@/lib/books/recommender";
 import { isGachonLibraryBook, type LibraryBook } from "@/lib/books/types";
+import {
+  DEFAULT_FLASH_THINKING_BUDGET,
+  DEFAULT_PRO_THINKING_BUDGET,
+  DEFAULT_RECOMMENDATION_MAX_OUTPUT_TOKENS,
+  readNonNegativeInteger,
+  readPositiveInteger,
+  thinkingConfigForGemini25,
+  uniqueModelChain,
+} from "@/lib/gemini/generationConfig";
 import { buildBookRecommendationPrompt } from "@/lib/gemini/libraryPrompt";
 import { parseLibraryRecommendationsResponse } from "@/lib/gemini/librarySchema";
 import { getGeminiClient } from "@/lib/gemini/client";
@@ -22,7 +31,12 @@ const FALLBACK_MODELS = (process.env.GEMINI_RECOMMENDATION_FALLBACK_MODELS ?? pr
   .split(",")
   .map((m) => m.trim())
   .filter(Boolean);
-const MODEL_CHAIN = [PRIMARY_MODEL, ...FALLBACK_MODELS];
+const MODEL_CHAIN = uniqueModelChain(PRIMARY_MODEL, FALLBACK_MODELS);
+const RECOMMENDATION_MAX_OUTPUT_TOKENS = readPositiveInteger(process.env.GEMINI_RECOMMENDATION_MAX_OUTPUT_TOKENS, DEFAULT_RECOMMENDATION_MAX_OUTPUT_TOKENS);
+const THINKING_BUDGETS = {
+  flashThinkingBudget: readNonNegativeInteger(process.env.GEMINI_RECOMMENDATION_FLASH_THINKING_BUDGET, DEFAULT_FLASH_THINKING_BUDGET),
+  proThinkingBudget: readPositiveInteger(process.env.GEMINI_RECOMMENDATION_PRO_THINKING_BUDGET, DEFAULT_PRO_THINKING_BUDGET),
+};
 
 type SessionRow = {
   id: string;
@@ -78,9 +92,9 @@ export async function POST(_req: NextRequest, { params }: { params: { id: string
       analysis: baseResult,
       candidates,
     });
-    const config = {
+    const baseConfig = {
       temperature: 0.72,
-      maxOutputTokens: 1_900,
+      maxOutputTokens: RECOMMENDATION_MAX_OUTPUT_TOKENS,
       responseMimeType: "application/json",
       responseSchema: {
         type: Type.OBJECT,
@@ -119,10 +133,11 @@ export async function POST(_req: NextRequest, { params }: { params: { id: string
     let usedModel: string | null = null;
     for (const model of MODEL_CHAIN) {
       try {
+        const thinkingConfig = thinkingConfigForGemini25(model, THINKING_BUDGETS);
         const response = await ai.models.generateContent({
           model,
           contents: [{ role: "user", parts: [{ text: promptText }] }],
-          config,
+          config: thinkingConfig ? { ...baseConfig, thinkingConfig } : baseConfig,
         });
         normalized = parseLibraryRecommendationsResponse(response.text ?? "{}");
         usedModel = model;
