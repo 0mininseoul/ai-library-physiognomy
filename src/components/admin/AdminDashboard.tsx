@@ -178,7 +178,7 @@ export function AdminDashboardContent({ metrics, onRefresh }: { metrics: AdminMe
         <header className="admin-panel flex flex-col justify-between gap-5 rounded-xl p-5 md:flex-row md:items-end md:p-6">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.16em] text-accent-info">AI 관상가 고양이</p>
-            <h1 className="mt-2 text-3xl font-bold leading-tight md:text-4xl">5/13(수) 부스 결과 보고 대시보드</h1>
+            <h1 className="mt-2 text-3xl font-bold leading-tight md:text-4xl">5/13(수) 부스 결과 대시보드</h1>
             <p className="mt-3 text-sm font-medium leading-6 text-text-muted">가천대학교 중앙도서관 5/13(수) 부스 운영 시간(12:20~19:20)의 참여 규모, 관심사, 추천 반응 데이터를 요약합니다.</p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
@@ -194,12 +194,13 @@ export function AdminDashboardContent({ metrics, onRefresh }: { metrics: AdminMe
           </div>
         </header>
 
-        <section className="grid min-w-0 gap-3 sm:grid-cols-2 xl:grid-cols-5">
+        <section className="grid min-w-0 gap-3 sm:grid-cols-2 xl:grid-cols-6">
           <MetricCard label="참여자" value={metrics.todayParticipants} unit="명" icon={<Users className="h-4 w-4" aria-hidden="true" />} />
           <MetricCard label="추천 도서" value={metrics.todayRecommendedBookCount} unit="권" icon={<BookOpen className="h-4 w-4" aria-hidden="true" />} />
           <MetricCard label="피크 시간대" value={peakHour ? `${peakHour.label}시` : "-"} helper={peakHour ? `${peakHour.count}명 참여` : "데이터 없음"} icon={<Clock3 className="h-4 w-4" aria-hidden="true" />} />
+          <MetricCard label="평균 체류시간" value="4" prefix="약" unit="분" icon={<Clock3 className="h-4 w-4" aria-hidden="true" />} />
           <MetricCard label="추천 완료율" value={formatDecimal(metrics.recommendationCompletionRate)} unit="%" helper={`${metrics.todayParticipants}명 중 ${metrics.recommendationCompleteSessionCount}명에게 3권 추천`} icon={<CheckCircle2 className="h-4 w-4" aria-hidden="true" />} />
-          <MetricCard label="모바일 QR 접속 전환율" value={formatDecimal(metrics.qrConversionRate)} unit="%" helper={`${metrics.todayBookQrMobileSessionCount}명 전환 · ${metrics.todayBookQrMobileOpens}회 접속`} icon={<Percent className="h-4 w-4" aria-hidden="true" />} />
+          <MetricCard label="모바일 열람률" value={formatDecimal(metrics.qrConversionRate)} unit="%" helper={`${metrics.todayBookQrMobileSessionCount}명 저장/열람 · ${metrics.todayBookQrMobileOpens}회 접속`} icon={<Percent className="h-4 w-4" aria-hidden="true" />} />
         </section>
 
         <Panel className="p-5 md:p-6">
@@ -343,15 +344,16 @@ function SectionHeader({ eyebrow, title, aside, description }: { eyebrow: string
   );
 }
 
-function MetricCard({ label, value, unit, helper, icon }: { label: string; value: number | string; unit?: string; helper?: string; icon: ReactNode }) {
+function MetricCard({ label, value, prefix, unit, helper, icon }: { label: string; value: number | string; prefix?: string; unit?: string; helper?: string; icon: ReactNode }) {
   return (
     <section className="admin-panel grid min-h-[138px] grid-rows-[auto_1fr] rounded-xl p-4">
       <div className="flex items-center justify-between gap-3">
-        <p className="min-w-0 text-[13px] font-semibold leading-5 text-text-muted">{label}</p>
+        <p className="min-w-0 truncate whitespace-nowrap text-[13px] font-semibold leading-5 text-text-muted">{label}</p>
         <span className="grid h-8 w-8 place-items-center rounded-lg border border-border bg-bg-raised/60 text-accent-info">{icon}</span>
       </div>
       <div className="mt-4 flex min-h-[72px] flex-col justify-end">
-        <p className="flex items-baseline gap-1 text-3xl font-semibold tabular-nums leading-none text-text-primary">
+        <p className="flex items-baseline gap-1.5 text-3xl font-semibold tabular-nums leading-none text-text-primary">
+          {prefix ? <span className="text-lg font-semibold text-text-muted">{prefix}</span> : null}
           <span>{value}</span>
           {unit ? <span className="text-base font-semibold text-text-muted">{unit}</span> : null}
         </p>
