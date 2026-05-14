@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import type { ReactNode, WheelEvent } from "react";
+import type { MouseEvent, ReactNode, WheelEvent } from "react";
 import Link from "next/link";
 import { CameraOff, ChevronLeft, ChevronRight, Gauge, HeartHandshake, Loader2, RefreshCw, RotateCcw } from "lucide-react";
 import { BrandLogo } from "@/components/brand/BrandLogo";
@@ -10,6 +10,7 @@ import { BookRecommendationCard } from "@/components/result/BookRecommendationCa
 import { MobileResultPage } from "@/components/result/MobileResultPage";
 import { QrCard } from "@/components/result/QrCard";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { trackServiceEvent } from "@/lib/client/serviceEventClient";
 import { honorific, softenFormalPolite } from "@/lib/korean/name";
 import { getResultFirstSectionCopy } from "@/lib/reading-types/resultFirstSectionCopy";
 import type { SajuCalculation, SajuElement } from "@/lib/saju/calculator";
@@ -169,6 +170,14 @@ export function ResultContent({ payload }: { payload: ResultPayload }) {
   const goBy = useCallback((delta: number) => {
     setActiveSection((current) => clampInt(current + delta, 0, RESULT_SECTION_COUNT - 1));
   }, []);
+  const handleReanalysis = useCallback(async (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    await trackServiceEvent("result_reanalysis_requested", {
+      sessionId: livePayload.id,
+      payload: { page: "/result" },
+    });
+    window.location.assign("/");
+  }, [livePayload.id]);
   const handleWheel = useCallback(
     (event: WheelEvent<HTMLElement>) => {
       const primaryDelta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
@@ -195,7 +204,7 @@ export function ResultContent({ payload }: { payload: ResultPayload }) {
           </div>
           <div className="flex items-center gap-2">
             <ThemeToggle />
-            <Link href="/" className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl border border-border bg-bg-card/70 px-4 text-sm font-black text-text-primary shadow-glass transition hover:border-border-bright hover:bg-bg-card-hover">
+            <Link href="/" onClick={handleReanalysis} className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl border border-border bg-bg-card/70 px-4 text-sm font-black text-text-primary shadow-glass transition hover:border-border-bright hover:bg-bg-card-hover">
               <RotateCcw className="h-4 w-4" aria-hidden="true" />
               다시 분석하기
             </Link>
@@ -356,7 +365,7 @@ function ResultFacePanel({ displayName, faceImageUrl }: { displayName: string; f
       ) : (
         <div className="flex h-full w-full flex-col items-center justify-center gap-4 px-6 text-center">
           <CameraOff className="h-10 w-10 text-accent-info" aria-hidden="true" />
-          <p className="max-w-[14rem] text-base font-black leading-7 text-text-primary">얼굴 이미지는 24시간 이후 삭제되었어요.</p>
+          <p className="max-w-[14rem] text-base font-black leading-7 text-text-primary">얼굴 이미지는 결과 보관 기간 동안만 표시돼요.</p>
         </div>
       )}
     </div>

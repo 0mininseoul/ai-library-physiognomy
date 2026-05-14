@@ -17,6 +17,7 @@ import { getGeminiClient } from "@/lib/gemini/client";
 import { calibrateFaceScores } from "@/lib/facemesh/scoreCalibration";
 import { displayGivenName, honorific } from "@/lib/korean/name";
 import { resolvePersonaSignal } from "@/lib/persona/personaResolver";
+import { imageVisibleUntil, sessionExpiresAt } from "@/lib/privacy/retention";
 import { chooseReadingTypeForPersona } from "@/lib/reading-types/personaMapping";
 import { getResultFirstSectionCopy } from "@/lib/reading-types/resultFirstSectionCopy";
 import { calculateSaju } from "@/lib/saju/calculator";
@@ -46,6 +47,7 @@ export async function POST(req: NextRequest) {
     metrics?: FaceMetrics;
     landmarks?: Landmark[];
     imageBase64?: string;
+    clientSessionId?: string;
   };
 
   if (!body.input?.consentAccepted || !body.imageBase64 || !body.metrics) {
@@ -53,6 +55,7 @@ export async function POST(req: NextRequest) {
   }
 
   const supabase = getServerSupabase();
+  const createdAt = new Date();
   const displayName = displayGivenName(body.input.name);
   const saju = calculateSaju(body.input.birthDate);
   const calibratedScores = calibrateFaceScores(body.metrics);
@@ -63,6 +66,9 @@ export async function POST(req: NextRequest) {
   const { data: session, error: insertError } = await supabase
     .from("library_sessions")
     .insert({
+      created_at: createdAt.toISOString(),
+      image_visible_until: imageVisibleUntil(createdAt).toISOString(),
+      expires_at: sessionExpiresAt(createdAt).toISOString(),
       name: body.input.name,
       display_name: displayName,
       student_id: body.input.studentId,
@@ -80,6 +86,19 @@ export async function POST(req: NextRequest) {
 
   if (insertError || !session?.id) {
     return Response.json({ error: "session_create_failed" }, { status: 500 });
+  }
+
+  if (body.clientSessionId) {
+    await supabase
+      .from("service_events")
+      .insert({
+        session_id: session.id,
+        event_name: "analysis_session_created",
+        payload: { clientSessionId: body.clientSessionId },
+      })
+      .then(({ error }) => {
+        if (error) console.warn("[api/analyze] session event tracking failed", error);
+      });
   }
 
   const facePath = `${session.id}/capture.jpg`;

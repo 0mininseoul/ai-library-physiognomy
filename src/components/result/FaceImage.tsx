@@ -23,7 +23,7 @@ export function FaceImage({ displayName, faceImageUrl }: FaceImageProps) {
         ) : (
           <div className="flex h-full flex-col items-center justify-center gap-4 px-6 text-center">
             <CameraOff className="h-9 w-9 text-accent-info" aria-hidden="true" />
-            <p className="max-w-sm text-base font-black leading-7 text-text-primary">얼굴 이미지는 24시간 이후 삭제됐어요.</p>
+            <p className="max-w-sm text-base font-black leading-7 text-text-primary">얼굴 이미지는 결과 보관 기간 동안만 표시돼요.</p>
           </div>
         )}
       </div>

@@ -362,7 +362,7 @@ select {
   background-image:
     linear-gradient(to top, rgb(var(--border-rgb) / 0.26) 1px, transparent 1px),
     linear-gradient(to right, rgb(var(--border-rgb) / 0.16) 1px, transparent 1px);
-  background-size: 100% 25%, calc(100% / 12) 100%;
+  background-size: 100% 25%, calc(100% / 8) 100%;
 }
 
 [data-theme="dark"] .admin-dashboard-shell,

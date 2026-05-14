@@ -9,6 +9,7 @@ import { LibraryPartnerBadge } from "@/components/brand/LibraryPartnerLogo";
 import { BOOK_CATEGORIES } from "@/lib/books/categories";
 import { FaceMeshOverlay } from "@/components/analyze/FaceMeshOverlay";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { createClientSessionId, trackServiceEvent } from "@/lib/client/serviceEventClient";
 import { applyConnectedBlackKeyToImageData } from "@/lib/chroma/blackKey";
 import { captureVideoFrame } from "@/lib/capture/screenshot";
 import { averageLandmarks, computeFaceMetrics } from "@/lib/facemesh/metricsCalculator";
@@ -74,6 +75,7 @@ export function AnalyzePage() {
   const startedRef = useRef(false);
   const scanStartedAtRef = useRef<number | null>(null);
   const sampleRef = useRef<Landmark[][]>([]);
+  const clientSessionIdRef = useRef(createClientSessionId());
   const completedStreamHandledRef = useRef(-1);
   const completedStreamTimersRef = useRef<number[]>([]);
   const { videoRef, status: cameraStatus, error: cameraError, start: startCamera, stop: stopCamera } = useCamera({ persistGlobal: true });
@@ -131,7 +133,7 @@ export function AnalyzePage() {
         const request = fetch("/api/analyze", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ input, landmarks, metrics, imageBase64 }),
+          body: JSON.stringify({ input, landmarks, metrics, imageBase64, clientSessionId: clientSessionIdRef.current }),
         }).then(async (res) => {
           const payload = await res.json();
           if (!res.ok) throw new Error(apiErrorCopy(payload?.error));
@@ -299,6 +301,7 @@ export function AnalyzePage() {
         <EntryModal
           cameraStatus={cameraStatus}
           cameraError={cameraError}
+          clientSessionId={clientSessionIdRef.current}
           error={formError}
           onError={setFormError}
           onStart={handleStart}
@@ -370,6 +373,7 @@ export function AnalyzePage() {
 function EntryModal({
   cameraStatus,
   cameraError,
+  clientSessionId,
   error,
   onError,
   onStart,
@@ -377,6 +381,7 @@ function EntryModal({
 }: {
   cameraStatus: ReturnType<typeof useCamera>["status"];
   cameraError: string | null;
+  clientSessionId: string;
   error: string | null;
   onError: (error: string | null) => void;
   onStart: (input: StudentInput) => void;
@@ -391,6 +396,19 @@ function EntryModal({
   const [favoriteCategory, setFavoriteCategory] = useState<string>(BOOK_CATEGORIES[0]);
   const [needFocus, setNeedFocus] = useState<NeedFocus | "">("");
   const [consentAccepted, setConsentAccepted] = useState(false);
+  const nameInputStartedRef = useRef(false);
+
+  function handleNameChange(value: string) {
+    setName(value);
+    if (nameInputStartedRef.current || !value.trim()) return;
+    nameInputStartedRef.current = true;
+    void trackServiceEvent("name_input_started", {
+      payload: {
+        clientSessionId,
+        page: "/",
+      },
+    });
+  }
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -435,7 +453,7 @@ function EntryModal({
         <div className="mb-5 rounded-xl border border-border/70 bg-bg-card/68 px-4 py-3 shadow-[inset_0_1px_0_rgb(255_255_255_/_0.16)]">
           <p className="text-[0.82rem] font-bold leading-5 text-text-muted">
             <span className="block">정보를 채운 뒤 정면 얼굴이 잡히면 자동 분석돼요.</span>
-            <span className="block">얼굴 이미지는 결과 화면에서 24시간까지만 표시돼요.</span>
+            <span className="block">얼굴 이미지는 결과 화면에서 30일 동안 표시돼요.</span>
           </p>
         </div>
 
@@ -450,7 +468,7 @@ function EntryModal({
 
         <div className="grid gap-3">
           <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:gap-5">
-            <DarkInput label="이름" name="name" value={name} placeholder="박영민" autoComplete="name" onChange={(event) => setName(event.target.value)} />
+            <DarkInput label="이름" name="name" value={name} placeholder="박영민" autoComplete="name" onChange={(event) => handleNameChange(event.target.value)} />
             <DarkInput label="학번(또는 사번)" name="studentId" value={studentId} placeholder="20260000" inputMode="numeric" autoComplete="off" onChange={(event) => setStudentId(event.target.value)} />
           </div>
 
@@ -534,7 +552,7 @@ function EntryModal({
             <input className="mt-1 h-4 w-4 accent-[var(--accent-info)]" type="checkbox" checked={consentAccepted} onChange={(event) => setConsentAccepted(event.target.checked)} />
             <span className="font-medium leading-6">
               개인정보처리방침 및 이용약관 동의
-              <span className="mt-1 block text-xs text-text-faint">얼굴 이미지는 24시간 이후 삭제돼요.</span>
+              <span className="mt-1 block text-xs text-text-faint">얼굴 이미지는 결과 화면에서 30일 동안 표시돼요.</span>
             </span>
           </label>
         </div>

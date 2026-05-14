@@ -8,7 +8,7 @@ export async function GET(_req: NextRequest, { params }: { params: { id: string 
   const supabase = getServerSupabase();
   const { data, error } = await supabase
     .from("library_sessions")
-    .select("created_at, image_visible_until, face_image_path, status")
+    .select("created_at, face_image_path, status")
     .eq("id", params.id)
     .maybeSingle();
 
@@ -16,7 +16,7 @@ export async function GET(_req: NextRequest, { params }: { params: { id: string 
     return new Response(null, { status: 404, headers: noStoreHeaders() });
   }
 
-  const visibleUntil = data.image_visible_until ? new Date(data.image_visible_until) : imageVisibleUntil(new Date(data.created_at));
+  const visibleUntil = imageVisibleUntil(new Date(data.created_at));
   if (visibleUntil.getTime() <= Date.now()) {
     return new Response(null, { status: 410, headers: noStoreHeaders() });
   }

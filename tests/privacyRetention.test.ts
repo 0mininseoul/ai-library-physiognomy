@@ -8,15 +8,15 @@ import {
 describe("privacy retention", () => {
   const createdAt = new Date("2026-05-08T00:00:00.000Z");
 
-  it("hides face images after 24 hours", () => {
+  it("keeps face images visible during the 30 day result window", () => {
     expect(imageVisibleUntil(createdAt).toISOString()).toBe(
-      "2026-05-09T00:00:00.000Z",
+      "2026-06-07T00:00:00.000Z",
     );
     expect(
-      isFaceImageVisible(createdAt, new Date("2026-05-08T23:59:59.000Z")),
+      isFaceImageVisible(createdAt, new Date("2026-06-06T23:59:59.000Z")),
     ).toBe(true);
     expect(
-      isFaceImageVisible(createdAt, new Date("2026-05-09T00:00:01.000Z")),
+      isFaceImageVisible(createdAt, new Date("2026-06-07T00:00:01.000Z")),
     ).toBe(false);
   });
 
