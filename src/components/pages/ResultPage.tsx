@@ -324,50 +324,15 @@ export function ResultContent({ payload }: { payload: ResultPayload }) {
   );
 }
 
-function ResultFacePanel({ displayName, faceImageUrl }: { displayName: string; faceImageUrl: string | null }) {
+function ResultFacePanel({ displayName }: { displayName: string; faceImageUrl: string | null }) {
   const name = honorific(displayName);
-  const [imageFailed, setImageFailed] = useState(false);
-  const [retryNonce, setRetryNonce] = useState(0);
-  const shouldShowImage = Boolean(faceImageUrl && !imageFailed);
-  const imageSrc = faceImageUrl && retryNonce > 0 ? `${faceImageUrl}${faceImageUrl.includes("?") ? "&" : "?"}retry=${retryNonce}` : faceImageUrl;
 
   return (
     <div className="glass-card relative mx-auto flex h-full min-h-[25rem] w-full overflow-hidden rounded-[1.75rem]">
-      {shouldShowImage ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={imageSrc ?? ""}
-          alt={`${name} 얼굴 분석 이미지`}
-          className="h-full w-full object-cover"
-          onError={() => {
-            if (retryNonce === 0) {
-              setRetryNonce(1);
-              return;
-            }
-            setImageFailed(true);
-          }}
-        />
-      ) : faceImageUrl ? (
-        <div className="flex h-full w-full flex-col items-center justify-center gap-4 px-6 text-center">
-          <CameraOff className="h-10 w-10 text-accent-info" aria-hidden="true" />
-          <p className="max-w-[14rem] text-base font-black leading-7 text-text-primary">이미지를 다시 불러오고 있어요.</p>
-          <button
-            type="button"
-            className="text-sm font-bold text-accent-info underline underline-offset-4"
-            onClick={() => {
-              setImageFailed(false);
-              setRetryNonce((value) => value + 1);
-            }}
-          >
-            한 번 더 불러오기
-          </button>
-        </div>
-      ) : (
-        <div className="flex h-full w-full flex-col items-center justify-center gap-4 px-6 text-center">
-          <CameraOff className="h-10 w-10 text-accent-info" aria-hidden="true" />
-          <p className="max-w-[14rem] text-base font-black leading-7 text-text-primary">얼굴 이미지는 결과 보관 기간 동안만 표시돼요.</p>
-        </div>
-      )}
+      <div className="flex h-full w-full flex-col items-center justify-center gap-4 px-6 text-center">
+        <CameraOff className="h-10 w-10 text-accent-info" aria-hidden="true" />
+        <p className="max-w-[14rem] text-base font-black leading-7 text-text-primary">{name}의 얼굴 이미지는 만료되어 표시되지 않아요.</p>
+      </div>
     </div>
   );
 }

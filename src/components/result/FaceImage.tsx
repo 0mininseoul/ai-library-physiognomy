@@ -18,12 +18,14 @@ export function FaceImage({ displayName, faceImageUrl }: FaceImageProps) {
 
       <div className="mt-5 aspect-[4/3] overflow-hidden rounded-xl border border-border bg-bg-card">
         {faceImageUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={faceImageUrl} alt={`${name} 얼굴 분석 이미지`} className="h-full w-full object-cover" />
+          <div className="flex h-full flex-col items-center justify-center gap-4 px-6 text-center">
+            <CameraOff className="h-9 w-9 text-accent-info" aria-hidden="true" />
+            <p className="max-w-sm text-base font-black leading-7 text-text-primary">{name}의 얼굴 이미지는 만료되어 표시되지 않아요.</p>
+          </div>
         ) : (
           <div className="flex h-full flex-col items-center justify-center gap-4 px-6 text-center">
             <CameraOff className="h-9 w-9 text-accent-info" aria-hidden="true" />
-            <p className="max-w-sm text-base font-black leading-7 text-text-primary">얼굴 이미지는 결과 보관 기간 동안만 표시돼요.</p>
+            <p className="max-w-sm text-base font-black leading-7 text-text-primary">얼굴 이미지는 만료되어 표시되지 않아요.</p>
           </div>
         )}
       </div>

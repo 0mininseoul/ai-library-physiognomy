@@ -206,7 +206,7 @@ describe("ResultContent", () => {
     expect(screen.getByRole("heading", { name: "영민님은 이런 사람과 흐름이 좋아요" })).toBeInTheDocument();
     expect(container).not.toHaveTextContent("피부");
     expect(container).not.toHaveTextContent(forbiddenRelationshipWord);
-    expect(screen.getByText("얼굴 이미지는 결과 보관 기간 동안만 표시돼요.")).toBeInTheDocument();
+    expect(screen.getByText("영민님의 얼굴 이미지는 만료되어 표시되지 않아요.")).toBeInTheDocument();
   });
 
   it("pads sparse section intro copy so the headline area never feels empty", () => {
@@ -239,10 +239,11 @@ describe("ResultContent", () => {
     }
   });
 
-  it("keeps face images clean without landmark marker dots", () => {
+  it("treats face images as expired even if a payload includes a URL", () => {
     const { container } = render(<ResultContent payload={{ ...payload, faceImageUrl: "https://example.com/face.jpg" }} />);
 
-    expect(screen.getByAltText("영민님 얼굴 분석 이미지")).toBeInTheDocument();
+    expect(screen.queryByAltText("영민님 얼굴 분석 이미지")).not.toBeInTheDocument();
+    expect(screen.getByText("영민님의 얼굴 이미지는 만료되어 표시되지 않아요.")).toBeInTheDocument();
     expect(container.querySelectorAll('span[style*="left:"][style*="top:"]')).toHaveLength(0);
   });
 

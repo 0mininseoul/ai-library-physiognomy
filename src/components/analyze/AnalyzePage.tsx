@@ -453,7 +453,7 @@ function EntryModal({
         <div className="mb-5 rounded-xl border border-border/70 bg-bg-card/68 px-4 py-3 shadow-[inset_0_1px_0_rgb(255_255_255_/_0.16)]">
           <p className="text-[0.82rem] font-bold leading-5 text-text-muted">
             <span className="block">정보를 채운 뒤 정면 얼굴이 잡히면 자동 분석돼요.</span>
-            <span className="block">얼굴 이미지는 결과 화면에서 30일 동안 표시돼요.</span>
+            <span className="block">얼굴 이미지는 분석 처리에만 사용하고 결과 화면에는 표시하지 않아요.</span>
           </p>
         </div>
 
@@ -552,7 +552,7 @@ function EntryModal({
             <input className="mt-1 h-4 w-4 accent-[var(--accent-info)]" type="checkbox" checked={consentAccepted} onChange={(event) => setConsentAccepted(event.target.checked)} />
             <span className="font-medium leading-6">
               개인정보처리방침 및 이용약관 동의
-              <span className="mt-1 block text-xs text-text-faint">얼굴 이미지는 결과 화면에서 30일 동안 표시돼요.</span>
+              <span className="mt-1 block text-xs text-text-faint">얼굴 이미지는 분석 처리에만 사용하고 결과 화면에는 표시하지 않아요.</span>
             </span>
           </label>
         </div>

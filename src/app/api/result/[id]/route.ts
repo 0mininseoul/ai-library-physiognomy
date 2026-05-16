@@ -1,7 +1,6 @@
 import { createHash } from "node:crypto";
 import { NextRequest } from "next/server";
 import { getServerSupabase } from "@/lib/supabase/server";
-import { isFaceImageVisible } from "@/lib/privacy/retention";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -10,19 +9,14 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
   const supabase = getServerSupabase();
   const { data, error } = await supabase
     .from("library_sessions")
-    .select("id, created_at, face_image_path, display_name, result_json, status")
+    .select("id, created_at, display_name, result_json, status")
     .eq("id", params.id)
     .maybeSingle();
 
   if (error) return Response.json({ error: "result_fetch_failed" }, { status: 500 });
   if (!data || data.status !== "complete" || !data.result_json) return Response.json({ error: "not_found" }, { status: 404 });
 
-  let faceImageUrl: string | null = null;
-  const isVisible = isFaceImageVisible(new Date(data.created_at));
-
-  if (data.face_image_path && isVisible) {
-    faceImageUrl = `/api/result/${data.id}/face-image`;
-  }
+  const faceImageUrl: string | null = null;
 
   await trackBookQrOpen(req, supabase, data.id).catch((error) => {
     console.warn("[api/result] QR tracking failed", error);
