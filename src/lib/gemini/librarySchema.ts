@@ -51,9 +51,13 @@ const recommendationItemSchema = z.object({
   fit_reason: z.string().min(1).optional(),
   reading_moment: z.string().min(1).optional(),
 });
+const optionalNonEmptyStringSchema = z.preprocess(
+  (value) => (typeof value === "string" && value.trim().length === 0 ? undefined : value),
+  z.string().trim().min(1).optional(),
+);
 
 const rawSchema = z.object({
-  personaConfirmed: z.string().min(1).optional(),
+  personaConfirmed: optionalNonEmptyStringSchema,
   reading_type: z.object({
     code: z.string().refine(isReadingTypeCode),
     display_name: z.string().min(1),

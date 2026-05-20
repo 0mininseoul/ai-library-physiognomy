@@ -193,6 +193,15 @@ describe("normalizeLibraryAnalysis", () => {
     expect(result.sectionCopy?.bookCuration).toEqual([]);
   });
 
+  it("treats blank personaConfirmed as omitted", () => {
+    const result = normalizeLibraryAnalysis({
+      ...validAnalysisPayload(),
+      personaConfirmed: "",
+    });
+
+    expect(result.personaConfirmed).toBeUndefined();
+  });
+
   it("normalizes recommendation-only payloads for the async book section", () => {
     const result = normalizeLibraryRecommendations({
       section_copy: {
@@ -298,3 +307,81 @@ describe("normalizeLibraryAnalysis", () => {
     expect(result.recommendations[2].actionCopy).toBe("좋아요");
   });
 });
+
+function validAnalysisPayload() {
+  return {
+    reading_type: {
+      code: "focus_reboot",
+      display_name: "집중력 리부트형",
+      headline: "영민님 집중력 리부트 타이밍",
+      description: "몰입 루틴이 필요한 상태입니다.",
+    },
+    main_copy: "영민님 집중 모드 켜짐",
+    geometry: {
+      symmetry: "좌우 눈높이와 입꼬리 기준으로 균형이 안정적입니다.",
+      golden_ratio: "얼굴 폭과 높이 비율이 편안한 첫인상을 만듭니다.",
+      thirds: "상중하안 분포가 사고와 실행의 균형 쪽으로 읽힙니다.",
+      fifths: "눈 사이 간격과 얼굴 폭의 비례가 차분합니다.",
+      face_shape: "전체 윤곽은 부드럽지만 하관 쪽 버티는 힘이 보입니다.",
+    },
+    parts: {
+      forehead: { metrics_text: "이마 면적 기준", comment: "계획 세우는 힘이 보입니다." },
+      eyes: { metrics_text: "눈매 각도 기준", comment: "관찰력이 빠른 눈입니다." },
+      nose: { metrics_text: "콧대 길이 기준", comment: "시작 전 계산이 들어가는 타입입니다." },
+      mouth: { metrics_text: "입꼬리 각도 기준", comment: "핵심에서 표현이 선명합니다." },
+      jaw: { metrics_text: "하관 안정감 기준", comment: "버티는 힘이 있습니다." },
+      impression: { metrics_text: "표정 안정감 기준", comment: "차분하게 몰입하는 인상이 있습니다." },
+    },
+    scores: {
+      likability: 82,
+      trust: 79,
+      symmetry: 77,
+      balance: 81,
+      attractiveness: 80,
+      comments: ["호감도 안정", "신뢰감 양호", "대칭성 양호", "균형감 양호", "인상 매력도 양호"],
+    },
+    physiognomy: {
+      keywords: ["집중", "관찰", "재정렬"],
+      summary: "이목구비 균형에서 집중 테마를 뽑았습니다.",
+      strengths: ["핵심을 좁히는 힘", "조용히 오래 버티는 힘"],
+      cautions: ["생각이 길어질 수 있음", "컨디션이 표정에 드러날 수 있음"],
+    },
+    saju: {
+      keywords: ["루틴", "실행", "회복"],
+      element_balance: "지금은 탐색 성향보다 정리 성향을 보강하면 좋습니다.",
+      current_flow: "오늘의 흐름은 실행 키워드와 연결됩니다.",
+      strength: "한 번 꽂히면 오래 파고듭니다.",
+      advice: "작게 시작하면 흐름이 붙습니다.",
+    },
+    romantic_match: {
+      best_types: ["에너지 실행형"],
+      why: "영민님의 깊게 파고드는 리듬을 상대가 가볍게 환기해줄 때 케미가 좋습니다.",
+      date_style: "조용한 전시나 책방처럼 대화가 천천히 열리는 코스가 잘 맞습니다.",
+      caution: "답장이 늦다고 바로 의미 부여하면 거리감이 생길 수 있어요.",
+    },
+    section_copy: {
+      face_reveal: ["영민님은 첫 화면부터 차분한 집중감이 보여요."],
+      face_signal: ["눈과 하관 좌표에서 안정적인 인상 신호가 보여요."],
+      inner_style: ["탐색은 선명하고 추진은 조금 보완하면 좋아요."],
+      chemi_match: ["가볍게 환기해주는 사람과 흐름이 좋아요."],
+    },
+    inner_style: {
+      dominant_label: "탐색",
+      dominant_emoji: "seedling",
+      dominant_headline: "궁금한 건 끝까지 파고드는 편이에요.",
+      dominant_detail: "관심사가 생기면 자료를 모으고 연결하는 속도가 빨라요.",
+      growth_label: "추진",
+      growth_emoji: "fire",
+      growth_headline: "시작 버튼이 조금 늦게 눌릴 수 있어요.",
+      growth_detail: "생각이 충분히 쌓일 때까지 기다리다 타이밍을 놓칠 수 있어요.",
+      growth_action: "작은 실행을 먼저 하나만 정하면 균형이 좋아져요.",
+    },
+    chemi_match: {
+      type_label: "에너지 실행형",
+      headline: "가볍게 시동을 걸어주는 사람과 흐름이 좋아요.",
+      why: "영민님의 깊은 생각을 현실 쪽으로 살짝 당겨줘요.",
+      friction: "속도를 강요하면 오히려 거리가 생길 수 있어요.",
+      good_scene: "짧게 산책하며 생각을 말로 꺼내는 장면이 좋아요.",
+    },
+  };
+}

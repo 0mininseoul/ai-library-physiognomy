@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { Type } from "@google/genai";
 import { NextRequest } from "next/server";
+import { buildServerErrorEventPayload } from "@/lib/events/serverErrorEvents";
 import { buildLibraryPrompt } from "@/lib/gemini/libraryPrompt";
 import {
   DEFAULT_ANALYSIS_MAX_OUTPUT_TOKENS,
@@ -264,25 +265,61 @@ export async function POST(req: NextRequest) {
         const finishReason = candidate.candidates?.[0]?.finishReason;
         const rawText = candidate.text ?? "";
         if (finishReason && finishReason !== "STOP") {
+          const finishError = new Error(`model_finish_${finishReason}`);
           console.warn(`[api/analyze] model ${model} finish reason ${finishReason}`, {
             length: rawText.length,
             maxOutputTokens: ANALYSIS_MAX_OUTPUT_TOKENS,
             thinkingBudget: thinkingConfig?.thinkingBudget,
             usage: summarizeGeminiUsage(candidate.usageMetadata),
           });
-          lastError = new Error(`model_finish_${finishReason}`);
+          await persistServiceEvent(supabase, {
+            sessionId: session.id,
+            eventName: "gemini_analysis_non_stop_finish",
+            level: finishReason === "MAX_TOKENS" ? "error" : "warn",
+            payload: buildServerErrorEventPayload({
+              route: "/api/analyze",
+              stage: "gemini_finish_reason",
+              message: finishError.message,
+              error: finishError,
+              model,
+              finishReason,
+              responseText: rawText,
+              maxOutputTokens: ANALYSIS_MAX_OUTPUT_TOKENS,
+              thinkingBudget: thinkingConfig?.thinkingBudget,
+              usage: summarizeGeminiUsage(candidate.usageMetadata),
+            }),
+          });
+          lastError = finishError;
           if (finishReason !== "MAX_TOKENS") continue;
         }
         try {
           normalized = normalizeLibraryAnalysis(parseLooseJson(rawText));
         } catch (parseError) {
+          const parseMessage = parseError instanceof Error ? parseError.message : String(parseError);
           console.warn(`[api/analyze] model ${model} returned invalid JSON`, {
-            message: parseError instanceof Error ? parseError.message : String(parseError),
+            message: parseMessage,
             length: rawText.length,
             finishReason,
             head: rawText.slice(0, 600),
             tail: rawText.slice(-200),
             usage: summarizeGeminiUsage(candidate.usageMetadata),
+          });
+          await persistServiceEvent(supabase, {
+            sessionId: session.id,
+            eventName: "gemini_analysis_invalid_json",
+            level: "error",
+            payload: buildServerErrorEventPayload({
+              route: "/api/analyze",
+              stage: "gemini_parse",
+              message: parseMessage,
+              error: parseError,
+              model,
+              finishReason,
+              responseText: rawText,
+              maxOutputTokens: ANALYSIS_MAX_OUTPUT_TOKENS,
+              thinkingBudget: thinkingConfig?.thinkingBudget,
+              usage: summarizeGeminiUsage(candidate.usageMetadata),
+            }),
           });
           lastError = finishReason === "MAX_TOKENS" ? lastError : parseError;
           continue;
@@ -298,6 +335,19 @@ export async function POST(req: NextRequest) {
       } catch (error) {
         lastError = error;
         console.warn(`[api/analyze] model ${model} failed`, error);
+        await persistServiceEvent(supabase, {
+          sessionId: session.id,
+          eventName: "gemini_analysis_model_error",
+          level: "error",
+          payload: buildServerErrorEventPayload({
+            route: "/api/analyze",
+            stage: "gemini_generate",
+            message: errorToMessage(error),
+            error,
+            model,
+            maxOutputTokens: ANALYSIS_MAX_OUTPUT_TOKENS,
+          }),
+        });
       }
     }
     if (!normalized) throw lastError ?? new Error("all_models_failed");
@@ -379,7 +429,20 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     const message = errorToMessage(error);
     console.error("[api/analyze] analysis failed", { sessionId: session.id, message, error });
-    await supabase.from("library_sessions").update({ status: "failed", last_error: message }).eq("id", session.id);
+    await Promise.all([
+      supabase.from("library_sessions").update({ status: "failed", last_error: message }).eq("id", session.id),
+      persistServiceEvent(supabase, {
+        sessionId: session.id,
+        eventName: "api_analyze_failed",
+        level: "error",
+        payload: buildServerErrorEventPayload({
+          route: "/api/analyze",
+          stage: "analysis_failed",
+          message,
+          error,
+        }),
+      }),
+    ]);
     return Response.json({ error: "analysis_failed", detail: process.env.NODE_ENV === "production" ? undefined : message }, { status: 500 });
   }
 }
@@ -420,6 +483,28 @@ function summarizeGeminiUsage(usage?: {
     thoughtsTokenCount: usage.thoughtsTokenCount,
     totalTokenCount: usage.totalTokenCount,
   };
+}
+
+async function persistServiceEvent(
+  supabase: ReturnType<typeof getServerSupabase>,
+  input: {
+    sessionId: string;
+    eventName: string;
+    level: "info" | "warn" | "error";
+    payload: Record<string, unknown>;
+  },
+) {
+  try {
+    const { error } = await supabase.from("service_events").insert({
+      session_id: input.sessionId,
+      event_name: input.eventName,
+      level: input.level,
+      payload: input.payload,
+    });
+    if (error) console.warn("[api/analyze] service event logging failed", error);
+  } catch (error) {
+    console.warn("[api/analyze] service event logging threw", error);
+  }
 }
 
 function errorToMessage(error: unknown) {
