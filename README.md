@@ -9,9 +9,9 @@ AI 관상/사주 기반 도서 추천 MVP.
 - GitHub repo: `0mininseoul/ai-library-physiognomy`
 - Vercel project: `ai-library-physiognomy`
   - GitHub repo connected
-  - Production env configured: Supabase, Gemini, Naver, Data4Library, admin credentials
-  - Development env configured: Supabase, Gemini, Naver, Data4Library, admin credentials
-  - Preview env is not configured yet because Vercel CLI currently requires a non-production branch target for preview variables.
+  - Production env configured: Supabase, Vertex AI Gemini, Naver, Data4Library, admin credentials
+  - Development env configured: Supabase, Vertex AI Gemini, Naver, Data4Library, admin credentials
+  - Preview env configured with Vertex AI Gemini credentials.
 - Supabase project: `AI Library Physiognomy`
   - Project ref: `lubmjeylpppdnckljoiw`
   - Region: `ap-northeast-2`
@@ -47,4 +47,4 @@ pnpm books:tag
 pnpm books:import
 ```
 
-The book import uses Naver Search API, Gemini, and Supabase service-role credentials from local environment variables.
+The book import uses Naver Search API, Vertex AI Gemini, and Supabase service-role credentials from local environment variables.

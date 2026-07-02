@@ -1,14 +1,15 @@
 import "./load-env";
 
-import { GoogleGenAI, Type } from "@google/genai";
+import { Type, type GoogleGenAI } from "@google/genai";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { BOOK_CATEGORIES, inferBookCategory, isBookCategory } from "../../src/lib/books/categories";
 import type { LibraryBook } from "../../src/lib/books/types";
+import { createVertexGeminiClient } from "../../src/lib/gemini/vertexClient";
 
 const IN_PATH = path.join(process.cwd(), "data/books/books.normalized.json");
 const OUT_PATH = path.join(process.cwd(), "data/books/books.tagged.json");
-const MODEL = process.env.GEMINI_BOOK_TAG_MODEL ?? process.env.GEMINI_LIVE_MODEL ?? "gemini-2.5-flash";
+const MODEL = process.env.GEMINI_BOOK_TAG_MODEL ?? process.env.VERTEX_AI_MODEL ?? "gemini-2.5-flash";
 const BATCH_SIZE = Number.parseInt(process.env.GEMINI_BOOK_TAG_BATCH_SIZE ?? "50", 10);
 
 const CATEGORY_COPY: Record<string, string> = {
@@ -142,15 +143,13 @@ async function tagBatch(ai: GoogleGenAI, books: LibraryBook[]): Promise<LibraryB
 }
 
 async function main() {
-  const apiKey = process.env.GEMINI_API_KEY;
   const books = JSON.parse(await fs.readFile(IN_PATH, "utf8")) as LibraryBook[];
   const tagged: LibraryBook[] = [];
+  const ai = createTaggingClient();
 
-  if (!apiKey) {
+  if (!ai) {
     tagged.push(...books.map(fallbackBookTag));
   } else {
-    const ai = new GoogleGenAI({ apiKey });
-
     for (let index = 0; index < books.length; index += BATCH_SIZE) {
       const batch = books.slice(index, index + BATCH_SIZE);
       try {
@@ -168,6 +167,19 @@ async function main() {
   await fs.mkdir(path.dirname(OUT_PATH), { recursive: true });
   await fs.writeFile(OUT_PATH, JSON.stringify(tagged, null, 2));
   console.log(`Wrote ${tagged.length} tagged books to ${OUT_PATH}`);
+}
+
+function createTaggingClient(): GoogleGenAI | null {
+  try {
+    return createVertexGeminiClient();
+  } catch (error) {
+    console.warn(
+      `Vertex AI Gemini is not configured; falling back to local book tags. ${
+        error instanceof Error ? error.message : String(error)
+      }`,
+    );
+    return null;
+  }
 }
 
 main().catch((error) => {

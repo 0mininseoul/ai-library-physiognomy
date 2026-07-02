@@ -26,7 +26,7 @@ export const runtime = "nodejs";
 export const maxDuration = 300;
 export const dynamic = "force-dynamic";
 
-const PRIMARY_MODEL = process.env.GEMINI_RECOMMENDATION_MODEL ?? process.env.GEMINI_LIVE_MODEL ?? process.env.GEMINI_LIBRARY_MODEL ?? "gemini-2.5-flash";
+const PRIMARY_MODEL = process.env.GEMINI_RECOMMENDATION_MODEL ?? process.env.VERTEX_AI_MODEL ?? process.env.GEMINI_LIBRARY_MODEL ?? "gemini-2.5-flash";
 const FALLBACK_MODELS = (process.env.GEMINI_RECOMMENDATION_FALLBACK_MODELS ?? process.env.GEMINI_LIBRARY_FALLBACK_MODELS ?? "gemini-2.5-flash,gemini-2.5-flash")
   .split(",")
   .map((m) => m.trim())

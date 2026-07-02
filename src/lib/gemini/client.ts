@@ -1,12 +1,11 @@
 import "server-only";
 
-import { GoogleGenAI } from "@google/genai";
+import type { GoogleGenAI } from "@google/genai";
+import { createVertexGeminiClient } from "@/lib/gemini/vertexClient";
 
 let cached: GoogleGenAI | null = null;
 
 export function getGeminiClient() {
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) throw new Error("Missing GEMINI_API_KEY");
-  cached ??= new GoogleGenAI({ apiKey });
+  cached ??= createVertexGeminiClient();
   return cached;
 }

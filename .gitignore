@@ -2,6 +2,7 @@
 .env.*
 !.env.example
 .vercel
+.secrets
 .next
 node_modules
 dist

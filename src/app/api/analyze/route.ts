@@ -29,7 +29,7 @@ import type { StudentInput } from "@/types/session";
 export const runtime = "nodejs";
 export const maxDuration = 300;
 
-const PRIMARY_MODEL = process.env.GEMINI_ANALYSIS_MODEL ?? process.env.GEMINI_LIBRARY_MODEL ?? "gemini-2.5-flash";
+const PRIMARY_MODEL = process.env.GEMINI_ANALYSIS_MODEL ?? process.env.VERTEX_AI_MODEL ?? process.env.GEMINI_LIBRARY_MODEL ?? "gemini-2.5-flash";
 const FALLBACK_MODELS = (process.env.GEMINI_ANALYSIS_FALLBACK_MODELS ?? "gemini-2.5-pro,gemini-2.5-flash")
   .split(",")
   .map((m) => m.trim())
